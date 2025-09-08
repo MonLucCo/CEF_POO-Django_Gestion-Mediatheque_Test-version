@@ -1,0 +1,26 @@
+# Environnement virtuel
+works/venv/
+
+# Fichiers Python compilés
+__pycache__/
+*.py[cod]
+
+# Base de données SQLite
+*.sqlite3
+
+# Fichiers de log
+*.log
+
+# Fichiers de configuration sensibles
+.env
+
+# Dossiers Django spécifiques
+/static/
+media/
+
+# IDE
+.idea/
+.vscode/
+
+# Jupyter Notebook
+.ipynb_checkpoints/
