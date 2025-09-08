@@ -1,76 +1,62 @@
-# 📋 Spécifications fonctionnelles – Projet Médiathèque Django
-
-Ce document décrit les **fonctionnalités attendues**, les **cas d’usage**, et les **règles métier** du projet de gestion de médiathèque développé avec Django.
-
----
-
-## 🧭 Sommaire
-
-- [🎯 Objectif](#-objectif)
-- [🧩 Fonctionnalités prévues](#-fonctionnalités-prévues)
-- [👥 Cas d’usage](#-cas-dusage)
-- [📌 Contraintes](#-contraintes)
-- [📎 Liens utiles](#-liens-utiles)
-
----
+# 📚 CEF POO Django – Gestion de Médiathèque
 
 ## 🎯 Objectif
 
-Développer une application web permettant la gestion des ressources d’une médiathèque :
-- Livres, CD, DVD
-- Usagers
-- Emprunts et retours
-
-L’application doit être simple, intuitive et adaptée à un usage pédagogique.
+Ce projet pédagogique vise à développer une application web de gestion de médiathèque en utilisant **Django** et les principes de la **programmation orientée objet (POO)**.
 
 ---
 
-## 🧩 Fonctionnalités prévues
+## 🚀 Lancement rapide
 
-### 🔹 Gestion des ressources
-- Ajout, modification, suppression de livres, CD, DVD
-- Classification par type, genre, auteur
+```bash
+cd works
+.\venv\Scripts\activate
+cd mediatheque
+python manage.py runserver 8900
+```
 
-### 🔹 Gestion des usagers
-- Création de comptes usagers
-- Suivi des emprunts et retours
-- Historique des interactions
-
-### 🔹 Emprunts
-- Enregistrement d’un emprunt
-- Détection des retards
-- Retour de ressource
-
-### 🔹 Interfaces
-- Interface d’administration Django
-- Interface utilisateur simplifiée (HTML/CSS)
+Accès local : [http://127.0.0.1:8900](http://127.0.0.1:8900)
 
 ---
 
-## 👥 Cas d’usage
+## 📁 Structure du dépôt
 
-- Un usager emprunte un livre et le retourne
-- Un administrateur ajoute une nouvelle ressource
-- Un usager consulte son historique d’emprunts
-- Un gestionnaire vérifie les ressources disponibles
-
----
-
-## 📌 Contraintes
-
-- Base de données locale (SQLite)
-- Authentification simple
-- Application mono-utilisateur en local
-- Respect des bonnes pratiques Django/POO
+```
+CEF_POO-Django_Gestion-Mediatheque_Test-version/
+├── delivery/           # Livrables
+├── docs/               # Documentation technique et fonctionnelle
+├── works/              # Projet Django et environnement virtuel
+└── README.md           # Présentation générale du projet
+```
 
 ---
 
-## 📎 Liens utiles
+## 📎 Documentation
 
-- [README principal du projet](../../README.md)
-- [README général de la documentation](../README.md)
-- [Spécifications techniques](../technique/README-tech.md)
-- [Suivi du développement](../developpement/README-dev.md)
-- [Architecture du projet](../architecture/README-archi.md)
+La documentation complète est disponible dans le dossier [`/docs`](docs/README.md), organisée par thème :
+- [Spécifications fonctionnelles](docs/fonctionnel/README-fonct.md)
+- [Documentation technique](docs/technique/README-tech.md)
+- [Suivi du développement](docs/developpement/README-dev.md)
+- [Architecture du projet](docs/architecture/README-archi.md)
 
+---
+
+## 🤝 Contribution
+
+Ce projet est réalisé dans un cadre **pédagogique individuel**.  
+Aucune contribution externe n’est demandée.
+
+---
+
+## 📄 Licence
+
+Distribué sous la licence **MIT**.
+
+---
+
+## 👤 Auteur
+
+**PerLucCo**  
+Autoentreprise – Développement Web et Web Mobile  
+📍 Vélizy-Villacoublay, France
 ---
