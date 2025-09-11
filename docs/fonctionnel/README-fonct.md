@@ -69,8 +69,10 @@ L’application doit être simple, intuitive et adaptée à un usage pédagogiqu
 
 - [README principal du projet](../../README.md)
 - [README général de la documentation](../README.md)
-- [Spécifications techniques](../technique/README-tech.md)
 - [Suivi du développement](../developpement/README-dev.md)
 - [Architecture du projet](../architecture/README-archi.md)
+- [Spécifications fonctionnelles](../fonctionnel/README-fonct.md)  
+- [Documentation technique](../technique/README-tech.md)
+- [Rapport de projet](../../delivery/rapport/rapport-projet.md)
 
 ---

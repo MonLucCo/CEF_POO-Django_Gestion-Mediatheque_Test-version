@@ -1,55 +1,83 @@
 # 🏗️ Architecture du projet – Médiathèque Django
 
-Ce document décrit l’architecture technique du projet, les composants principaux, et leur organisation au sein de l’application Django.
+Ce document décrit d’abord l’architecture **initiale** (une seule app), puis l’architecture **revisitée** en trois pôles, avant de présenter les composants, le flux de données et le modèle MVC.
 
 ---
 
-## 🧭 Sommaire
+## 🏛️ 1. Architecture initiale
 
-- [📁 Structure des dossiers](#-structure-des-dossiers)
-- [🧱 Composants principaux](#-composants-principaux)
-- [🔄 Flux de données](#-flux-de-données)
-- [🧩 Modèle MVC dans Django](#-modèle-mvc-dans-django)
-- [📎 Liens vers la documentation](#-liens-vers-la-documentation)
+Au démarrage, toutes les fonctionnalités étaient regroupées dans une seule application Django `mediatheque/` :
 
----
-
-## 📁 Structure des dossiers
-
-```
-CEF_POO-Django_Gestion-Mediatheque_Test-version/
-├── mediatheque/          # Application principale
-│   ├── models.py         # Modèles de données
-│   ├── views.py          # Logique métier
-│   ├── templates/        # Fichiers HTML
-│   └── urls.py           # Routage
-├── manage.py             # Script de gestion Django
-├── db.sqlite3            # Base de données locale
-└── docs/                 # Documentation du projet
+```text
+Médiathèque Django (v1)
+└── mediatheque/
+    ├── models.py
+    ├── views.py
+    ├── urls.py
+    ├── templates/
+    ├── static/
+    └── tests.py
 ```
 
----
+Limites de ce modèle :
 
-## 🧱 Composants principaux
-
-- **Modèles** : Représentation des entités (Livre, Usager, Emprunt)
-- **Vues** : Traitement des requêtes et logique métier
-- **Templates** : Interface utilisateur en HTML
-- **URLconf** : Définition des routes
-- **Admin** : Interface d’administration Django
+- Fichiers volumineux et responsabilités multiples dans `mediatheque/`  
+- Difficulté à isoler l’authentification de la logique métier  
+- Tests unitaires peu ciblés et code moins évolutif  
 
 ---
 
-## 🔄 Flux de données
+## 🔄 2. Architecture révisée (3 pôles)
 
-1. L’utilisateur interagit via l’interface HTML
-2. Les vues traitent la requête
-3. Les modèles accèdent à la base de données
-4. La réponse est rendue via un template
+Pour clarifier les responsabilités et faciliter la maintenance, le projet a été scindé en trois pôles :
+
+```text
+Médiathèque Django (v2)
+├── mediatheque/           # Couche centrale
+│   ├── settings.py        # DB, langue, timezone
+│   ├── urls.py            # Routage global
+│   ├── views.py           # Page d’accueil et redirections
+│   └── templates/         # Layouts communs
+├── bibliothecaire/        # Gestion des membres et des emprunts
+│   ├── models.py          # Livre, Emprunt, Retour…
+│   ├── views.py           # CRUD membres et médias
+│   └── urls.py
+├── membre/                # Consultation seule des médias
+│   ├── views.py           # Liste des médias
+│   └── urls.py
+└── requirements.txt
+```
+
+Avantages :
+
+- Séparation nette des responsabilités  
+- Réduction de la taille et de la complexité des modules  
+- Tests unitaires spécifiques et isolés par app  
+- Meilleure évolutivité pour l’ajout de fonctionnalités  
 
 ---
 
-## 🧩 Modèle MVC dans Django
+## 🧱 3. Composants principaux
+
+- **Models** : définition des entités métier (`Livre`, `Usager`, `Emprunt`)  
+- **Views** : traitement des requêtes et logique métier  
+- **Templates** : rendu HTML côté client  
+- **URLs** : routage par application  
+- **Admin** : interface d’administration Django  
+
+---
+
+## 🔄 4. Flux de données
+
+1. L’utilisateur envoie une requête HTTP  
+2. Le **routage global** (`mediatheque/urls.py`) oriente vers l’app adéquate  
+3. La **view** traite la logique métier  
+4. Le **model** interagit avec la base de données  
+5. La réponse est rendue via un **template**  
+
+---
+
+## 🧩 5. Modèle MVC dans Django
 
 | Composant Django | Rôle MVC classique |
 |------------------|--------------------|
@@ -57,16 +85,18 @@ CEF_POO-Django_Gestion-Mediatheque_Test-version/
 | Views            | Contrôleur         |
 | Templates        | Vue                |
 
-> Django suit une architecture MTV (Model-Template-View), qui est une variante du MVC adaptée au web.
+> Django suit le pattern MTV (Model-Template-View), équivalent au MVC adapté au web.
 
 ---
 
-## 📎 Liens vers la documentation
+## 📎 6. Liens vers la documentation
 
 - [README principal du projet](../../README.md)
 - [README général de la documentation](../README.md)
-- [Spécifications fonctionnelles](../fonctionnel/README-fonct.md)
-- [Documentation technique](../technique/README-tech.md)
 - [Suivi du développement](../developpement/README-dev.md)
+- [Architecture du projet](../architecture/README-archi.md)
+- [Spécifications fonctionnelles](../fonctionnel/README-fonct.md)  
+- [Documentation technique](../technique/README-tech.md)
+- [Rapport de projet](../../delivery/rapport/rapport-projet.md)
 
 ---

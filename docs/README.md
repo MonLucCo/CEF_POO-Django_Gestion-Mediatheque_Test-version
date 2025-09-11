@@ -26,9 +26,10 @@ Chaque sous-dossier contient un fichier `README` dédié à son thème.
 
 ## 📎 Liens utiles
 
-- [README principal du dépôt](../../README.md)
+- [README principal du dépôt](../README.md)
 - [Page des issues GitHub](https://github.com/MonLucCo/CEF_POO-Django_Gestion-Mediatheque_Test-version/issues)
 - [Dépôt GitHub du projet](https://github.com/MonLucCo/CEF_POO-Django_Gestion-Mediatheque_Test-version)
+- [Rapport de projet](../delivery/rapport/rapport-projet.md)
 
 ---
 
