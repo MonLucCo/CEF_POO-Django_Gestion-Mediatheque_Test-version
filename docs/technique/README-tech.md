@@ -79,8 +79,10 @@ git clone -b MonLucCo/issue2 https://github.com/MonLucCo/CEF_POO-Django_Gestion-
 
 - [README principal du projet](../../README.md)
 - [README général de la documentation](../README.md)
-- [Spécifications fonctionnelles](../fonctionnel/README-fonct.md)
 - [Suivi du développement](../developpement/README-dev.md)
 - [Architecture du projet](../architecture/README-archi.md)
+- [Spécifications fonctionnelles](../fonctionnel/README-fonct.md)  
+- [Documentation technique](../technique/README-tech.md)
+- [Rapport de projet](../../delivery/rapport/rapport-projet.md)
 
 ---

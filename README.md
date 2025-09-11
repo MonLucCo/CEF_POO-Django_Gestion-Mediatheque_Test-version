@@ -39,6 +39,8 @@ La documentation complète est disponible dans le dossier [`/docs`](docs/README.
 - [Suivi du développement](docs/developpement/README-dev.md)
 - [Architecture du projet](docs/architecture/README-archi.md)
 
+Le rapport de projet est disponible dans le dossier [`/delivery`](delivery/rapport/rapport-projet.md) dans sa version _intermédiaire_.
+
 ---
 
 ## 🤝 Contribution
@@ -57,6 +59,6 @@ Distribué sous la licence **MIT**.
 ## 👤 Auteur
 
 **PerLucCo**  
-Autoentreprise – Développement Web et Web Mobile  
+Micro-entreprise – Développement Web et Web Mobile  
 📍 Vélizy-Villacoublay, France
 ---
