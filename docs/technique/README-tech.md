@@ -27,7 +27,7 @@ Ce document regroupe les **commandes**, **paramètres**, et **procédures techni
 
 ```bash
 cd works
-.\\venv\\Scripts\\activate
+.\venv\Scripts\activate
 cd mediatheque
 python manage.py runserver 8900
 ```

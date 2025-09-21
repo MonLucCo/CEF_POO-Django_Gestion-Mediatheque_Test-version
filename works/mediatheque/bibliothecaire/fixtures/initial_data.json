@@ -1,0 +1,544 @@
+[
+  {
+    "model": "auth.user",
+    "pk": 1,
+    "fields": {
+      "password": "pbkdf2_sha256$1000000$kILo4tiiBdRJYi99MYR323$C93xEaFK/GjcX1Q8QoJEngKH16Att70mqQo5xQyj5iU=",
+      "last_login": null,
+      "is_superuser": true,
+      "username": "admin",
+      "first_name": "",
+      "last_name": "",
+      "email": "admin.test@localhost",
+      "is_staff": true,
+      "is_active": true,
+      "date_joined": "2025-09-20T10:00:00Z",
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "bibliothecaire.membre",
+    "pk": 1,
+    "fields": {
+      "nom": "Dupont",
+      "compte": "membre1",
+      "bloque": false
+    }
+  },
+  {
+    "model": "bibliothecaire.membre",
+    "pk": 2,
+    "fields": {
+      "nom": "Martin",
+      "compte": "membre2",
+      "bloque": true
+    }
+  },
+  {
+    "model": "bibliothecaire.membre",
+    "pk": 3,
+    "fields": {
+      "nom": "Bernard",
+      "compte": "membre3",
+      "bloque": false
+    }
+  },
+  {
+    "model": "bibliothecaire.membre",
+    "pk": 4,
+    "fields": {
+      "nom": "Thomas",
+      "compte": "membre4",
+      "bloque": false
+    }
+  },
+  {
+    "model": "bibliothecaire.membre",
+    "pk": 5,
+    "fields": {
+      "nom": "Petit",
+      "compte": "membre5",
+      "bloque": true
+    }
+  },
+  {
+    "model": "bibliothecaire.bibliothecaire",
+    "pk": 1,
+    "fields": {
+      "nom": "Leclerc"
+    }
+  },
+  {
+    "model": "bibliothecaire.bibliothecaire",
+    "pk": 2,
+    "fields": {
+      "nom": "Moreau"
+    }
+  },
+  {
+    "model": "bibliothecaire.media",
+    "pk": 1,
+    "fields": {
+      "titre": "Le Petit Prince",
+      "annee_edition": 1943,
+      "consultable": true,
+      "disponible": true,
+      "theme": "Roman",
+      "media_type": "LIVRE"
+    }
+  },
+  {
+    "model": "bibliothecaire.media",
+    "pk": 2,
+    "fields": {
+      "titre": "1984",
+      "annee_edition": 1949,
+      "consultable": false,
+      "disponible": false,
+      "theme": "Science-fiction",
+      "media_type": "LIVRE"
+    }
+  },
+  {
+    "model": "bibliothecaire.media",
+    "pk": 3,
+    "fields": {
+      "titre": "Django Unleashed",
+      "annee_edition": 2021,
+      "consultable": true,
+      "disponible": true,
+      "theme": "Informatique",
+      "media_type": "LIVRE"
+    }
+  },
+  {
+    "model": "bibliothecaire.media",
+    "pk": 4,
+    "fields": {
+      "titre": "Python Cookbook",
+      "annee_edition": 2019,
+      "consultable": true,
+      "disponible": true,
+      "theme": "Informatique",
+      "media_type": "LIVRE"
+    }
+  },
+  {
+    "model": "bibliothecaire.media",
+    "pk": 5,
+    "fields": {
+      "titre": "Les Misérables",
+      "annee_edition": 1862,
+      "consultable": false,
+      "disponible": false,
+      "theme": "Roman",
+      "media_type": "LIVRE"
+    }
+  },
+  {
+    "model": "bibliothecaire.livre",
+    "pk": 1,
+    "fields": {
+      "media_ptr": 1,
+      "auteur": "Antoine de Saint-Exupéry",
+      "nb_page": 96,
+      "resume": "Conte poétique et philosophique"
+    }
+  },
+  {
+    "model": "bibliothecaire.livre",
+    "pk": 2,
+    "fields": {
+      "media_ptr": 2,
+      "auteur": "George Orwell",
+      "nb_page": 328,
+      "resume": "Roman dystopique"
+    }
+  },
+  {
+    "model": "bibliothecaire.livre",
+    "pk": 3,
+    "fields": {
+      "media_ptr": 3,
+      "auteur": "Adam Freeman",
+      "nb_page": 800,
+      "resume": "Guide complet de Django"
+    }
+  },
+  {
+    "model": "bibliothecaire.livre",
+    "pk": 4,
+    "fields": {
+      "media_ptr": 4,
+      "auteur": "David Beazley",
+      "nb_page": 700,
+      "resume": "Recettes Python avancées"
+    }
+  },
+  {
+    "model": "bibliothecaire.livre",
+    "pk": 5,
+    "fields": {
+      "media_ptr": 5,
+      "auteur": "Victor Hugo",
+      "nb_page": 1232,
+      "resume": "Épopée historique"
+    }
+  },
+  {
+    "model": "bibliothecaire.media",
+    "pk": 6,
+    "fields": {
+      "titre": "Inception",
+      "annee_edition": 2010,
+      "consultable": true,
+      "disponible": true,
+      "theme": "Thriller",
+      "media_type": "DVD"
+    }
+  },
+  {
+    "model": "bibliothecaire.media",
+    "pk": 7,
+    "fields": {
+      "titre": "Matrix",
+      "annee_edition": 1999,
+      "consultable": false,
+      "disponible": false,
+      "theme": "Action",
+      "media_type": "DVD"
+    }
+  },
+  {
+    "model": "bibliothecaire.media",
+    "pk": 8,
+      "fields": {
+      "titre": "Le Fabuleux Destin d’Amélie Poulain",
+      "annee_edition": 2001,
+      "consultable": true,
+      "disponible": true,
+      "theme": "Comédie",
+      "media_type": "DVD"
+    }
+  },
+  {
+    "model": "bibliothecaire.media",
+    "pk": 9,
+    "fields": {
+      "titre": "Interstellar",
+      "annee_edition": 2014,
+      "consultable": true,
+      "disponible": true,
+      "theme": "Science-fiction",
+      "media_type": "DVD"
+    }
+  },
+  {
+    "model": "bibliothecaire.media",
+    "pk": 10,
+    "fields": {
+      "titre": "Le Seigneur des Anneaux",
+      "annee_edition": 2001,
+      "consultable": false,
+      "disponible": false,
+      "theme": "Fantasy",
+      "media_type": "DVD"
+    }
+  },
+  {
+    "model": "bibliothecaire.dvd",
+    "pk": 6,
+    "fields": {
+      "media_ptr": 6,
+      "realisateur": "Christopher Nolan",
+      "duree": 148,
+      "histoire": "Rêves imbriqués"
+    }
+  },
+  {
+    "model": "bibliothecaire.dvd",
+    "pk": 7,
+    "fields": {
+      "media_ptr": 7,
+      "realisateur": "Lana Wachowski",
+      "duree": 136,
+      "histoire": "Réalité simulée"
+    }
+  },
+  {
+    "model": "bibliothecaire.dvd",
+    "pk": 8,
+    "fields": {
+      "media_ptr": 8,
+      "realisateur": "Jean-Pierre Jeunet",
+      "duree": 122,
+      "histoire": "Le quotidien enchanté d’Amélie"
+    }
+  },
+  {
+    "model": "bibliothecaire.dvd",
+    "pk": 9,
+    "fields": {
+      "media_ptr": 9,
+      "realisateur": "Christopher Nolan",
+      "duree": 169,
+      "histoire": "Exploration spatiale"
+    }
+  },
+  {
+    "model": "bibliothecaire.dvd",
+    "pk": 10,
+    "fields": {
+      "media_ptr": 10,
+      "realisateur": "Peter Jackson",
+      "duree": 558,
+      "histoire": "Quête épique en Terre du Milieu"
+    }
+  },
+  {
+    "model": "bibliothecaire.media",
+    "pk": 11,
+    "fields": {
+      "titre": "Thriller",
+      "annee_edition": 1982,
+      "consultable": true,
+      "disponible": true,
+      "theme": "Pop",
+      "media_type": "CD"
+    }
+  },
+  {
+    "model": "bibliothecaire.media",
+    "pk": 12,
+    "fields": {
+      "titre": "Back in Black",
+      "annee_edition": 1980,
+      "consultable": false,
+      "disponible": false,
+      "theme": "Rock",
+      "media_type": "CD"
+    }
+  },
+  {
+    "model": "bibliothecaire.media",
+    "pk": 13,
+    "fields": {
+      "titre": "The Dark Side of the Moon",
+      "annee_edition": 1973,
+      "consultable": true,
+      "disponible": true,
+      "theme": "Progressive",
+      "media_type": "CD"
+    }
+  },
+  {
+    "model": "bibliothecaire.media",
+    "pk": 14,
+    "fields": {
+      "titre": "Abbey Road",
+      "annee_edition": 1969,
+      "consultable": true,
+      "disponible": true,
+      "theme": "Rock",
+      "media_type": "CD"
+    }
+  },
+  {
+    "model": "bibliothecaire.media",
+    "pk": 15,
+    "fields": {
+      "titre": "Kind of Blue",
+      "annee_edition": 1959,
+      "consultable": false,
+      "disponible": false,
+      "theme": "Jazz",
+      "media_type": "CD"
+    }
+  },
+  {
+    "model": "bibliothecaire.cd",
+    "pk": 11,
+    "fields": {
+      "media_ptr": 11,
+      "artiste": "Michael Jackson",
+      "nb_piste": 9,
+      "duree_ecoute": 42
+    }
+  },
+  {
+    "model": "bibliothecaire.cd",
+    "pk": 12,
+    "fields": {
+      "media_ptr": 12,
+      "artiste": "AC/DC",
+      "nb_piste": 10,
+      "duree_ecoute": 41
+    }
+  },
+  {
+    "model": "bibliothecaire.cd",
+    "pk": 13,
+    "fields": {
+      "media_ptr": 13,
+      "artiste": "Pink Floyd",
+      "nb_piste": 10,
+      "duree_ecoute": 43
+    }
+  },
+  {
+    "model": "bibliothecaire.cd",
+    "pk": 14,
+    "fields": {
+      "media_ptr": 14,
+      "artiste": "The Beatles",
+      "nb_piste": 17,
+      "duree_ecoute": 47
+    }
+  },
+  {
+    "model": "bibliothecaire.cd",
+    "pk": 15,
+    "fields": {
+      "media_ptr": 15,
+      "artiste": "Miles Davis",
+      "nb_piste": 5,
+      "duree_ecoute": 46
+    }
+  },
+  {
+    "model": "bibliothecaire.jeudeplateau",
+    "pk": 16,
+    "fields": {
+      "titre": "Monopoly",
+      "annee_edition": 1935,
+      "consultable": true,
+      "createur": "Parker Brothers",
+      "regle_consultable": true,
+      "categorie": "Économie",
+      "duree_partie": 90,
+      "nb_joueur_min": 2,
+      "nb_joueur_max": 6,
+      "age_min": 8
+    }
+  },
+  {
+    "model": "bibliothecaire.jeudeplateau",
+    "pk": 17,
+    "fields": {
+      "titre": "Risk",
+      "annee_edition": 1959,
+      "consultable": true,
+      "createur": "Parker Brothers",
+      "regle_consultable": true,
+      "categorie": "Stratégie",
+      "duree_partie": 120,
+      "nb_joueur_min": 2,
+      "nb_joueur_max": 6,
+      "age_min": 10
+    }
+  },
+  {
+    "model": "bibliothecaire.jeudeplateau",
+    "pk": 18,
+    "fields": {
+      "titre": "Catan",
+      "annee_edition": 1995,
+      "consultable": false,
+      "createur": "Klaus Teuber",
+      "regle_consultable": true,
+      "categorie": "Stratégie",
+      "duree_partie": 75,
+      "nb_joueur_min": 3,
+      "nb_joueur_max": 4,
+      "age_min": 10
+    }
+  },
+  {
+    "model": "bibliothecaire.jeudeplateau",
+    "pk": 19,
+    "fields": {
+      "titre": "Carcassonne",
+      "annee_edition": 2000,
+      "consultable": true,
+      "createur": "Klaus-Jürgen Wrede",
+      "regle_consultable": true,
+      "categorie": "Placement de tuiles",
+      "duree_partie": 45,
+      "nb_joueur_min": 2,
+      "nb_joueur_max": 5,
+      "age_min": 8
+    }
+  },
+  {
+    "model": "bibliothecaire.jeudeplateau",
+    "pk": 20,
+    "fields": {
+      "titre": "Dixit",
+      "annee_edition": 2008,
+      "consultable": false,
+      "createur": "Jean-Louis Roubira",
+      "regle_consultable": false,
+      "categorie": "Imagination",
+      "duree_partie": 30,
+      "nb_joueur_min": 3,
+      "nb_joueur_max": 6,
+      "age_min": 8
+    }
+  },
+  {
+    "model": "bibliothecaire.emprunt",
+    "pk": 1,
+    "fields": {
+      "media": 1,
+      "emprunteur": 1,
+      "date_emprunt": "2025-09-01",
+      "date_retour": "2025-09-10",
+      "statut": 2
+    }
+  },
+  {
+    "model": "bibliothecaire.emprunt",
+    "pk": 2,
+    "fields": {
+      "media": 2,
+      "emprunteur": 2,
+      "date_emprunt": "2025-09-05",
+      "date_retour": null,
+      "statut": 1
+    }
+  },
+  {
+    "model": "bibliothecaire.emprunt",
+    "pk": 3,
+    "fields": {
+      "media": 3,
+      "emprunteur": 3,
+      "date_emprunt": "2025-08-20",
+      "date_retour": null,
+      "statut": 0
+    }
+  },
+  {
+    "model": "bibliothecaire.emprunt",
+    "pk": 4,
+    "fields": {
+      "media": 7,
+      "emprunteur": 4,
+      "date_emprunt": "2025-09-10",
+      "date_retour": null,
+      "statut": 1
+    }
+  },
+  {
+    "model": "bibliothecaire.emprunt",
+    "pk": 5,
+    "fields": {
+      "media": 12,
+      "emprunteur": 5,
+      "date_emprunt": "2025-07-01",
+      "date_retour": "2025-07-15",
+      "statut": 2
+    }
+  }
+]
