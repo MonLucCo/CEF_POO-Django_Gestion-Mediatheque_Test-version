@@ -19,13 +19,13 @@ from django.db import models
 
 # ── 0. Enumérations ────────────────────────────────────────────────────────────
 
-class StatutEmprunt(models.TextChoices):
+class StatutEmprunt(models.IntegerChoices):
     """
     Enumération des statuts possibles pour un emprunt.
     """
-    EN_COURS = 'en_cours', 'En cours'
-    RENDU    = 'rendu',    'Rendu'
-    RETARD   = 'retard',   'En retard'
+    RETARD   = 0, 'En retard'
+    EN_COURS = 1, 'En cours'
+    RENDU    = 2, 'Rendu'
 
 
 # ── 1. Objets ─────────────────────────────────────────────────────────────────
@@ -96,6 +96,9 @@ class Dvd(Media):
     duree       = models.PositiveIntegerField()
     histoire    = models.CharField(max_length=200)
 
+    class Meta:
+        verbose_name = 'DVD'
+        verbose_name_plural = "DVDs"
 
 class Cd(Media):
     """
@@ -110,19 +113,37 @@ class Cd(Media):
     nb_piste     = models.PositiveIntegerField(default=1)
     duree_ecoute = models.PositiveIntegerField()
 
+    class Meta:
+        verbose_name = 'CD'
+        verbose_name_plural = "CDs"
+
 
 class JeuDePlateau(Support):
     """
     Jeu de plateau uniquement consultable, non empruntable.
 
     Attributs :
-      - createur : string, max_length=100
+      - createur           : string, max_length=100
+      - regle_consultable  : booléen, True si la règle est disponible
+      - categorie          : string, max_length=100
+      - duree_partie       : integer, durée moyenne en minutes
+      - nb_joueur_min      : integer, nombre minimal de joueurs
+      - nb_joueur_max      : integer, nombre maximal de joueurs
+      - age_min            : integer, âge minimal recommandé
     """
-    createur = models.CharField(max_length=100)
+    createur          = models.CharField(max_length=100)
+    regle_consultable = models.BooleanField(default=False)
+    categorie         = models.CharField(max_length=100, default="Non classé")
+    duree_partie      = models.PositiveIntegerField(default=30)
+    nb_joueur_min     = models.PositiveIntegerField(default=2)
+    nb_joueur_max     = models.PositiveIntegerField(default=4)
+    age_min           = models.PositiveIntegerField(default=8)
 
     def __str__(self):
-        return f"{self.titre} (Jeu créé par {self.createur})"
+        return f"{self.titre} (Jeu créé par {self.createur}) - ({self.categorie}, {self.nb_joueur_min}-{self.nb_joueur_max} joueurs)"
 
+    class Meta:
+        verbose_name_plural = "jeux de plateau"
 
 # ── 2. Utilisateurs ───────────────────────────────────────────────────────────
 
@@ -225,9 +246,9 @@ class Emprunt(models.Model):
     )
     date_emprunt = models.DateField(auto_now_add=True)
     date_retour  = models.DateField(null=True, blank=True)
-    statut       = models.CharField(
-        max_length=20,
-        choices=StatutEmprunt.choices
+    statut       = models.IntegerField(
+        choices=StatutEmprunt.choices,
+        default=StatutEmprunt.EN_COURS
     )
 
     def __str__(self):
