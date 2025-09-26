@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}Espace Bibliothécaire{% endblock %}</title>
+</head>
+<body>
+    <header>
+        <h1>Médiathèque – Bibliothécaire</h1>
+        <nav>
+            <ul>
+
+                <li><a href="{% url 'bibliothecaire:media_list' %}">Médias</a></li>
+                {% comment %}
+
+                <li><a href="{% url 'bibliothecaire:emprunt_list' %}">Emprunts</a></li>
+                <li><a href="{% url 'bibliothecaire:membre_list' %}">Membres</a></li>
+                <li><a href="{% url 'bibliothecaire:jeu_list' %}">Jeux</a></li>
+
+                {% endcomment %}
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        {% block content %}
+        <!-- Contenu spécifique à chaque page -->
+        {% endblock %}
+    </main>
+
+    <footer>
+        <p>&copy; Médiathèque – Projet Django</p>
+    </footer>
+</body>
+</html>
