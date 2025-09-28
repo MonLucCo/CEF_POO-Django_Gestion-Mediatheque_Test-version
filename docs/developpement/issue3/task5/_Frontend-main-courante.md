@@ -86,13 +86,13 @@ Cette section distingue les fonctionnalités explicitement demandées dans le su
 
 | Type          | Fichier / Dossier                                       | Statut         |
 |---------------|---------------------------------------------------------|----------------|
-| Routage       | `bibliothecaire/urls.py`                                | 🆕 À créer     |
+| Routage       | `bibliothecaire/urls.py`                                | 🆕 En cours    |
 | Vues          | `bibliothecaire/views.py`                               | 🔄 À compléter |
-| Templates     | `bibliothecaire/templates/bibliothecaire/`              | 🆕 À créer     |
+| Templates     | `bibliothecaire/templates/bibliothecaire/`              | 🆕 En cours    |
 | Tests         | `bibliothecaire/tests.py`                               | 🔄 À compléter |
 | Fixtures      | `bibliothecaire/fixtures/*.json`                        | 🆕 À créer     |
 | Documentation | `/docs/developpement/issue3/_Frontend-main-courante.md` | ✅ En cours     |
-| Plan de test  | `/docs/tests/tests-plan.md`                             | 🆕 À créer     |
+| Plan de test  | `/docs/tests/tests-plan.md`                             | ✅ En cours     |
 
 ---
 
@@ -114,7 +114,6 @@ Cette section distingue les fonctionnalités explicitement demandées dans le su
 | Emprunt      | Vue filtrée par `statut`                          | Suivi des emprunts en cours / rendus |
 | Membre       | Vue d’historique d’emprunts                       | Visualisation des prêts passés       |
 | JeuDePlateau | Liste consultable, Détail, Création, Modification | Consultation sans emprunt            |
-
 
 ---
 
@@ -152,7 +151,7 @@ Cette section distingue les fonctionnalités explicitement demandées dans le su
 - [ ] Tests de chaque vue CRUD pour `Media`, `Emprunt`, `Membre`
 - [ ] Vérification des modèles via shell Django
 - [ ] Tests de navigation et affichage dans le navigateur
-- [ ] Préparation du plan de test (`tests-plan.md`)
+- [X] Préparation du plan de test (`tests-plan.md`)
 - [ ] Validation des cas métier avec fixtures
 
 ### 7.2 ✨ Fonctionnalités souhaitables
@@ -341,6 +340,63 @@ Media (objet mère)
 
 Cette difficulté, bien que discrète, est **fondamentale** pour garantir un affichage correct et complet des données dans une architecture Django orientée POO.  
 Elle montre que le polymorphisme ne se résume pas à la structure des classes, mais dépend aussi de la **manière dont les objets sont instanciés et transmis aux vues/templates**.
+
+### 9.5 Difficulté 5 : définir et structurer les tests unitaires
+
+Cette difficulté a émergé non pas dans l’écriture des tests eux-mêmes, mais dans leur **organisation progressive** au sein du projet. 
+Elle est directement liée à la montée en complexité du code, à la volonté de maintenir une traçabilité claire, et à l’exigence d’autonomie entre les modules anciens et les développements récents.
+
+Elle prolonge les réflexions amorcées dans les sections 9.3 et 9.4 : après avoir clarifié l’architecture des vues et le typage des objets, il s’agissait ici de structurer les tests unitaires de manière à accompagner le développement de façon incrémentale, traçable et modulaire.
+
+La résolution de cette difficulté m'a permis de structurer les tests unitaires et de préparer, puis réaliser le plan de tests dans une approche DRY (Don't Repeat Yourself) préconisée en POO. 
+
+#### a) Nature de la difficulté
+La documentation Django propose une structure minimale (`tests.py` à la racine de l’app), mais ne guide pas explicitement sur la **modularisation des tests** ni sur la manière de les organiser pour accompagner un développement incrémental. Il m’a fallu comprendre comment :
+- Séparer les tests par fonctionnalité (accueil, liste, détail, etc.)
+- Maintenir une cohérence entre les tests et les étapes du développement
+- Faciliter la lecture et la contribution future par d’autres développeurs
+
+#### b) Démarche exploratoire
+Après avoir étudié les pratiques communautaires (forums, documentation officielle, guides structurés), j’ai adopté une organisation modulaire :
+
+- Création d’un dossier `bibliothecaire/tests_blocs/` avec des fichiers dédiés :
+  - `test_accueil.py`
+  - `test_media_list.py`
+  - `test_media_detail.py`
+- Ajout d’un fichier `__init__.py` pour rendre le dossier détectable par Django
+- Conservation du fichier `tests.py` comme **point d’entrée documentaire**, contenant :
+  - Un test minimal (`test_environment`) pour valider l’environnement
+  - Des commentaires orientant vers le dossier `tests_blocs/` et le fichier `tests-plan.md`
+
+#### c) Compréhension à l’issue
+- La **décomposition en structure** permet une lisibilité et une autonomie très forte entre les tests anciens et les ajouts récents.
+- Le fichier `tests.py` joue un rôle de **pivot technique et pédagogique**, utile pour la mise en œuvre et la relecture.
+- La rédaction d’un fichier `tests-plan.md` est une **bonne pratique essentielle** pour formaliser les objectifs, les cas de test, et la couverture attendue.
+
+#### d) Documentation associée
+- [Django – Tests unitaires](https://docs.djangoproject.com/fr/5.2/internals/contributing/writing-code/unit-tests/)
+- [CodezUp – Django Testing Best Practices](https://codezup.com/django-testing-best-practices-unit-tests-integration-tests/)
+- [Dev.to – Writing Scalable Unit Tests in Django](https://dev.to/shreyash_jhon_doe/writing-scalable-maintainable-unit-tests-in-django-a-practical-guide-with-real-examples-47a4)
+
+Ces ressources me confirment que la modularisation des tests, l’usage de `setUpTestData()`, et la documentation parallèle sont des pratiques reconnues pour maintenir la qualité et la scalabilité du code.
+
+### 9.6 Difficulté 6 : reprise de modélisation en cours de développement
+
+Cette difficulté concerne la traçabilité et la lisibilité des développements. 
+Elle est apparue lors de la mise en œuvre des premiers tests unitaires et l'analyse qui a découlé de l'identification de la cause d'une erreur lors d'un test (ou de sa mise au point).
+
+La solution a consisté en trois points d'organisation :
+- la création d'une note technique qui :
+  - identifie les erreurs de modélisation.
+  - propose au moins une analyse ou une proposition de résolution.
+  - identifie les tests unitaires à reprendre après correction.
+- l'indexation du plan de tests (contenu et rapport des tests) pour permettre sa reprise et mise à jour.
+- la création de points de sauvegarde (Git) pour tracer les documents techniques et le code.
+
+La résolution de cette difficulté a démontré :
+- l'importance de coder au plus tôt les tests unitaires sur les objets du modèle.
+- qu'un test unitaire peut fonctionner correctement tout en étant "non vérifié" (Ko) lors de la découverte d'une erreur (bogue).
+- l'efficacité d'une démarche itérative qui reprend tous les tests unitaires.
 
 ---
 
