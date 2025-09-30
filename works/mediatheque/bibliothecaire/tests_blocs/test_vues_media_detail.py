@@ -6,17 +6,17 @@ from bibliothecaire.models import Media, Livre, Dvd, Cd
 class MediaDetailViewTests(TestCase):
     @classmethod
     def setUpTestData(cls):
-        cls.media = Media.objects.create(titre="Test Media", annee_edition=0, media_type="LIVRE", theme="Test Thème")
+        cls.media = Media.objects.create(name="Test Media", annee_edition=0, media_type="LIVRE", theme="Test Thème")
         cls.livre = Livre.objects.create(
-            titre="Test Media-Livre", annee_edition=0, media_type="LIVRE", theme="Test Thème Media-Livre",
+            name="Test Media-Livre", annee_edition=0, media_type="LIVRE", theme="Test Thème Media-Livre",
             auteur="Auteur Test Livre", nb_page=0, resume="Résumé Test Livre"
         )
         cls.dvd = Dvd.objects.create(
-            titre="Test Media-Dvd", annee_edition=0, media_type="DVD", theme="Test Thème Media-Dvd",
+            name="Test Media-Dvd", annee_edition=0, media_type="DVD", theme="Test Thème Media-Dvd",
             realisateur="Réalisateur Test Dvd", duree=0, histoire="Histoire Test Dvd"
         )
         cls.cd = Cd.objects.create(
-            titre="Test Media-Cd", annee_edition=2021, media_type="CD", theme="Test Thème Media-Cd",
+            name="Test Media-Cd", annee_edition=2021, media_type="CD", theme="Test Thème Media-Cd",
             artiste="Artiste Test CD", nb_piste=0, duree_ecoute=0
         )
 

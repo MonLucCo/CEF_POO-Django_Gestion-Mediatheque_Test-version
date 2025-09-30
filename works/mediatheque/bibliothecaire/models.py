@@ -35,11 +35,11 @@ class Support(models.Model):
     Abstraction de tout élément consultable dans la médiathèque.
 
     Attributs :
-      - titre         : string, max_length=100
+      - name         : string, max_length=100
       - annee_edition : integer, >= 0
       - consultable   : booléen, True si visible en catalogue
     """
-    titre         = models.CharField(max_length=100)
+    name         = models.CharField(max_length=100)
     annee_edition = models.PositiveIntegerField()
     consultable   = models.BooleanField(default=True)
 
@@ -66,7 +66,7 @@ class Media(Support):
     media_type   = models.CharField(max_length=10, choices=TYPE_CHOICES)
 
     def __str__(self):
-        return f"{self.titre} ({self.media_type})"
+        return f"{self.name} ({self.media_type})"
 
 
 class Livre(Media):
@@ -140,7 +140,7 @@ class JeuDePlateau(Support):
     age_min           = models.PositiveIntegerField(default=8)
 
     def __str__(self):
-        return f"{self.titre} (Jeu créé par {self.createur}) - ({self.categorie}, {self.nb_joueur_min}-{self.nb_joueur_max} joueurs)"
+        return f"{self.name} (Jeu créé par {self.createur}) - ({self.categorie}, {self.nb_joueur_min}-{self.nb_joueur_max} joueurs)"
 
     class Meta:
         verbose_name_plural = "jeux de plateau"
@@ -152,9 +152,9 @@ class Utilisateur(models.Model):
     Abstraction de toute personne utilisant la médiathèque.
 
     Attributs :
-      - nom : string, max_length=100
+      - name : string, max_length=100
     """
-    nom = models.CharField(max_length=100)
+    name = models.CharField(max_length=100)
 
     class Meta:
         abstract = True
@@ -211,7 +211,7 @@ class Membre(Utilisateur):
     def __str__(self):
         etat = 'Bloqué' if self.bloque else 'Actif'
         return (
-            f"{self.nom} ({self.compte}) "
+            f"{self.name} ({self.compte}) "
             f"[{etat}] Emprunts : {self.nb_emprunts_en_cours}/{self.MAX_EMPRUNTS}"
         )
 

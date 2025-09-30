@@ -2,7 +2,7 @@
 
 📁 `/docs/developpement/issue3/task5/Modelisation_correction-erreurs-suite-tests-unitaires.md`  
 
-📌 Version : indexD-3
+📌 Version : indexE-4
 
 ---
 
@@ -102,6 +102,12 @@ class Support(models.Model):
 - Tests T-NAV-03, T-ENT-xx, T-VUE-xx
 - Prévoir des tests dans l’issue #4 ou lors de l’intégration des vues liées à `Support`
 
+#### 🔸 Validation post correction
+- Création des tests pour l'administration (T-ADM-01 et T-ADM-02) : `test_admin.py`
+- Templates mis à jour : `media_list.html` et `media_detail.html`
+- Tests corrigés : `test_urls.py`, `test_entites_mdeia.py`, `test_vues_media_list.py` et `test_vue_media_detail.py`
+- Résultat : ✅ Tests passés avec succès (T-NAV-03 toujours en échec - attente correction 3) `test_report_indexE-4.txt`
+
 ---
 
 ### 3.2 Correction 2 – Renommage du champ `titre` → `name` dans `Utilisateur`
@@ -124,6 +130,12 @@ class Utilisateur(models.Model):
 #### 🔸 Tests impactés
 - Tests T-NAV-03, T-ENT-xx, T-VUE-xx
 - Prévoir des tests dans l’issue #4 ou lors de l’intégration des vues liées à `Support`
+
+#### 🔸 Validation post correction
+- Validation des tests pour l'administration (T-ADM-01 et T-ADM-02) : ✅ Tests passés avec succès
+- Templates mis à jour : `media_list.html` et `media_detail.html`
+- Tests corrigés : `test_urls.py`, `test_entites_mdeia.py`, `test_vues_media_list.py` et `test_vue_media_detail.py`
+- Résultat : ✅ Tests passés avec succès (T-NAV-03 toujours en échec - attente correction 3) `test_report_indexE-4.txt`
 
 ---
 

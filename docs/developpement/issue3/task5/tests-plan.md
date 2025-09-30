@@ -10,8 +10,8 @@ Il est conçu pour :
 - Documenter les cas de test, les méthodes de validation et les liens techniques
 
 📌 Version du document :  
-- **Indexage** : index D-3 
-- **Périmètre couvert** : entité `Media` – vues `liste` et `détail`  
+- **Indexage** : index E-3 (index D-3, avec correction de la modélisation)
+- **Périmètre couvert** : site administration, entité `Media` – vues `liste` et `détail`  
 - **Niveau de couverture** : tests de niveau _minimum_ à _intermédiaire_  
 - **Évolutivité prévue** :
   - entité `Media` - vues `mise à jour` et `supprime` (masque pour le bibliothécaire)
@@ -30,6 +30,7 @@ Il pourra être déplacé ou indexé dans `/docs/tests/` (à créer) si une docu
    - [🧭 Navigation (`T-NAV-xxx`)](#-navigation-t-nav-xxx)
    - [📚 Entités (`T-ENT-xxx`)](#-entités-t-ent-xxx)
    - [🧪 Vues (`T-VUE-xxx`)](#-vues-t-vue-xxx)
+   - [🧪 Administration (`T-ADM-xxx`)](#-administration-t-adm-xxx)
 4. [🔹 Méthode de validation](#-4-méthode-de-validation)
 5. [🔹 Couverture attendue](#-5-couverture-attendue)
 6. [🔹 Liens vers les fichiers de test](#-6-liens-vers-les-fichiers-de-test)
@@ -52,11 +53,12 @@ Il pourra être déplacé ou indexé dans `/docs/tests/` (à créer) si une docu
 
 Les tests sont répartis en trois catégories :
 
-| Catégorie  | Dossier / Fichier                           | Préfixe ID | Objectif principal                                 |
-|------------|---------------------------------------------|------------|----------------------------------------------------|
-| Navigation | `tests_blocs/test_urls.py`                  | `T-NAV-`   | Vérifier les accès, les routes, les redirections   |
-| Entités    | `tests_blocs/test_entites_media.py`, etc.   | `T-ENT-`   | Vérifier la cohérence des modèles et des données   |
-| Vues       | `tests_blocs/test_vues_media_list.py`, etc. | `T-VUE-`   | Vérifier le comportement des vues et des templates |
+| Catégorie      | Dossier / Fichier                           | Préfixe ID | Objectif principal                                 |
+|----------------|---------------------------------------------|------------|----------------------------------------------------|
+| Navigation     | `tests_blocs/test_urls.py`                  | `T-NAV-`   | Vérifier les accès, les routes, les redirections   |
+| Entités        | `tests_blocs/test_entites_media.py`, etc.   | `T-ENT-`   | Vérifier la cohérence des modèles et des données   |
+| Vues           | `tests_blocs/test_vues_media_list.py`, etc. | `T-VUE-`   | Vérifier le comportement des vues et des templates |
+| Administration | `tests_blocs/test_admin.py`                 | `T-ADM-`   | Vérifier le site d'administration du projet        |
 
 > Remarque : les catégories Permissions, Formulaires, Erreurs, Filtrages sont envisagées, mais n'ont pas été mises en œuvre pour cette étape du développement.
 
@@ -111,6 +113,19 @@ Les tests sont répartis en trois catégories :
 
 ---
 
+### 🧪 Administration (`T-ADM-xxx`)
+
+| ID Test  | Description                                                                 | Cible                         | Résultat attendu                                           | Statut   |
+|----------|-----------------------------------------------------------------------------|-------------------------------|------------------------------------------------------------|----------|
+| T-ADM-01 | Accès à l’interface admin et aux apps exposées (`/admin/{app_label}/`)      | `admin:index` + apps exposées | Code 200 pour chaque URL                                   | ✅ Validé |
+| T-ADM-02 | Vérification des URLs admin selon les permissions déclarées dans ModelAdmin | `ModelAdmin` exposés          | Code 200 pour chaque vue autorisée (`add`, `change`, etc.) | ✅ Validé |
+
+> 🔧 Les tests utilisent `RequestFactory` pour simuler une requête authentifiée (`mock_request`) et éviter les erreurs liées à `self.client.request()`.  
+> ✅ Le test T-ADM-02 est dynamique : il s’adapte aux permissions et à la présence d’objets pour chaque modèle.  
+> 📌 Le modèle `Media` est exposé en lecture seule, ce qui est pris en compte dans le test.
+
+---
+
 ## 🔹 4. Méthode de validation
 
 - Exécution des tests via :
@@ -147,12 +162,13 @@ Les tests sont répartis en trois catégories :
 
 ## 🔹 6. Liens vers les fichiers de test
 
-| Fichier                     | Fonctionnalité ciblée           | Catégorie  |
-|-----------------------------|---------------------------------|------------|
-| `test_urls.py`              | Routage et accès (URLs locales) | Navigation |
-| `test_entites_media.py`     | Modèle `Media` et sous-types    | Entités    |
-| `test_vues_media_detail.py` | Détail d’un média typé          | Vues       |
-| `test_vues_media_list.py`   | Liste des médias                | Vues       |
+| Fichier                     | Fonctionnalité ciblée           | Catégorie      |
+|-----------------------------|---------------------------------|----------------|
+| `test_urls.py`              | Routage et accès (URLs locales) | Navigation     |
+| `test_entites_media.py`     | Modèle `Media` et sous-types    | Entités        |
+| `test_vues_media_detail.py` | Détail d’un média typé          | Vues           |
+| `test_vues_media_list.py`   | Liste des médias                | Vues           |
+| `test_admin.py`             | Interface d’administration      | Administration |
 
 
 
