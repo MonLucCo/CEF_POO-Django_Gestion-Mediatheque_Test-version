@@ -7,17 +7,17 @@ from bibliothecaire.models import Media, Livre, Dvd, Cd
 class MediaListViewTests(TestCase):
     @classmethod
     def setUpTestData(cls):
-        cls.media = Media.objects.create(name="Test Media", annee_edition=0, media_type="LIVRE", theme="Test Thème")
+        cls.media = Media.objects.create(name="Test Media", media_type="LIVRE", theme="Test Thème")
         cls.livre = Livre.objects.create(
-            name="Test Media-Livre", annee_edition=0, media_type="LIVRE", theme="Test Thème Media-Livre",
+            name="Test Media-Livre", media_type="LIVRE", theme="Test Thème Media-Livre",
             auteur="Auteur Test Livre", nb_page=0, resume="Résumé Test Livre"
         )
         cls.dvd = Dvd.objects.create(
-            name="Test Media-Dvd", annee_edition=0, media_type="DVD", theme="Test Thème Media-Dvd",
+            name="Test Media-Dvd", media_type="DVD", theme="Test Thème Media-Dvd",
             realisateur="Réalisateur Test Dvd", duree=0, histoire="Histoire Test Dvd"
         )
         cls.cd = Cd.objects.create(
-            name="Test Media-Cd", annee_edition=0, media_type="CD", theme="Test Thème Media-Cd",
+            name="Test Media-Cd", media_type="CD", theme="Test Thème Media-Cd",
             artiste="Artiste Test CD", nb_piste=0, duree_ecoute=0
         )
 
@@ -31,8 +31,7 @@ class MediaListViewTests(TestCase):
 
     def test_vue_02_media_list_champs_generiques(self):
         response = self.client.get(reverse('bibliothecaire:media_list'))
-        self.assertNotContains(response, 0)
-        self.assertNotContains(response, 0)
+        self.assertNotContains(response, "Histoire Test Dvd")
         self.assertNotContains(response, "Test Thème Media-Livre")
         # Vérifie que les champs typés ne sont pas affichés
         self.assertNotContains(response, "Auteur Test Livre")

@@ -6,11 +6,11 @@ class MediaEntityTests(TestCase):
     @classmethod
     def setUpTestData(cls):
         # Création d’un Media seul
-        cls.monMedia = Media.objects.create(name="Test Media", annee_edition=0, media_type="LIVRE", theme="Test Theme Media")
+        cls.monMedia = Media.objects.create(name="Test Media", media_type="LIVRE", theme="Test Theme Media")
 
     def test_ent_01_media_livre_creation(self):
         self.assertEqual(self.monMedia.name, "Test Media")
-        self.assertEqual(self.monMedia.annee_edition, 0)
+        self.assertEqual(self.monMedia.annee_edition, None)
         self.assertEqual(self.monMedia.theme, "Test Theme Media")
         self.assertEqual(self.monMedia.media_type, "LIVRE")
 
@@ -37,8 +37,8 @@ class MediaEntityTests(TestCase):
         from bibliothecaire.models import Livre
 
         titreLivre = "Test Media-Livre"
-        monLivre = Livre.objects.create(
-            name=titreLivre, annee_edition=1, media_type="LIVRE", theme="Test Theme Media-Livre",
+        Livre.objects.create(
+            name=titreLivre, media_type="LIVRE", theme="Test Theme Media-Livre",
             auteur="Auteur-Livre", resume="Résumé-Livre", nb_page=0
         )
 
@@ -56,3 +56,5 @@ class MediaEntityTests(TestCase):
             Livre.objects.get(pk=1)
         # Vérifie que le Livre avec pk=2 est bien un sous-type Livre de Media et qu'il a la même valeur
         self.assertEqual(Livre.objects.get(pk=2).name, titreLivre)
+        # Vérifie que le Livre avec pk=2 est un sous-type avec le champ hérité 'annee_edition' vide
+        self.assertEqual(Livre.objects.get(pk=2).annee_edition, None)

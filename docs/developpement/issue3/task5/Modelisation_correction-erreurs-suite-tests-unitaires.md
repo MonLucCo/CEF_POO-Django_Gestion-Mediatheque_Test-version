@@ -135,7 +135,7 @@ class Utilisateur(models.Model):
 - Validation des tests pour l'administration (T-ADM-01 et T-ADM-02) : ✅ Tests passés avec succès
 - Templates mis à jour : `media_list.html` et `media_detail.html`
 - Tests corrigés : `test_urls.py`, `test_entites_mdeia.py`, `test_vues_media_list.py` et `test_vue_media_detail.py`
-- Résultat : ✅ Tests passés avec succès (T-NAV-03 toujours en échec - attente correction 3) `test_report_indexE-4.txt`
+- Résultat : ✅ Tests passés avec succès (T-NAV-03 toujours en échec - attente correction 3) `test_report_indexE-3.txt`
 
 ---
 
@@ -170,6 +170,37 @@ annee_edition = models.PositiveIntegerField(
 - `test_media_enregistrement` (dans `tests_blocs/test_accueil.py`)
 - `test_media_detail_accessible` (dans `test_urls.py`) – actuellement KO
 - Prévoir un test de validation explicite dans `test_entites_media.py`
+
+#### 🔸 Synthèse des corrections retenues
+
+- **Définition des contraintes dans `Support`**  
+  Le champ `annee_edition` est une valeur vide ou positive garantissant une cohérence pour tous les types de support (médias ou jeux de plateau).
+
+- **Reporter les contraintes métier dans le formulaire**  
+  Le modèle doit être stable et les bornes de validité cohérentes dans le temps. Pour cela les contraintes évolutives liées au temps ne sont pas définies dans le modèle. 
+  Cela se traduit par :
+    - Suppression des validators et de la méthode `clean()` dans le modèle.
+    - Ajout d’un `help_text` explicite : *"Année d’édition si connue. Sinon, laisser vide."*
+    - Report du contrôle dynamique (borne supérieure = année courante) dans le formulaire associé.
+
+- **Contenu des tests unitaires**  
+  La validation étant déplacée dans les formulaires, les tests unitaires doivent prévoir un ciblage sur le contrôle de validité dans les `ModelForm` et non dans les modèles eux-mêmes
+
+- **Adaptation du template de détail**  
+  Le champ `annee_edition` est masqué dans le template si sa valeur est vide (`None`). 
+  Cette décision évite l’affichage de données non renseignées et simplifie les tests de rendu.  
+  Un filtre personnalisé (defaut_si_vide) a été envisagé pour afficher ‘non définie’ dans les templates, 
+  mais n’a pas été retenu à ce stade pour limiter les impacts sur les tests. Cette option reste ouverte pour une correction ultérieure.
+
+> Ce choix permet une validation claire, maintenable et cohérente. Elle laisse un modèle simple tout en garantissant une validation métier côté interface.
+
+> Le template est associé à la logique de la donnée (masquage du champ si contenu vide) et des tests unitaires. Un filtre personnalisé reste à envisager pour rendre explicite le contenu des champs.
+
+#### 🔸 Validation post correction
+- Validation des tests pour l'administration (T-ADM-01 et T-ADM-02) : ✅ Tests passés avec succès
+- Templates mis à jour : `media_detail.html` (masquage du champ **Année** si la valeur de `annee_edition` est vide)
+- Tests corrigés : `test_entites_mdeia.py`, `test_vues_media_list.py` et `test_vue_media_detail.py`
+- Résultat : ✅ Tests passés avec succès `test_report_indexE-4.txt`
 
 ---
 

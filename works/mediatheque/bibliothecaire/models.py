@@ -17,7 +17,7 @@ sont documentées dans le rapport de projet (Annexe A).
 
 from django.db import models
 
-# ── 0. Enumérations ────────────────────────────────────────────────────────────
+# ── 0. Commun : Enumérations ────────────────────────────────────────────────────────────
 
 class StatutEmprunt(models.IntegerChoices):
     """
@@ -36,11 +36,14 @@ class Support(models.Model):
 
     Attributs :
       - name         : string, max_length=100
-      - annee_edition : integer, >= 0
+      - annee_edition : integer, >= 0 ou laisser vide
       - consultable   : booléen, True si visible en catalogue
     """
     name         = models.CharField(max_length=100)
-    annee_edition = models.PositiveIntegerField()
+    annee_edition = models.PositiveIntegerField(
+        null=True, blank=True,
+        help_text="Année d'édition si connue. Sinon laisser vide."
+    )
     consultable   = models.BooleanField(default=True)
 
     class Meta:
