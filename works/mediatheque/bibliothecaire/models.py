@@ -14,7 +14,7 @@ Ce module définit les entités métier de la médiathèque, avec :
 Les règles métier détaillées (cardinalité des prêts, durées, blocages, etc.)
 sont documentées dans le rapport de projet (Annexe A).
 """
-
+from django.core.validators import MinValueValidator
 from django.db import models
 
 # ── 0. Commun : Enumérations ────────────────────────────────────────────────────────────
@@ -82,7 +82,11 @@ class Livre(Media):
       - resume  : string, max_length=200
     """
     auteur   = models.CharField(max_length=100)
-    nb_page  = models.PositiveIntegerField()
+    nb_page  = models.PositiveIntegerField(
+        null=True, blank=True,
+        validators=[MinValueValidator(1)],
+        help_text="Nombre de pages (au moins une), ou laisser vide."
+    )
     resume   = models.CharField(max_length=200)
 
 
@@ -96,7 +100,11 @@ class Dvd(Media):
       - histoire    : string, max_length=200
     """
     realisateur = models.CharField(max_length=100)
-    duree       = models.PositiveIntegerField()
+    duree       = models.PositiveIntegerField(
+        null=True, blank=True,
+        validators=[MinValueValidator(1)],
+        help_text="Durée en minute (au moins une), ou laisser vide."
+    )
     histoire    = models.CharField(max_length=200)
 
     class Meta:
@@ -113,8 +121,16 @@ class Cd(Media):
       - duree_ecoute : integer, >= 0 (minutes)
     """
     artiste      = models.CharField(max_length=100)
-    nb_piste     = models.PositiveIntegerField(default=1)
-    duree_ecoute = models.PositiveIntegerField()
+    nb_piste     = models.PositiveIntegerField(
+        default=1,
+        validators=[MinValueValidator(1)],
+        help_text="Nombre de pistes (au moins une)."
+    )
+    duree_ecoute = models.PositiveIntegerField(
+        null=True, blank=True,
+        validators=[MinValueValidator(1)],
+        help_text="Durée d'écoute en minute (au moins une), ou laisser vide."
+    )
 
     class Meta:
         verbose_name = 'CD'
