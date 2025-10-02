@@ -16,7 +16,7 @@ class NavigationTests(TestCase):
     def test_nav_03_media_detail_accessible(self):
         # Préparer un media
         from bibliothecaire.models import Media
-        media = Media.objects.create(titre="Test", media_type="LIVRE", theme="Test")
+        media = Media.objects.create(name="Test", media_type="LIVRE", theme="Test")
         response = self.client.get(reverse('bibliothecaire:media_detail', args=[media.id]))
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'bibliothecaire/media/media_detail.html')

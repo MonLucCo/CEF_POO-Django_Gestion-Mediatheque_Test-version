@@ -398,6 +398,30 @@ La résolution de cette difficulté a démontré :
 - qu'un test unitaire peut fonctionner correctement tout en étant "non vérifié" (Ko) lors de la découverte d'une erreur (bogue).
 - l'efficacité d'une démarche itérative qui reprend tous les tests unitaires.
 
+### 9.7 Difficulté 7 : gestion des contrôles de validité sur les champs numériques de données
+
+Cette difficulté concerne le contrôle des bornes (limites de validité) des champs numériques du modèle de données. 
+Lors de la correction du champ `annee_edition` de l'entité `Support`, j'ai cherché à assurer dans le modèle une séparation claire et précise entre la structure du modèle et les méthodes de validation de la donnée.
+
+La solution identifiée dans un premier temps, mais non retenue, a consisté à définir une propriété `Validators(MinValueValidator(valueMin),MaxValueValidator(valueMax))` dans la structure du modèle.
+Mais cette propriété étant statique lors du chargement du module au démarrage du serveur, 
+j'ai ensuite (second temps) mis en œuvre une définition dynamique et définissant une surcharge de la méthode `clean()` de l'entité du modèle (il s'agissait de `Support`).
+Ceci m'a conduit à distinguer la portée de cette définition du contrôle de validité. 
+Soit définir un contrôle centralisé métier dans l'entité _mère_ (`Media`), soit dans les entités typées (`Livre`, `Dvd` et `Cd`). 
+
+Cette mise en évidence de la logique métier de validation m'a conduit à la solution finale retenue consistant à reporter la logique métier de contrôle de validité de la donnée dans les formulaires, 
+au lieu de l'intégrer dans la modélisation du champ de l'entité du modèle. 
+
+La solution retenue est un modèle simple concernant la définition des champs des entités du modèle avec un report dans les formulaires des méthodes de validation métier de la donnée.
+
+La résolution de cette difficulté a démontré :
+- l'importance d'une responsabilité claire en évitant la duplication des contrôles dans plusieurs entités héritées.
+- l'intérêt de centraliser la logique métier dans les formulaires ou service, et de garder le modèle structurellement simple.
+- la cohérence à conserver entre :
+  - les bornes **stables** qui peuvent être définies dans le modèle via **Validators**.
+  - les bornes **dynamiques** (ie. année courante) qui doivent être définies dans un formulaire ou une méthode `clean()`.
+- l'importance de garantir l'intégrité métier avec une structure des données toujours cohérente.
+
 ---
 
 ## 10. 🔗 Liens utiles

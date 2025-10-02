@@ -2,7 +2,7 @@
 
 📁 `/docs/developpement/issue3/task5/Modelisation_correction-erreurs-suite-tests-unitaires.md`  
 
-📌 Version : indexD-3
+📌 Version : indexE-5
 
 ---
 
@@ -64,6 +64,13 @@ La troisième version, index D-3, a conduit à l'ajout des corrections C-MOD-04 
 Ces ajouts ont été identifiés à partir de la première version stabilisée des tests unitaires du plan de tests. 
 Les résultats de ces tests unitaires sont consignés dans le document [`test_report_indexD-3.txt`](test_report_indexD-3.txt) 
 
+La quatrième version, index E-5, a conduit à la réalisation des corrections C-MOD-01, C-MOD-02, C-MOD-03 et C-MOD-05. 
+Ces corrections ont conduit à l'ajout dans le **plan de tests** des tests du site d'administration (T-ADM-01 et T-ADM-02). 
+Les résultats de ces tests unitaires sont consignés :
+- Pour C-MOD-01 et C-MOD-02, dans le document [`test_report_indexE-3.txt`](test_report_indexE-3.txt) 
+- Pour C-MOD-01, C-MOD-02 et C-MOD-03, dans le document [`test_report_indexE-4.txt`](test_report_indexE-4.txt) 
+- Pour C-MOD-01, C-MOD-02, C-MOD-03 et C-MOD-05, dans le document [`test_report_indexE-5.txt`](test_report_indexE-5.txt) 
+
 ---
 
 ## 🔹 2. Synthèse des corrections à appliquer
@@ -102,6 +109,12 @@ class Support(models.Model):
 - Tests T-NAV-03, T-ENT-xx, T-VUE-xx
 - Prévoir des tests dans l’issue #4 ou lors de l’intégration des vues liées à `Support`
 
+#### 🔸 Validation post correction
+- Création des tests pour l'administration (T-ADM-01 et T-ADM-02) : `test_admin.py`
+- Templates mis à jour : `media_list.html` et `media_detail.html`
+- Tests corrigés : `test_urls.py`, `test_entites_mdeia.py`, `test_vues_media_list.py` et `test_vue_media_detail.py`
+- Résultat : ✅ Tests passés avec succès (T-NAV-03 toujours en échec - attente correction 3) `test_report_indexE-4.txt`
+
 ---
 
 ### 3.2 Correction 2 – Renommage du champ `titre` → `name` dans `Utilisateur`
@@ -124,6 +137,12 @@ class Utilisateur(models.Model):
 #### 🔸 Tests impactés
 - Tests T-NAV-03, T-ENT-xx, T-VUE-xx
 - Prévoir des tests dans l’issue #4 ou lors de l’intégration des vues liées à `Support`
+
+#### 🔸 Validation post correction
+- Validation des tests pour l'administration (T-ADM-01 et T-ADM-02) : ✅ Tests passés avec succès
+- Templates mis à jour : `media_list.html` et `media_detail.html`
+- Tests corrigés : `test_urls.py`, `test_entites_mdeia.py`, `test_vues_media_list.py` et `test_vue_media_detail.py`
+- Résultat : ✅ Tests passés avec succès (T-NAV-03 toujours en échec - attente correction 3) `test_report_indexE-3.txt`
 
 ---
 
@@ -158,6 +177,37 @@ annee_edition = models.PositiveIntegerField(
 - `test_media_enregistrement` (dans `tests_blocs/test_accueil.py`)
 - `test_media_detail_accessible` (dans `test_urls.py`) – actuellement KO
 - Prévoir un test de validation explicite dans `test_entites_media.py`
+
+#### 🔸 Synthèse des corrections retenues
+
+- **Définition des contraintes dans `Support`**  
+  Le champ `annee_edition` est une valeur vide ou positive garantissant une cohérence pour tous les types de support (médias ou jeux de plateau).
+
+- **Reporter les contraintes métier dans le formulaire**  
+  Le modèle doit être stable et les bornes de validité cohérentes dans le temps. Pour cela les contraintes évolutives liées au temps ne sont pas définies dans le modèle. 
+  Cela se traduit par :
+    - Suppression des validators et de la méthode `clean()` dans le modèle.
+    - Ajout d’un `help_text` explicite : *"Année d’édition si connue. Sinon, laisser vide."*
+    - Report du contrôle dynamique (borne supérieure = année courante) dans le formulaire associé.
+
+- **Contenu des tests unitaires**  
+  La validation étant déplacée dans les formulaires, les tests unitaires doivent prévoir un ciblage sur le contrôle de validité dans les `ModelForm` et non dans les modèles eux-mêmes
+
+- **Adaptation du template de détail**  
+  Le champ `annee_edition` est masqué dans le template si sa valeur est vide (`None`). 
+  Cette décision évite l’affichage de données non renseignées et simplifie les tests de rendu.  
+  Un filtre personnalisé (defaut_si_vide) a été envisagé pour afficher ‘non définie’ dans les templates, 
+  mais n’a pas été retenu à ce stade pour limiter les impacts sur les tests. Cette option reste ouverte pour une correction ultérieure.
+
+> Ce choix permet une validation claire, maintenable et cohérente. Elle laisse un modèle simple tout en garantissant une validation métier côté interface.
+
+> Le template est associé à la logique de la donnée (masquage du champ si contenu vide) et des tests unitaires. Un filtre personnalisé reste à envisager pour rendre explicite le contenu des champs.
+
+#### 🔸 Validation post correction
+- Validation des tests pour l'administration (T-ADM-01 et T-ADM-02) : ✅ Tests passés avec succès
+- Templates mis à jour : `media_detail.html` (masquage du champ **Année** si la valeur de `annee_edition` est vide)
+- Tests corrigés : `test_entites_mdeia.py`, `test_vues_media_list.py` et `test_vue_media_detail.py`
+- Résultat : ✅ Tests passés avec succès `test_report_indexE-4.txt`
 
 ---
 
@@ -231,6 +281,46 @@ duree_ecoute = models.PositiveIntegerField(
 - `T-ENT-04` (création d’un sous-type et vérification des champs)  
 - `test_entites_media.py` (valeurs numériques dans les objets typés)  
 - Fixtures `initial_data.json` à réviser
+
+#### 🔸 Synthèse des corrections retenues
+
+- **Ajout de `MinValueValidator(1)`** sur les champs numériques suivants :
+  - `nb_page` dans `Livre`
+  - `duree` dans `Dvd`
+  - `duree_ecoute` dans `Cd`
+  - `nb_piste` dans `Cd`, avec `default=1` pour garantir une valeur minimale même en création simplifiée
+
+- **Respect de la logique métier** :
+  - Un livre doit avoir au moins une page
+  - Un CD doit contenir au moins une piste
+  - Un DVD ou un CD doit avoir une durée d’écoute significative, sinon laissé vide
+
+- **Template `media_detail.html` mis à jour** :
+  - Affichage conditionnel des champs numériques avec unité (`minute(s)`)
+  - Mention explicite `"non saisie"` si valeur absente
+  - Ajout du champ `consultable` (oubli détecté lors des tests T-VUE-04abc)
+
+- **Tests unitaires adaptés** :
+  - Passage de `.create()` à `.full_clean()` + `.save()` pour déclencher les validators
+  - Vérification du rendu HTML avec `assertContains()` et `assertNotContains()`
+  - Calcul dynamique des valeurs affichées dans les tests (`Oui/Non`, `non saisie`, `X minute(s)`)
+
+#### 🔸 Validation post correction
+
+- **Modèle corrigé** dans `models.py_indexI-5` :
+  - Tous les champs numériques métiers sont correctement validés
+  - Le champ `nb_piste` est non nullable avec une valeur par défaut
+
+- **Template corrigé** dans `media_detail.html_indexE-5` :
+  - Ajout du champ `consultable`
+  - Affichage conditionnel des champs numériques avec unité ou mention `"non saisie"`
+
+- **Tests validés** :
+  - `test_entites_media.py_indexE-5` : création et vérification des entités typées
+  - `test_vues_media_detail.py_indexE-5` : vérification du rendu HTML pour chaque type (`Livre`, `Dvd`, `Cd`)
+  - Tous les tests T-VUE-04abc passent avec succès, y compris les cas minimaux et enrichis
+
+- **Résultat** : ✅ Correction C-MOD-05 validée et consolidée dans les modèles, templates et tests
 
 ---
 

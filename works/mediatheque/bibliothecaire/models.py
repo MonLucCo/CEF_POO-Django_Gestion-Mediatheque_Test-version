@@ -14,10 +14,10 @@ Ce module définit les entités métier de la médiathèque, avec :
 Les règles métier détaillées (cardinalité des prêts, durées, blocages, etc.)
 sont documentées dans le rapport de projet (Annexe A).
 """
-
+from django.core.validators import MinValueValidator
 from django.db import models
 
-# ── 0. Enumérations ────────────────────────────────────────────────────────────
+# ── 0. Commun : Enumérations ────────────────────────────────────────────────────────────
 
 class StatutEmprunt(models.IntegerChoices):
     """
@@ -35,12 +35,15 @@ class Support(models.Model):
     Abstraction de tout élément consultable dans la médiathèque.
 
     Attributs :
-      - titre         : string, max_length=100
-      - annee_edition : integer, >= 0
+      - name         : string, max_length=100
+      - annee_edition : integer, >= 0 ou laisser vide
       - consultable   : booléen, True si visible en catalogue
     """
-    titre         = models.CharField(max_length=100)
-    annee_edition = models.PositiveIntegerField()
+    name         = models.CharField(max_length=100)
+    annee_edition = models.PositiveIntegerField(
+        null=True, blank=True,
+        help_text="Année d'édition si connue. Sinon laisser vide."
+    )
     consultable   = models.BooleanField(default=True)
 
     class Meta:
@@ -66,7 +69,7 @@ class Media(Support):
     media_type   = models.CharField(max_length=10, choices=TYPE_CHOICES)
 
     def __str__(self):
-        return f"{self.titre} ({self.media_type})"
+        return f"{self.name} ({self.media_type})"
 
 
 class Livre(Media):
@@ -79,7 +82,11 @@ class Livre(Media):
       - resume  : string, max_length=200
     """
     auteur   = models.CharField(max_length=100)
-    nb_page  = models.PositiveIntegerField()
+    nb_page  = models.PositiveIntegerField(
+        null=True, blank=True,
+        validators=[MinValueValidator(1)],
+        help_text="Nombre de pages (au moins une), ou laisser vide."
+    )
     resume   = models.CharField(max_length=200)
 
 
@@ -93,7 +100,11 @@ class Dvd(Media):
       - histoire    : string, max_length=200
     """
     realisateur = models.CharField(max_length=100)
-    duree       = models.PositiveIntegerField()
+    duree       = models.PositiveIntegerField(
+        null=True, blank=True,
+        validators=[MinValueValidator(1)],
+        help_text="Durée en minute (au moins une), ou laisser vide."
+    )
     histoire    = models.CharField(max_length=200)
 
     class Meta:
@@ -110,8 +121,16 @@ class Cd(Media):
       - duree_ecoute : integer, >= 0 (minutes)
     """
     artiste      = models.CharField(max_length=100)
-    nb_piste     = models.PositiveIntegerField(default=1)
-    duree_ecoute = models.PositiveIntegerField()
+    nb_piste     = models.PositiveIntegerField(
+        default=1,
+        validators=[MinValueValidator(1)],
+        help_text="Nombre de pistes (au moins une)."
+    )
+    duree_ecoute = models.PositiveIntegerField(
+        null=True, blank=True,
+        validators=[MinValueValidator(1)],
+        help_text="Durée d'écoute en minute (au moins une), ou laisser vide."
+    )
 
     class Meta:
         verbose_name = 'CD'
@@ -140,7 +159,7 @@ class JeuDePlateau(Support):
     age_min           = models.PositiveIntegerField(default=8)
 
     def __str__(self):
-        return f"{self.titre} (Jeu créé par {self.createur}) - ({self.categorie}, {self.nb_joueur_min}-{self.nb_joueur_max} joueurs)"
+        return f"{self.name} (Jeu créé par {self.createur}) - ({self.categorie}, {self.nb_joueur_min}-{self.nb_joueur_max} joueurs)"
 
     class Meta:
         verbose_name_plural = "jeux de plateau"
@@ -152,9 +171,9 @@ class Utilisateur(models.Model):
     Abstraction de toute personne utilisant la médiathèque.
 
     Attributs :
-      - nom : string, max_length=100
+      - name : string, max_length=100
     """
-    nom = models.CharField(max_length=100)
+    name = models.CharField(max_length=100)
 
     class Meta:
         abstract = True
@@ -211,7 +230,7 @@ class Membre(Utilisateur):
     def __str__(self):
         etat = 'Bloqué' if self.bloque else 'Actif'
         return (
-            f"{self.nom} ({self.compte}) "
+            f"{self.name} ({self.compte}) "
             f"[{etat}] Emprunts : {self.nb_emprunts_en_cours}/{self.MAX_EMPRUNTS}"
         )
 
