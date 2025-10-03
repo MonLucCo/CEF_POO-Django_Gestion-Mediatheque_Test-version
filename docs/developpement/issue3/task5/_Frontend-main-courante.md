@@ -422,6 +422,15 @@ La résolution de cette difficulté a démontré :
   - les bornes **dynamiques** (ie. année courante) qui doivent être définies dans un formulaire ou une méthode `clean()`.
 - l'importance de garantir l'intégrité métier avec une structure des données toujours cohérente.
 
+### 9.8 Difficulté 8 : nommage des dossiers du projet
+
+Lors de la création de dossiers dans la structure du projet, il est essentiel de vérifier qu’ils ne sont pas exclus par le fichier `.gitignore`.
+Le dossier `media/` est un exemple typique : il est ignoré par défaut, car utilisé pour les fichiers uploadés.
+
+La solution appliquée est d'utiliser le **nom des entités au pluriel pour les dossiers de templates** (medias/, livres/, membres/, etc.).
+
+Cette correction a permis d’explorer l’interface de _refactorisation_ de PyCharm, notamment la _preview_ des impacts et l’exclusion sélective de fichiers sensibles (`.gitignore`, `migrations`).
+
 ---
 
 ## 10. 🔗 Liens utiles

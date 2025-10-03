@@ -1,0 +1,99 @@
+{% extends 'bibliothecaire/_base.html' %}
+
+{% block title %}Détail du Média{% endblock %}
+
+{% block content %}
+<h2>Détail du média</h2>
+
+<table>
+    <tr>
+        <th>Titre</th>
+        <td>{{ media.name }}</td>
+    </tr>
+    <tr>
+        <th>Type</th>
+        <td>{{ media.media_type }}</td>
+    </tr>
+    {% if media.annee_edition %}
+        <tr>
+            <th>Année</th>
+            <td>{{ media.annee_edition }}</td>
+        </tr>
+    {%  endif %}
+    <tr>
+        <th>Consultable</th>
+        <td>{{ media.consultable|yesno:"Oui,Non" }}</td>
+    </tr>
+    <tr>
+        <th>Thème</th>
+        <td>{{ media.theme }}</td>
+    </tr>
+    <tr>
+        <th>Disponible</th>
+        {% comment %}
+        <td>{% if media.disponible %}Oui{% else %}Non{% endif %}</td>
+        {% endcomment %}
+        <td>{{ media.disponible|yesno:"Oui,Non" }}</td>
+    </tr>
+
+  {% if media.media_type == "LIVRE" %}
+    <tr>
+        <th>Auteur</th>
+        <td>{{ media.auteur }}</td>
+    </tr>
+    <tr>
+        <th>Nombre de pages</th>
+        {% if media.nb_page %}
+            <td>{{ media.nb_page }}</td>
+        {% else %}
+            <td>non saisie</td>
+        {% endif %}
+    </tr>
+    <tr>
+        <th>Résumé</th>
+        <td>{{ media.resume }}</td>
+    </tr>
+  {% elif media.media_type == "DVD" %}
+    <tr>
+        <th>Réalisateur</th>
+        <td>{{ media.realisateur }}</td>
+    </tr>
+    <tr>
+        <th>Durée</th>
+        {% if media.duree %}
+            <td>{{ media.duree }} minute(s)</td>
+        {% else %}
+            <td>non saisie</td>
+        {% endif %}
+    </tr>
+    <tr><th>Histoire</th><td>{{ media.histoire }}</td></tr>
+  {% elif media.media_type == "CD" %}
+    <tr>
+        <th>Artiste</th>
+        <td>{{ media.artiste }}</td>
+    </tr>
+    <tr>
+        <th>Nombre de pistes</th>
+        <td>{{ media.nb_piste }}</td>
+    </tr>
+    <tr>
+        <th>Durée d'écoute</th>
+        {%  if media.duree_ecoute %}
+            <td>{{ media.duree_ecoute }} minute(s)</td>
+        {%  else %}
+            <td>non saisie</td>
+        {% endif %}
+    </tr>
+  {% endif %}
+</table>
+
+<div style="margin-top: 20px;">
+{% comment %}
+    <a href="{% url 'bibliothecaire:media_update' media.pk %}">Modifier</a> |
+    <a href="{% url 'bibliothecaire:media_delete' media.pk %}">Supprimer</a> |
+{% endcomment %}
+    <a href="{% url 'bibliothecaire:media_list' %}">Retour à la liste</a>
+</div>
+
+
+{% endblock %}

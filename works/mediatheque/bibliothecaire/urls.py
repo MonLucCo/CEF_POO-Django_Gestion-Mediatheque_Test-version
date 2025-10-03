@@ -9,11 +9,11 @@ urlpatterns = [
     path('accueil/', views.AccueilBibliothecaireView.as_view(), name='accueil'),
 
     # Media (Livre, Dvd, Cd)
-    path('media/', views.MediaListView.as_view(), name='media_list'),
-    path('media/<int:pk>/', views.MediaDetailView.as_view(), name='media_detail'),
-#    path('media/ajouter/', views.MediaCreateView.as_view(), name='media_create'),
-#    path('media/<int:pk>/modifier/', views.MediaUpdateView.as_view(), name='media_update'),
-#    path('media/<int:pk>/supprimer/', views.MediaDeleteView.as_view(), name='media_delete'),
+    path('medias/', views.MediaListView.as_view(), name='media_list'),
+    path('medias/<int:pk>/', views.MediaDetailView.as_view(), name='media_detail'),
+#    path('medias/ajouter/', views.MediaCreateView.as_view(), name='media_create'),
+#    path('medias/<int:pk>/modifier/', views.MediaUpdateView.as_view(), name='media_update'),
+#    path('medias/<int:pk>/supprimer/', views.MediaDeleteView.as_view(), name='media_delete'),
 
     # Emprunts
  #   path('emprunts/', views.EmpruntListView.as_view(), name='emprunt_list'),
@@ -28,7 +28,7 @@ urlpatterns = [
  #   path('membres/<int:pk>/supprimer/', views.MembreDeleteView.as_view(), name='membre_delete'),
 
     # Fonctionnalités souhaitables (optionnelles)
- #   path('media/type/<str:type>/', views.MediaFilteredListView.as_view(), name='media_filtered'),
+ #   path('medias/type/<str:type>/', views.MediaFilteredListView.as_view(), name='media_filtered'),
  #   path('emprunts/statut/<int:statut>/', views.EmpruntFilteredListView.as_view(), name='emprunt_filtered'),
  #   path('membres/<int:pk>/historique/', views.MembreHistoriqueView.as_view(), name='membre_historique'),
  #    path('jeux/', views.JeuListView.as_view(), name='jeu_list'),
