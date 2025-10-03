@@ -19,6 +19,7 @@ class MediaEntityTests(TestCase):
     def test_ent_02_media_default_values(self):
         self.assertTrue(self.monMedia.consultable)
         self.assertTrue(self.monMedia.disponible)
+        self.assertFalse(self.monMedia.is_typed())
 
     def test_ent_03_media_sans_sous_type(self):
         # Ce n'est pas une entité Livre (type)

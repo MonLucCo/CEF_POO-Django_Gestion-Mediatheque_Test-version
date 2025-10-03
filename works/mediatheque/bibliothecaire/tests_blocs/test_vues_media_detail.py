@@ -6,7 +6,7 @@ from bibliothecaire.models import Media, Livre, Dvd, Cd
 class MediaDetailViewTests(TestCase):
     @classmethod
     def setUpTestData(cls):
-        cls.media = Media(name="Test Media", theme="Test Thème")
+        cls.media = Media(name="Test du Media", theme="Test Thème du Media")
         cls.media.full_clean()
         cls.media.save()
         cls.livre = Livre(
@@ -46,6 +46,11 @@ class MediaDetailViewTests(TestCase):
     def test_vue_04a_media_detail_instance_type_livre(self):
         response = self.client.get(reverse('bibliothecaire:media_detail', args=[self.livre.pk]))
         media_obj = response.context['media']
+        # Vérification du typage
+        self.assertTrue(isinstance(media_obj, Livre))
+        self.assertTrue(media_obj.is_typed())
+        self.assertEqual(media_obj.get_real_instance(), media_obj)  # même contenu
+        self.assertIsNot(media_obj.get_real_instance(), media_obj)  # objets différents
         # Vérification du contenu
         self.assertEqual(type(media_obj).__name__, "Livre")
         self.assertEqual(media_obj.name, "Test Media-Livre")
@@ -82,6 +87,11 @@ class MediaDetailViewTests(TestCase):
     def test_vue_04b_media_detail_instance_type_dvd(self):
         response = self.client.get(reverse('bibliothecaire:media_detail', args=[self.dvd.pk]))
         media_obj = response.context['media']
+        # Vérification du typage
+        self.assertTrue(isinstance(media_obj, Dvd))
+        self.assertTrue(media_obj.is_typed())
+        self.assertEqual(media_obj.get_real_instance(), media_obj)  # même contenu
+        self.assertIsNot(media_obj.get_real_instance(), media_obj)  # objets différents
         # Vérification du contenu
         self.assertEqual(type(media_obj).__name__, "Dvd")
         self.assertEqual(media_obj.name, "Test Media-Dvd")
@@ -118,6 +128,11 @@ class MediaDetailViewTests(TestCase):
     def test_vue_04c_media_detail_instance_type_cd(self):
         response = self.client.get(reverse('bibliothecaire:media_detail', args=[self.cd.pk]))
         media_obj = response.context['media']
+        # Vérification du typage
+        self.assertTrue(isinstance(media_obj, Cd))
+        self.assertTrue(media_obj.is_typed())
+        self.assertEqual(media_obj.get_real_instance(), media_obj)  # même contenu
+        self.assertIsNot(media_obj.get_real_instance(), media_obj)  # objets différents
         # Vérification du contenu
         self.assertEqual(type(media_obj).__name__, "Cd")
         self.assertEqual(media_obj.name, "Test Media-Cd")
@@ -155,8 +170,23 @@ class MediaDetailViewTests(TestCase):
         # Vue de détail d'un objet non typé (Media)
         responseMedia = self.client.get(reverse('bibliothecaire:media_detail', args=[self.media.pk]))
         media_obj = responseMedia.context['media']
+        # Vérification du typage
+        self.assertTrue(isinstance(media_obj, Media))
+        self.assertFalse(media_obj.is_typed())
+        self.assertEqual(media_obj.get_real_instance(), media_obj)
+        self.assertIs(media_obj.get_real_instance(), media_obj)
+        # Vérification du contenu
+        self.assertEqual(type(media_obj).__name__, "Media")
+        self.assertEqual(media_obj.name, "Test du Media")
+        self.assertEqual(media_obj.annee_edition, None)
+        self.assertEqual(media_obj.consultable, True)
+        self.assertEqual(media_obj.disponible, True)
+        self.assertEqual(media_obj.theme, "Test Thème du Media")
+        self.assertEqual(media_obj.media_type, "NON_DEFINI")
+        # Vérification de l'affichage détaillé
         expected_media_type = media_obj.media_type if media_obj.media_type != 'NON_DEFINI' else "Non défini"
         self.assertContains(responseMedia, f"<td>{expected_media_type}</td>")
-        self.assertNotContains(responseMedia, "Auteur Test Livre")
-        self.assertNotContains(responseMedia, "Résumé Test Livre")
-        self.assertNotContains(responseMedia, "Année")
+        self.assertNotContains(responseMedia, "<th>Auteur</th>")
+        self.assertNotContains(responseMedia, "<th>Réalisateur</th>")
+        self.assertNotContains(responseMedia, "<th>Artiste</th>")
+        self.assertNotContains(responseMedia, "<th>Année</th>")
