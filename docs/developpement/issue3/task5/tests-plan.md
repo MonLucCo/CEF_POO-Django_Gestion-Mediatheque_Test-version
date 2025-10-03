@@ -68,12 +68,12 @@ Les tests sont répartis en trois catégories :
 
 ### 🧭 Navigation (`T-NAV-xxx`)
 
-| ID Test  | Description                         | URL ciblée                   | Résultat attendu            | Statut          |
-|----------|-------------------------------------|------------------------------|-----------------------------|-----------------|
-| T-NAV-01 | Accès à la page d’accueil           | `/bibliothecaire/`           | Code 200 + template accueil | ✅ Validé        |
-| T-NAV-02 | Accès à la liste des médias         | `/bibliothecaire/media/`     | Code 200 + template liste   | ✅ Validé        |
-| T-NAV-03 | Accès au détail d’un média existant | `/bibliothecaire/media/1/`   | Code 200 + template détail  | ❌ Correction BD |
-| T-NAV-04 | Accès à un média inexistant         | `/bibliothecaire/media/999/` | Code 404                    | ✅ Validé        |
+| ID Test  | Description                         | URL ciblée                   | Résultat attendu            | Statut   |
+|----------|-------------------------------------|------------------------------|-----------------------------|----------|
+| T-NAV-01 | Accès à la page d’accueil           | `/bibliothecaire/`           | Code 200 + template accueil | ✅ Validé |
+| T-NAV-02 | Accès à la liste des médias         | `/bibliothecaire/media/`     | Code 200 + template liste   | ✅ Validé |
+| T-NAV-03 | Accès au détail d’un média existant | `/bibliothecaire/media/1/`   | Code 200 + template détail  | ✅ Validé |
+| T-NAV-04 | Accès à un média inexistant         | `/bibliothecaire/media/999/` | Code 404                    | ✅ Validé |
 
 > ❌ Le test T-NAV-03 a révélé une contrainte sur le champ `annee_edition` du modèle `Media`. Il sera à reprendre après correction du modèle de données.  
 > 🔧 La correction a été intégrée et documentée dans [`Modelisation_correction-erreurs-suite-tests-unitaires.md`](Modelisation_correction-erreurs-suite-tests-unitaires.md).  

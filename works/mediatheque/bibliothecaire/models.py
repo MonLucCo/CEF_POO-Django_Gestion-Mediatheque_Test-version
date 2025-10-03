@@ -54,10 +54,23 @@ class Media(Support):
     """
     Support empruntable : héritier de Support.
 
+    Représente un média générique pouvant être typé (Livre, DVD, CD) ou laissé non typé.
+    Permet la consultation et l’emprunt via l’interface bibliothécaire.
+
     Attributs :
-      - disponible  : booléen, True si non prêté
-      - theme       : string, max_length=200
-      - media_type  : choix parmi ['LIVRE','DVD','CD']
+      - disponible   : booléen, True si le média est disponible à l’emprunt
+      - theme        : string, thème ou catégorie du média
+      - media_type   : string, choix parmi ['NON_DEFINI', 'LIVRE', 'DVD', 'CD']
+                       Définit le type déclaré du média, sans garantir l’instanciation réelle du sous-type.
+
+    Méthodes :
+      - __str__()             : Affiche le nom et le type déclaré du média.
+      - is_typed()            : Retourne True si un sous-type réel est instancié (Livre, DVD ou CD).
+      - get_real_instance()   : Retourne l’instance réelle du sous-type si elle existe, sinon l’objet Media lui-même.
+
+    Remarques :
+      - Le champ media_type est utilisé pour l’affichage et les filtres, mais ne garantit pas la présence d’un sous-type.
+      - La méthode get_real_instance() permet d’accéder aux attributs spécifiques du type réel sans dépendre de la vue.
     """
     disponible   = models.BooleanField(default=True)
     theme        = models.CharField(max_length=200)
@@ -76,6 +89,18 @@ class Media(Support):
 
     def __str__(self):
         return f"{self.name} ({self.media_type})"
+
+    def is_typed(self):
+        return hasattr(self, 'livre') or hasattr(self, 'dvd') or hasattr(self, 'cd')
+
+    def get_real_instance(self):
+        if hasattr(self, 'livre'):
+            return self.livre
+        elif hasattr(self, 'dvd'):
+            return self.dvd
+        elif hasattr(self, 'cd'):
+            return self.cd
+        return self
 
 
 class Livre(Media):

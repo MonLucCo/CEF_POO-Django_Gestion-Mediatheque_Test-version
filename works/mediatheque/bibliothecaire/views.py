@@ -19,11 +19,4 @@ class MediaDetailView(DetailView):
 
     def get_object(self, queryset=None):
         obj = super(MediaDetailView, self).get_object(queryset)
-        if hasattr(obj, 'livre'):
-            return obj.livre
-        elif hasattr(obj, 'dvd'):
-            return obj.dvd
-        elif hasattr(obj, 'cd'):
-            return obj.cd
-        else:
-            return obj
+        return obj.get_real_instance()

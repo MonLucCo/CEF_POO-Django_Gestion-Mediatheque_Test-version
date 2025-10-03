@@ -2,7 +2,7 @@
 
 📁 `/docs/developpement/issue3/task5/Modelisation_correction-erreurs-suite-tests-unitaires.md`  
 
-📌 Version : indexE-6
+📌 Version : indexE-7
 
 ---
 
@@ -75,6 +75,13 @@ La cinquième version, index E-6, a conduit à la réalisation de la correction 
 Ces corrections ont conduit à la modification de l'intitulé du test T-ENT-01 pour prendre en compte un média non typé.
 Les résultats de ces tests unitaires sont consignés :
 - Pour C-MOD-01 à C-MOD-05, dans le document [`test_report_indexE-6.txt`](test_report_indexE-6.txt)  
+
+La sixième version, index E-7, a conduit à la réalisation de la correction C-MOD-06.
+Ces corrections ont conduit à la modification de l'entité `Media` et des vues `views.py` pour centraliser la logique de typage et d'accès aux types de médias.
+Les résultats de ces tests unitaires sont consignés :
+- Pour C-MOD-01 à C-MOD-06 (toutes les corrections du _Bloc 1_), dans le document [`test_report_indexE-7.txt`](test_report_indexE-7.txt)  
+
+Cette sixième version clôt les corrections du modèle de données de l'application `bibliothecaire` et permet de poursuivre le développement initial de l'application.
 
 ---
 
@@ -402,6 +409,31 @@ def get_real_instance(self):
 - `T-VUE-05` (absence de typage malgré `media_type`)  
 - `test_vues_media_detail.py` (accès aux champs spécifiques via `get_real_instance`)  
 - `test_entites_media.py` (vérification du typage réel)
+
+#### 🔸 Synthèse des corrections retenues
+
+Deux méthodes ont été ajoutées au modèle `Media` pour centraliser la logique de typage réel :
+- `is_typed()` : retourne `True` si un sous-type (`Livre`, `Dvd`, `Cd`) est instancié
+- `get_real_instance()` : retourne l’instance réelle du sous-type si elle existe, sinon l’objet `Media` lui-même
+
+Cette centralisation permet de :
+- Supprimer la logique de typage dispersée dans les vues
+- Simplifier l’accès aux attributs spécifiques dans les templates
+- Renforcer la cohérence métier et la testabilité
+- Préparer les futures vues de liste et les filtres typés
+
+#### 🔸 Validation post correction
+
+La méthode `get_real_instance()` est désormais utilisée dans `MediaDetailView.get_object()` pour garantir que la vue retourne l’objet typé réel.
+
+Les tests suivants ont été adaptés ou enrichis :
+
+- `T-VUE-04a/b/c` : vérification que l’objet retourné est typé, avec égalité de contenu (`==`) mais identité distincte (`is not`)
+- `T-VUE-05` : vérification que l’objet non typé retourne lui-même (`is`)
+- `T-ENT-04a/b/c` : ajout de `is_typed()` et `get_real_instance()` dans les assertions
+- `T-ENT-05` : confirmation que `get_real_instance()` retourne l’objet `Media` non typé
+
+Tous les tests sont validés ([`test_report_indexE-7.txt`](test_report_indexE-7.txt)), confirmant la stabilité et la cohérence de la correction.
 
 ---
 
