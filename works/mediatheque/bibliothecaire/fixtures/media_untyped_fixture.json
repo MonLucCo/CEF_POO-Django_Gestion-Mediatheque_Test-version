@@ -1,0 +1,31 @@
+[
+  {
+    "model": "bibliothecaire.media",
+    "pk": 901,
+    "fields": {
+      "name": "Média minimal -sans type–disponible-consultable-sans date"
+    }
+  },
+  {
+    "model": "bibliothecaire.media",
+    "pk": 902,
+    "fields": {
+      "name": "Média minimal -sans type–indisponible-consultable-sans date",
+      "disponible": false
+    }
+  },
+  {
+    "model": "bibliothecaire.media",
+    "pk": 903,
+    "fields": {
+      "name": "Média minimal -sans type–indisponible-consultable-date",
+      "annee_edition": 1980
+    }
+  },
+  {
+    "model": "bibliothecaire.media",
+    "fields": {
+      "name": "Média minimal – insertion automatique"
+    }
+  }
+]

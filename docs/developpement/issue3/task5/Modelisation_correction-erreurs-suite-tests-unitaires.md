@@ -2,7 +2,7 @@
 
 📁 `/docs/developpement/issue3/task5/Modelisation_correction-erreurs-suite-tests-unitaires.md`  
 
-📌 Version : indexE-5
+📌 Version : indexE-6
 
 ---
 
@@ -70,6 +70,11 @@ Les résultats de ces tests unitaires sont consignés :
 - Pour C-MOD-01 et C-MOD-02, dans le document [`test_report_indexE-3.txt`](test_report_indexE-3.txt) 
 - Pour C-MOD-01, C-MOD-02 et C-MOD-03, dans le document [`test_report_indexE-4.txt`](test_report_indexE-4.txt) 
 - Pour C-MOD-01, C-MOD-02, C-MOD-03 et C-MOD-05, dans le document [`test_report_indexE-5.txt`](test_report_indexE-5.txt) 
+
+La cinquième version, index E-6, a conduit à la réalisation de la correction C-MOD-04.
+Ces corrections ont conduit à la modification de l'intitulé du test T-ENT-01 pour prendre en compte un média non typé.
+Les résultats de ces tests unitaires sont consignés :
+- Pour C-MOD-01 à C-MOD-05, dans le document [`test_report_indexE-6.txt`](test_report_indexE-6.txt)  
 
 ---
 
@@ -243,6 +248,52 @@ media_type = models.CharField(
 - `T-VUE-05` (vue de détail d’un Media non typé)  
 - `T-ENT-03` (attributs accessibles selon typage)  
 - `test_entites_media.py` (création de Media seul)
+
+#### 🔸 Synthèse des corrections retenues
+
+Trois approches ont été envisagées pour permettre la création d’un objet `Media` non typé, nécessaire notamment dans les `setUp` des tests `tests_vues_*` et `tests_entites_media.py`.
+
+##### 1. **Solution initiale** : permettre `media_type = None`
+- Le champ `media_type` serait défini avec `null=True` et `blank=True`.
+- Permettrait de créer un `Media` sans typage explicite.
+- ❌ Risque d’incohérence avec `choices`, validation Django plus fragile.
+
+##### 2. **Solution minimaliste** : supprimer le champ `media_type`
+- Le typage serait déduit dynamiquement via `__class__.__name__` ou `get_real_instance()`.
+- ✅ Réduction de la redondance.
+- ❌ Perte de lisibilité métier, impossibilité de filtrer en base, complexité accrue dans les templates et l’admin.
+
+##### 3. **Solution retenue** : ajouter un item explicite `'NON_DEFINI'` dans `TYPE_CHOICES`
+- Permet de conserver un typage métier explicite tout en autorisant un état non typé.
+- ✅ Compatible avec les vues, les tests, l’admin et les filtres en base.
+- ✅ Facile à valider et à documenter.
+
+> Cette solution garantit la stabilité du modèle, la clarté métier, et la testabilité du projet.
+
+#### 🔸 Validation post correction
+
+La correction C-MOD-04 a été validée par une série de vérifications techniques et fonctionnelles :
+
+##### ✅ Tests unitaires
+- Tous les tests existants ont été relancés avec succès (`T-ENT-*`, `T-VUE-*`, `T-NAV-*`)
+- Le test `T-ENT-01`a été renommé dans `tests-plan.md` pour un média minimaliste et non typé
+- Le test `T-VUE-05` a été mis à jour pour vérifier l’affichage conditionnel du type `'NON_DEFINI'` dans `media_list.html`
+
+##### ✅ Visualisation navigateur
+- Un fichier `media_untyped_fixture.json` a été injecté pour créer plusieurs objets `Media` non typés
+- L’affichage dans `/bibliothecaire/medias/` est conforme :
+  - Les médias non typés apparaissent avec l’indication `(- sans -)`
+  - Le comportement est cohérent avec les médias typés (`(LIVRE)`, `(DVD)`, etc.)
+
+##### ✅ Cohérence admin
+- Les objets non typés sont visibles et modifiables dans l’interface d’administration
+- Le champ `media_type` affiche correctement la valeur `'NON_DEFINI'` dans les formulaires
+
+##### ✅ Structure du template
+- Le fichier `media_list.html` a été modifié pour gérer explicitement le cas `'NON_DEFINI'`
+- L’affichage est conditionné pour éviter les _blancs silencieux_ ou les valeurs techniques
+
+> Cette validation garantit que la correction est fonctionnelle, testable, et conforme aux attentes métier et UX.
 
 ---
 

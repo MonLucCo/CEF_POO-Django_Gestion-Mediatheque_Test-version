@@ -6,7 +6,7 @@ from bibliothecaire.models import Media, Livre, Dvd, Cd
 class MediaDetailViewTests(TestCase):
     @classmethod
     def setUpTestData(cls):
-        cls.media = Media(name="Test Media", media_type="LIVRE", theme="Test Thème")
+        cls.media = Media(name="Test Media", theme="Test Thème")
         cls.media.full_clean()
         cls.media.save()
         cls.livre = Livre(
@@ -154,7 +154,9 @@ class MediaDetailViewTests(TestCase):
     def test_vue_05_media_detail_vue_sans_type(self):
         # Vue de détail d'un objet non typé (Media)
         responseMedia = self.client.get(reverse('bibliothecaire:media_detail', args=[self.media.pk]))
-        self.assertContains(responseMedia, "LIVRE")
+        media_obj = responseMedia.context['media']
+        expected_media_type = media_obj.media_type if media_obj.media_type != 'NON_DEFINI' else "Non défini"
+        self.assertContains(responseMedia, f"<td>{expected_media_type}</td>")
         self.assertNotContains(responseMedia, "Auteur Test Livre")
         self.assertNotContains(responseMedia, "Résumé Test Livre")
         self.assertNotContains(responseMedia, "Année")

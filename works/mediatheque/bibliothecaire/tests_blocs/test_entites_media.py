@@ -6,15 +6,15 @@ class MediaEntityTests(TestCase):
     @classmethod
     def setUpTestData(cls):
         # Création d’un Media seul
-        cls.monMedia = Media(name="Test Media", media_type="LIVRE", theme="Test Theme Media")
+        cls.monMedia = Media(name="Test Media", theme="Test Theme Media")
         cls.monMedia.full_clean()
         cls.monMedia.save()
 
-    def test_ent_01_media_livre_creation(self):
+    def test_ent_01_media_creation(self):
         self.assertEqual(self.monMedia.name, "Test Media")
         self.assertEqual(self.monMedia.annee_edition, None)
         self.assertEqual(self.monMedia.theme, "Test Theme Media")
-        self.assertEqual(self.monMedia.media_type, "LIVRE")
+        self.assertEqual(self.monMedia.media_type, "NON_DEFINI")
 
     def test_ent_02_media_default_values(self):
         self.assertTrue(self.monMedia.consultable)

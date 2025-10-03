@@ -85,7 +85,7 @@ Les tests sont répartis en trois catégories :
 
 | ID Test  | Description                                                   | Modèle testé    | Résultat attendu                                                   | Statut   |
 |----------|---------------------------------------------------------------|-----------------|--------------------------------------------------------------------|----------|
-| T-ENT-01 | Création d’un `Media` typé `Livre`                            | `Media`         | Attributs cohérents (`titre`, `media_type`, `theme`, etc.)         | ✅ Validé |
+| T-ENT-01 | Création d’un `Media` non typé (création minimaliste)         | `Media`         | Attributs cohérents (`titre`, `media_type`, `theme`, etc.)         | ✅ Validé |
 | T-ENT-02 | Vérification des attributs par défaut                         | `Media`         | `consultable=True`, `disponible=True`                              | ✅ Validé |
 | T-ENT-03 | Vérification des attributs accessibles selon le typage        | `Media`         | Champs spécifiques (`auteur`, `resume`, etc.) absents si non typé  | ✅ Validé |
 | T-ENT-04 | Vérification du typage multi-table et de la structure en base | `Media → Livre` | `Media.count() == 2`, `Livre.count() == 1`, `Livre.pk == Media.pk` | ✅ Validé |
