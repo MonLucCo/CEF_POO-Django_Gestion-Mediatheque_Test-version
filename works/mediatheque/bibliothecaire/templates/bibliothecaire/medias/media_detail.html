@@ -12,7 +12,11 @@
     </tr>
     <tr>
         <th>Type</th>
-        <td>{{ media.media_type }}</td>
+        {% if media.media_type != 'NON_DEFINI' %}
+            <td>{{ media.media_type }}</td>
+        {% else %}
+            <td>Non défini</td>
+        {% endif %}
     </tr>
     {% if media.annee_edition %}
         <tr>

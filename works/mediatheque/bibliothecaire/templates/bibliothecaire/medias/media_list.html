@@ -8,7 +8,11 @@
   {% for media in medias %}
     <li>
       <a href="{% url 'bibliothecaire:media_detail' media.pk %}">
-        {{ media.name }} ({{ media.media_type }}) {% if media.disponible %}- [disponible]{% endif %}
+        {% if media.media_type != 'NON_DEFINI' %}
+          {{ media.name }} ({{ media.media_type }}) {% if media.disponible %}- [disponible]{% endif %}
+        {% else %}
+          {{ media.name }} (- sans -) {% if media.disponible %}- [disponible]{% endif %}
+        {% endif %}
       </a>
     </li>
   {% empty %}

@@ -62,11 +62,17 @@ class Media(Support):
     disponible   = models.BooleanField(default=True)
     theme        = models.CharField(max_length=200)
     TYPE_CHOICES = [
+        ('NON_DEFINI', 'Non défini'),
         ('LIVRE', 'Livre'),
         ('DVD',   'DVD'),
         ('CD',    'CD'),
     ]
-    media_type   = models.CharField(max_length=10, choices=TYPE_CHOICES)
+    media_type   = models.CharField(
+        max_length=12,
+        choices=TYPE_CHOICES,
+        default='NON_DEFINI',
+        help_text="Type de média. 'NON_DEFINI' si aucun sous-type n'est instancié."
+    )
 
     def __str__(self):
         return f"{self.name} ({self.media_type})"
