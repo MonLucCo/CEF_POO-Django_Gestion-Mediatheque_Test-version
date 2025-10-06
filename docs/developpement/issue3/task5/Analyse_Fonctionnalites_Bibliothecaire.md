@@ -2,7 +2,7 @@
 
 📁 `/docs/developpement/issue3/task5/Analyse_Fonctionnalites.md`  
 
-📌 Version : index F-1 (issue #3 – étape 5)
+📌 Version : index F-2 (issue #3 – étape 5)
 
 ---
 
@@ -61,14 +61,15 @@ Permettre au bibliothécaire de consulter les médias du catalogue selon des cri
 
 #### 🧩 Cas d’usage
 
-| ID         | Description métier                            | Filtrage appliqué                                         | Avancement                                 |
-|------------|-----------------------------------------------|-----------------------------------------------------------|--------------------------------------------|
-| UC-LIST-01 | Afficher tous les médias consultables         | `Media.objects.filter(consultable=True)`                  | ✅ Implémenté                               |
-| UC-LIST-02 | Afficher tous les médias disponibles          | `Media.objects.filter(consultable=True, disponible=True)` | 🔸 À intégrer dans get_queryset()          |
-| UC-LIST-03 | Afficher les médias par type (Livre, Dvd, Cd) | `Media.objects.filter(media_type='LIVRE')` (ou autre)     | 🔸 À intégrer avec paramètre GET ou filtre |
+| ID         | Description métier                            | Filtrage appliqué                                         | Avancement   |
+|------------|-----------------------------------------------|-----------------------------------------------------------|--------------|
+| UC-LIST-01 | Afficher tous les médias consultables         | `Media.objects.filter(consultable=True)`                  | ✅ Implémenté |
+| UC-LIST-02 | Afficher tous les médias disponibles          | `Media.objects.filter(consultable=True, disponible=True)` | ✅ Implémenté |
+| UC-LIST-03 | Afficher les médias par type (Livre, Dvd, Cd) | `Media.objects.filter(media_type='LIVRE')` (ou autre)     | ✅ Implémenté |
 
-> ✅ UC-LIST-01 est validé dans MediaListView et testé (`T-VUE-01`, `T-VUE-02`).   
-> 🔸 UC-LIST-02 et UC-LIST-03 sont à intégrer dans la logique de filtrage dynamique.
+> 🔹 La structuration des routes associées à ces cas d’usage a soulevé une difficulté métier importante, documentée dans la 
+> [Difficulté 10 – Organisation du routage lié aux médias](../../../developpement/issue3/_Frontend-main-courante.md#910-difficulté-10--organisation-et-clarté-du-routage-lié-aux-médias).  
+> 🔹 Chaque UC dispose d’une route dédiée, d’une vue spécifique et d’un bloc de test fonctionnel (`T-FUN-*`).
 
 #### 🔧 Impacts techniques
 

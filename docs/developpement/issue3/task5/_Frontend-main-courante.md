@@ -443,6 +443,69 @@ Cette correction a permis d'approfondir cette démarche de tests unitaires à la
 
 ---
 
+### 9.10 Difficulté 10 : Organisation et clarté du routage lié aux médias
+
+#### a) Contexte de la difficulté
+
+Lors de la mise en œuvre des vues liées à l’entité `Media`, une complexité est apparue concernant la **structuration des routes**. 
+Le sujet impose plusieurs cas d’usage distincts :
+- Affichage de la **liste complète** des médias
+- Affichage des **médias disponibles** pour l’emprunt
+- Création d’un emprunt ou d’un média (selon des critères métier).
+
+Ces cas d'usage induisent des fonctions complémentaires :
+- Affichage des **médias par type** (`LIVRE`, `DVD`, `CD`)
+
+Cette diversité fonctionnelle soulève une question centrale : **comment organiser les routes de manière claire, cohérente et extensible**, sans créer d’ambiguïté entre les vues ni de duplication technique.
+
+#### b) Problème rencontré
+
+La route `/medias/` est déjà utilisée pour UC-LIST-01 (consultables).  
+Ajouter des paramètres GET (`?type=...`, `?disponible=True`) sur cette route aurait permis un filtrage dynamique, mais aurait introduit une **ambiguïté métier** :
+- `/medias/?type=LIVRE` : est-ce une vue typée ou une vue consultable filtrée ?
+- `/medias/?disponible=True` : est-ce UC-LIST-02 ou une extension de UC-LIST-01 ?
+
+Cette situation rend difficile la lecture du code, la documentation des cas d’usage, et la maintenance des tests.
+
+#### c) Résolution retenue
+
+Pour garantir une **clarté fonctionnelle et une traçabilité technique**, les routes ont été **scindées en trois chemins indépendants** :
+
+| Route                       | Cas d’usage associé | Vue Django                 | Filtrage appliqué                     |
+|-----------------------------|---------------------|----------------------------|---------------------------------------|
+| `/medias/`                  | ----                | `MediaListView`            | ----                                  |
+| `/medias/consultables/`     | UC-LIST-01          | `MediaConsultableListView` | `consultable=True`                    |
+| `/medias/disponibles/`      | UC-LIST-02          | `MediaDisponibleListView`  | `consultable=True`, `disponible=True` |
+| `/medias/types/?type=LIVRE` | UC-LIST-03          | `MediaTypeListView`        | `media_type='LIVRE'`                  |
+
+> 🔹 Chaque route correspond à un **filtrage métier explicite**, testé et documenté séparément.  
+> 🔹 Le routage est **orthogonal** : chaque chemin est indépendant, mais peut être enrichi par des paramètres GET (`theme`, `statut`, etc.).
+
+#### d) Enjeux techniques et fonctionnels
+
+- **Lisibilité du code** : chaque vue est dédiée à un cas d’usage métier
+- **Modularité des tests** : chaque UC possède ses propres tests (`T-NAV`, `T-ENT`, `T-VUE`, `T-FUN`)
+- **Extensibilité** : chaque route peut évoluer sans impacter les autres
+- **Documentation claire** : chaque route est associée à une UC dans `Analyse_Fonctionnalites_Bibliothecaire.md`
+
+#### e) Enseignements
+
+- Le routage n’est pas qu’un choix technique : il reflète la **logique métier** du projet.
+- Il doit être pensé en fonction des **cas d’usage**, des **tests**, et de la **documentation**.
+- Une route unique avec des paramètres GET peut sembler plus compacte, mais devient vite difficile à maintenir si elle couvre plusieurs logiques métier.
+
+#### f) Conclusion
+
+La scission des routes `/medias/` en trois chemins indépendants permet :
+- Une **navigation claire** pour le bibliothécaire
+- Une **architecture modulaire** pour le développeur
+- Une **documentation traçable** pour le mainteneur
+
+Cette difficulté m'a permis de comprendre et illustre l’importance de **penser le routage comme un outil métier**, et non comme une simple convention technique.
+
+---
+
+
 ## 10. 🔗 Liens utiles
 
 - [Issue #3 – Développement de l’application fonctionnelle bibliothécaire](https://github.com/MonLucCo/CEF_POO-Django_Gestion-Mediatheque_Test-version/issues/3)  

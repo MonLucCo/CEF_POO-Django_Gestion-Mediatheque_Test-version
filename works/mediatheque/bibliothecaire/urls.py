@@ -12,6 +12,7 @@ urlpatterns = [
     path('medias/', views.MediaListView.as_view(), name='media_list'),
     path('medias/consultables/', views.MediaListConsultableView.as_view(), name='media_list_consultables'),
     path('medias/disponibles/', views.MediaListDisponibleView.as_view(), name='media_list_disponibles'),
+    path('medias/types/', views.MediaListByTypeView.as_view(), name='media_list_by_type'),
     path('medias/<int:pk>/', views.MediaDetailView.as_view(), name='media_detail'),
 #    path('medias/ajouter/', views.MediaCreateView.as_view(), name='media_create'),
 #    path('medias/<int:pk>/modifier/', views.MediaUpdateView.as_view(), name='media_update'),

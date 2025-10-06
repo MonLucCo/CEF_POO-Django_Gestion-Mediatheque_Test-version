@@ -13,6 +13,15 @@
                 <li><a href="{% url 'bibliothecaire:media_list' %}">Médias</a></li>
                 <li><a href="{% url 'bibliothecaire:media_list_consultables' %}">Consultables</a></li>
                 <li><a href="{% url 'bibliothecaire:media_list_disponibles' %}">Disponibles</a></li>
+                <li>
+                  Médias par type :
+                  <ul>
+                    <li><a href="{% url 'bibliothecaire:media_list_by_type' %}?type=LIVRE">Livres</a></li>
+                    <li><a href="{% url 'bibliothecaire:media_list_by_type' %}?type=DVD">DVD</a></li>
+                    <li><a href="{% url 'bibliothecaire:media_list_by_type' %}?type=CD">CD</a></li>
+                  </ul>
+                </li>
+
                 {% comment %}
 
                 <li><a href="{% url 'bibliothecaire:emprunt_list' %}">Emprunts</a></li>

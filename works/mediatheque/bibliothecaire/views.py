@@ -36,3 +36,18 @@ class MediaListDisponibleView(MediaListView):
         context['filtrage'] = 'disponibles'
         context['disponible'] = True
         return context
+
+
+class MediaListByTypeView(MediaListView):
+    def get_queryset(self):
+        rqt_media_type = self.request.GET.get('type')
+        if rqt_media_type in ['LIVRE', 'DVD', 'CD']:
+            return Media.objects.filter(media_type=rqt_media_type)
+        return Media.objects.none()
+
+    def get_context_data(self, **kwargs):
+        context = super(MediaListByTypeView, self).get_context_data(**kwargs)
+        rqt_media_type = self.request.GET.get('type')
+        context['filtrage'] = f"type: {rqt_media_type}" if rqt_media_type else "type inconnu"
+        context['media_type'] = rqt_media_type
+        return context

@@ -79,3 +79,58 @@ class MediaDisponibleViewTests(TestCase):
         for media in self.response.context['medias']:
             self.assertTrue(media.consultable)
             self.assertTrue(media.disponible)
+
+class MediaTypeViewTests(TestCase):
+    fixtures = ['medias_test.json']
+
+    @classmethod
+    def setUpTestData(cls):
+        cls.url = reverse('bibliothecaire:media_list_by_type')
+
+    def setUp(self):
+        self.media_types = ['LIVRE', 'DVD', 'CD']
+        self.expected_titles = {
+            'LIVRE': 'Liste des livres',
+            'DVD': 'Liste des DVD',
+            'CD': 'Liste des CD'
+        }
+
+    def test_nav_07_url_and_template(self):
+        """T-NAV-07 : Vérifie l’accès et le template pour chaque type"""
+        for media_type in self.media_types:
+            with self.subTest(media_type=media_type):
+                response = self.client.get(f"{self.url}?type={media_type}")
+                self.assertEqual(response.status_code, 200)
+                self.assertTemplateUsed(response, 'bibliothecaire/medias/media_list.html')
+
+    def test_ent_07_type_objects_only(self):
+        """T-ENT-07 : Vérifie que tous les objets affichés ont le bon media_type"""
+        for media_type in self.media_types:
+            with self.subTest(media_type=media_type):
+                response = self.client.get(f"{self.url}?type={media_type}")
+                for media in response.context['medias']:
+                    self.assertEqual(media.media_type, media_type)
+
+    def test_vue_08_title_displayed(self):
+        """T-VUE-08 : Vérifie que le titre <h2> correspond au type demandé"""
+        for media_type in self.media_types:
+            with self.subTest(media_type=media_type):
+                response = self.client.get(f"{self.url}?type={media_type}")
+                self.assertContains(response, f"<h2>{self.expected_titles[media_type]}</h2>")
+
+    def test_fun_03_uc_list_03_verification(self):
+        """
+        T-FUN-03 : Vérifie la cohérence fonctionnelle de UC-LIST-03
+        - Accès OK
+        - Template utilisé
+        - Titre affiché
+        - Objets filtrés correctement
+        """
+        for media_type in self.media_types:
+            with self.subTest(media_type=media_type):
+                response = self.client.get(f"{self.url}?type={media_type}")
+                self.assertEqual(response.status_code, 200)
+                self.assertTemplateUsed(response, 'bibliothecaire/medias/media_list.html')
+                self.assertContains(response, f"<h2>{self.expected_titles[media_type]}</h2>")
+                for media in response.context['medias']:
+                    self.assertEqual(media.media_type, media_type)
