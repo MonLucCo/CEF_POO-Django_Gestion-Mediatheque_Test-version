@@ -5,7 +5,7 @@ Pour une analyse métier complète, se référer à [`Analyse_Fonctionnalites.md
 
 Les fonctionnalités sont organisées selon trois pôles :
 - `membre` : consultation et accès public au catalogue
-- `bibliothecaire` : gestion des emprunts, retours, membres
+- `bibliothecaire` : gestion des médias et des emprunts, retours, membres
 - `accueil` : redirection et gestion des comptes
 
 Chaque fonctionnalité est associée à un rôle utilisateur (`visiteur`, `membre`, `bibliothécaire`) et à une logique métier définie dans les modèles (`Media`, `Emprunt`, `Membre`, etc.).
@@ -33,18 +33,23 @@ L’application doit permettre :
 - Le **blocage automatique** des membres en cas de retard ou dépassement de quota
 - La **navigation sécurisée** selon les rôles
 
-> 📎 Voir aussi : [`Analyse_Fonctionnalites.md`](Analyse_Fonctionnalites.md) pour le détail des cas d’usage et des règles métier.
+> 📎 Voir aussi : 
+> - [`Analyse_Fonctionnalites.md`](Analyse_Fonctionnalites.md) pour le détail des cas d’usage et des règles métier.
+> - [`Analyse_Fonctionnalites_Bibliothecaire.md`](../developpement/issue3/task5/Analyse_Fonctionnalites_Bibliothecaire.md) pour le détail relatif à l'application `bibliothecaire`.
 
 ---
 
 ## 2. Segmentation des rôles et des pôles
 
-| Pôle             | Rôle utilisateur  | Accès / Fonction                       |
-|------------------|-------------------|----------------------------------------|
-| `consultation`   | Visiteur / Membre | Consultation du catalogue              |
-| `bibliothecaire` | Bibliothécaire    | Gestion des emprunts, retours, membres |
-| `accueil`        | Tous              | Redirection, login, accueil            |
-| `mediatheque`    | Technique         | Routage, configuration, modèles        |
+| Pôle             | Rôle utilisateur         | Accès / Fonction                               |
+|------------------|--------------------------|------------------------------------------------|
+| `consultation`   | Membre (connecté ou non) | Consultation du catalogue                      |
+| `bibliothecaire` | Bibliothécaire           | Gestion des médias, emprunts, retours, membres |
+| `accueil`        | Tous                     | Redirection, login, accueil                    |
+| `mediatheque`    | Technique                | Routage, configuration, modèles                |
+
+> 🔹 Le rôle "Visiteur" n’est pas défini comme rôle fonctionnel autonome. 
+> La consultation publique est considérée comme une fonctionnalité accessible à tout membre, connecté ou non.
 
 ---
 
@@ -91,4 +96,18 @@ L’application doit permettre :
 - [`models.py_indexH.txt`](../developpement/issue3/task1/models.py_indexH.txt)
 - [`Analyse-initial_data.md`](../developpement/issue3/task2/Analyse-initial_data.md)
 - [`Analyse_Fonctionnalites.md`](Analyse_Fonctionnalites.md)
+
+### 🔹 Spécialisations par rôle
+
+Certains documents fonctionnels détaillent les cas d’usage selon les profils utilisateurs. Ils complètent le présent fichier par une analyse ciblée :
+
+| Rôle           | Document associé                                                                                                       | Positionnement actuel                          |
+|----------------|------------------------------------------------------------------------------------------------------------------------|------------------------------------------------|
+| Bibliothécaire | [`Analyse_Fonctionnalites_Bibliothecaire.md`](../developpement/issue3/task5/Analyse_Fonctionnalites_Bibliothecaire.md) | lié à l’implémentation de l’issue #3 – étape 5 |
+| Membre         | *(à créer)*                                                                                                            | lié à l'implémentation de l'issue #4           |
+
+> Ces _documents associés_ pourront être déplacés vers `/docs/fonctionnel/` une fois les cas d’usage stabilisés et validés.
+
+---
+
 

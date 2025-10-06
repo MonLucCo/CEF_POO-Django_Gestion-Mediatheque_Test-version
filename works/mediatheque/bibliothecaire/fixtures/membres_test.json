@@ -1,0 +1,47 @@
+[
+  {
+    "model": "bibliothecaire.membre",
+    "pk": 1,
+    "fields": {
+      "name": "Dupont",
+      "compte": "membre1",
+      "bloque": false
+    }
+  },
+  {
+    "model": "bibliothecaire.membre",
+    "pk": 2,
+    "fields": {
+      "name": "Martin",
+      "compte": "membre2",
+      "bloque": true
+    }
+  },
+  {
+    "model": "bibliothecaire.membre",
+    "pk": 3,
+    "fields": {
+      "name": "Bernard",
+      "compte": "membre3",
+      "bloque": false
+    }
+  },
+  {
+    "model": "bibliothecaire.membre",
+    "pk": 4,
+    "fields": {
+      "name": "Thomas",
+      "compte": "membre4",
+      "bloque": false
+    }
+  },
+  {
+    "model": "bibliothecaire.membre",
+    "pk": 5,
+    "fields": {
+      "name": "Petit",
+      "compte": "membre5",
+      "bloque": true
+    }
+  }
+]

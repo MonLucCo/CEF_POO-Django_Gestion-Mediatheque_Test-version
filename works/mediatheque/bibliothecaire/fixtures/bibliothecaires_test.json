@@ -1,0 +1,16 @@
+[
+  {
+    "model": "bibliothecaire.bibliothecaire",
+    "pk": 1,
+    "fields": {
+      "name": "Leclerc"
+    }
+  },
+  {
+    "model": "bibliothecaire.bibliothecaire",
+    "pk": 2,
+    "fields": {
+      "name": "Moreau"
+    }
+  }
+]

@@ -3,15 +3,21 @@
 {% block title %}Catalogue des Médias{% endblock %}
 
 {% block content %}
-<h2>Liste des médias</h2>
+
+{% if consultable or disponible %}
+    <h2>Liste des médias{% if consultable %} consultables{% endif %}{% if disponible %} disponibles{% endif %}</h2>
+{% else %}
+    <h2>Liste complète des médias</h2>
+{% endif %}
+
 <ul>
   {% for media in medias %}
     <li>
       <a href="{% url 'bibliothecaire:media_detail' media.pk %}">
         {% if media.media_type != 'NON_DEFINI' %}
-          {{ media.name }} ({{ media.media_type }}) {% if media.disponible %}- [disponible]{% endif %}
+          {{ media.name }} ({{ media.media_type }}) {% if media.consultable %}- {consultable}{% endif %} {% if media.disponible %}- [disponible]{% endif %}
         {% else %}
-          {{ media.name }} (- sans -) {% if media.disponible %}- [disponible]{% endif %}
+          {{ media.name }} (- sans -) {% if media.consultable %}- {consultable}{% endif %} {% if media.disponible %}- [disponible]{% endif %}
         {% endif %}
       </a>
     </li>

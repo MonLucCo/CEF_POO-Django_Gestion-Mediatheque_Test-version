@@ -2,7 +2,9 @@
 
 Ce document décrit les **fonctionnalités attendues**, les **cas d’usage**, et les **règles métier** du projet de gestion de médiathèque développé avec Django.
 
-Le document [`README-fonct.md`](README-fonct.md) le complète en détaillant les fonctionnalités indépendamment des étapes de développement.
+Les documents suivants le complète :
+- [`README-fonct.md`](README-fonct.md) en détaillant les fonctionnalités indépendamment des étapes de développement.
+- [`Analyse_Fonctionnalites_Bibliothecaire.md`](../developpement/issue3/task5/Analyse_Fonctionnalites_Bibliothecaire.md) en précisant les cas d'usage fonctionnels relatifs aux Bibliothécaires.
 
 ---
 
