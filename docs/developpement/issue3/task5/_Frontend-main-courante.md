@@ -90,7 +90,7 @@ Cette section distingue les fonctionnalités explicitement demandées dans le su
 | Vues          | `bibliothecaire/views.py`                               | 🔄 À compléter |
 | Templates     | `bibliothecaire/templates/bibliothecaire/`              | 🆕 En cours    |
 | Tests         | `bibliothecaire/tests.py`                               | 🔄 À compléter |
-| Fixtures      | `bibliothecaire/fixtures/*.json`                        | 🆕 À créer     |
+| Fixtures      | `bibliothecaire/fixtures/*.json`                        | ✅ En cours     |
 | Documentation | `/docs/developpement/issue3/_Frontend-main-courante.md` | ✅ En cours     |
 | Plan de test  | `/docs/tests/tests-plan.md`                             | ✅ En cours     |
 
@@ -150,7 +150,7 @@ Cette section distingue les fonctionnalités explicitement demandées dans le su
 
 - [ ] Tests de chaque vue CRUD pour `Media`, `Emprunt`, `Membre`
 - [ ] Vérification des modèles via shell Django
-- [ ] Tests de navigation et affichage dans le navigateur
+- [X] Tests de navigation et affichage dans le navigateur
 - [X] Préparation du plan de test (`tests-plan.md`)
 - [ ] Validation des cas métier avec fixtures
 
@@ -430,6 +430,16 @@ Le dossier `media/` est un exemple typique : il est ignoré par défaut, car uti
 La solution appliquée est d'utiliser le **nom des entités au pluriel pour les dossiers de templates** (medias/, livres/, membres/, etc.).
 
 Cette correction a permis d’explorer l’interface de _refactorisation_ de PyCharm, notamment la _preview_ des impacts et l’exclusion sélective de fichiers sensibles (`.gitignore`, `migrations`).
+
+### 9.9 Difficulté 9 : interactions entre les tests unitaires techniques et fonctionnels métier
+
+Lors de la reprise des développements fonctionnels, après la correction du modèle (Bloc 1), il a été difficile de caractériser un test unitaire fonctionnel (métier) dans une catégorie technique (`NAV`, `ENT` ou `VUE`).
+Une analyse fonctionnelle basée sur les cas d'usage du rôle de Bibliothécaire a permis d'identifier les différentes fonctionnalités à réaliser et à tester.
+
+Pour éviter une liaison entre les tests unitaires et conserver ainsi une autonomie entre les tests, la solution a consisté à créer une nouvelle catégorie de tests unitaires (T-FUN) qui sont définis de manière spécifique.
+Les tests techniques et fonctionnels sont regroupés dans une classe de **tests du cas d'usage** pour une facilité de développement et de maintenance.
+
+Cette correction a permis d'approfondir cette démarche de tests unitaires à la fois pour des validations techniques, mais aussi pour des validations fonctionnelles, dans un cadre commun des tests de cas d'usage.
 
 ---
 

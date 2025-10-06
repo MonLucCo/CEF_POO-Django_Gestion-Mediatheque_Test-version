@@ -1,0 +1,82 @@
+[
+  {
+    "model": "bibliothecaire.jeudeplateau",
+    "pk": 16,
+    "fields": {
+      "name": "Monopoly",
+      "annee_edition": 1935,
+      "consultable": true,
+      "createur": "Parker Brothers",
+      "regle_consultable": true,
+      "categorie": "Économie",
+      "duree_partie": 90,
+      "nb_joueur_min": 2,
+      "nb_joueur_max": 6,
+      "age_min": 8
+    }
+  },
+  {
+    "model": "bibliothecaire.jeudeplateau",
+    "pk": 17,
+    "fields": {
+      "name": "Risk",
+      "annee_edition": 1959,
+      "consultable": true,
+      "createur": "Parker Brothers",
+      "regle_consultable": true,
+      "categorie": "Stratégie",
+      "duree_partie": 120,
+      "nb_joueur_min": 2,
+      "nb_joueur_max": 6,
+      "age_min": 10
+    }
+  },
+  {
+    "model": "bibliothecaire.jeudeplateau",
+    "pk": 18,
+    "fields": {
+      "name": "Catan",
+      "annee_edition": 1995,
+      "consultable": false,
+      "createur": "Klaus Teuber",
+      "regle_consultable": true,
+      "categorie": "Stratégie",
+      "duree_partie": 75,
+      "nb_joueur_min": 3,
+      "nb_joueur_max": 4,
+      "age_min": 10
+    }
+  },
+  {
+    "model": "bibliothecaire.jeudeplateau",
+    "pk": 19,
+    "fields": {
+      "name": "Carcassonne",
+      "annee_edition": 2000,
+      "consultable": true,
+      "createur": "Klaus-Jürgen Wrede",
+      "regle_consultable": true,
+      "categorie": "Placement de tuiles",
+      "duree_partie": 45,
+      "nb_joueur_min": 2,
+      "nb_joueur_max": 5,
+      "age_min": 8
+    }
+  },
+  {
+    "model": "bibliothecaire.jeudeplateau",
+    "pk": 20,
+    "fields": {
+      "name": "Dixit",
+      "annee_edition": 2008,
+      "consultable": false,
+      "createur": "Jean-Louis Roubira",
+      "regle_consultable": false,
+      "categorie": "Imagination",
+      "duree_partie": 30,
+      "nb_joueur_min": 3,
+      "nb_joueur_max": 6,
+      "age_min": 8
+    }
+  }
+]

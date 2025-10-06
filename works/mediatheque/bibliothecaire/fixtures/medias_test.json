@@ -1,0 +1,332 @@
+[
+  {
+    "model": "bibliothecaire.media",
+    "pk": 1,
+    "fields": {
+      "name": "Le Petit Prince",
+      "annee_edition": 1943,
+      "consultable": true,
+      "disponible": true,
+      "theme": "Roman",
+      "media_type": "LIVRE"
+    }
+  },
+  {
+    "model": "bibliothecaire.media",
+    "pk": 2,
+    "fields": {
+      "name": "1984",
+      "annee_edition": 1949,
+      "consultable": false,
+      "disponible": false,
+      "theme": "Science-fiction",
+      "media_type": "LIVRE"
+    }
+  },
+  {
+    "model": "bibliothecaire.media",
+    "pk": 3,
+    "fields": {
+      "name": "Django Unleashed",
+      "annee_edition": 2021,
+      "consultable": true,
+      "disponible": true,
+      "theme": "Informatique",
+      "media_type": "LIVRE"
+    }
+  },
+  {
+    "model": "bibliothecaire.media",
+    "pk": 4,
+    "fields": {
+      "name": "Python Cookbook",
+      "annee_edition": 2019,
+      "consultable": true,
+      "disponible": true,
+      "theme": "Informatique",
+      "media_type": "LIVRE"
+    }
+  },
+  {
+    "model": "bibliothecaire.media",
+    "pk": 5,
+    "fields": {
+      "name": "Les Misérables",
+      "annee_edition": 1862,
+      "consultable": false,
+      "disponible": false,
+      "theme": "Roman",
+      "media_type": "LIVRE"
+    }
+  },
+  {
+    "model": "bibliothecaire.livre",
+    "pk": 1,
+    "fields": {
+      "media_ptr": 1,
+      "auteur": "Antoine de Saint-Exupéry",
+      "nb_page": 96,
+      "resume": "Conte poétique et philosophique"
+    }
+  },
+  {
+    "model": "bibliothecaire.livre",
+    "pk": 2,
+    "fields": {
+      "media_ptr": 2,
+      "auteur": "George Orwell",
+      "nb_page": 328,
+      "resume": "Roman dystopique"
+    }
+  },
+  {
+    "model": "bibliothecaire.livre",
+    "pk": 3,
+    "fields": {
+      "media_ptr": 3,
+      "auteur": "Adam Freeman",
+      "nb_page": 800,
+      "resume": "Guide complet de Django"
+    }
+  },
+  {
+    "model": "bibliothecaire.livre",
+    "pk": 4,
+    "fields": {
+      "media_ptr": 4,
+      "auteur": "David Beazley",
+      "nb_page": 700,
+      "resume": "Recettes Python avancées"
+    }
+  },
+  {
+    "model": "bibliothecaire.livre",
+    "pk": 5,
+    "fields": {
+      "media_ptr": 5,
+      "auteur": "Victor Hugo",
+      "nb_page": 1232,
+      "resume": "Épopée historique"
+    }
+  },
+  {
+    "model": "bibliothecaire.media",
+    "pk": 6,
+    "fields": {
+      "name": "Inception",
+      "annee_edition": 2010,
+      "consultable": true,
+      "disponible": true,
+      "theme": "Thriller",
+      "media_type": "DVD"
+    }
+  },
+  {
+    "model": "bibliothecaire.media",
+    "pk": 7,
+    "fields": {
+      "name": "Matrix",
+      "annee_edition": 1999,
+      "consultable": false,
+      "disponible": false,
+      "theme": "Action",
+      "media_type": "DVD"
+    }
+  },
+  {
+    "model": "bibliothecaire.media",
+    "pk": 8,
+      "fields": {
+      "name": "Le Fabuleux Destin d’Amélie Poulain",
+      "annee_edition": 2001,
+      "consultable": true,
+      "disponible": true,
+      "theme": "Comédie",
+      "media_type": "DVD"
+    }
+  },
+  {
+    "model": "bibliothecaire.media",
+    "pk": 9,
+    "fields": {
+      "name": "Interstellar",
+      "annee_edition": 2014,
+      "consultable": true,
+      "disponible": true,
+      "theme": "Science-fiction",
+      "media_type": "DVD"
+    }
+  },
+  {
+    "model": "bibliothecaire.media",
+    "pk": 10,
+    "fields": {
+      "name": "Le Seigneur des Anneaux",
+      "annee_edition": 2001,
+      "consultable": false,
+      "disponible": false,
+      "theme": "Fantasy",
+      "media_type": "DVD"
+    }
+  },
+  {
+    "model": "bibliothecaire.dvd",
+    "pk": 6,
+    "fields": {
+      "media_ptr": 6,
+      "realisateur": "Christopher Nolan",
+      "duree": 148,
+      "histoire": "Rêves imbriqués"
+    }
+  },
+  {
+    "model": "bibliothecaire.dvd",
+    "pk": 7,
+    "fields": {
+      "media_ptr": 7,
+      "realisateur": "Lana Wachowski",
+      "duree": 136,
+      "histoire": "Réalité simulée"
+    }
+  },
+  {
+    "model": "bibliothecaire.dvd",
+    "pk": 8,
+    "fields": {
+      "media_ptr": 8,
+      "realisateur": "Jean-Pierre Jeunet",
+      "duree": 122,
+      "histoire": "Le quotidien enchanté d’Amélie"
+    }
+  },
+  {
+    "model": "bibliothecaire.dvd",
+    "pk": 9,
+    "fields": {
+      "media_ptr": 9,
+      "realisateur": "Christopher Nolan",
+      "duree": 169,
+      "histoire": "Exploration spatiale"
+    }
+  },
+  {
+    "model": "bibliothecaire.dvd",
+    "pk": 10,
+    "fields": {
+      "media_ptr": 10,
+      "realisateur": "Peter Jackson",
+      "duree": 558,
+      "histoire": "Quête épique en Terre du Milieu"
+    }
+  },
+  {
+    "model": "bibliothecaire.media",
+    "pk": 11,
+    "fields": {
+      "name": "Thriller",
+      "annee_edition": 1982,
+      "consultable": true,
+      "disponible": true,
+      "theme": "Pop",
+      "media_type": "CD"
+    }
+  },
+  {
+    "model": "bibliothecaire.media",
+    "pk": 12,
+    "fields": {
+      "name": "Back in Black",
+      "annee_edition": 1980,
+      "consultable": false,
+      "disponible": false,
+      "theme": "Rock",
+      "media_type": "CD"
+    }
+  },
+  {
+    "model": "bibliothecaire.media",
+    "pk": 13,
+    "fields": {
+      "name": "The Dark Side of the Moon",
+      "annee_edition": 1973,
+      "consultable": true,
+      "disponible": true,
+      "theme": "Progressive",
+      "media_type": "CD"
+    }
+  },
+  {
+    "model": "bibliothecaire.media",
+    "pk": 14,
+    "fields": {
+      "name": "Abbey Road",
+      "annee_edition": 1969,
+      "consultable": true,
+      "disponible": true,
+      "theme": "Rock",
+      "media_type": "CD"
+    }
+  },
+  {
+    "model": "bibliothecaire.media",
+    "pk": 15,
+    "fields": {
+      "name": "Kind of Blue",
+      "annee_edition": 1959,
+      "consultable": false,
+      "disponible": false,
+      "theme": "Jazz",
+      "media_type": "CD"
+    }
+  },
+  {
+    "model": "bibliothecaire.cd",
+    "pk": 11,
+    "fields": {
+      "media_ptr": 11,
+      "artiste": "Michael Jackson",
+      "nb_piste": 9,
+      "duree_ecoute": 42
+    }
+  },
+  {
+    "model": "bibliothecaire.cd",
+    "pk": 12,
+    "fields": {
+      "media_ptr": 12,
+      "artiste": "AC/DC",
+      "nb_piste": 10,
+      "duree_ecoute": 41
+    }
+  },
+  {
+    "model": "bibliothecaire.cd",
+    "pk": 13,
+    "fields": {
+      "media_ptr": 13,
+      "artiste": "Pink Floyd",
+      "nb_piste": 10,
+      "duree_ecoute": 43
+    }
+  },
+  {
+    "model": "bibliothecaire.cd",
+    "pk": 14,
+    "fields": {
+      "media_ptr": 14,
+      "artiste": "The Beatles",
+      "nb_piste": 17,
+      "duree_ecoute": 47
+    }
+  },
+  {
+    "model": "bibliothecaire.cd",
+    "pk": 15,
+    "fields": {
+      "media_ptr": 15,
+      "artiste": "Miles Davis",
+      "nb_piste": 5,
+      "duree_ecoute": 46
+    }
+  }
+]
