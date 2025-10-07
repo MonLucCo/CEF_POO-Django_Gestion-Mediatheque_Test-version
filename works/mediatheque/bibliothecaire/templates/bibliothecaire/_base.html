@@ -9,17 +9,28 @@
         <h1>Médiathèque – Bibliothécaire</h1>
         <nav>
             <ul>
-
-                <li><a href="{% url 'bibliothecaire:media_list' %}">Médias</a></li>
-                <li><a href="{% url 'bibliothecaire:media_list_consultables' %}">Consultables</a></li>
-                <li><a href="{% url 'bibliothecaire:media_list_disponibles' %}">Disponibles</a></li>
                 <li>
-                  Médias par type :
-                  <ul>
-                    <li><a href="{% url 'bibliothecaire:media_list_by_type' %}?type=LIVRE">Livres</a></li>
-                    <li><a href="{% url 'bibliothecaire:media_list_by_type' %}?type=DVD">DVD</a></li>
-                    <li><a href="{% url 'bibliothecaire:media_list_by_type' %}?type=CD">CD</a></li>
-                  </ul>
+                    Lister les médias :
+                    <ul>
+                        <li><a href="{% url 'bibliothecaire:media_list' %}">Tous </a></li>
+                        <li><a href="{% url 'bibliothecaire:media_list_consultables' %}">Consultables</a></li>
+                        <li><a href="{% url 'bibliothecaire:media_list_disponibles' %}">Disponibles</a></li>
+                        <li>
+                          Par type :
+                          <ul>
+                            <li><a href="{% url 'bibliothecaire:media_list_by_type' %}?type=LIVRE">Livres</a></li>
+                            <li><a href="{% url 'bibliothecaire:media_list_by_type' %}?type=DVD">DVD</a></li>
+                            <li><a href="{% url 'bibliothecaire:media_list_by_type' %}?type=CD">CD</a></li>
+                            <li><a href="{% url 'bibliothecaire:media_list_non_types' %}?type=NON_DEFINI">Non défini</a></li>
+                          </ul>
+                        </li>
+                    </ul>
+                </li>
+                <li>
+                    Créer un média :
+                    <ul>
+                        <li><a href="{% url 'bibliothecaire:media_create' %}">Type "non défini"</a></li>
+                    </ul>
                 </li>
 
                 {% comment %}

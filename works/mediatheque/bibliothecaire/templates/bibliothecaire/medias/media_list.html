@@ -7,7 +7,7 @@
 {% if consultable or disponible %}
     <h2>Liste des médias{% if consultable %} consultables{% endif %}{% if disponible %} disponibles{% endif %}</h2>
 {% elif filtre != 'type inconnu' %}
-    <h2>Liste des {% if media_type == "LIVRE" %}livres{% elif media_type == 'DVD' %}DVD{% elif media_type == 'CD' %}CD{% else %}médias{% endif %}</h2>
+    <h2>Liste des {% if media_type == "LIVRE" %}livres{% elif media_type == 'DVD' %}DVD{% elif media_type == 'CD' %}CD{% elif media_type == 'NON_DEFINI' %}médias "non définis" (en attente de définition){% else %}médias{% endif %}</h2>
 {% else %}
     <h2>Liste complète des médias</h2>
 {% endif %}

@@ -1,17 +1,22 @@
-from django.shortcuts import render
-from django.views.generic import TemplateView, ListView, DetailView
-from .models import Media
+from django.urls import reverse_lazy
+from django.views.generic import TemplateView, ListView, DetailView, CreateView
+from bibliothecaire.models import Media
+from bibliothecaire.forms import MediaForm
 
 # Create your views here.
 
 # accueil
 class AccueilBibliothecaireView(TemplateView):
     template_name = 'bibliothecaire/accueil.html'
+
+
 # Media
 class MediaListView(ListView):
     model = Media
     context_object_name = 'medias'
     template_name = 'bibliothecaire/medias/media_list.html'
+
+
 class MediaDetailView(DetailView):
     model = Media
     context_object_name = 'media'
@@ -20,6 +25,8 @@ class MediaDetailView(DetailView):
     def get_object(self, queryset=None):
         obj = super(MediaDetailView, self).get_object(queryset)
         return obj.get_real_instance()
+
+
 class MediaListConsultableView(MediaListView):
     def get_queryset(self):
         return Media.objects.filter(consultable=True)
@@ -28,6 +35,8 @@ class MediaListConsultableView(MediaListView):
         context['filtrage'] = 'consultables'
         context['consultable'] = True
         return context
+
+
 class MediaListDisponibleView(MediaListView):
     def get_queryset(self):
         return Media.objects.filter(consultable=True, disponible=True)
@@ -51,3 +60,20 @@ class MediaListByTypeView(MediaListView):
         context['filtrage'] = f"type: {rqt_media_type}" if rqt_media_type else "type inconnu"
         context['media_type'] = rqt_media_type
         return context
+
+
+class MediaNonTypeListView(MediaListByTypeView):
+    def get_queryset(self):
+        return Media.objects.filter(media_type='NON_DEFINI')
+
+
+class MediaCreateView(CreateView):
+    model = Media
+    form_class = MediaForm
+    template_name = 'bibliothecaire/medias/media_form.html'
+    success_url = reverse_lazy('bibliothecaire:media_list')
+
+    def form_valid(self, form):
+        form.instance.consultable = False
+        form.instance.disponible = False
+        return super(MediaCreateView, self).form_valid(form)
