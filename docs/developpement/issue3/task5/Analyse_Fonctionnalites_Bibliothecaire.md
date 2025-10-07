@@ -2,7 +2,7 @@
 
 📁 `/docs/developpement/issue3/task5/Analyse_Fonctionnalites.md`  
 
-📌 Version : index F-2 (issue #3 – étape 5)
+📌 Version : index F-3 (issue #3 – étape 5)
 
 ---
 
@@ -66,10 +66,27 @@ Permettre au bibliothécaire de consulter les médias du catalogue selon des cri
 | UC-LIST-01 | Afficher tous les médias consultables         | `Media.objects.filter(consultable=True)`                  | ✅ Implémenté |
 | UC-LIST-02 | Afficher tous les médias disponibles          | `Media.objects.filter(consultable=True, disponible=True)` | ✅ Implémenté |
 | UC-LIST-03 | Afficher les médias par type (Livre, Dvd, Cd) | `Media.objects.filter(media_type='LIVRE')` (ou autre)     | ✅ Implémenté |
+| UC-LIST-04 | Afficher les médias non typés (`NON_DEFINI`)  | `Media.objects.filter(media_type='NON_DEFINI')`           | ✅ Implémenté |                                               |                                                           |              |
 
 > 🔹 La structuration des routes associées à ces cas d’usage a soulevé une difficulté métier importante, documentée dans la 
 > [Difficulté 10 – Organisation du routage lié aux médias](../../../developpement/issue3/_Frontend-main-courante.md#910-difficulté-10--organisation-et-clarté-du-routage-lié-aux-médias).  
 > 🔹 Chaque UC dispose d’une route dédiée, d’une vue spécifique et d’un bloc de test fonctionnel (`T-FUN-*`).
+
+#### 🧠 Analyse technique associée
+
+- La mise en œuvre des UC-LIST-01 à UC-LIST-03 a nécessité de traiter deux difficultés majeures :
+  - [Difficulté 9](_Frontend-main-courante.md#99-difficulté-9--interactions-entre-les-tests-unitaires-techniques-et-fonctionnels-métier) : distinction entre tests techniques et fonctionnels
+  - [Difficulté 10](_Frontend-main-courante.md#910-difficulté-10--organisation-et-clarté-du-routage-lié-aux-médias) : clarification du routage des vues liées à `Media`
+
+- La création d’un média non typé (`UC-CREATE-01`) implique la possibilité de le consulter.  
+  Une nouvelle UC a donc été ajoutée pour le profil **Bibliothécaire uniquement** :
+
+| ID         | Description métier                           | Filtrage appliqué                               |
+|------------|----------------------------------------------|-------------------------------------------------|
+| UC-LIST-04 | Afficher les médias non typés (`NON_DEFINI`) | `Media.objects.filter(media_type='NON_DEFINI')` |
+
+> 🔹 Cette UC est exclue de l’application Membre.  
+> 🔹 Elle permet au bibliothécaire de retrouver les médias en attente de typage ou de complétion.
 
 #### 🔧 Impacts techniques
 
@@ -86,16 +103,39 @@ Permettre au bibliothécaire d’ajouter un nouveau média au catalogue, avec ou
 
 #### 🧩 Cas d’usage
 
-| ID           | Description métier                                    | Formulaire utilisé | Avancement            |
-|--------------|-------------------------------------------------------|--------------------|-----------------------|
-| UC-CREATE-01 | Ajouter un média non typé (`media_type='NON_DEFINI'`) | `MediaForm`        | 🔸 Formulaire à créer |
-| UC-CREATE-02 | Ajouter un Livre                                      | `LivreForm`        | 🔸 Formulaire à créer |
-| UC-CREATE-03 | Ajouter un Dvd                                        | `DvdForm`          | 🔸 Formulaire à créer |
-| UC-CREATE-04 | Ajouter un Cd                                         | `CdForm`           | 🔸 Formulaire à créer |
+| ID           | Description métier                                    | Formulaire utilisé | Avancement              |
+|--------------|-------------------------------------------------------|--------------------|-------------------------|
+| UC-CREATE-01 | Ajouter un média non typé (`media_type='NON_DEFINI'`) | `MediaForm`        | ✅ Formulaire implémenté |
+| UC-CREATE-02 | Ajouter un Livre                                      | `LivreForm`        | 🔄 Formulaire à créer   |
+| UC-CREATE-03 | Ajouter un Dvd                                        | `DvdForm`          | 🔄 Formulaire à créer   |
+| UC-CREATE-04 | Ajouter un Cd                                         | `CdForm`           | 🔄 Formulaire à créer   |
 
 > 🔸 Les vues `CreateView` typées ne sont pas encore développées.  
 > 🔸 Les formulaires spécifiques sont à créer et à valider via `full_clean()`.  
 > 📌 Aucun test `T-FORM-*` encore défini.
+
+#### 🧠 Analyse technique associée
+
+- Le modèle `Media` repose sur une **structure en héritage multi-table**, imposée par l’ORM Django.  
+  Chaque entité typée (`Livre`, `Dvd`, `Cd`) est liée à une instance `Media` via une clé primaire identique (`pk`).
+
+- Cette organisation impose une **création en deux temps** :
+  1. Création de l’objet `Media` (UC-CREATE-01)
+  2. Création de l’objet typé (`Livre`, `Dvd`, `Cd`) selon `media_type` (UC-CREATE-02 à UC-CREATE-04)
+
+> 🔹 Cette segmentation est **techniquement impérative**, non considérée comme une difficulté.  
+> 🔹 Elle est conforme aux pratiques des ORM modernes pour gérer l’héritage.
+
+- Particularité métier du champ `consultable` :
+  - Un média **non typé** est **non consultable** par défaut.
+  - Un média **typé** est **consultable par défaut**, mais peut être désactivé selon les besoins métier.
+
+> 🔹 Cette logique permet de distinguer les médias en attente (non typés) des médias prêts à être empruntés ou consultés.
+
+- La mise en œuvre des UC-CREATE a nécessité de traiter une difficulté majeure liée au formulaire :
+  - [Difficulté 11](_Frontend-main-courante.md#911-difficulté-11--visualisation-des-contraintes-du-formulaire) : 
+    visualisation des contraintes dans le formulaire (fonctionnalités vs Design UX/UI).
+
 
 #### 🔧 Impacts techniques
 

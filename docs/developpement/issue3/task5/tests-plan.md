@@ -2,7 +2,7 @@
 
 📁 `/docs/developpement/issue3/task5/tests-plan.md`  
 
-📌 Version : index F-2 (issue #3 – étape 5 - Bloc 2)
+📌 Version : index F-3 (issue #3 – étape 5 - Bloc 2)
 - Rapport de tests associé : [`test_report_indexF-2.txt`](test_report_indexF-2.txt)
 
 ___
@@ -24,7 +24,7 @@ Il est conçu pour :
 📌 Version du document :  
 - **Indexage** : 
   - index E-7 (index D-3, avec correction de la modélisation) pour le **Bloc 1** de correction
-  - index F-2 (index F-1, reprise du développement fonctionnel) pour le **Bloc 2** de correction
+  - index F-3 (index F-1, reprise du développement fonctionnel) pour le **Bloc 2** de correction
 - **Périmètre couvert** : site administration, entité `Media` – vues `liste` et `détail`  
 - **Niveau de couverture** : tests de niveau _minimum_ à _intermédiaire_  
 - **Évolutivité prévue** :
@@ -42,10 +42,12 @@ Chaque index de ce plan possède un rapport de tests nommé `tests_report_index[
 1. [🔹 Objectifs du plan de test](#-1-objectifs-du-plan-de-test)
 2. [🔹 Organisation des tests](#-2-organisation-des-tests)
 3. [🔹 Cas de test (Étape 5)](#-3-cas-de-test-étape-5)
-   - [🧭 Navigation (`T-NAV-xxx`)](#-navigation-t-nav-xxx)
-   - [📚 Entités (`T-ENT-xxx`)](#-entités-t-ent-xxx)
+   - [🧪 Navigation (`T-NAV-xxx`)](#-navigation-t-nav-xxx)
+   - [🧪 Entités (`T-ENT-xxx`)](#-entités-t-ent-xxx)
    - [🧪 Vues (`T-VUE-xxx`)](#-vues-t-vue-xxx)
+   - [🧪 Formulaires (`T-FORM-xxx`)](#-formulaires-t-form-xxx)
    - [🧪 Administration (`T-ADM-xxx`)](#-administration-t-adm-xxx)
+   - [🧪 Fonctionnel (`T-FUN-xxx`)](#-fonctionnel-t-fun-xxx)
 4. [🔹 Méthode de validation](#-4-méthode-de-validation)
 5. [🔹 Couverture attendue](#-5-couverture-attendue)
 6. [🔹 Liens vers les fichiers de test](#-6-liens-vers-les-fichiers-de-test)
@@ -76,7 +78,8 @@ Les tests sont répartis en cinq catégories :
 | Administration | `tests_blocs/test_admin.py`                 | `T-ADM-`   | Vérifier le site d'administration du projet        | Bloc 1   |
 | Fonctionnel    | `tests_blocs/test_uc_list_media.py`, etc.   | `T-FUN-`   | Vérifier une fonctionnalité métier                 | Bloc 2   |
 
-> Remarque : les catégories Permissions, Formulaires, Erreurs, Filtrages sont envisagées, mais n'ont pas été mises en œuvre pour cette étape du développement.
+> Remarque : les catégories Permissions, Formulaires, Erreurs, Filtrages sont envisagées, mais n'ont pas été mises en 
+> œuvre pour cette étape du développement.
 
 ---
 
@@ -87,7 +90,7 @@ Chaque catégorie de tests est regroupée dans une sous-section spécifique avec
 - ❌ Echec
 - ✅ Validé
 
-### 🧭 Navigation (`T-NAV-xxx`)
+### 🧪 Navigation (`T-NAV-xxx`)
 
 | Série  | ID Test  | Description                              | URL ciblée                                | Résultat attendu            | Statut   |
 |--------|----------|------------------------------------------|-------------------------------------------|-----------------------------|----------|
@@ -98,24 +101,29 @@ Chaque catégorie de tests est regroupée dans une sous-section spécifique avec
 | Bloc 2 | T-NAV-05 | Accès à la liste des médias consultables | `/bibliothecaire/medias/consultables/`    | Code 200 + template liste   | ✅ Validé |
 | Bloc 2 | T-NAV-06 | Accès à la liste des médias disponibles  | `/bibliothecaire/medias/disponibles/`     | Code 200 + template liste   | ✅ Validé |
 | Bloc 2 | T-NAV-07 | Accès à la liste des médias par type     | `/bibliothecaire/medias/type/?type=LIVRE` | Code 200 + template liste   | ✅ Validé |
+| Bloc 2 | T-NAV-08 | Accès à la création d'un média           | `/bibliothecaire/medias/ajouter/`         | Code 200 + template liste   | ✅ Validé |
+| Bloc 2 | T-NAV-09 | Accès à la liste des médias non typés    | `/bibliothecaire/medias/non-types/`       | Code 200 + template liste   | ✅ Validé |
 
-> ❌ Le test T-NAV-03 a révélé une contrainte sur le champ `annee_edition` du modèle `Media`. ✅ Il a été repris après correction du modèle de données.  
+> ❌ Le test T-NAV-03 a révélé une contrainte sur le champ `annee_edition` du modèle `Media`. ✅ Il a été repris 
+> après correction du modèle de données.  
 > 🔧 La correction a été intégrée et documentée dans [`Modelisation_correction-erreurs-suite-tests-unitaires.md`](Modelisation_correction-erreurs-suite-tests-unitaires.md).  
 > 📌 Aucun point technique à noter dans la main-courante pour la série du **Bloc 1**.
 
 ---
 
-### 📚 Entités (`T-ENT-xxx`)
+### 🧪 Entités (`T-ENT-xxx`)
 
-| Série  | ID Test  | Description                                                     | Modèle testé    | Résultat attendu                                                        | Statut   |
-|--------|----------|-----------------------------------------------------------------|-----------------|-------------------------------------------------------------------------|----------|
-| Bloc 1 | T-ENT-01 | Création d’un `Media` non typé (création minimaliste)           | `Media`         | Attributs cohérents (`titre`, `media_type`, `theme`, etc.)              | ✅ Validé |
-| Bloc 1 | T-ENT-02 | Vérification des attributs par défaut                           | `Media`         | `consultable=True`, `disponible=True`                                   | ✅ Validé |
-| Bloc 1 | T-ENT-03 | Vérification des attributs accessibles selon le typage          | `Media`         | Champs spécifiques (`auteur`, `resume`, etc.) absents si non typé       | ✅ Validé |
-| Bloc 1 | T-ENT-04 | Vérification du typage multi-table et de la structure en base   | `Media → Livre` | `Media.count() == 2`, `Livre.count() == 1`, `Livre.pk == Media.pk`      | ✅ Validé |
-| Bloc 2 | T-ENT-05 | Vérification de tous les objets affichés ont `consultable=True` | `Media`         | `consultable=True` pour une sélection de `Media`                        | ✅ Validé |
-| Bloc 2 | T-ENT-06 | Vérifie que tous les objets affichés ont `disponible=True`      | `Media`         | `disponible=True` (et `consultable=True`) pour une sélection de `Media` | ✅ Validé |
-| Bloc 2 | T-ENT-07 | Vérifie que tous les objets affichés ont `media_type='LIVRE'`   | `Media`         | `media_type='LIVRE'` pour une sélection de `Media`                      | ✅ Validé |
+| Série  | ID Test  | Description                                                        | Modèle testé    | Résultat attendu                                                        | Statut   |
+|--------|----------|--------------------------------------------------------------------|-----------------|-------------------------------------------------------------------------|----------|
+| Bloc 1 | T-ENT-01 | Création d’un `Media` non typé (création minimaliste)              | `Media`         | Attributs cohérents (`name`, `media_type`, `theme`, etc.)               | ✅ Validé |
+| Bloc 1 | T-ENT-02 | Vérification des attributs par défaut                              | `Media`         | `consultable=True`, `disponible=True`                                   | ✅ Validé |
+| Bloc 1 | T-ENT-03 | Vérification des attributs accessibles selon le typage             | `Media`         | Champs spécifiques (`auteur`, `resume`, etc.) absents si non typé       | ✅ Validé |
+| Bloc 1 | T-ENT-04 | Vérification du typage multi-table et de la structure en base      | `Media → Livre` | `Media.count() == 2`, `Livre.count() == 1`, `Livre.pk == Media.pk`      | ✅ Validé |
+| Bloc 2 | T-ENT-05 | Vérification de tous les objets affichés ont `consultable=True`    | `Media`         | `consultable=True` pour une sélection de `Media`                        | ✅ Validé |
+| Bloc 2 | T-ENT-06 | Vérifie que tous les objets affichés ont `disponible=True`         | `Media`         | `disponible=True` (et `consultable=True`) pour une sélection de `Media` | ✅ Validé |
+| Bloc 2 | T-ENT-07 | Vérifie que tous les objets affichés ont `media_type='LIVRE'`      | `Media`         | `media_type='LIVRE'` pour une sélection de `Media`                      | ✅ Validé |
+| Bloc 2 | T-ENT-08 | Création d'un `Media` (non typé) avec des valeurs minimales        | `Media`         | Valeurs cohérentes avec la définition minimale d'un `Media` non typé    | ✅ Validé |
+| Bloc 2 | T-ENT-09 | Vérifie que tous les objets affichés ont `media_type='NON_DEFINI'` | `Media`         | Tous les objets de la vue ont `media_type='NON_DEFINI'`                 | ✅ Validé |
 
 > ✅ Les tests T-ENT-xx sont validés.  
 > ✅ Les assertions couvrent la structure multi-table, les attributs hérités et typés, et la cohérence des enregistrements.  
@@ -126,20 +134,38 @@ Chaque catégorie de tests est regroupée dans une sous-section spécifique avec
 
 ### 🧪 Vues (`T-VUE-xxx`)
 
-| Série  | ID Test  | Vue testée                 | Description                                                 | Résultat attendu                              | Statut   |
-|--------|----------|----------------------------|-------------------------------------------------------------|-----------------------------------------------|----------|
-| Bloc 1 | T-VUE-01 | `MediaListView`            | Affichage des titres                                        | Présence dans le HTML                         | ✅ Validé |
-| Bloc 1 | T-VUE-02 | `MediaListView`            | Affichage du type et disponibilité                          | Présence dans le HTML                         | ✅ Validé |
-| Bloc 1 | T-VUE-03 | `MediaDetailView`          | Affichage des champs spécifiques du sous-type               | Présence de `auteur`, `resume`, etc. si typé  | ✅ Validé |
-| Bloc 1 | T-VUE-04 | `MediaDetailView`          | Utilisation de l’objet typé dans le contexte                | Instance héritée (`Livre`, `Dvd`, `Cd`) reçue | ✅ Validé |
-| Bloc 1 | T-VUE-05 | `MediaDetailView`          | Affichage d’un objet non typé malgré `media_type` défini    | Absence des champs spécifiques dans le HTML   | ✅ Ajouté |
-| Bloc 2 | T-VUE-06 | `MediaListConsultableView` | Le titre <`h2`> du template correspond à la vue consultable | Présence dans le HTML                         | ✅ Validé |
-| Bloc 2 | T-VUE-07 | `MediaDisponibleListView`  | Le titre <`h2`> du template correspond à la vue disponibles | Présence dans le HTML                         | ✅ Validé |
-| Bloc 2 | T-VUE-08 | `MediaTypeListView`        | Le titre <`h2`> du template correspond au type demandé      | Présence dans le HTML                         | ✅ Validé |
+| Série  | ID Test  | Vue testée                 | Description                                                            | Résultat attendu                              | Statut   |
+|--------|----------|----------------------------|------------------------------------------------------------------------|-----------------------------------------------|----------|
+| Bloc 1 | T-VUE-01 | `MediaListView`            | Affichage des titres                                                   | Présence dans le HTML                         | ✅ Validé |
+| Bloc 1 | T-VUE-02 | `MediaListView`            | Affichage du type et disponibilité                                     | Présence dans le HTML                         | ✅ Validé |
+| Bloc 1 | T-VUE-03 | `MediaDetailView`          | Affichage des champs spécifiques du sous-type                          | Présence de `auteur`, `resume`, etc. si typé  | ✅ Validé |
+| Bloc 1 | T-VUE-04 | `MediaDetailView`          | Utilisation de l’objet typé dans le contexte                           | Instance héritée (`Livre`, `Dvd`, `Cd`) reçue | ✅ Validé |
+| Bloc 1 | T-VUE-05 | `MediaDetailView`          | Affichage d’un objet non typé malgré `media_type` défini               | Absence des champs spécifiques dans le HTML   | ✅ Ajouté |
+| Bloc 2 | T-VUE-06 | `MediaListConsultableView` | Le titre <`h2`> du template correspond à la vue consultable            | Présence dans le HTML                         | ✅ Validé |
+| Bloc 2 | T-VUE-07 | `MediaDisponibleListView`  | Le titre <`h2`> du template correspond à la vue disponibles            | Présence dans le HTML                         | ✅ Validé |
+| Bloc 2 | T-VUE-08 | `MediaTypeListView`        | Le titre <`h2`> du template correspond au type demandé                 | Présence dans le HTML                         | ✅ Validé |
+| Bloc 2 | T-VUE-09 | `MediaCreateView`          | Affichage du formulaire `MediaForm` dans le template `media_form.html` | Présence du template dans le HTML             | ✅ Validé |
+| Bloc 2 | T-VUE-10 | `MediaNonTypeListView`     | Le titre <`h2`> du template correspond à la vue des non typés          | Présence dans le HTML                         | ✅ Validé |
 
 > ✅ La distinction entre typage réel et simple valeur `media_type` est désormais testée.  
 > ✅ La logique de typage dynamique est assurée par la surcharge de `get_object()` dans `MediaDetailView`.  
 > 📌 Le test `T-VUE-05` confirme que `media_type="LIVRE"` ne suffit pas sans sous-type instancié.
+
+---
+
+### 🧪 Formulaires (`T-FORM-xxx`)
+
+| Série  | ID Test   | Formulaire testé | Description                                                         | Résultat attendu                                                              | Statut   |
+|--------|-----------|------------------|---------------------------------------------------------------------|-------------------------------------------------------------------------------|----------|
+| Bloc 2 | T-FORM-01 | `MediaForm`      | Vérifie que les champs attendus sont présents dans le formulaire    | Champs `name`, `theme`, `annee_edition` visibles dans le HTML                 | ✅ Validé |
+| Bloc 2 | T-FORM-02 | `MediaForm`      | Vérifie que les labels personnalisés sont affichés                  | `Titre du média`, `Thématique`, `Année d'édition` présents dans le formulaire | ✅ Validé |
+| Bloc 2 | T-FORM-03 | `MediaForm`      | Vérifie les contraintes de validation (obligatoires vs facultatifs) | `name` et `theme` obligatoires, `annee_edition` facultatif                    | ✅ Validé |
+
+> 🔧 Ces tests permettent de valider la structure, la lisibilité et la robustesse du formulaire `MediaForm`, 
+> indépendamment de la logique métier.  
+> 🔹 Ils sont complémentaires aux tests fonctionnels (`T-FUN-*`) qui valident le cycle complet de création.  
+> 🔹 Le test `T-FORM-03` confirme que les contraintes sont bien définies dans le modèle et respectées dans le 
+> formulaire, sans dépendre du design visuel (cf. [Difficulté 11](_Frontend-main-courante.md#911-difficulté-11--visualisation-des-contraintes-du-formulaire)).
 
 ---
 
@@ -150,7 +176,8 @@ Chaque catégorie de tests est regroupée dans une sous-section spécifique avec
 | Bloc 1 | T-ADM-01 | Accès à l’interface admin et aux apps exposées (`/admin/{app_label}/`)      | `admin:index` + apps exposées | Code 200 pour chaque URL                                   | ✅ Validé |
 | Bloc 1 | T-ADM-02 | Vérification des URLs admin selon les permissions déclarées dans ModelAdmin | `ModelAdmin` exposés          | Code 200 pour chaque vue autorisée (`add`, `change`, etc.) | ✅ Validé |
 
-> 🔧 Les tests utilisent `RequestFactory` pour simuler une requête authentifiée (`mock_request`) et éviter les erreurs liées à `self.client.request()`.  
+> 🔧 Les tests utilisent `RequestFactory` pour simuler une requête authentifiée (`mock_request`) et éviter les erreurs 
+> liées à `self.client.request()`.  
 > ✅ Le test T-ADM-02 est dynamique : il s’adapte aux permissions et à la présence d’objets pour chaque modèle.  
 > 📌 Le modèle `Media` est exposé en lecture seule, ce qui est pris en compte dans le test.
 
@@ -158,15 +185,29 @@ Chaque catégorie de tests est regroupée dans une sous-section spécifique avec
 
 ### 🧪 Fonctionnel (`T-FUN-xxx`)
 
-| Série  | ID Test  | Description                                                                     | Résultat attendu                                                                 | Statut   |
-|--------|----------|---------------------------------------------------------------------------------|----------------------------------------------------------------------------------|----------|
-| Bloc 2 | T-FUN-01 | Vérifie que la vue consultable respecte les règles métier définies (UC-LIST-01) | Code 200 + template (T-NAV-05), Booléen vrai (T-ENT-05), Contenu HTML (T-VUE-06) | ✅ Validé |
-| Bloc 2 | T-FUN-02 | Vérifie que la vue disponibles respecte les règles métier définies (UC-LIST-02) | Code 200 + template (T-NAV-06), Booléen vrai (T-ENT-06), Contenu HTML (T-VUE-07) | ✅ Validé |
-| Bloc 2 | T-FUN-03 | Vérifie que la vue par type respecte les règles métier définies (UC-LIST-03)    | Code 200 + template (T-NAV-07), Type exact (T-ENT-07), Contenu HTML (T-VUE-08)   | ✅ Validé |
+| Série  | ID Test  | Description                                                                        | Résultat attendu                                                                 | Statut   |
+|--------|----------|------------------------------------------------------------------------------------|----------------------------------------------------------------------------------|----------|
+| Bloc 2 | T-FUN-01 | Vérifie que la vue consultable respecte les règles métier définies (UC-LIST-01)    | Code 200 + template (T-NAV-05), Booléen vrai (T-ENT-05), Contenu HTML (T-VUE-06) | ✅ Validé |
+| Bloc 2 | T-FUN-02 | Vérifie que la vue disponibles respecte les règles métier définies (UC-LIST-02)    | Code 200 + template (T-NAV-06), Booléen vrai (T-ENT-06), Contenu HTML (T-VUE-07) | ✅ Validé |
+| Bloc 2 | T-FUN-03 | Vérifie que la vue par type respecte les règles métier définies (UC-LIST-03)       | Code 200 + template (T-NAV-07), Type exact (T-ENT-07), Contenu HTML (T-VUE-08)   | ✅ Validé |
+| Bloc 2 | T-FUN-04 | Création réussie d'un média (non typé) avec les données valides                    | Code 302 + Redirection finale correcte + Objet `Media` (non typé) créé en base   | ✅ Validé |
+| Bloc 2 | T-FUN-05 | Vérifie le refus de création d'un média (non typé) avec champ obligatoire manquant | Code 200 + Template Form avec message d'erreur + Objet `Media` non créé en base  | ✅ Validé |
+| Bloc 2 | T-FUN-06 | Vérifie que la vue non typée respecte les règles métier définies (UC-LIST-04)      | Code 200 + template (T-NAV-09), Type exact (NON_DEFINI), Contenu HTML spécifique | ✅ Validé |
 
-> 🔧 Les tests unitaires _fonctionnels_ sont définis pour être autonome. Ils peuvent se rapprocher de tests unitaires _techniques_ qui sont indiqués dans le _résultat attendu_. 
+> 🔧 Les tests unitaires _fonctionnels_ sont définis pour être autonome. Ils peuvent se rapprocher de tests unitaires
+> _techniques_ qui sont indiqués dans le _résultat attendu_. 
 > Pour une facilité de développement et de maintenance, ils sont regroupés dans une classe de tests fonctionnels et techniques.  
-> 🔹 Cette organisation permet de valider chaque UC dans une classe dédiée, tout en conservant la granularité des tests techniques pour le diagnostic.
+> 🔹 Cette organisation permet de valider chaque UC dans une classe dédiée, tout en conservant la granularité des tests
+> techniques pour le diagnostic.  
+
+> 🔧 Les tests de création (T-FUN-04 et T-FUN-05) attendent : 
+> - un code **HTTP 302** qui correspond à la _redirection automatique_ effectuée par Django après validation du 
+> formulaire via `form_valid()`.
+> - un code **HTTP 200** qui correspond à la page servie avec un _message d'erreur_ après l'invalidation du formulaire 
+> via `form_invalid()`.   
+> 
+> Ce comportement est standard pour les vues génériques (CreateView) et confirme le succès de l’enregistrement ou 
+> l'affichage d'une erreur dans le formulaire.
 
 ---
 
@@ -181,9 +222,11 @@ Chaque catégorie de tests est regroupée dans une sous-section spécifique avec
   - Affichage des erreurs, lignes concernées, et liens vers le code
 - Vérification manuelle dans le navigateur (complémentaire)
 
-> ℹ️ Note : pour obtenir les résultats en redirigeant la sortie vers un fichier `test_report.txt`, il faut aussi rediger le canal de sortie d'erreur (canal 2) vers le canal standard (canal 1).
+> ℹ️ Note : pour obtenir les résultats en redirigeant la sortie vers un fichier `test_report.txt`, il faut aussi rediger 
+> le canal de sortie d'erreur (canal 2) vers le canal standard (canal 1).
 > 
-> Cette redirection permet de capturer les messages de test affichés dans le terminal, qui sont parfois envoyés sur le canal d’erreur (stderr) par Django ou les frameworks de test. 
+> Cette redirection permet de capturer les messages de test affichés dans le terminal, qui sont parfois envoyés sur le 
+> canal d’erreur (stderr) par Django ou les frameworks de test. 
 > Pour une analyse structurée, il faut utiliser `--verbosity=2` ou `--verbosity=3` selon le niveau de détail souhaité.
 
 > La commande dans le terminal est :
@@ -218,6 +261,7 @@ Chaque catégorie de tests est regroupée dans une sous-section spécifique avec
 | `test_vues_media_list.py`   | Liste des médias                                                    | Vues           |
 | `test_admin.py`             | Interface d’administration                                          | Administration |
 | `test_uc_list_media.py`     | Cas d’usage des listes de médias (consultables, disponibles, typés) | Fonctionnel    |
+| `test_uc_create_media.py`   | Cas d'usage des créations de médias (non typé, livre, dvd, cd)      | Fonctionnel    |
 
 ---
 
@@ -239,3 +283,20 @@ Ce plan est conçu pour être enrichi au fil du développement :
 - [Writing Scalable Unit Tests in Django – Dev.to](https://dev.to/shreyash_jhon_doe/writing-scalable-maintainable-unit-tests-in-django-a-practical-guide-with-real-examples-47a4)
 
 ---
+
+---
+
+---
+
+
+### 🧪 Vues (`T-VUE-xxx`)
+
+| Série  | ID Test  | Vue testée                   | Description métier UC-LIST-04                                     | Résultat attendu                              | Statut   |
+|--------|----------|------------------------------|-------------------------------------------------------------------|------------------------------------------------|----------|
+
+
+---
+
+> 🔧 Ces tests permettent de valider que UC-LIST-04 est bien une vue métier autonome, avec un filtrage explicite (`media_type='NON_DEFINI'`) et une présentation dédiée dans le template.  
+> 🔹 Le test `T-VUE-10` s’appuie sur le bloc conditionnel ajouté dans `media_list.html` pour afficher le message spécifique aux médias non typés.  
+> 🔹 Le test `T-FUN-06` complète la série UC-LIST en assurant la cohérence métier du cycle de consultation.

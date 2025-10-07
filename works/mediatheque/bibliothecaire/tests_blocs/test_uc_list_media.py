@@ -81,7 +81,7 @@ class MediaDisponibleViewTests(TestCase):
             self.assertTrue(media.disponible)
 
 class MediaTypeViewTests(TestCase):
-    fixtures = ['medias_test.json']
+    fixtures = ['medias_test.json', 'media_untyped_fixture.json']
 
     @classmethod
     def setUpTestData(cls):
@@ -121,6 +121,59 @@ class MediaTypeViewTests(TestCase):
     def test_fun_03_uc_list_03_verification(self):
         """
         T-FUN-03 : Vérifie la cohérence fonctionnelle de UC-LIST-03
+        - Accès OK
+        - Template utilisé
+        - Titre affiché
+        - Objets filtrés correctement
+        """
+        for media_type in self.media_types:
+            with self.subTest(media_type=media_type):
+                response = self.client.get(f"{self.url}?type={media_type}")
+                self.assertEqual(response.status_code, 200)
+                self.assertTemplateUsed(response, 'bibliothecaire/medias/media_list.html')
+                self.assertContains(response, f"<h2>{self.expected_titles[media_type]}</h2>")
+                for media in response.context['medias']:
+                    self.assertEqual(media.media_type, media_type)
+
+class MediaNonTypeViewTests(TestCase):
+    fixtures = ['medias_test.json', 'media_untyped_fixture.json']
+
+    @classmethod
+    def setUpTestData(cls):
+        cls.url = reverse('bibliothecaire:media_list_non_types')
+
+    def setUp(self):
+        self.media_types = ['NON_DEFINI']
+        self.expected_titles = {
+            'NON_DEFINI': 'Liste des médias "non définis" (en attente de définition)'
+        }
+
+    def test_nav_09_url_and_template(self):
+        """T-NAV-09 : Vérifie l’accès et le template pour chaque type"""
+        for media_type in self.media_types:
+            with self.subTest(media_type=media_type):
+                response = self.client.get(f"{self.url}?type={media_type}")
+                self.assertEqual(response.status_code, 200)
+                self.assertTemplateUsed(response, 'bibliothecaire/medias/media_list.html')
+
+    def test_ent_09_type_objects_only(self):
+        """T-ENT-09 : Vérifie que tous les objets affichés ont le bon media_type"""
+        for media_type in self.media_types:
+            with self.subTest(media_type=media_type):
+                response = self.client.get(f"{self.url}?type={media_type}")
+                for media in response.context['medias']:
+                    self.assertEqual(media.media_type, media_type)
+
+    def test_vue_10_title_displayed(self):
+        """T-VUE-10 : Vérifie que le titre <h2> correspond au type demandé"""
+        for media_type in self.media_types:
+            with self.subTest(media_type=media_type):
+                response = self.client.get(f"{self.url}?type={media_type}")
+                self.assertContains(response, f"<h2>{self.expected_titles[media_type]}</h2>")
+
+    def test_fun_06_uc_list_06_verification(self):
+        """
+        T-FUN-06 : Vérifie la cohérence fonctionnelle de UC-LIST-04
         - Accès OK
         - Template utilisé
         - Titre affiché

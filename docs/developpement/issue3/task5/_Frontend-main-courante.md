@@ -84,15 +84,16 @@ Cette section distingue les fonctionnalités explicitement demandées dans le su
 
 ## 4. 🗂️ Fichiers concernés
 
-| Type          | Fichier / Dossier                                       | Statut         |
-|---------------|---------------------------------------------------------|----------------|
-| Routage       | `bibliothecaire/urls.py`                                | 🆕 En cours    |
-| Vues          | `bibliothecaire/views.py`                               | 🔄 À compléter |
-| Templates     | `bibliothecaire/templates/bibliothecaire/`              | 🆕 En cours    |
-| Tests         | `bibliothecaire/tests.py`                               | 🔄 À compléter |
-| Fixtures      | `bibliothecaire/fixtures/*.json`                        | ✅ En cours     |
-| Documentation | `/docs/developpement/issue3/_Frontend-main-courante.md` | ✅ En cours     |
-| Plan de test  | `/docs/tests/tests-plan.md`                             | ✅ En cours     |
+| Type              | Fichier / Dossier                                                            | Statut         |
+|-------------------|------------------------------------------------------------------------------|----------------|
+| Routage           | `bibliothecaire/urls.py`                                                     | 🆕 En cours    |
+| Vues              | `bibliothecaire/views.py`                                                    | 🔄 À compléter |
+| Templates         | `bibliothecaire/templates/bibliothecaire/`                                   | 🆕 En cours    |
+| Tests             | `bibliothecaire/tests.py`                                                    | 🔄 À compléter |
+| Fixtures          | `bibliothecaire/fixtures/*.json`                                             | ✅ En cours     |
+| Documentation     | `/docs/developpement/issue3/_Frontend-main-courante.md`                      | ✅ En cours     |
+| Plan de test      | `/docs/developpement/issue3/task5/tests-plan.md`                             | ✅ En cours     |
+| AF Bibliothécaire | `/docs/developpement/issue3/task5/Analyse_Fonctionnalites_Bibliothecaire.md` | ✅ En cours     |
 
 ---
 
@@ -505,6 +506,39 @@ Cette difficulté m'a permis de comprendre et illustre l’importance de **pense
 
 ---
 
+### 9.11 Difficulté 11 – Visualisation des contraintes du formulaire
+
+#### a) Problématique
+
+Lors de la mise en œuvre de UC-CREATE-01, le formulaire de création d’un média non typé repose sur un `ModelForm` Django.  
+Les champs obligatoires sont correctement validés côté serveur, mais **aucun indicateur visuel (`*`, couleur, icône)** n’est affiché dans le template `media_form.html`.
+
+#### b) Analyse technique
+
+- Le formulaire utilise `form.as_p`, qui génère automatiquement les balises HTML sans personnalisation.
+- Les attributs `required` sont bien présents dans le HTML, mais **non stylisés ni signalés visuellement**.
+- Django permet de personnaliser les libellés (`label`) et les aides (`help_text`), mais cela relève du **design UX/UI**, non du périmètre fonctionnel.
+
+#### c) Arbitrage
+
+🔹 Le choix de ne pas afficher d’indicateur visuel d’obligation est **volontaire et justifié** :
+- Les validations fonctionnelles sont présentes et testées.
+- Le design sera revu ultérieurement par un designer.
+- Le formulaire reste conforme aux exigences du sujet.
+
+#### d) Résolution
+
+- Le formulaire conserve une structure générique (`form.as_p`) pour faciliter la reprise.
+- Aucun indicateur visuel n’est ajouté dans cette version.
+- Le bloc de test `T-FORM-01` valide la logique métier sans test UX visuel.
+
+#### e) Conclusion
+
+Cette réflexion m'a permis :
+- d'approfondir les fonctionnalités offertes par les formulaires génériques de Django.
+- de clarifier la frontière entre le développement fonctionnel et les choix relevant du design UX/UI.
+
+---
 
 ## 10. 🔗 Liens utiles
 
