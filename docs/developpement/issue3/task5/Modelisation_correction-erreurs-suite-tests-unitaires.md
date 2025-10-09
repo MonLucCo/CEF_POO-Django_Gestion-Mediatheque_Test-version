@@ -2,7 +2,9 @@
 
 📁 `/docs/developpement/issue3/task5/Modelisation_correction-erreurs-suite-tests-unitaires.md`  
 
-📌 Version : indexE-7
+📌 Version : (issue #3 – étape 5 - Bloc 2)
+ - indexE-7 : Bloc 1 (série des corrections initiales du modèle) 
+ - indexF-4 : Bloc 2 (série des corrections en développement fonctionnel)
 
 ---
 
@@ -20,6 +22,7 @@
   - [3.4 Correction 4 – Ajout d’un choix `NON_DEFINI` à `media_type`](#34-correction-4--ajout-dun-choix-non_defini-à-media_type)
   - [3.5 Correction 5 – Validation des champs numériques métier](#35-correction-5--validation-des-champs-numériques-métier)
   - [3.6 Correction 6 – Centralisation du typage réel via `get_real_instance()`](#36-correction-6--centralisation-du-typage-réel-via-get_real_instance)
+  - [3.7 Correction 7 -  Correction des champs `consultable` et `disponible` avec `default=False`](#37-correction-7---correction-des-champs-consultable-et-disponible-avec-defaultfalse)
 - [4. Suivi des tests après correction](#-4-suivi-des-tests-après-correction)
 
 ---
@@ -87,14 +90,15 @@ Cette sixième version clôt les corrections du modèle de données de l'applica
 
 ## 🔹 2. Synthèse des corrections à appliquer
 
-| ID       | Correction identifiée                                   | Modèle concerné      | Type de correction     | Tests impactés à re-exécuter                                |
-|----------|---------------------------------------------------------|----------------------|------------------------|-------------------------------------------------------------|
-| C-MOD-01 | Renommer le champ `titre` en `name` dans `Support`      | `Support`            | Sémantique / cohérence | À définir dans les issues #2, #3 et #4                      |
-| C-MOD-02 | Renommer le champ `nom` en `name` dans `Utilisateur`    | `Utilisateur`        | Sémantique / cohérence | À définir dans les issues #2, #3 et #4                      |
-| C-MOD-03 | Redéfinir `annee_edition` dans `Media`                  | `Media`              | Validation / structure | `test_media_enregistrement`, `test_media_detail_accessible` |
-| C-MOD-04 | Ajout d’un choix `NON_DEFINI` à `media_type`            | `Media`              | Sémantique / cohérence | `T-VUE-05`, `T-ENT-03`, `test_entites_media.py`             |
-| C-MOD-05 | Validation des champs numériques métier                 | `Livre`, `Dvd`, `Cd` | validation / structure | `T-ENT-04`, `test_entites_media.py`, fixtures JSON          |
-| C-MOD-06 | Centralisation du typage réel via `get_real_instance()` | `Media`              | Structure / cohérence  | `T-VUE-04`, `T-VUE-05`, `test_vues_media_detail.py`         |
+| Série  | ID       | Correction identifiée                                            | Modèle concerné      | Type de correction     | Tests impactés à re-exécuter                                |
+|--------|----------|------------------------------------------------------------------|----------------------|------------------------|-------------------------------------------------------------|
+| Bloc 1 | C-MOD-01 | Renommer le champ `titre` en `name` dans `Support`               | `Support`            | Sémantique / cohérence | À définir dans les issues #2, #3 et #4                      |
+| Bloc 1 | C-MOD-02 | Renommer le champ `nom` en `name` dans `Utilisateur`             | `Utilisateur`        | Sémantique / cohérence | À définir dans les issues #2, #3 et #4                      |
+| Bloc 1 | C-MOD-03 | Redéfinir `annee_edition` dans `Media`                           | `Media`              | Validation / structure | `test_media_enregistrement`, `test_media_detail_accessible` |
+| Bloc 1 | C-MOD-04 | Ajout d’un choix `NON_DEFINI` à `media_type`                     | `Media`              | Sémantique / cohérence | `T-VUE-05`, `T-ENT-03`, `test_entites_media.py`             |
+| Bloc 1 | C-MOD-05 | Validation des champs numériques métier                          | `Livre`, `Dvd`, `Cd` | validation / structure | `T-ENT-04`, `test_entites_media.py`, fixtures JSON          |
+| Bloc 1 | C-MOD-06 | Centralisation du typage réel via `get_real_instance()`          | `Media`              | Structure / cohérence  | `T-VUE-04`, `T-VUE-05`, `test_vues_media_detail.py`         |
+| Bloc 2 | C-MOD-07 | Correction de `consultable` et `disponible` avec `default=False` | `Support` et `Media` | Workflow / cohérence   | `T-ENT-02`, `T-FUN-01` à `T-FUN-06`                         |
 
 ---
 
@@ -424,7 +428,8 @@ Cette centralisation permet de :
 
 #### 🔸 Validation post correction
 
-La méthode `get_real_instance()` est désormais utilisée dans `MediaDetailView.get_object()` pour garantir que la vue retourne l’objet typé réel.
+La méthode `get_real_instance()` est désormais utilisée dans `MediaDetailView.get_object()` pour garantir que la vue 
+retourne l’objet typé réel.
 
 Les tests suivants ont été adaptés ou enrichis :
 
@@ -433,7 +438,66 @@ Les tests suivants ont été adaptés ou enrichis :
 - `T-ENT-04a/b/c` : ajout de `is_typed()` et `get_real_instance()` dans les assertions
 - `T-ENT-05` : confirmation que `get_real_instance()` retourne l’objet `Media` non typé
 
-Tous les tests sont validés ([`test_report_indexE-7.txt`](test_report_indexE-7.txt)), confirmant la stabilité et la cohérence de la correction.
+Tous les tests du **Bloc 1** sont validés ([`test_report_indexE-7.txt`](test_report_indexE-7.txt)), confirmant la stabilité et la cohérence de la correction.
+
+---
+
+### 3.7 Correction 7 -  Correction des champs `consultable` et `disponible` avec `default=False`
+
+#### 🔸 Justification
+
+La logique métier du cycle de vie des médias repose sur deux états booléens :  
+- `consultable` : indique si le média est visible dans le catalogue  
+- `disponible` : indique si le média peut être emprunté  
+
+Ces champs doivent être présents dès la création d’un objet `Media`, avec des valeurs par défaut cohérentes avec 
+l’état initial métier (`état 0 – début`).  
+Sans ces champs, les tests fonctionnels UC-LIST-01 à UC-LIST-04 échouent, ou sont instables.  
+La correction permet de stabiliser le modèle et d’aligner les comportements avec les transitions métier définies dans 
+`Analyse_LifeCycle_Medias.md`.
+
+#### 🔸 Action à mener
+
+Ajout dans `Support` :
+
+```python
+consultable = models.BooleanField(default=False)
+```
+
+Ajout dans `Media` :
+
+```python
+disponible = models.BooleanField(default=False)
+```
+
+> 🔹 Le champ `consultable` est défini dans `Support`, car il concerne aussi les `JeuDePlateau`.  
+> 🔹 Le champ `disponible` est spécifique à `Media`, parce que seuls les objets empruntables sont concernés.
+
+#### 🔸 Tests impactés
+
+- `T-ENT-02` : vérifie les valeurs par défaut à la création
+- `T-FUN-01` à `T-FUN-06` : valident les vues UC-LIST-01 à UC-LIST-04
+- `test_uc_create_media.py` : vérifie la création d’un média avec ou sans typage
+- `test_uc_list_media.py` : vérifie le filtrage par `consultable`, `disponible`, `media_type`
+
+#### 🔸 Validation post correction
+
+- ✅ Modèle mis à jour dans `models.py_indexI-8.txt`
+- ✅ Migration effectuée avec succès (`makemigrations` + `migrate`)
+- ✅ Tests unitaires : 43 tests passés (`test_report_indexF-4b.txt`)
+- ✅ Validation graphique : UC-LIST-01 à UC-LIST-04 et UC-CREATE-01 à UC-CREATE-04 fonctionnels
+- ✅ Interface admin : CRUD activé sur `Media`, comportement validé
+
+#### 🔸 Synthèse métier
+
+Cette correction permet de formaliser l’**état initial** d’un média (`état 0 – début`) comme suit :
+
+| Champ         | Valeur par défaut | Justification métier                          |
+|---------------|-------------------|-----------------------------------------------|
+| `consultable` | `False`           | Média non visible tant qu’il n’est pas validé |
+| `disponible`  | `False`           | Média non empruntable tant qu’il n’est pas prêt |
+
+> 🔧 Ces valeurs sont cohérentes avec la transition (0) du cycle de vie métier : création d’un média en attente.
 
 ---
 

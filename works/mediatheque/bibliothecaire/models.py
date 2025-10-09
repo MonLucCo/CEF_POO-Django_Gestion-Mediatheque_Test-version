@@ -44,7 +44,7 @@ class Support(models.Model):
         null=True, blank=True,
         help_text="Année d'édition si connue. Sinon laisser vide."
     )
-    consultable   = models.BooleanField(default=True)
+    consultable   = models.BooleanField(default=False)
 
     class Meta:
         abstract = True
@@ -72,7 +72,7 @@ class Media(Support):
       - Le champ media_type est utilisé pour l’affichage et les filtres, mais ne garantit pas la présence d’un sous-type.
       - La méthode get_real_instance() permet d’accéder aux attributs spécifiques du type réel sans dépendre de la vue.
     """
-    disponible   = models.BooleanField(default=True)
+    disponible   = models.BooleanField(default=False)
     theme        = models.CharField(max_length=200)
     TYPE_CHOICES = [
         ('NON_DEFINI', 'Non défini'),
@@ -109,7 +109,7 @@ class Livre(Media):
 
     Attributs :
       - auteur  : string, max_length=100
-      - nb_page : integer, >= 0
+      - nb_page : integer, >= 1
       - resume  : string, max_length=200
     """
     auteur   = models.CharField(max_length=100)
@@ -127,7 +127,7 @@ class Dvd(Media):
 
     Attributs :
       - realisateur : string, max_length=100
-      - duree       : integer, >= 0 (minutes)
+      - duree       : integer, >= 1 (minutes)
       - histoire    : string, max_length=200
     """
     realisateur = models.CharField(max_length=100)

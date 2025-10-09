@@ -1,6 +1,7 @@
-<h2>Ajouter un média non typé</h2>
+<h2>Ajouter un {% if is_livre %}Livre{% elif is_dvd %}DVD{% elif is_cd %}CD{% else %}média non typé{% endif %}</h2>
 <form method="post">
   {% csrf_token %}
   {{ form.as_p }}
   <button type="submit">Valider</button>
+  <a href="{% url 'bibliothecaire:media_list' %}">Annuler</a>
 </form>

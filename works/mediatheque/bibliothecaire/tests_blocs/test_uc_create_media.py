@@ -90,3 +90,51 @@ class MediaCreateTests(TestCase):
 
         # Vérifie qu’aucun objet Media n’a été créé
         self.assertFalse(Media.objects.filter(**data).exists())
+
+    def test_fun_07_creation_typage_etat_metier(self):
+        """
+        T-FUN-07 : Vérifie la transition métier (0) et (0+1) pour chaque média typé (Livre, Dvd, Cd)
+        Le test utilise les vues typées de création et remplit les champs spécifiques requis.
+        Il valide que :
+         - un média créé avec consultable=False est en état 1 (disponible=True).
+         - un média créé avec consultable=True est en état 3 (disponible=True).
+        """
+
+        # Initial State : état 0 (début)
+        types = {
+            'livre': {'auteur': 'Auteur Test', 'resume': 'Résumé Test'},
+            'dvd': {'realisateur': 'Réalisateur Test', 'histoire': 'Histoire Test'},
+            'cd': {'artiste': 'Artiste Test', 'nb_piste' : 1}
+        }
+
+        for media_type, specific_fields in types.items():
+            with self.subTest(media_type=media_type):
+                url = reverse(f'bibliothecaire:media_create_{media_type}')
+
+                # Création en état 1 : consultable=False
+                data_attente = {
+                    'name': f'Média {media_type} attente',
+                    'theme': 'Test T-FUN-07',
+                    'media_type': media_type,
+                    'consultable': False,
+                    **specific_fields
+                }
+                response = self.client.post(url, data_attente)
+                self.assertEqual(response.status_code, 302)
+                media = Media.objects.get(name=data_attente['name'])
+                self.assertFalse(media.consultable)
+                self.assertTrue(media.disponible)
+
+                # Création en état 3 : consultable=True
+                data_empruntable = {
+                    'name': f'Média {media_type} prêt',
+                    'theme': 'Test T-FUN-07',
+                    'media_type': media_type,
+                    'consultable': True,
+                    **specific_fields
+                }
+                response = self.client.post(url, data_empruntable)
+                self.assertEqual(response.status_code, 302)
+                media = Media.objects.get(name=data_empruntable['name'])
+                self.assertTrue(media.consultable)
+                self.assertTrue(media.disponible)

@@ -106,9 +106,9 @@ Permettre au bibliothécaire d’ajouter un nouveau média au catalogue, avec ou
 | ID           | Description métier                                    | Formulaire utilisé | Avancement              |
 |--------------|-------------------------------------------------------|--------------------|-------------------------|
 | UC-CREATE-01 | Ajouter un média non typé (`media_type='NON_DEFINI'`) | `MediaForm`        | ✅ Formulaire implémenté |
-| UC-CREATE-02 | Ajouter un Livre                                      | `LivreForm`        | 🔄 Formulaire à créer   |
-| UC-CREATE-03 | Ajouter un Dvd                                        | `DvdForm`          | 🔄 Formulaire à créer   |
-| UC-CREATE-04 | Ajouter un Cd                                         | `CdForm`           | 🔄 Formulaire à créer   |
+| UC-CREATE-02 | Ajouter un Livre                                      | `LivreForm`        | ✅ Formulaire implémenté |
+| UC-CREATE-03 | Ajouter un Dvd                                        | `DvdForm`          | ✅ Formulaire implémenté |
+| UC-CREATE-04 | Ajouter un Cd                                         | `CdForm`           | ✅ Formulaire implémenté |
 
 > 🔸 Les vues `CreateView` typées ne sont pas encore développées.  
 > 🔸 Les formulaires spécifiques sont à créer et à valider via `full_clean()`.  
@@ -128,7 +128,10 @@ Permettre au bibliothécaire d’ajouter un nouveau média au catalogue, avec ou
 
 - Particularité métier du champ `consultable` :
   - Un média **non typé** est **non consultable** par défaut.
-  - Un média **typé** est **consultable par défaut**, mais peut être désactivé selon les besoins métier.
+  - Un média **typé** est selon les besoins métier :
+    - en situation d'**attente** : **disponible par défaut** et **non consultable par défaut**
+    - en situation **empruntable** : **disponible par défaut** et **consultable par saisie**
+
 
 > 🔹 Cette logique permet de distinguer les médias en attente (non typés) des médias prêts à être empruntés ou consultés.
 
@@ -158,12 +161,13 @@ Permettre au bibliothécaire d’ajouter un nouveau média au catalogue, avec ou
 
 ## 4. Liaison technique
 
-| Élément     | Source technique                     |
-|-------------|--------------------------------------|
-| Modèle      | `Media`, `Livre`, `Dvd`, `Cd`        |
-| Vue         | `MediaListView`, `MediaDetailView`, `MediaCreateView` |
-| Template    | `media_list.html`, `media_detail.html`, `media_form.html` |
-| Formulaire  | `MediaForm`, `LivreForm`, `DvdForm`, `CdForm` |
-| Tests       | `test_vues_media_list.py`, `test_vues_media_detail.py`, `test_entites_media.py` |
+| Élément            | Source technique                                                                |
+|--------------------|---------------------------------------------------------------------------------|
+| Modèle             | `Media`, `Livre`, `Dvd`, `Cd`                                                   |
+| Vue                | `MediaListView`, `MediaDetailView`, `MediaCreateView`                           |
+| Template           | `media_list.html`, `media_detail.html`, `media_form.html`                       |
+| Formulaire         | `MediaForm`, `LivreForm`, `DvdForm`, `CdForm`                                   |
+| Tests techniques   | `test_vues_media_list.py`, `test_vues_media_detail.py`, `test_entites_media.py` |
+| tests fonctionnels | `test_uc_list_media.py`, `test_uc_create_media.py`                              |
 
 ---

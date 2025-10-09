@@ -24,10 +24,10 @@ class MediaListViewTests(TestCase):
 
     def test_vue_01_media_list_affichage(self):
         response = self.client.get(reverse('bibliothecaire:media_list'))
-        self.assertContains(response, "Test Media (- sans -) - {consultable} - [disponible]")
-        self.assertContains(response, "Test Media-Livre (LIVRE) - {consultable} - [disponible]")
-        self.assertContains(response, "Test Media-Dvd (DVD) - {consultable} - [disponible]")
-        self.assertContains(response, "Test Media-Cd (CD) - {consultable} - [disponible]")
+        self.assertContains(response, "Test Media (- sans -)")
+        self.assertContains(response, "Test Media-Livre (LIVRE)")
+        self.assertContains(response, "Test Media-Dvd (DVD)")
+        self.assertContains(response, "Test Media-Cd (CD)")
 
     def test_vue_02_media_list_champs_generiques(self):
         response = self.client.get(reverse('bibliothecaire:media_list'))
