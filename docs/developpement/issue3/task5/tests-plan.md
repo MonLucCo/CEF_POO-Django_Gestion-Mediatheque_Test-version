@@ -2,8 +2,8 @@
 
 📁 `/docs/developpement/issue3/task5/tests-plan.md`  
 
-📌 Version : index F-3 (issue #3 – étape 5 - Bloc 2)
-- Rapport de tests associé : [`test_report_indexF-2.txt`](test_report_indexF-2.txt)
+📌 Version : index F-4 (issue #3 – étape 5 - Bloc 2)
+- Rapport de tests associé : [`test_report_indexF-4.txt`](test_report_indexF-4.txt)
 
 ___
 
@@ -24,7 +24,9 @@ Il est conçu pour :
 📌 Version du document :  
 - **Indexage** : 
   - index E-7 (index D-3, avec correction de la modélisation) pour le **Bloc 1** de correction
-  - index F-3 (index F-1, reprise du développement fonctionnel) pour le **Bloc 2** de correction
+  - index F-4 (intégration du cycle de vie de `Media` + création des médias typés) pour le **Bloc 2** de correction, avec :
+    - index F-1, reprise du développement fonctionnel
+    - index F-3, fonctions de liste et de création d'un média non typé.
 - **Périmètre couvert** : site administration, entité `Media` – vues `liste` et `détail`  
 - **Niveau de couverture** : tests de niveau _minimum_ à _intermédiaire_  
 - **Évolutivité prévue** :
@@ -185,14 +187,15 @@ Chaque catégorie de tests est regroupée dans une sous-section spécifique avec
 
 ### 🧪 Fonctionnel (`T-FUN-xxx`)
 
-| Série  | ID Test  | Description                                                                        | Résultat attendu                                                                 | Statut   |
-|--------|----------|------------------------------------------------------------------------------------|----------------------------------------------------------------------------------|----------|
-| Bloc 2 | T-FUN-01 | Vérifie que la vue consultable respecte les règles métier définies (UC-LIST-01)    | Code 200 + template (T-NAV-05), Booléen vrai (T-ENT-05), Contenu HTML (T-VUE-06) | ✅ Validé |
-| Bloc 2 | T-FUN-02 | Vérifie que la vue disponibles respecte les règles métier définies (UC-LIST-02)    | Code 200 + template (T-NAV-06), Booléen vrai (T-ENT-06), Contenu HTML (T-VUE-07) | ✅ Validé |
-| Bloc 2 | T-FUN-03 | Vérifie que la vue par type respecte les règles métier définies (UC-LIST-03)       | Code 200 + template (T-NAV-07), Type exact (T-ENT-07), Contenu HTML (T-VUE-08)   | ✅ Validé |
-| Bloc 2 | T-FUN-04 | Création réussie d'un média (non typé) avec les données valides                    | Code 302 + Redirection finale correcte + Objet `Media` (non typé) créé en base   | ✅ Validé |
-| Bloc 2 | T-FUN-05 | Vérifie le refus de création d'un média (non typé) avec champ obligatoire manquant | Code 200 + Template Form avec message d'erreur + Objet `Media` non créé en base  | ✅ Validé |
-| Bloc 2 | T-FUN-06 | Vérifie que la vue non typée respecte les règles métier définies (UC-LIST-04)      | Code 200 + template (T-NAV-09), Type exact (NON_DEFINI), Contenu HTML spécifique | ✅ Validé |
+| Série  | ID Test  | Description                                                                        | Résultat attendu                                                                                                            | Statut   |
+|--------|----------|------------------------------------------------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------|----------|
+| Bloc 2 | T-FUN-01 | Vérifie que la vue consultable respecte les règles métier définies (UC-LIST-01)    | Code 200 + template (T-NAV-05), Booléen vrai (T-ENT-05), Contenu HTML (T-VUE-06)                                            | ✅ Validé |
+| Bloc 2 | T-FUN-02 | Vérifie que la vue disponibles respecte les règles métier définies (UC-LIST-02)    | Code 200 + template (T-NAV-06), Booléen vrai (T-ENT-06), Contenu HTML (T-VUE-07)                                            | ✅ Validé |
+| Bloc 2 | T-FUN-03 | Vérifie que la vue par type respecte les règles métier définies (UC-LIST-03)       | Code 200 + template (T-NAV-07), Type exact (T-ENT-07), Contenu HTML (T-VUE-08)                                              | ✅ Validé |
+| Bloc 2 | T-FUN-04 | Création réussie d'un média (non typé) avec les données valides                    | Code 302 + Redirection finale correcte + Objet `Media` (non typé) créé en base                                              | ✅ Validé |
+| Bloc 2 | T-FUN-05 | Vérifie le refus de création d'un média (non typé) avec champ obligatoire manquant | Code 200 + Template Form avec message d'erreur + Objet `Media` non créé en base                                             | ✅ Validé |
+| Bloc 2 | T-FUN-06 | Vérifie que la vue non typée respecte les règles métier définies (UC-LIST-04)      | Code 200 + template (T-NAV-09), Type exact (NON_DEFINI), Contenu HTML spécifique                                            | ✅ Validé |
+| Bloc 2 | T-FUN-07 | Vérifie la création d’un média typé selon l’état métier attendu                    | Création via formulaire : état 1 (`consultable=False`, `disponible=True`) ou état 3 (`consultable=True`, `disponible=True`) | ✅ Validé |
 
 > 🔧 Les tests unitaires _fonctionnels_ sont définis pour être autonome. Ils peuvent se rapprocher de tests unitaires
 > _techniques_ qui sont indiqués dans le _résultat attendu_. 
@@ -283,20 +286,3 @@ Ce plan est conçu pour être enrichi au fil du développement :
 - [Writing Scalable Unit Tests in Django – Dev.to](https://dev.to/shreyash_jhon_doe/writing-scalable-maintainable-unit-tests-in-django-a-practical-guide-with-real-examples-47a4)
 
 ---
-
----
-
----
-
-
-### 🧪 Vues (`T-VUE-xxx`)
-
-| Série  | ID Test  | Vue testée                   | Description métier UC-LIST-04                                     | Résultat attendu                              | Statut   |
-|--------|----------|------------------------------|-------------------------------------------------------------------|------------------------------------------------|----------|
-
-
----
-
-> 🔧 Ces tests permettent de valider que UC-LIST-04 est bien une vue métier autonome, avec un filtrage explicite (`media_type='NON_DEFINI'`) et une présentation dédiée dans le template.  
-> 🔹 Le test `T-VUE-10` s’appuie sur le bloc conditionnel ajouté dans `media_list.html` pour afficher le message spécifique aux médias non typés.  
-> 🔹 Le test `T-FUN-06` complète la série UC-LIST en assurant la cohérence métier du cycle de consultation.

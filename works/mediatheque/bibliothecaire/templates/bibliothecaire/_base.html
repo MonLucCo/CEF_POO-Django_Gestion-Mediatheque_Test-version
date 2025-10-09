@@ -10,6 +10,9 @@
         <nav>
             <ul>
                 <li>
+                    <a href="{% url 'bibliothecaire:accueil' %}">Aller à l'accueil</a>
+                </li>
+                <li>
                     Lister les médias :
                     <ul>
                         <li><a href="{% url 'bibliothecaire:media_list' %}">Tous </a></li>
@@ -30,6 +33,9 @@
                     Créer un média :
                     <ul>
                         <li><a href="{% url 'bibliothecaire:media_create' %}">Type "non défini"</a></li>
+                        <li><a href="{% url 'bibliothecaire:media_create_livre' %}">Type LIVRE</a></li>
+                        <li><a href="{% url 'bibliothecaire:media_create_dvd' %}">Type DVD</a></li>
+                        <li><a href="{% url 'bibliothecaire:media_create_cd' %}">Type CD</a></li>
                     </ul>
                 </li>
 

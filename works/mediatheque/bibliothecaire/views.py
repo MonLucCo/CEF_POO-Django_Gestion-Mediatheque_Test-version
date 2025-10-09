@@ -1,7 +1,8 @@
 from django.urls import reverse_lazy
 from django.views.generic import TemplateView, ListView, DetailView, CreateView
 from bibliothecaire.models import Media
-from bibliothecaire.forms import MediaForm
+from bibliothecaire.forms import MediaForm, LivreForm, DvdForm, CdForm
+
 
 # Create your views here.
 
@@ -73,7 +74,66 @@ class MediaCreateView(CreateView):
     template_name = 'bibliothecaire/medias/media_form.html'
     success_url = reverse_lazy('bibliothecaire:media_list')
 
+    def set_lifecycle_flags(self, form):
+        # form.instance.consultable = False         # Valeur par défaut dans le modèle
+        # form.instance.disponible = False          # Valeur par défaut dans le modèle
+        # form.instance.media_type = 'NON_DEFINI'   # Valeur par défaut dans le modèle
+        pass
+
     def form_valid(self, form):
-        form.instance.consultable = False
-        form.instance.disponible = False
+        self.set_lifecycle_flags(form)
         return super(MediaCreateView, self).form_valid(form)
+
+
+class MediaLivreCreateView(MediaCreateView):
+    form_class = LivreForm
+
+    def get_context_data(self, **kwargs):
+        context = super(MediaLivreCreateView, self).get_context_data(**kwargs)
+        context['is_livre'] = True
+        return context
+
+    def set_lifecycle_flags(self, form):
+        # form.instance.consultable = False     # Champ exposé dans la vue
+        form.instance.disponible = True         # Selon valeur de 'consultable', Etat1 pour false ou Etat3 pour True
+        form.instance.media_type = 'LIVRE'
+
+    def form_valid(self, form):
+        self.set_lifecycle_flags(form)
+        return super(MediaLivreCreateView, self).form_valid(form)
+
+
+class MediaDvdCreateView(MediaCreateView):
+    form_class = DvdForm
+
+    def get_context_data(self, **kwargs):
+        context = super(MediaDvdCreateView, self).get_context_data(**kwargs)
+        context['is_dvd'] = True
+        return context
+
+    def set_lifecycle_flags(self, form):
+        # form.instance.consultable = False     # Champ exposé dans la vue
+        form.instance.disponible = True         # Selon valeur de 'consultable', Etat1 pour false ou Etat3 pour True
+        form.instance.media_type = 'DVD'
+
+    def form_valid(self, form):
+        self.set_lifecycle_flags(form)
+        return super(MediaDvdCreateView, self).form_valid(form)
+
+
+class MediaCdCreateView(MediaCreateView):
+    form_class = CdForm
+
+    def get_context_data(self, **kwargs):
+        context = super(MediaCdCreateView, self).get_context_data(**kwargs)
+        context['is_cd'] = True
+        return context
+
+    def set_lifecycle_flags(self, form):
+        # form.instance.consultable = False     # Champ exposé dans la vue
+        form.instance.disponible = True         # Selon valeur de 'consultable', Etat1 pour false ou Etat3 pour True
+        form.instance.media_type = 'CD'
+
+    def form_valid(self, form):
+        self.set_lifecycle_flags(form)
+        return super(MediaCdCreateView, self).form_valid(form)

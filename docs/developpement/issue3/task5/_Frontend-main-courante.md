@@ -150,14 +150,14 @@ Cette section distingue les fonctionnalités explicitement demandées dans le su
 ### 7.1 🧭 Fonctionnalités primordiales
 
 - [ ] Tests de chaque vue CRUD pour `Media`, `Emprunt`, `Membre`
-- [ ] Vérification des modèles via shell Django
+- [X] Vérification des modèles via shell Django
 - [X] Tests de navigation et affichage dans le navigateur
 - [X] Préparation du plan de test (`tests-plan.md`)
 - [ ] Validation des cas métier avec fixtures
 
 ### 7.2 ✨ Fonctionnalités souhaitables
 
-- [ ] Tests de filtrage par type et statut
+- [X] Tests de filtrage par type et statut
 - [ ] Tests d’accès conditionnel (ex. : membre bloqué)
 - [ ] Tests d’affichage des historiques
 - [ ] Tests de liste, d'affichage, de création, de mise à jour des jeux de plateaux
@@ -169,17 +169,17 @@ Cette section distingue les fonctionnalités explicitement demandées dans le su
 
 ### 8.1 🧭 Fonctionnalités primordiales
 
-- [ ] `media_test.json` (livres, DVD, CD)
+- [X] `media_test.json` (livres, DVD, CD)
 - [ ] `emprunts_test.json`
 - [ ] `retours_test.json`
 - [ ] `membres_test.json`
 
 ### 8.2 ✨ Fonctionnalités souhaitables
 
-- [ ] `media_filtre_test.json` (pour tests de type)
+- [X] `media_filtre_test.json` (pour tests de type)
 - [ ] `emprunts_statut_test.json` (pour tests de statut)
 - [ ] `historique_emprunts_test.json`
-- [ ] `jeux_test.json`
+- [X] `jeux_test.json`
 
 ---
 
@@ -502,7 +502,8 @@ La scission des routes `/medias/` en trois chemins indépendants permet :
 - Une **architecture modulaire** pour le développeur
 - Une **documentation traçable** pour le mainteneur
 
-Cette difficulté m'a permis de comprendre et illustre l’importance de **penser le routage comme un outil métier**, et non comme une simple convention technique.
+Cette difficulté m'a permis de comprendre et illustre l’importance de **penser le routage comme un outil métier**, et 
+non comme une simple convention technique.
 
 ---
 
@@ -537,6 +538,83 @@ Les champs obligatoires sont correctement validés côté serveur, mais **aucun 
 Cette réflexion m'a permis :
 - d'approfondir les fonctionnalités offertes par les formulaires génériques de Django.
 - de clarifier la frontière entre le développement fonctionnel et les choix relevant du design UX/UI.
+
+---
+
+### 9.12 Difficulté 12 - Formalisation du cycle de vie initial et typé des médias
+
+#### a) Contexte de la difficulté
+
+Cette difficulté est apparue lors de la création des formulaires des médias typés (`Livre`, `DVD`, `CD`) en identifiant 
+une ambiguïté sur la définition de l'état (et surtout initial) d'un média.  
+Elle a révélé un besoin métier fondamental : **stabiliser les états initiaux des objets `Media`** typés, afin de 
+garantir une cohérence entre les données créées, les transitions métier, et les vues exposées.
+
+Le cycle de vie métier, modélisé dans le document [Analyse_LifeCycle_Medias.md](Analyse_LifeCycle_Medias.md), a permis 
+d’identifier un **état initial explicite** :  
+> **État 0** (début) → `consultable=False`, `disponible=False`
+
+Ce point de départ est essentiel pour permettre au bibliothécaire de déclencher les transitions métier vers des états 
+stables (création, empruntable, emprunté, hors gestion, etc.).
+
+#### b) Problèmes identifiés
+
+- Le modèle `Media` définissait par défaut `consultable=True`, `disponible=True`, ce qui plaçait les objets directement 
+  en **état 3 (empruntable)**, sans validation métier.
+- Les vues typées forçaient `disponible=True` sans cohérence avec la logique de `consultable`, créant des états instables.
+- Le champ `consultable` était exposé dans le formulaire, mais parfois écrasé dans la vue, ce qui brouillait la 
+  responsabilité métier.
+
+#### c) Résolution apportée
+
+La résolution s’est articulée autour de trois axes :
+
+1. **Modèle** :  
+   - Correction des valeurs par défaut :
+     ```python
+     consultable = models.BooleanField(default=False)
+     disponible = models.BooleanField(default=False)
+     ```
+   - Alignement structurel avec l’état 0 du cycle de vie.
+
+2. **Vues typées** :  
+   - Mise en œuvre d’une méthode `set_lifecycle_flags()` pour initier les états métier selon le type.
+   - Clarification des transitions vers l’état 1 ou 3 selon les cas d’usage.
+
+3. **Documentation** :  
+   - Rédaction du document [Analyse_LifeCycle_Medias.md](Analyse_LifeCycle_Medias.md) pour formaliser les états, 
+     transitions, et impacts techniques.
+   - Intégration dans le [Plan de tests](tests-plan.md) (`T-FUN-xx` à `T-FUN-yy`) pour valider les transitions métier.
+
+   > Le document [Analyse_LifeCycle_Medias.md](Analyse_LifeCycle_Medias.md) défini les principes retenus pour le 
+   > développement et les tests dans l'ensemble du projet, alors que le [Plan de tests](tests-plan.md) décrits les tests 
+   > mis en œuvre.  
+
+#### d) Enjeux et bénéfices
+
+- **Cohérence métier** : chaque média typé entre dans le cycle de vie avec un état stable et explicite.
+- **Clarté technique** : les vues ne surchargent plus arbitrairement les champs, mais respectent les transitions métier.
+- **Traçabilité documentaire** : chaque état et transition est formalisé, testé, et documenté.
+- **Extensibilité** : le cycle de vie peut être enrichi sans refactorisation lourde.
+
+La transition (0) du cycle de vie est désormais formalisée comme : 
+- Création technique → Initialisation métier → Passage à l’état "Attente" (État 1).
+Les autres transitions du cycle de vie de l'objet `Media` typé (`Livre`, `Dvd`, `Cd`) sont explicites avec les 
+- _cheminements_ autorisés ou interdits.
+
+#### e) Conclusion
+
+La Difficulté 12 constitue un **nœud central du projet**, car elle relie :
+- la modélisation métier (`Analyse_LifeCycle_Medias.md`)
+- la structure technique (`models.py`, `views.py`)
+- la logique fonctionnelle (`formulaires`, `tests`, `templates`)
+
+Sa résolution a permis de transformer une ambiguïté technique en **levier de stabilité et de scalabilité**, en posant 
+les fondations d’un cycle de vie métier robuste et extensible pour le projet.
+Cette clarification stabilise les vues de création, les tests fonctionnels et le cycle de vie global du modèle `Media`. 
+Elle m'a permis de poursuivre le développement plus facilement en utilisant une description explicite, tout en ayant du 
+recul entre les notions d'**objets** (modélisation), de structure **technique** (framework Django) et la logique 
+**fonctionnelle** (le besoin métier). 
 
 ---
 

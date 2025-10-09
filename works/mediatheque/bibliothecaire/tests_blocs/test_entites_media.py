@@ -17,8 +17,8 @@ class MediaEntityTests(TestCase):
         self.assertEqual(self.monMedia.media_type, "NON_DEFINI")
 
     def test_ent_02_media_default_values(self):
-        self.assertTrue(self.monMedia.consultable)
-        self.assertTrue(self.monMedia.disponible)
+        self.assertFalse(self.monMedia.consultable)
+        self.assertFalse(self.monMedia.disponible)
         self.assertFalse(self.monMedia.is_typed())
 
     def test_ent_03_media_sans_sous_type(self):

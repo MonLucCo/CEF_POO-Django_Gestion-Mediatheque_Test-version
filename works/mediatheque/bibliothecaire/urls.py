@@ -16,7 +16,10 @@ urlpatterns = [
     path('medias/non-types/', views.MediaNonTypeListView.as_view(), name='media_list_non_types'),
     path('medias/<int:pk>/', views.MediaDetailView.as_view(), name='media_detail'),
     path('medias/ajouter/', views.MediaCreateView.as_view(), name='media_create'),
-#    path('medias/<int:pk>/modifier/', views.MediaUpdateView.as_view(), name='media_update'),
+    path('medias/ajouter/livre', views.MediaLivreCreateView.as_view(), name='media_create_livre'),
+    path('medias/ajouter/dvd', views.MediaDvdCreateView.as_view(), name='media_create_dvd'),
+    path('medias/ajouter/cd', views.MediaCdCreateView.as_view(), name='media_create_cd'),
+    #    path('medias/<int:pk>/modifier/', views.MediaUpdateView.as_view(), name='media_update'),
 #    path('medias/<int:pk>/supprimer/', views.MediaDeleteView.as_view(), name='media_delete'),
 
     # Emprunts
