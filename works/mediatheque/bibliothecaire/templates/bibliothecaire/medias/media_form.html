@@ -1,7 +1,15 @@
-<h2>Ajouter un {% if is_livre %}Livre{% elif is_dvd %}DVD{% elif is_cd %}CD{% else %}média non typé{% endif %}</h2>
+<h2>{% if is_typage %}Transformer un média en{% elif is_update%}Modifier{% else %}Ajouter{% endif%} un {% if is_livre %}Livre{% elif is_dvd %}DVD{% elif is_cd %}CD{% elif is_non_defini %}média non typé{% endif %}</h2>
 <form method="post">
   {% csrf_token %}
   {{ form.as_p }}
   <button type="submit">Valider</button>
-  <a href="{% url 'bibliothecaire:media_list' %}">Annuler</a>
 </form>
+
+{% if is_typage %}
+<form method="post" action="{% url 'bibliothecaire:media_cancel_typing' object.pk %}">
+  {% csrf_token %}
+  <button type="submit" style="background-color: #ccc;">Annuler la transformation</button>
+</form>
+{% else %}
+<a href="{% url 'bibliothecaire:media_list' %}">Annuler</a>
+{% endif %}

@@ -1,4 +1,6 @@
 from django import forms
+from django.http.request import MediaType
+
 from bibliothecaire.models import Media, Livre, Dvd, Cd
 
 
@@ -8,15 +10,23 @@ class MediaForm(forms.ModelForm):
         fields = [
             'name',
             'annee_edition',
-            'theme'
-            # consultable, disponible et media_type sont fixés dans la vue
+            'theme',
+            'media_type',    # media_type est exposé selon 'is_update'
+            # consultable et disponible sont fixés dans la vue
         ]
         labels = {
             'name':'Titre du média',
             'annee_edition':"Année d'édition",
             'theme':'Thématique',
+            'media_type' : 'Type de média',
         }
 
+    def __init__(self, *args, **kwargs):
+        is_update = kwargs.pop('is_update', False)
+        super(MediaForm, self).__init__(*args, **kwargs)
+
+        if is_update != True:
+            self.fields.pop('media_type', None)
 
 class LivreForm(forms.ModelForm):
     class Meta:

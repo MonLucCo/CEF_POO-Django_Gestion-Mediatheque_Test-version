@@ -1,6 +1,7 @@
 # 🧾 Main courante – Étape 5 : Développement fonctionnel initial
 
-Cette main-courante documente l’étape 5 de l’issue #3 du projet Médiathèque : le développement fonctionnel initial de l’application dédiée au profil bibliothécaire.
+Cette main-courante documente l’étape 5 de l’issue #3 du projet Médiathèque : le développement fonctionnel initial de 
+l’application dédiée au profil bibliothécaire.
 
 Elle vise à :
 - Structurer les actions techniques à réaliser
@@ -9,7 +10,14 @@ Elle vise à :
 - Suivre les fichiers à produire et les tests à mettre en œuvre
 - Documenter les difficultés rencontrées et les arbitrages méthodologiques
 
-La rédaction s’appuie sur le modèle métier du projet, les exigences explicites du sujet, et les bonnes pratiques Django issues de la documentation officielle.
+La rédaction s’appuie sur le modèle métier du projet, les exigences explicites du sujet, et les bonnes pratiques Django 
+issues de la documentation officielle.
+
+---
+
+📁 `/docs/developpement/issue3/task5/_Frontend-main-courante.md`  
+
+📌 Version : index G-10 (issue #3 – étape 5)
 
 ---
 
@@ -24,6 +32,19 @@ La rédaction s’appuie sur le modèle métier du projet, les exigences explici
 7. [🧪 Tests unitaires et validation](#7--tests-unitaires-et-validation)
 8. [📥 Fixtures de test à préparer](#8--fixtures-de-test-à-préparer)
 9. [📌 Difficultés rencontrées](#9--difficultés-rencontrées)
+   - [9.1 Difficulté 1 : organiser le développement avec une vue d'ensemble cohérente (main courante)](#91-difficulté-1--organiser-le-développement-avec-une-vue-densemble-cohérente---création-dune-main-courante-de-développement)
+   - [9.2 Difficulté 2 : comprendre les mécanismes liés au moteur de template Django](#92-difficulté-2--comprendre-les-mécanismes-liés-au-moteur-de-template-django)
+   - [9.3 Difficulté 3 : choix de la meilleure architecture de Vue](#93-difficulté-3--choix-de-la-meilleure-architecture-de-vue)
+   - [9.4 Difficulté 4 : accéder aux données spécifiques de l’objet typé (héritage multi-table et ORM Django)](#94-difficulté-4--accéder-aux-données-spécifiques-de-lobjet-typé-héritage-multi-table-et-orm-django)
+   - [9.5 Difficulté 5 : définir et structurer les tests unitaires](#95-difficulté-5--définir-et-structurer-les-tests-unitaires)
+   - [9.6 Difficulté 6 : reprise de modélisation en cours de développement](#96-difficulté-6--reprise-de-modélisation-en-cours-de-développement)
+   - [9.7 Difficulté 7 : gestion des contrôles de validité sur les champs numériques de données](#97-difficulté-7--gestion-des-contrôles-de-validité-sur-les-champs-numériques-de-données)
+   - [9.8 Difficulté 8 : nommage des dossiers du projet](#98-difficulté-8--nommage-des-dossiers-du-projet)
+   - [9.9 Difficulté 9 : interactions entre les tests unitaires techniques et fonctionnels métier](#99-difficulté-9--interactions-entre-les-tests-unitaires-techniques-et-fonctionnels-métier)
+   - [9.10 Difficulté 10 : Organisation et clarté du routage lié aux médias](#910-difficulté-10--organisation-et-clarté-du-routage-lié-aux-médias)
+   - [9.11 Difficulté 11 – Visualisation des contraintes du formulaire](#911-difficulté-11--visualisation-des-contraintes-du-formulaire)
+   - [9.12 Difficulté 12 - Formalisation du cycle de vie initial et typé des médias](#912-difficulté-12---formalisation-du-cycle-de-vie-initial-et-typé-des-médias)
+   - [9.13 Difficulté 13 : Définir ce que signifie “ajouter un média” – segmentation fonctionnelle, typage différé et structuration technique](#913-difficulté-13--définir-ce-que-signifie-ajouter-un-média--segmentation-fonctionnelle-typage-différé-et-structuration-technique)
 10. [🔗 Liens utiles](#10--liens-utiles)
 
 ---
@@ -615,6 +636,73 @@ Cette clarification stabilise les vues de création, les tests fonctionnels et l
 Elle m'a permis de poursuivre le développement plus facilement en utilisant une description explicite, tout en ayant du 
 recul entre les notions d'**objets** (modélisation), de structure **technique** (framework Django) et la logique 
 **fonctionnelle** (le besoin métier). 
+
+---
+
+### 9.13 Difficulté 13 : Définir ce que signifie “ajouter un média” – segmentation fonctionnelle, typage différé et structuration technique
+
+#### a) Contexte de la difficulté
+
+La fonctionnalité “ajouter un média” semble triviale dans sa formulation, mais elle recouvre en réalité **plusieurs cas d’usage distincts**, selon que le média est typé dès sa création ou non. Cette ambiguïté a nécessité une clarification métier et technique pour garantir une couverture fonctionnelle cohérente.
+
+#### b) Problème rencontré
+
+Le terme “ajouter” peut désigner :
+- la **création directe** d’un média typé (`Livre`, `Dvd`, `Cd`)
+- la **création différée** d’un média non typé (`Media` avec `media_type='NON_DEFINI'`), suivi d’un typage ultérieur
+
+Cette dualité impose de **lier la création à la mise à jour**, et de prévoir des cas spécifiques pour :
+- la modification d’un média typé
+- la modification d’un média non typé
+- le typage d’un média non typé vers un type réel
+- l’annulation d’un typage en cours
+
+#### c) Résolution adoptée
+
+La fonctionnalité “ajouter un média” a été **décomposée en 12 fonctions élémentaires** :
+
+| Action         | Type ciblé        |
+|----------------|-------------------|
+| Ajouter        | Livre, Dvd, Cd, Média non typé |
+| Modifier       | Livre, Dvd, Cd, Média non typé |
+| Typer          | Livre, Dvd, Cd     |
+| Annuler typage | Média non typé    |
+
+Cette segmentation permet de couvrir tous les cas d’usage métier, tout en assurant une traçabilité technique claire dans les vues, les formulaires et les tests.
+
+#### d) Enseignements techniques
+
+La résolution de cette difficulté a permis de :
+
+- **Structurer les routes** de manière explicite pour chaque cas fonctionnel :
+  - `/ajouter/<type>` pour les créations typées
+  - `/modifier/` pour les mises à jour d'un média non typé
+  - `<type>/modifier/` pour les mises à jour d'un média typé
+  - `/modifier/<type>` pour les typages
+  - `/annuler_typage/` pour les rollbacks
+
+  > Cette clarté dans le routage facilite la maintenance, la compréhension globale et la documentation.
+
+- **Enrichir le modèle** avec des méthodes utilitaires :
+  - `mutate_to_typed()` pour la création typée
+  - `get_real_instance()` pour le typage polymorphe
+  - `get_update_url_name()` et `get_typage_url_name()` pour le routage dynamique
+  - `get_specific_fields()` dans chaque sous-type pour centraliser les champs spécifiques
+  
+  > Ces ajouts rendent le modèle plus expressif, plus autonome et plus lisible pour les développeurs.
+
+- **Segmenter les données de contexte** dans les vues et les templates (`is_typage`, `is_update`, `is_<type>`) pour 
+éviter une complexité excessive dans le modèle tout en assurant une logique métier claire et testable.
+
+#### e) Impacts sur le projet
+
+- Création des vues `MediaTypage<Type>View` et `MediaCancelTypingView`
+- Mise à jour des templates pour gérer les cas de typage et d’annulation
+- Définition des tests fonctionnels `T-FUN-08` à `T-FUN-10`
+- Documentation enrichie dans `Analyse_Fonctionnalites_Bibliothecaire.md`, `Analyse_LifeCycle_Medias.md` et `tests-plan.md`
+
+> Cette difficulté m'a permis de comprendre comment derrière une fonctionnalité métier simple, peut se cacher une 
+> **complexité technique structurante**, qui doit être anticipée, documentée et testée pour garantir la robustesse du projet.
 
 ---
 

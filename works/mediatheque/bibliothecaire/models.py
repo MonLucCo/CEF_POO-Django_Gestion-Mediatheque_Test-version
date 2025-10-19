@@ -14,6 +14,8 @@ Ce module définit les entités métier de la médiathèque, avec :
 Les règles métier détaillées (cardinalité des prêts, durées, blocages, etc.)
 sont documentées dans le rapport de projet (Annexe A).
 """
+from django.apps import apps
+from django.core.exceptions import ValidationError
 from django.core.validators import MinValueValidator
 from django.db import models
 
@@ -93,6 +95,9 @@ class Media(Support):
     def is_typed(self):
         return hasattr(self, 'livre') or hasattr(self, 'dvd') or hasattr(self, 'cd')
 
+    def is_typage_incomplete(self):
+        return self.media_type != 'NON_DEFINI' and not self.is_typed()
+
     def get_real_instance(self):
         if hasattr(self, 'livre'):
             return self.livre
@@ -101,6 +106,39 @@ class Media(Support):
         elif hasattr(self, 'cd'):
             return self.cd
         return self
+
+    def mutate_to_typed(self):
+        if self.media_type == 'NON_DEFINI':
+            raise ValidationError("Impossible de muter un média sans type défini.")
+
+        model_name = self.media_type.capitalize()  # 'LIVRE' → 'Livre'
+        TypedModel = apps.get_model('bibliothecaire', model_name)
+
+        # Vérifie si l'objet typé existe déjà
+        if TypedModel.objects.filter(pk=self.pk).exists():
+            return TypedModel.objects.get(pk=self.pk)
+
+        return TypedModel.objects.create(
+                id=self.pk,
+                name=self.name,
+                annee_edition=self.annee_edition,
+                consultable=self.consultable,       # Issue du média non typé, donc 'non consultable'
+                disponible=True,                    # Objet typé, donc 'disponible'
+                theme=self.theme,
+                media_type=self.media_type,
+            )
+
+    def get_update_url_name(self):
+        valid_types = [key for key, _ in self.TYPE_CHOICES if key != 'NON_DEFINI']
+        if self.media_type in valid_types:
+            return f'bibliothecaire:media_update_{self.media_type.lower()}'
+        return 'bibliothecaire:media_update'    
+
+    def get_typage_url_name(self):
+        valid_types = [key for key, _ in self.TYPE_CHOICES if key != 'NON_DEFINI']
+        if self.media_type in valid_types:
+            return f'bibliothecaire:media_typage_{self.media_type.lower()}'
+        return 'bibliothecaire:media_update'
 
 
 class Livre(Media):
@@ -119,6 +157,10 @@ class Livre(Media):
         help_text="Nombre de pages (au moins une), ou laisser vide."
     )
     resume   = models.CharField(max_length=200)
+
+    @staticmethod
+    def get_specific_fields():
+        return ['auteur', 'nb_page', 'resume']
 
 
 class Dvd(Media):
@@ -141,6 +183,11 @@ class Dvd(Media):
     class Meta:
         verbose_name = 'DVD'
         verbose_name_plural = "DVDs"
+
+    @staticmethod
+    def get_specific_fields():
+        return ['realisateur', 'duree', 'histoire']
+
 
 class Cd(Media):
     """
@@ -166,6 +213,10 @@ class Cd(Media):
     class Meta:
         verbose_name = 'CD'
         verbose_name_plural = "CDs"
+
+    @staticmethod
+    def get_specific_fields():
+        return ['artiste', 'nb_piste', 'duree_ecoute']
 
 
 class JeuDePlateau(Support):
@@ -194,6 +245,7 @@ class JeuDePlateau(Support):
 
     class Meta:
         verbose_name_plural = "jeux de plateau"
+
 
 # ── 2. Utilisateurs ───────────────────────────────────────────────────────────
 
