@@ -92,8 +92,8 @@
 </table>
 
 <div style="margin-top: 20px;">
+    <a href="{% url media.get_update_url_name media.pk %}">Modifier</a> |
 {% comment %}
-    <a href="{% url 'bibliothecaire:media_update' media.pk %}">Modifier</a> |
     <a href="{% url 'bibliothecaire:media_delete' media.pk %}">Supprimer</a> |
 {% endcomment %}
     <a href="{% url 'bibliothecaire:media_list' %}">Retour à la liste</a>

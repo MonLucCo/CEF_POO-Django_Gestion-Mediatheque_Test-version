@@ -2,7 +2,7 @@
 
 📁 `/docs/developpement/issue3/task5/tests-plan.md`  
 
-📌 Version : index F-4 (issue #3 – étape 5 - Bloc 2)
+📌 Version : index G-10 (issue #3 – étape 5 - Bloc 2)
 - Rapport de tests associé : [`test_report_indexF-4.txt`](test_report_indexF-4.txt)
 
 ___
@@ -24,9 +24,11 @@ Il est conçu pour :
 📌 Version du document :  
 - **Indexage** : 
   - index E-7 (index D-3, avec correction de la modélisation) pour le **Bloc 1** de correction
-  - index F-4 (intégration du cycle de vie de `Media` + création des médias typés) pour le **Bloc 2** de correction, avec :
+  - index G-10 (modification des médias non typés : fonction de typage des médias et rollback en média non typé) pour 
+  le **Bloc 2** de correction, avec :
     - index F-1, reprise du développement fonctionnel
-    - index F-3, fonctions de liste et de création d'un média non typé.
+    - index F-3, fonctions de liste et de création d'un média non typé
+    - index F-4, fonctions de création des médias typés. Intégration du cycle de vie de `Media`.
 - **Périmètre couvert** : site administration, entité `Media` – vues `liste` et `détail`  
 - **Niveau de couverture** : tests de niveau _minimum_ à _intermédiaire_  
 - **Évolutivité prévue** :
@@ -196,6 +198,9 @@ Chaque catégorie de tests est regroupée dans une sous-section spécifique avec
 | Bloc 2 | T-FUN-05 | Vérifie le refus de création d'un média (non typé) avec champ obligatoire manquant | Code 200 + Template Form avec message d'erreur + Objet `Media` non créé en base                                             | ✅ Validé |
 | Bloc 2 | T-FUN-06 | Vérifie que la vue non typée respecte les règles métier définies (UC-LIST-04)      | Code 200 + template (T-NAV-09), Type exact (NON_DEFINI), Contenu HTML spécifique                                            | ✅ Validé |
 | Bloc 2 | T-FUN-07 | Vérifie la création d’un média typé selon l’état métier attendu                    | Création via formulaire : état 1 (`consultable=False`, `disponible=True`) ou état 3 (`consultable=True`, `disponible=True`) | ✅ Validé |
+| Bloc 2 | T-FUN-08 | Création d’un sous-type via typage (`MediaTypage<Type>View`)                       | Objet typé créé, champs spécifiques appliqués, redirection vers la liste                                                    | ✅ Validé |
+| Bloc 2 | T-FUN-09 | Annulation du typage (`MediaCancelTypingView`)                                     | Sous-type supprimé, `media_type` réinitialisé à `'NON_DEFINI'`, redirection OK                                              | ✅ Validé |
+| Bloc 2 | T-FUN-10 | Redirection vers typage depuis `MediaUpdateView` si `media_type` modifié           | Redirection vers la vue `MediaTypage<Type>View` sans enregistrement préalable                                               | ✅ Validé |
 
 > 🔧 Les tests unitaires _fonctionnels_ sont définis pour être autonome. Ils peuvent se rapprocher de tests unitaires
 > _techniques_ qui sont indiqués dans le _résultat attendu_. 
@@ -211,6 +216,11 @@ Chaque catégorie de tests est regroupée dans une sous-section spécifique avec
 > 
 > Ce comportement est standard pour les vues génériques (CreateView) et confirme le succès de l’enregistrement ou 
 > l'affichage d'une erreur dans le formulaire.
+
+
+> 🔧 Les tests T-FUN-08 à T-FUN-10 valident la logique métier du typage différé, la cohérence des transitions, 
+> et la robustesse des vues associées.  
+> Ces tests consolident le fonctionnement de la fonction **ajouter un média**.
 
 ---
 
@@ -265,6 +275,7 @@ Chaque catégorie de tests est regroupée dans une sous-section spécifique avec
 | `test_admin.py`             | Interface d’administration                                          | Administration |
 | `test_uc_list_media.py`     | Cas d’usage des listes de médias (consultables, disponibles, typés) | Fonctionnel    |
 | `test_uc_create_media.py`   | Cas d'usage des créations de médias (non typé, livre, dvd, cd)      | Fonctionnel    |
+| `test_uc_typage_media.py`   | Cas d’usage du typage et rollback des médias non typés              | Fonctionnel    |
 
 ---
 
@@ -275,6 +286,10 @@ Ce plan est conçu pour être enrichi au fil du développement :
 - Ajout de tests pour les vues `CreateView`, `UpdateView`, `DeleteView`
 - Ajout de tests pour les entités `Emprunt`, `Membre`, `JeuDePlateau`
 - Ajout de tests de permissions, formulaires, erreurs, filtrage
+- Ajout de tests pour les transitions métier définies dans `Analyse_LifeCycle_Medias.md`
+- Ajout de tests pour les vues `MediaTypage<Type>View` et `MediaCancelTypingView`
+- Ajout de tests de rollback et de redirection conditionnelle
+- Préparation des tests pour UC-DELETE (masquage) et UC-ADMIN (suppression définitive)
 
 ---
 

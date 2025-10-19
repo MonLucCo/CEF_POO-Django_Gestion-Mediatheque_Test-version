@@ -2,7 +2,7 @@
 
 📁 `/docs/developpement/issue3/task5/Analyse_Fonctionnalites.md`  
 
-📌 Version : index F-3 (issue #3 – étape 5)
+📌 Version : index G-10 (issue #3 – étape 5)
 
 ---
 
@@ -41,9 +41,11 @@ Il permet de :
 | Fonction                     | Statut         | Description                                               | Désignation | Avancement technique              | Tests associés         |
 |------------------------------|----------------|-----------------------------------------------------------|-------------|-----------------------------------|------------------------|
 | Afficher la liste des médias | ✅ Demandée     | Vue principale pour consultation du catalogue             | UC-LIST     | 🟢 Vue en place (`MediaListView`) | `T-VUE-01`, `T-VUE-02` |
-| Ajouter un média             | ✅ Demandée     | Création d’un média typé ou non typé                      | UC-CREATE   | 🟡 Formulaires à créer            | `T-VUE-06` (à définir) |
-| Modifier un média            | 🔸 Souhaitable | Mise à jour des champs métier                             | UC-UPDATE   | 	⚪ Non commencé                   | —                      |
-| Supprimer / masquer un média | 🔸 Souhaitable | Retrait d’un média du catalogue sans suppression physique | UC-DELETE   | 	⚪ Non commencé                   | —                      |
+| Ajouter un média             | ✅ Demandée     | Création d’un média typé ou non typé                      | UC-CREATE   | 🟢 Vue en place                   | `T-FUN-04`, `T-FUN-05` |
+| Modifier un média            | 🔸 Souhaitable | Mise à jour des champs métier                             | UC-UPDATE   | 🟢 Vue en place                   | `T-FUN-10`             |
+| Typer un média               | 🔸 Souhaitable | Transformation d’un média non typé en typé                | UC-TYPAGE   | 🟢 Vue en place                   | `T-FUN-08`             |
+| Annuler un typage            | 🔸 Souhaitable | Rollback d’un typage en cours                             | UC-ROLLBACK | 🟢 Vue en place                   | `T-FUN-09`             |
+| Supprimer / masquer un média | 🔸 Souhaitable | Retrait d’un média du catalogue sans suppression physique | UC-DELETE   | ⚪ Non commencé                    | —                      |
 
 > 🔹 L’interface doit rester **basique**, sans mise en forme avancée : un designer Web prendra le relai.  
 > 🔹 Les vues doivent être **fonctionnelles, testables et extensibles**.
@@ -150,24 +152,67 @@ Permettre au bibliothécaire d’ajouter un nouveau média au catalogue, avec ou
 
 ### 3.3. Cas d’usage (souhaitables) – Modification et suppression 
 
-| ID           | Description métier                           | Statut         | Vue cible         | Avancement     |
-|--------------|----------------------------------------------|----------------|-------------------|----------------|
-| UC-UPDATE-01 | Modifier un média typé ou non typé           | 🔸 Souhaitable | `MediaUpdateView` | ❌ Non commencé |
-| UC-DELETE-01 | Masquer un média (sans suppression physique) | 🔸 Souhaitable | `MediaDeleteView` | ❌ Non commencé |
+| ID          | Description métier                           | Statut         | Vue cible         | Avancement     |
+|-------------|----------------------------------------------|----------------|-------------------|----------------|
+| UC-UPDATE-* | Modifier un média typé ou non typé           | 🔸 Souhaitable | `MediaUpdateView` | ✅ Implémenté   |
+| UC-DELETE-* | Masquer un média (sans suppression physique) | 🔸 Souhaitable | `MediaDeleteView` | ❌ Non commencé |
 
-> Ces cas d’usage peuvent être développés ultérieurement ou en fin de l'issue #3.
+> Ces cas d’usage _souhaitable_ ont pour vocation de compléter les cas d'usage de _création d'un média_ pour une 
+> expérience utilisateur (UX) cohérente.
+
+#### 3.3.1 Cas d’usage UC-UPDATE et UC-TYPAGE – Mise à jour et transformation d’un média
+
+##### 🎯 Objectif métier  
+Permettre au bibliothécaire de modifier un média existant, qu’il soit typé ou non, et de transformer un média non typé en un sous-type réel (`Livre`, `Dvd`, `Cd`).  
+La logique métier impose une distinction entre mise à jour classique, typage différé et annulation de typage.
+
+##### 🧩 Cas d’usage
+
+| ID           | Description métier                                     | Vue utilisée            | Formulaire utilisé | Avancement     |
+|--------------|--------------------------------------------------------|-------------------------|--------------------|----------------|
+| UC-UPDATE-01 | Modifier un média typé (`Livre`, `Dvd`, `Cd`)          | `LivreUpdateView`, etc. | `LivreForm`, etc.  | ✅ Vue en place |
+| UC-UPDATE-02 | Modifier un média non typé (`media_type='NON_DEFINI'`) | `MediaUpdateView`       | `MediaForm`        | ✅ Vue en place |
+| UC-TYPAGE-01 | Typer un média en `Livre`                              | `MediaTypageLivreView`  | `LivreForm`        | ✅ Vue en place |
+| UC-TYPAGE-02 | Typer un média en `Dvd`                                | `MediaTypageDvdView`    | `DvdForm`          | ✅ Vue en place |
+| UC-TYPAGE-03 | Typer un média en `Cd`                                 | `MediaTypageCdView`     | `CdForm`           | ✅ Vue en place |
+| UC-TYPAGE-04 | Annuler un typage en cours                             | `MediaCancelTypingView` | —                  | ✅ Vue en place |
+
+> 🔹 Le typage est déclenché automatiquement depuis `MediaUpdateView` si le champ `media_type` est modifié.  
+> 🔹 L’annulation du typage supprime le sous-type et réinitialise le champ `media_type` à `'NON_DEFINI'`.
+
+#### 🧠 Analyse technique associée
+
+- Le typage est réalisé via une méthode `mutate_to_typed()` dans le modèle `Media`, garantissant une création atomique du sous-type.
+- Les champs spécifiques sont appliqués dynamiquement via `get_specific_fields()` dans chaque sous-type (`Livre`, `Dvd`, `Cd`).
+- Le routage est explicite pour chaque cas :
+  - `/ajouter/<type>` → création typée
+  - `/modifier/` → mise à jour non typée
+  - `/<type>/modifier/` → mise à jour typée
+  - `/modifier/<type>` → typage
+  - `/annuler_typage/` → rollback
+
+> 🔹 Cette segmentation permet une traçabilité claire, une maintenance facilitée et une UX cohérente.
+
+
+#### 3.3.2 Cas d’usage UC-DELETE – Masquer un média (sans suppression physique)
+
+Cette fonctionnalité sera développée ultérieurement, car elle nécessite de prendre en considération la situation 
+d'emprunt pour effectuer la modification du média.
+
+Cette UC sera intégrée dans une future étape, en cohérence avec les transitions métier définies dans 
+[Analyse_LifeCycle_Medias.md](Analyse_LifeCycle_Medias.md).
 
 ---
 
 ## 4. Liaison technique
 
-| Élément            | Source technique                                                                |
-|--------------------|---------------------------------------------------------------------------------|
-| Modèle             | `Media`, `Livre`, `Dvd`, `Cd`                                                   |
-| Vue                | `MediaListView`, `MediaDetailView`, `MediaCreateView`                           |
-| Template           | `media_list.html`, `media_detail.html`, `media_form.html`                       |
-| Formulaire         | `MediaForm`, `LivreForm`, `DvdForm`, `CdForm`                                   |
-| Tests techniques   | `test_vues_media_list.py`, `test_vues_media_detail.py`, `test_entites_media.py` |
-| tests fonctionnels | `test_uc_list_media.py`, `test_uc_create_media.py`                              |
+| Élément            | Source technique                                                                                                           |
+|--------------------|----------------------------------------------------------------------------------------------------------------------------|
+| Modèle             | `Media`, `Livre`, `Dvd`, `Cd`                                                                                              |
+| Vue                | `MediaListView`, `MediaDetailView`, `MediaCreateView`, `MediaUpdateView`, `MediaTypage<Type>View`, `MediaCancelTypingView` |
+| Template           | `media_list.html`, `media_detail.html`, `media_form.html`                                                                  |
+| Formulaire         | `MediaForm`, `LivreForm`, `DvdForm`, `CdForm`                                                                              |
+| Tests techniques   | `test_vues_media_list.py`, `test_vues_media_detail.py`, `test_entites_media.py`                                            |
+| Tests fonctionnels | `test_uc_list_media.py`, `test_uc_create_media.py`, `test_uc_typage_media.py`                                              |
 
 ---

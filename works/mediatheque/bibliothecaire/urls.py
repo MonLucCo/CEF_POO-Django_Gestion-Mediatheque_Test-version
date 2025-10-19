@@ -9,18 +9,32 @@ urlpatterns = [
     path('accueil/', views.AccueilBibliothecaireView.as_view(), name='accueil'),
 
     # Media (Livre, Dvd, Cd)
+    # Listes
     path('medias/', views.MediaListView.as_view(), name='media_list'),
     path('medias/consultables/', views.MediaListConsultableView.as_view(), name='media_list_consultables'),
     path('medias/disponibles/', views.MediaListDisponibleView.as_view(), name='media_list_disponibles'),
     path('medias/types/', views.MediaListByTypeView.as_view(), name='media_list_by_type'),
     path('medias/non-types/', views.MediaNonTypeListView.as_view(), name='media_list_non_types'),
+    # Détails
     path('medias/<int:pk>/', views.MediaDetailView.as_view(), name='media_detail'),
+    # Création
     path('medias/ajouter/', views.MediaCreateView.as_view(), name='media_create'),
     path('medias/ajouter/livre', views.MediaLivreCreateView.as_view(), name='media_create_livre'),
     path('medias/ajouter/dvd', views.MediaDvdCreateView.as_view(), name='media_create_dvd'),
     path('medias/ajouter/cd', views.MediaCdCreateView.as_view(), name='media_create_cd'),
-    #    path('medias/<int:pk>/modifier/', views.MediaUpdateView.as_view(), name='media_update'),
-#    path('medias/<int:pk>/supprimer/', views.MediaDeleteView.as_view(), name='media_delete'),
+    # Mise à jour
+    path('medias/<int:pk>/modifier/', views.MediaUpdateView.as_view(), name='media_update'),
+    path('medias/<int:pk>/modifier/livre/', views.MediaTypageLivreView.as_view(), name='media_typage_livre'),
+    path('medias/<int:pk>/modifier/dvd/', views.MediaTypageDvdView.as_view(), name='media_typage_dvd'),
+    path('medias/<int:pk>/modifier/cd/', views.MediaTypageCdView.as_view(), name='media_typage_cd'),
+
+    path('medias/<int:pk>/livre/modifier/', views.LivreUpdateView.as_view(), name='media_update_livre'),
+    path('medias/<int:pk>/dvd/modifier/', views.DvdUpdateView.as_view(), name='media_update_dvd'),
+    path('medias/<int:pk>/cd/modifier/', views.CdUpdateView.as_view(), name='media_update_cd'),
+
+    path('medias/<int:pk>/annuler_typage/', views.MediaCancelTypingView.as_view(), name='media_cancel_typing'),
+
+    #    path('medias/<int:pk>/supprimer/', views.MediaDeleteView.as_view(), name='media_delete'),
 
     # Emprunts
  #   path('emprunts/', views.EmpruntListView.as_view(), name='emprunt_list'),
