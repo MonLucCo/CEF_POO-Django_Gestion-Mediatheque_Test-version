@@ -1,6 +1,6 @@
-# 🧾 Main courante – Étape 5 : Développement fonctionnel initial
+# 🧾 Main courante – Développement fonctionnel initial Bibliothecaire
 
-Cette main-courante documente l’étape 5 de l’issue #3 du projet Médiathèque : le développement fonctionnel initial de 
+Cette main-courante documente les étapes de l’issue #3 du projet Médiathèque : le développement fonctionnel initial de 
 l’application dédiée au profil bibliothécaire.
 
 Elle vise à :
@@ -15,9 +15,21 @@ issues de la documentation officielle.
 
 ---
 
-📁 `/docs/developpement/issue3/task5/_Frontend-main-courante.md`  
+📁 `/docs/developpement/issue3/task5/_Frontend-main-courante_indexG-10.md`  
 
-📌 Version : index G-10 (issue #3 – étape 5)
+> 📌 Ce document constitue la version figée de la main courante de l'étape 5 (task5) de l’issue #3, arrêtée à 
+> l’**index G-10**.
+
+Il couvre :
+- Bloc 1 : modélisation des entités et vue LIST des médias
+- Bloc 2 : développement des vues CRUD pour `Media`, typage différé, rollback
+- Tests validés : ✅ 47 tests
+- Documents associés : [`tests-plan_indexG-10.md`](tests-plan_indexG-10.md), 
+[`Analyse_LifeCycle_Medias.md` (index G-10)](Analyse_LifeCycle_Medias_indexG-10.md), 
+[`Analyse_Fonctionnalites_Bibliothecaire.md` (index G-10)](Analyse_Fonctionnalites_Bibliothecaire_indexG-10.md)
+
+➡️ La poursuite du développement (Bloc 3 : Membre et Emprunt) est documentée dans 
+[`_Frontend-main-courante.md` (étape 6 - `/task6`)](../task6/_Frontend-main-courante.md).
 
 ---
 
@@ -60,7 +72,8 @@ issues de la documentation officielle.
 
 ## 2. 📌 Fonctionnalités par entité – Profil Bibliothécaire
 
-Cette section distingue les fonctionnalités explicitement demandées dans le sujet (primordiales) de celles qui peuvent être ajoutées pour améliorer l’expérience ou démontrer la maîtrise technique (souhaitables).
+Cette section distingue les fonctionnalités explicitement demandées dans le sujet (primordiales) de celles qui peuvent 
+être ajoutées pour améliorer l’expérience ou démontrer la maîtrise technique (souhaitables).
 
 ### 2.1 🧭 Fonctionnalités primordiales (exigées dans le sujet)
 
@@ -82,7 +95,8 @@ Cette section distingue les fonctionnalités explicitement demandées dans le su
 | **Membre**       | Affichage des emprunts en cours, Blocage/déblocage du compte               |
 | **JeuDePlateau** | Liste consultable (non empruntable), Détail, Création, Modification        |
 
-> ℹ️ Ces fonctionnalités ne sont pas exigées dans la grille d’évaluation du sujet, mais peuvent être intégrées pour démontrer la modularité du projet et la capacité à étendre le périmètre fonctionnel.
+> ℹ️ Ces fonctionnalités ne sont pas exigées dans la grille d’évaluation du sujet, mais peuvent être intégrées pour 
+> démontrer la modularité du projet et la capacité à étendre le périmètre fonctionnel.
 >
 > ℹ️ La suppression de `JeuDePlateau` est réservée à l’administrateur et n’est pas incluse dans cette étape.
 
@@ -218,23 +232,28 @@ Mais, pour une première réalisation avec Django cela se traduit par plusieurs 
 - relation backend-frontend
 - mise en place des tests fonctionnels
 
-À partir du site de référence [`Django - Documentation`](https://docs.djangoproject.com/fr/5.2/intro/), j'ai pu synthétiser une ligne directrice pour réaliser le développement fonctionnel initial de l'application Bibliothécaire.
+À partir du site de référence [`Django - Documentation`](https://docs.djangoproject.com/fr/5.2/intro/), j'ai pu synthétiser une ligne directrice pour réaliser le 
+développement fonctionnel initial de l'application Bibliothécaire.
 
 ### 9.2 Difficulté 2 : comprendre les mécanismes liés au moteur de template Django
 
 Lors de la réalisation de template, Django exploite des mécanismes qui peuvent perturber l'interprétation du code HTML.
-Par exemple, la mise en commentaire d'une ligne de code HTML n'était pas pris en compte sans l'insertion d'une commande `{% comment %} ... {% endcomment %}`.
+Par exemple, la mise en commentaire d'une ligne de code HTML n'était pas pris en compte sans l'insertion d'une commande 
+`{% comment %} ... {% endcomment %}`.
 
-> `{% comment %} ... {% endcomment %}` est interprété **par le moteur Django**, contrairement à `<!-- ... -->` qui est ignoré **par le navigateur**.
+> `{% comment %} ... {% endcomment %}` est interprété **par le moteur Django**, contrairement à `<!-- ... -->` qui est 
+> ignoré **par le navigateur**.
 
-Après lecture du [tutorial (partie 3) de la documentation de Django] (https://docs.djangoproject.com/fr/5.2/intro/tutorial03/), j'ai compris qu'il me fallait comprendre les mécanismes de Django pour interpréter les templates.
+Après lecture du [tutorial (partie 3) de la documentation de Django] (https://docs.djangoproject.com/fr/5.2/intro/tutorial03/), 
+j'ai compris qu'il me fallait comprendre les mécanismes de Django pour interpréter les templates.
 De ces lectures, j'ai créé un [_memento_](../../../technique/Memento_Django-Balises-Filtres.md) pour une réexploitation dans mon développement.
 
 > Ce mémento est appelé à évoluer au fil du développement, notamment avec les _filtres personnalisés_ et les _tests de rendu_.
 
 ### 9.3 Difficulté 3 : choix de la meilleure architecture de Vue
 
-Cette difficulté s'est avérée la plus complexe à expliciter, car elle apparaît anodine dans sa formulation tout en étant liée à de nombreux sujets impactés par la résolution choisie. Par conséquent, elle est développée pour parcourir les différentes facettes.
+Cette difficulté s'est avérée la plus complexe à expliciter, car elle apparaît anodine dans sa formulation tout en étant 
+liée à de nombreux sujets impactés par la résolution choisie. Par conséquent, elle est développée pour parcourir les différentes facettes.
 
 Sa résolution m'a permis de :
 - prendre du recul sur les différentes solutions possibles entre le backend (le modèle de données) et le frontend (les templates)
@@ -242,8 +261,10 @@ Sa résolution m'a permis de :
 
 #### a) Contexte de la difficulté
 
-Lors de la mise en œuvre des vues liées à l’entité `Media` (et ses spécialisations `Livre`, `Dvd`, `Cd`), une difficulté majeure est apparue : **quelle structure adopter pour les vues ?**  
-Le sujet impose certaines fonctionnalités (liste, ajout), mais laisse ouvertes d’autres (détail, suppression). Cette situation a révélé que **le périmètre fonctionnel influence directement l’architecture technique**.
+Lors de la mise en œuvre des vues liées à l’entité `Media` (et ses spécialisations `Livre`, `Dvd`, `Cd`), une difficulté 
+majeure est apparue : **quelle structure adopter pour les vues ?**  
+Le sujet impose certaines fonctionnalités (liste, ajout), mais laisse ouvertes d’autres (détail, suppression). Cette 
+situation a révélé que **le périmètre fonctionnel influence directement l’architecture technique**.
 
 #### b) Deux architectures possibles
 
@@ -274,7 +295,8 @@ Le choix architectural dépend de plusieurs facteurs :
 #### d) Décision retenue
 
 Pour répondre strictement au sujet, l’architecture centralisée est retenue pour l’étape 5.  
-Cependant, la structure du projet est pensée pour **permettre une bascule vers une architecture spécialisée** si le périmètre fonctionnel s’élargit (ajout de nouveaux types, logique métier plus fine).
+Cependant, la structure du projet est pensée pour **permettre une bascule vers une architecture spécialisée** si le 
+périmètre fonctionnel s’élargit (ajout de nouveaux types, logique métier plus fine).
 
 #### e) Importance de l’architecture technique des vues
 
@@ -298,29 +320,39 @@ Ce choix doit donc être **documenté, justifié, et réévalué** à chaque év
 
 ### 9.4 Difficulté 4 : accéder aux données spécifiques de l’objet typé (héritage multi-table et ORM Django)
 
-Cette difficulté, bien que discrète (aucune erreur explicite à l’exécution), s’est révélée déterminante pour garantir un affichage complet des données dans les vues. Elle ne relève pas d’un choix stratégique, mais d’un **problème technique lié au polymorphisme et à l’héritage multi-table dans Django**, combiné aux mécanismes internes de son ORM.
+Cette difficulté, bien que discrète (aucune erreur explicite à l’exécution), s’est révélée déterminante pour garantir un 
+affichage complet des données dans les vues. Elle ne relève pas d’un choix stratégique, mais d’un **problème technique lié 
+au polymorphisme et à l’héritage multi-table dans Django**, combiné aux mécanismes internes de son ORM.
 
-La documentation officielle aborde cette problématique de manière implicite, sans proposer de solution native pour “caster” automatiquement une instance de `Media` vers son sous-type (`Livre`, `Dvd`, `Cd`). Après avoir exploré les options de modélisation, j’ai orienté mes recherches vers les forums et les retours d’expérience communautaires, ce qui m’a permis d’identifier une **bonne pratique émergente**.
+La documentation officielle aborde cette problématique de manière implicite, sans proposer de solution native pour “caster” 
+automatiquement une instance de `Media` vers son sous-type (`Livre`, `Dvd`, `Cd`). Après avoir exploré les options de 
+modélisation, j’ai orienté mes recherches vers les forums et les retours d’expérience communautaires, ce qui m’a permis 
+d’identifier une **bonne pratique émergente**.
 
 La résolution s’est faite en deux temps :
 - Une **surcharge de la méthode `get_object()` dans la vue** pour accéder dynamiquement à l’objet typé, sans modifier le modèle.
-- Une **éventuelle centralisation dans le modèle** via une méthode utilitaire (`get_real_instance()`), pour simplifier et uniformiser le comportement dans toutes les vues concernées.
+- Une **éventuelle centralisation dans le modèle** via une méthode utilitaire (`get_real_instance()`), pour simplifier 
+- et uniformiser le comportement dans toutes les vues concernées.
 
-Cette difficulté illustre l’importance de comprendre non seulement la structure des modèles, mais aussi **la manière dont Django instancie et transmet les objets aux vues et aux templates**.
+Cette difficulté illustre l’importance de comprendre non seulement la structure des modèles, mais aussi **la manière dont 
+Django instancie et transmet les objets aux vues et aux templates**.
 
 La résolution de cette difficulté m'a permis d'aller rechercher la solution dans les discussions en cours des forums.
 
 #### a) Contexte de la difficulté
 
 Le modèle de la médiathèque repose sur une classe mère `Media`, dont héritent les entités typées `Livre`, `Dvd`, `Cd`.  
-Chaque sous-type possède des champs spécifiques (ex. : `auteur` pour `Livre`, `realisateur` pour `Dvd`, etc.), mais les vues sont centralisées sur `Media`.
+Chaque sous-type possède des champs spécifiques (ex. : `auteur` pour `Livre`, `realisateur` pour `Dvd`, etc.), mais les 
+vues sont centralisées sur `Media`.
 
-Lors de l’affichage du détail d’un média, il est nécessaire d’accéder à la fois aux champs communs et aux champs spécifiques du type réel. Sinon, seules les données des champs communs sont affichés car accessibles.
+Lors de l’affichage du détail d’un média, il est nécessaire d’accéder à la fois aux champs communs et aux champs spécifiques 
+du type réel. Sinon, seules les données des champs communs sont affichés car accessibles.
 Cette situation soulève une difficulté technique liée au **polymorphisme effectif** dans le cadre de l’**héritage multi-table Django**.
 
 #### b) Problème rencontré
 
-- Une instance récupérée via `Media.objects.get(pk=...)` est de type `Media` et **ne donne pas accès directement** aux champs spécifiques du sous-type.
+- Une instance récupérée via `Media.objects.get(pk=...)` est de type `Media` et **ne donne pas accès directement** aux 
+champs spécifiques du sous-type.
 - Les données typées sont stockées dans une table distincte, liée à `Media` via un champ `media_ptr_id`.
 - Django ne permet pas d’accéder à `media.auteur` ou `media.realisateur` tant que l’objet n’est pas typé correctement.
 
@@ -347,7 +379,8 @@ Le template reçoit alors une instance typée, exposant à la fois les champs h�
 
 - Cette difficulté est **technique**, non stratégique : elle découle du fonctionnement interne de l’ORM Django.
 - Elle illustre le besoin de **maîtriser les mécanismes de l’héritage multi-table** pour accéder aux données de manière polymorphe.
-- Il est recommandé de centraliser cette logique dans une méthode utilitaire (`get_real_instance()`) pour éviter la duplication et faciliter la maintenance.
+- Il est recommandé de centraliser cette logique dans une méthode utilitaire (`get_real_instance()`) pour éviter la 
+duplication et faciliter la maintenance.
 
 #### e) Illustration schématique
 
@@ -360,26 +393,35 @@ Media (objet mère)
 
 #### f) Conclusion
 
-Cette difficulté, bien que discrète, est **fondamentale** pour garantir un affichage correct et complet des données dans une architecture Django orientée POO.  
-Elle montre que le polymorphisme ne se résume pas à la structure des classes, mais dépend aussi de la **manière dont les objets sont instanciés et transmis aux vues/templates**.
+Cette difficulté, bien que discrète, est **fondamentale** pour garantir un affichage correct et complet des données dans 
+une architecture Django orientée POO.  
+Elle montre que le polymorphisme ne se résume pas à la structure des classes, mais dépend aussi de la **manière dont les 
+objets sont instanciés et transmis aux vues/templates**.
 
 ### 9.5 Difficulté 5 : définir et structurer les tests unitaires
 
 Cette difficulté a émergé non pas dans l’écriture des tests eux-mêmes, mais dans leur **organisation progressive** au sein du projet. 
-Elle est directement liée à la montée en complexité du code, à la volonté de maintenir une traçabilité claire, et à l’exigence d’autonomie entre les modules anciens et les développements récents.
+Elle est directement liée à la montée en complexité du code, à la volonté de maintenir une traçabilité claire, et à 
+l’exigence d’autonomie entre les modules anciens et les développements récents.
 
-Elle prolonge les réflexions amorcées dans les sections 9.3 et 9.4 : après avoir clarifié l’architecture des vues et le typage des objets, il s’agissait ici de structurer les tests unitaires de manière à accompagner le développement de façon incrémentale, traçable et modulaire.
+Elle prolonge les réflexions amorcées dans les sections 9.3 et 9.4 : après avoir clarifié l’architecture des vues et le 
+typage des objets, il s’agissait ici de structurer les tests unitaires de manière à accompagner le développement de façon 
+incrémentale, traçable et modulaire.
 
-La résolution de cette difficulté m'a permis de structurer les tests unitaires et de préparer, puis réaliser le plan de tests dans une approche DRY (Don't Repeat Yourself) préconisée en POO. 
+La résolution de cette difficulté m'a permis de structurer les tests unitaires et de préparer, puis réaliser le plan de 
+tests dans une approche DRY (Don't Repeat Yourself) préconisée en POO. 
 
 #### a) Nature de la difficulté
-La documentation Django propose une structure minimale (`tests.py` à la racine de l’app), mais ne guide pas explicitement sur la **modularisation des tests** ni sur la manière de les organiser pour accompagner un développement incrémental. Il m’a fallu comprendre comment :
+La documentation Django propose une structure minimale (`tests.py` à la racine de l’app), mais ne guide pas explicitement 
+sur la **modularisation des tests** ni sur la manière de les organiser pour accompagner un développement incrémental. 
+Il m’a fallu comprendre comment :
 - Séparer les tests par fonctionnalité (accueil, liste, détail, etc.)
 - Maintenir une cohérence entre les tests et les étapes du développement
 - Faciliter la lecture et la contribution future par d’autres développeurs
 
 #### b) Démarche exploratoire
-Après avoir étudié les pratiques communautaires (forums, documentation officielle, guides structurés), j’ai adopté une organisation modulaire :
+Après avoir étudié les pratiques communautaires (forums, documentation officielle, guides structurés), j’ai adopté une 
+organisation modulaire :
 
 - Création d’un dossier `bibliothecaire/tests_blocs/` avec des fichiers dédiés :
   - `test_accueil.py`
@@ -393,19 +435,22 @@ Après avoir étudié les pratiques communautaires (forums, documentation offici
 #### c) Compréhension à l’issue
 - La **décomposition en structure** permet une lisibilité et une autonomie très forte entre les tests anciens et les ajouts récents.
 - Le fichier `tests.py` joue un rôle de **pivot technique et pédagogique**, utile pour la mise en œuvre et la relecture.
-- La rédaction d’un fichier `tests-plan.md` est une **bonne pratique essentielle** pour formaliser les objectifs, les cas de test, et la couverture attendue.
+- La rédaction d’un fichier `tests-plan.md` est une **bonne pratique essentielle** pour formaliser les objectifs, les 
+cas de test, et la couverture attendue.
 
 #### d) Documentation associée
 - [Django – Tests unitaires](https://docs.djangoproject.com/fr/5.2/internals/contributing/writing-code/unit-tests/)
 - [CodezUp – Django Testing Best Practices](https://codezup.com/django-testing-best-practices-unit-tests-integration-tests/)
 - [Dev.to – Writing Scalable Unit Tests in Django](https://dev.to/shreyash_jhon_doe/writing-scalable-maintainable-unit-tests-in-django-a-practical-guide-with-real-examples-47a4)
 
-Ces ressources me confirment que la modularisation des tests, l’usage de `setUpTestData()`, et la documentation parallèle sont des pratiques reconnues pour maintenir la qualité et la scalabilité du code.
+Ces ressources me confirment que la modularisation des tests, l’usage de `setUpTestData()`, et la documentation parallèle 
+sont des pratiques reconnues pour maintenir la qualité et la scalabilité du code.
 
 ### 9.6 Difficulté 6 : reprise de modélisation en cours de développement
 
 Cette difficulté concerne la traçabilité et la lisibilité des développements. 
-Elle est apparue lors de la mise en œuvre des premiers tests unitaires et l'analyse qui a découlé de l'identification de la cause d'une erreur lors d'un test (ou de sa mise au point).
+Elle est apparue lors de la mise en œuvre des premiers tests unitaires et l'analyse qui a découlé de l'identification 
+de la cause d'une erreur lors d'un test (ou de sa mise au point).
 
 La solution a consisté en trois points d'organisation :
 - la création d'une note technique qui :
@@ -423,18 +468,23 @@ La résolution de cette difficulté a démontré :
 ### 9.7 Difficulté 7 : gestion des contrôles de validité sur les champs numériques de données
 
 Cette difficulté concerne le contrôle des bornes (limites de validité) des champs numériques du modèle de données. 
-Lors de la correction du champ `annee_edition` de l'entité `Support`, j'ai cherché à assurer dans le modèle une séparation claire et précise entre la structure du modèle et les méthodes de validation de la donnée.
+Lors de la correction du champ `annee_edition` de l'entité `Support`, j'ai cherché à assurer dans le modèle une séparation 
+claire et précise entre la structure du modèle et les méthodes de validation de la donnée.
 
-La solution identifiée dans un premier temps, mais non retenue, a consisté à définir une propriété `Validators(MinValueValidator(valueMin),MaxValueValidator(valueMax))` dans la structure du modèle.
+La solution identifiée dans un premier temps, mais non retenue, a consisté à définir une propriété 
+`Validators(MinValueValidator(valueMin),MaxValueValidator(valueMax))` dans la structure du modèle.
 Mais cette propriété étant statique lors du chargement du module au démarrage du serveur, 
-j'ai ensuite (second temps) mis en œuvre une définition dynamique et définissant une surcharge de la méthode `clean()` de l'entité du modèle (il s'agissait de `Support`).
+j'ai ensuite (second temps) mis en œuvre une définition dynamique et définissant une surcharge de la méthode `clean()` 
+de l'entité du modèle (il s'agissait de `Support`).
 Ceci m'a conduit à distinguer la portée de cette définition du contrôle de validité. 
 Soit définir un contrôle centralisé métier dans l'entité _mère_ (`Media`), soit dans les entités typées (`Livre`, `Dvd` et `Cd`). 
 
-Cette mise en évidence de la logique métier de validation m'a conduit à la solution finale retenue consistant à reporter la logique métier de contrôle de validité de la donnée dans les formulaires, 
+Cette mise en évidence de la logique métier de validation m'a conduit à la solution finale retenue consistant à reporter 
+la logique métier de contrôle de validité de la donnée dans les formulaires, 
 au lieu de l'intégrer dans la modélisation du champ de l'entité du modèle. 
 
-La solution retenue est un modèle simple concernant la définition des champs des entités du modèle avec un report dans les formulaires des méthodes de validation métier de la donnée.
+La solution retenue est un modèle simple concernant la définition des champs des entités du modèle avec un report dans 
+les formulaires des méthodes de validation métier de la donnée.
 
 La résolution de cette difficulté a démontré :
 - l'importance d'une responsabilité claire en évitant la duplication des contrôles dans plusieurs entités héritées.
@@ -446,22 +496,29 @@ La résolution de cette difficulté a démontré :
 
 ### 9.8 Difficulté 8 : nommage des dossiers du projet
 
-Lors de la création de dossiers dans la structure du projet, il est essentiel de vérifier qu’ils ne sont pas exclus par le fichier `.gitignore`.
+Lors de la création de dossiers dans la structure du projet, il est essentiel de vérifier qu’ils ne sont pas exclus par 
+le fichier `.gitignore`.
 Le dossier `media/` est un exemple typique : il est ignoré par défaut, car utilisé pour les fichiers uploadés.
 
 La solution appliquée est d'utiliser le **nom des entités au pluriel pour les dossiers de templates** (medias/, livres/, membres/, etc.).
 
-Cette correction a permis d’explorer l’interface de _refactorisation_ de PyCharm, notamment la _preview_ des impacts et l’exclusion sélective de fichiers sensibles (`.gitignore`, `migrations`).
+Cette correction a permis d’explorer l’interface de _refactorisation_ de PyCharm, notamment la _preview_ des impacts et 
+l’exclusion sélective de fichiers sensibles (`.gitignore`, `migrations`).
 
 ### 9.9 Difficulté 9 : interactions entre les tests unitaires techniques et fonctionnels métier
 
-Lors de la reprise des développements fonctionnels, après la correction du modèle (Bloc 1), il a été difficile de caractériser un test unitaire fonctionnel (métier) dans une catégorie technique (`NAV`, `ENT` ou `VUE`).
-Une analyse fonctionnelle basée sur les cas d'usage du rôle de Bibliothécaire a permis d'identifier les différentes fonctionnalités à réaliser et à tester.
+Lors de la reprise des développements fonctionnels, après la correction du modèle (Bloc 1), il a été difficile de caractériser 
+un test unitaire fonctionnel (métier) dans une catégorie technique (`NAV`, `ENT` ou `VUE`).
+Une analyse fonctionnelle basée sur les cas d'usage du rôle de Bibliothécaire a permis d'identifier les différentes 
+fonctionnalités à réaliser et à tester.
 
-Pour éviter une liaison entre les tests unitaires et conserver ainsi une autonomie entre les tests, la solution a consisté à créer une nouvelle catégorie de tests unitaires (T-FUN) qui sont définis de manière spécifique.
-Les tests techniques et fonctionnels sont regroupés dans une classe de **tests du cas d'usage** pour une facilité de développement et de maintenance.
+Pour éviter une liaison entre les tests unitaires et conserver ainsi une autonomie entre les tests, la solution a consisté 
+à créer une nouvelle catégorie de tests unitaires (T-FUN) qui sont définis de manière spécifique.
+Les tests techniques et fonctionnels sont regroupés dans une classe de **tests du cas d'usage** pour une facilité de 
+développement et de maintenance.
 
-Cette correction a permis d'approfondir cette démarche de tests unitaires à la fois pour des validations techniques, mais aussi pour des validations fonctionnelles, dans un cadre commun des tests de cas d'usage.
+Cette correction a permis d'approfondir cette démarche de tests unitaires à la fois pour des validations techniques, mais 
+aussi pour des validations fonctionnelles, dans un cadre commun des tests de cas d'usage.
 
 ---
 
@@ -478,12 +535,14 @@ Le sujet impose plusieurs cas d’usage distincts :
 Ces cas d'usage induisent des fonctions complémentaires :
 - Affichage des **médias par type** (`LIVRE`, `DVD`, `CD`)
 
-Cette diversité fonctionnelle soulève une question centrale : **comment organiser les routes de manière claire, cohérente et extensible**, sans créer d’ambiguïté entre les vues ni de duplication technique.
+Cette diversité fonctionnelle soulève une question centrale : **comment organiser les routes de manière claire, cohérente et 
+extensible**, sans créer d’ambiguïté entre les vues ni de duplication technique.
 
 #### b) Problème rencontré
 
 La route `/medias/` est déjà utilisée pour UC-LIST-01 (consultables).  
-Ajouter des paramètres GET (`?type=...`, `?disponible=True`) sur cette route aurait permis un filtrage dynamique, mais aurait introduit une **ambiguïté métier** :
+Ajouter des paramètres GET (`?type=...`, `?disponible=True`) sur cette route aurait permis un filtrage dynamique, mais 
+aurait introduit une **ambiguïté métier** :
 - `/medias/?type=LIVRE` : est-ce une vue typée ou une vue consultable filtrée ?
 - `/medias/?disponible=True` : est-ce UC-LIST-02 ou une extension de UC-LIST-01 ?
 
@@ -501,7 +560,8 @@ Pour garantir une **clarté fonctionnelle et une traçabilité technique**, les 
 | `/medias/types/?type=LIVRE` | UC-LIST-03          | `MediaTypeListView`        | `media_type='LIVRE'`                  |
 
 > 🔹 Chaque route correspond à un **filtrage métier explicite**, testé et documenté séparément.  
-> 🔹 Le routage est **orthogonal** : chaque chemin est indépendant, mais peut être enrichi par des paramètres GET (`theme`, `statut`, etc.).
+> 🔹 Le routage est **orthogonal** : chaque chemin est indépendant, mais peut être enrichi par des paramètres GET (`theme`, 
+> `statut`, etc.).
 
 #### d) Enjeux techniques et fonctionnels
 
@@ -514,7 +574,8 @@ Pour garantir une **clarté fonctionnelle et une traçabilité technique**, les 
 
 - Le routage n’est pas qu’un choix technique : il reflète la **logique métier** du projet.
 - Il doit être pensé en fonction des **cas d’usage**, des **tests**, et de la **documentation**.
-- Une route unique avec des paramètres GET peut sembler plus compacte, mais devient vite difficile à maintenir si elle couvre plusieurs logiques métier.
+- Une route unique avec des paramètres GET peut sembler plus compacte, mais devient vite difficile à maintenir si elle 
+couvre plusieurs logiques métier.
 
 #### f) Conclusion
 
@@ -533,13 +594,15 @@ non comme une simple convention technique.
 #### a) Problématique
 
 Lors de la mise en œuvre de UC-CREATE-01, le formulaire de création d’un média non typé repose sur un `ModelForm` Django.  
-Les champs obligatoires sont correctement validés côté serveur, mais **aucun indicateur visuel (`*`, couleur, icône)** n’est affiché dans le template `media_form.html`.
+Les champs obligatoires sont correctement validés côté serveur, mais **aucun indicateur visuel (`*`, couleur, icône)** 
+n’est affiché dans le template `media_form.html`.
 
 #### b) Analyse technique
 
 - Le formulaire utilise `form.as_p`, qui génère automatiquement les balises HTML sans personnalisation.
 - Les attributs `required` sont bien présents dans le HTML, mais **non stylisés ni signalés visuellement**.
-- Django permet de personnaliser les libellés (`label`) et les aides (`help_text`), mais cela relève du **design UX/UI**, non du périmètre fonctionnel.
+- Django permet de personnaliser les libellés (`label`) et les aides (`help_text`), mais cela relève du **design UX/UI**, 
+non du périmètre fonctionnel.
 
 #### c) Arbitrage
 
@@ -571,7 +634,7 @@ une ambiguïté sur la définition de l'état (et surtout initial) d'un média.
 Elle a révélé un besoin métier fondamental : **stabiliser les états initiaux des objets `Media`** typés, afin de 
 garantir une cohérence entre les données créées, les transitions métier, et les vues exposées.
 
-Le cycle de vie métier, modélisé dans le document [Analyse_LifeCycle_Medias.md](Analyse_LifeCycle_Medias.md), a permis 
+Le cycle de vie métier, modélisé dans le document [Analyse_LifeCycle_Medias.md](Analyse_LifeCycle_Medias_indexG-10.md), a permis 
 d’identifier un **état initial explicite** :  
 > **État 0** (début) → `consultable=False`, `disponible=False`
 
@@ -603,12 +666,12 @@ La résolution s’est articulée autour de trois axes :
    - Clarification des transitions vers l’état 1 ou 3 selon les cas d’usage.
 
 3. **Documentation** :  
-   - Rédaction du document [Analyse_LifeCycle_Medias.md](Analyse_LifeCycle_Medias.md) pour formaliser les états, 
+   - Rédaction du document [Analyse_LifeCycle_Medias.md](Analyse_LifeCycle_Medias_indexG-10.md) pour formaliser les états, 
      transitions, et impacts techniques.
-   - Intégration dans le [Plan de tests](tests-plan.md) (`T-FUN-xx` à `T-FUN-yy`) pour valider les transitions métier.
+   - Intégration dans le [Plan de tests](tests-plan_indexG-10.md) (`T-FUN-xx` à `T-FUN-yy`) pour valider les transitions métier.
 
-   > Le document [Analyse_LifeCycle_Medias.md](Analyse_LifeCycle_Medias.md) défini les principes retenus pour le 
-   > développement et les tests dans l'ensemble du projet, alors que le [Plan de tests](tests-plan.md) décrits les tests 
+   > Le document [Analyse_LifeCycle_Medias.md](Analyse_LifeCycle_Medias_indexG-10.md) défini les principes retenus pour le 
+   > développement et les tests dans l'ensemble du projet, alors que le [Plan de tests](tests-plan_indexG-10.md) décrits les tests 
    > mis en œuvre.  
 
 #### d) Enjeux et bénéfices
@@ -643,7 +706,9 @@ recul entre les notions d'**objets** (modélisation), de structure **technique**
 
 #### a) Contexte de la difficulté
 
-La fonctionnalité “ajouter un média” semble triviale dans sa formulation, mais elle recouvre en réalité **plusieurs cas d’usage distincts**, selon que le média est typé dès sa création ou non. Cette ambiguïté a nécessité une clarification métier et technique pour garantir une couverture fonctionnelle cohérente.
+La fonctionnalité “ajouter un média” semble triviale dans sa formulation, mais elle recouvre en réalité **plusieurs cas 
+d’usage distincts**, selon que le média est typé dès sa création ou non. Cette ambiguïté a nécessité une clarification 
+métier et technique pour garantir une couverture fonctionnelle cohérente.
 
 #### b) Problème rencontré
 
@@ -661,14 +726,15 @@ Cette dualité impose de **lier la création à la mise à jour**, et de prévoi
 
 La fonctionnalité “ajouter un média” a été **décomposée en 12 fonctions élémentaires** :
 
-| Action         | Type ciblé        |
-|----------------|-------------------|
+| Action         | Type ciblé                     |
+|----------------|--------------------------------|
 | Ajouter        | Livre, Dvd, Cd, Média non typé |
 | Modifier       | Livre, Dvd, Cd, Média non typé |
-| Typer          | Livre, Dvd, Cd     |
-| Annuler typage | Média non typé    |
+| Typer          | Livre, Dvd, Cd                 |
+| Annuler typage | Média non typé                 |
 
-Cette segmentation permet de couvrir tous les cas d’usage métier, tout en assurant une traçabilité technique claire dans les vues, les formulaires et les tests.
+Cette segmentation permet de couvrir tous les cas d’usage métier, tout en assurant une traçabilité technique claire dans 
+les vues, les formulaires et les tests.
 
 #### d) Enseignements techniques
 
@@ -711,6 +777,6 @@ La résolution de cette difficulté a permis de :
 - [Issue #3 – Développement de l’application fonctionnelle bibliothécaire](https://github.com/MonLucCo/CEF_POO-Django_Gestion-Mediatheque_Test-version/issues/3)  
 - [README-tech.md](../../technique/README-tech.md)  
 - [Analyse_Fonctionnalites.md](../../fonctionnel/Analyse_Fonctionnalites.md)  
-- [tests-plan.md](../../tests/tests-plan.md) *(à créer)*
+- [tests-plan.md](tests-plan_indexG-10.md)
 
 ---

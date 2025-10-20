@@ -224,6 +224,6 @@ Tests garantissant la protection contre les usages non prévus ou malveillants :
 - [`Analyse_Fonctionnalites_Bibliothecaire.md`](Analyse_Fonctionnalites_Bibliothecaire.md)
 - [`tests-plan.md`](tests-plan.md)
 - [`README-dev.md`](../../README-dev.md)
-- [`Modelisation_correction-erreurs-suite-tests-unitaires.md`](Modelisation_correction-erreurs-suite-tests-unitaires.md)
+- [`Modelisation_correction-erreurs-suite-tests-unitaires.md` (étape 5)](../task5/Modelisation_correction-erreurs-suite-tests-unitaires.md)
 
 ---

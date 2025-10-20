@@ -35,7 +35,9 @@ L’application doit permettre :
 
 > 📎 Voir aussi : 
 > - [`Analyse_Fonctionnalites.md`](Analyse_Fonctionnalites.md) pour le détail des cas d’usage et des règles métier.
-> - [`Analyse_Fonctionnalites_Bibliothecaire.md`](../developpement/issue3/task5/Analyse_Fonctionnalites_Bibliothecaire.md) pour le détail relatif à l'application `bibliothecaire`.
+> - [`Analyse_Fonctionnalites_Bibliothecaire.md` (version courante)](../developpement/issue3/task5/Analyse_Fonctionnalites_Bibliothecaire_indexG-10.md) 
+> pour le détail relatif à l'application `bibliothecaire` :
+>   - version figée pour les Médias seuls en version **index G-10** [`Analyse_Fonctionnalites_Bibliothecaire.md` (version figée Médias - index G-10)](../developpement/issue3/task5/Analyse_Fonctionnalites_Bibliothecaire_indexG-10.md).
 
 ---
 
@@ -103,7 +105,7 @@ Certains documents fonctionnels détaillent les cas d’usage selon les profils 
 
 | Rôle           | Document associé                                                                                                       | Positionnement actuel                          |
 |----------------|------------------------------------------------------------------------------------------------------------------------|------------------------------------------------|
-| Bibliothécaire | [`Analyse_Fonctionnalites_Bibliothecaire.md`](../developpement/issue3/task5/Analyse_Fonctionnalites_Bibliothecaire.md) | lié à l’implémentation de l’issue #3 – étape 5 |
+| Bibliothécaire | [`Analyse_Fonctionnalites_Bibliothecaire.md`](../developpement/issue3/task5/Analyse_Fonctionnalites_Bibliothecaire_indexG-10.md) | lié à l’implémentation de l’issue #3 – étape 5 |
 | Membre         | *(à créer)*                                                                                                            | lié à l'implémentation de l'issue #4           |
 
 > Ces _documents associés_ pourront être déplacés vers `/docs/fonctionnel/` une fois les cas d’usage stabilisés et validés.

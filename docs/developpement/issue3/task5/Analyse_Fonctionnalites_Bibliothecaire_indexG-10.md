@@ -1,6 +1,6 @@
 # 📘 Analyse des fonctionnalités – Bibliothécaire  
 
-📁 `/docs/developpement/issue3/task5/Analyse_Fonctionnalites.md`  
+📁 `/docs/developpement/issue3/task5/Analyse_Fonctionnalites_indexG-10.md`  
 
 📌 Version : index G-10 (issue #3 – étape 5)
 
@@ -23,7 +23,7 @@
 Ce document formalise les cas d’usage fonctionnels liés au profil bibliothécaire, en cohérence avec les exigences du sujet et les choix techniques validés dans les documents :
 
 - [`Modelisation_correction-erreurs-suite-tests-unitaires.md`](Modelisation_correction-erreurs-suite-tests-unitaires.md)  
-- [`tests-plan.md`](tests-plan.md)  
+- [`tests-plan.md` (index G-10)](tests-plan_indexG-10.md)  
 - [`Analyse_Fonctionnalites.md`](../../../fonctionnel/Analyse_Fonctionnalites.md)
 - [`README-fonct.md`](../../../fonctionnel/README-fonct.md)
 
@@ -71,14 +71,14 @@ Permettre au bibliothécaire de consulter les médias du catalogue selon des cri
 | UC-LIST-04 | Afficher les médias non typés (`NON_DEFINI`)  | `Media.objects.filter(media_type='NON_DEFINI')`           | ✅ Implémenté |                                               |                                                           |              |
 
 > 🔹 La structuration des routes associées à ces cas d’usage a soulevé une difficulté métier importante, documentée dans la 
-> [Difficulté 10 – Organisation du routage lié aux médias](../../../developpement/issue3/_Frontend-main-courante.md#910-difficulté-10--organisation-et-clarté-du-routage-lié-aux-médias).  
+> [Difficulté 10 – Organisation du routage lié aux médias](_Frontend-main-courante_indexG-10.md#910-difficulté-10--organisation-et-clarté-du-routage-lié-aux-médias).  
 > 🔹 Chaque UC dispose d’une route dédiée, d’une vue spécifique et d’un bloc de test fonctionnel (`T-FUN-*`).
 
 #### 🧠 Analyse technique associée
 
 - La mise en œuvre des UC-LIST-01 à UC-LIST-03 a nécessité de traiter deux difficultés majeures :
-  - [Difficulté 9](_Frontend-main-courante.md#99-difficulté-9--interactions-entre-les-tests-unitaires-techniques-et-fonctionnels-métier) : distinction entre tests techniques et fonctionnels
-  - [Difficulté 10](_Frontend-main-courante.md#910-difficulté-10--organisation-et-clarté-du-routage-lié-aux-médias) : clarification du routage des vues liées à `Media`
+  - [Difficulté 9](_Frontend-main-courante_indexG-10.md#99-difficulté-9--interactions-entre-les-tests-unitaires-techniques-et-fonctionnels-métier) : distinction entre tests techniques et fonctionnels
+  - [Difficulté 10](_Frontend-main-courante_indexG-10.md#910-difficulté-10--organisation-et-clarté-du-routage-lié-aux-médias) : clarification du routage des vues liées à `Media`
 
 - La création d’un média non typé (`UC-CREATE-01`) implique la possibilité de le consulter.  
   Une nouvelle UC a donc été ajoutée pour le profil **Bibliothécaire uniquement** :
@@ -138,7 +138,7 @@ Permettre au bibliothécaire d’ajouter un nouveau média au catalogue, avec ou
 > 🔹 Cette logique permet de distinguer les médias en attente (non typés) des médias prêts à être empruntés ou consultés.
 
 - La mise en œuvre des UC-CREATE a nécessité de traiter une difficulté majeure liée au formulaire :
-  - [Difficulté 11](_Frontend-main-courante.md#911-difficulté-11--visualisation-des-contraintes-du-formulaire) : 
+  - [Difficulté 11](_Frontend-main-courante_indexG-10.md#911-difficulté-11--visualisation-des-contraintes-du-formulaire) : 
     visualisation des contraintes dans le formulaire (fonctionnalités vs Design UX/UI).
 
 
@@ -200,7 +200,7 @@ Cette fonctionnalité sera développée ultérieurement, car elle nécessite de 
 d'emprunt pour effectuer la modification du média.
 
 Cette UC sera intégrée dans une future étape, en cohérence avec les transitions métier définies dans 
-[Analyse_LifeCycle_Medias.md](Analyse_LifeCycle_Medias.md).
+[Analyse_LifeCycle_Medias.md](Analyse_LifeCycle_Medias_indexG-10.md).
 
 ---
 
