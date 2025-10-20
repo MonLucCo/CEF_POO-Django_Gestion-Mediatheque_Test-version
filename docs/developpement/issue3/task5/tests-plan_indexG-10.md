@@ -1,19 +1,12 @@
 # ✅ Plan de test – Bibliothécaire
 
-📁 `/docs/developpement/issue3/task5/tests-plan.md`  
-
-📌 Version : index G-10 (issue #3 – étape 5 - Bloc 2)
-- Rapport de tests associé : [`test_report_indexF-4.txt`](test_report_indexF-4.txt)
-
-___
-
 Ce document constitue le plan de test unitaire et fonctionnel de l’application dédiée au profil bibliothécaire. 
 Il accompagne le développement progressif des fonctionnalités définies dans l’issue #3, en particulier l’étape 5, 
 et sert de base extensible pour les étapes suivantes et les autres issues du projet.
 
 Les tests ont été regroupé en **Bloc de tests** qui correspondent à des phases de développement de l'issue #3 :
 - **Bloc 1** : Première correction majeure de la modélisation
-- **Bloc 2** : développement fonctionnel de l'application bibliothécaire.
+- **Bloc 2** : développement fonctionnel des Médias de l'application bibliothécaire.
 
 Il est conçu pour :
 - Structurer les tests par catégorie (navigation, entités, fonctionnalités)
@@ -35,9 +28,24 @@ Il est conçu pour :
   - entité `Media` - vues `mise à jour` et `supprime` (masque pour le bibliothécaire)
   - entités `Emprunt`, `Membre`, `JeuDePlateau` et vues CRUD
 
-📌 Ce plan de test est spécifique à l’étape 5 de l’issue #3.
+📌 Ce plan de test est spécifique aux étapes de l’issue #3.
 Il pourra être déplacé ou indexé dans `/docs/tests/` (à créer) si une documentation globale est mise en place.
 Chaque index de ce plan possède un rapport de tests nommé `tests_report_index[version].md`.
+
+---
+
+📁 `/docs/developpement/issue3/task5/tests-plan_indexG-10.md`  
+- Rapport de tests associé : [`test_report_indexG-10.txt`](test_report_indexG-10.txt)
+
+> 📌 Ce plan de test est figé à l’**index G-10** et couvre les blocs 1 et 2 de l'étape 5 (task5) de l’issue #3.
+
+Il accompagne :
+- La modélisation et les vues liées à `Media`
+- Le typage différé et le rollback métier
+- Les tests fonctionnels validés (47 tests)
+
+➡️ La suite du plan de test (Bloc 3 : Membre et Emprunt) est poursuivie dans 
+[`tests-plan.md` (étape 6 - `/task6`)](../task6/tests-plan.md).
 
 ---
 
@@ -169,7 +177,7 @@ Chaque catégorie de tests est regroupée dans une sous-section spécifique avec
 > indépendamment de la logique métier.  
 > 🔹 Ils sont complémentaires aux tests fonctionnels (`T-FUN-*`) qui valident le cycle complet de création.  
 > 🔹 Le test `T-FORM-03` confirme que les contraintes sont bien définies dans le modèle et respectées dans le 
-> formulaire, sans dépendre du design visuel (cf. [Difficulté 11](_Frontend-main-courante.md#911-difficulté-11--visualisation-des-contraintes-du-formulaire)).
+> formulaire, sans dépendre du design visuel (cf. [Difficulté 11](_Frontend-main-courante_indexG-10.md#911-difficulté-11--visualisation-des-contraintes-du-formulaire)).
 
 ---
 

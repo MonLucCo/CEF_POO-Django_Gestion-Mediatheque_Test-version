@@ -49,7 +49,7 @@ Il s’inscrit dans une logique de développement incrémental, où chaque séri
 
 Ce document est donc un **outil de pilotage technique**, complémentaire à :
 
-- [`tests-plan.md`](tests-plan.md), qui formalise les cas de test et leur état
+- [`tests-plan.md`](tests-plan_indexG-10.md), qui formalise les cas de test et leur état
 - [`_Frontend-main-courante.md`](Modelisation_correction-erreurs-suite-tests-unitaires.md), qui consigne les difficultés rencontrées et les décisions prises
 
 Chaque correction est présentée selon le triptyque :

@@ -4,7 +4,9 @@ Ce document décrit les **fonctionnalités attendues**, les **cas d’usage**, e
 
 Les documents suivants le complète :
 - [`README-fonct.md`](README-fonct.md) en détaillant les fonctionnalités indépendamment des étapes de développement.
-- [`Analyse_Fonctionnalites_Bibliothecaire.md`](../developpement/issue3/task5/Analyse_Fonctionnalites_Bibliothecaire.md) en précisant les cas d'usage fonctionnels relatifs aux Bibliothécaires.
+- [`Analyse_Fonctionnalites_Bibliothecaire.md` (version courante)](../developpement/issue3/task6/Analyse_Fonctionnalites_Bibliothecaire.md) 
+en précisant les cas d'usage fonctionnels relatifs aux Bibliothécaires :
+  - version figée pour les Médias seuls en version **index G-10** [`Analyse_Fonctionnalites_Bibliothecaire.md` (version Medias seuls)](../developpement/issue3/task5/Analyse_Fonctionnalites_Bibliothecaire_indexG-10.md).
 
 ---
 
