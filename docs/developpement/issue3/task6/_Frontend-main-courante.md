@@ -25,7 +25,7 @@ et couvre :
 - Les vues CRUD, les transitions métier, les historiques
 - La préparation des tests fonctionnels et des fixtures
 
-📌 Version : index H-1 (issue #3 – étape 6)
+📌 Version : index H-2 (issue #3 – étape 6 - Bloc 3)
 
 ---
 
@@ -53,6 +53,7 @@ et couvre :
    - [9.11 Difficulté 11 – Visualisation des contraintes du formulaire](#911-difficulté-11--visualisation-des-contraintes-du-formulaire)
    - [9.12 Difficulté 12 - Formalisation du cycle de vie initial et typé des médias](#912-difficulté-12---formalisation-du-cycle-de-vie-initial-et-typé-des-médias)
    - [9.13 Difficulté 13 : Définir ce que signifie “ajouter un média” – segmentation fonctionnelle, typage différé et structuration technique](#913-difficulté-13--définir-ce-que-signifie-ajouter-un-média--segmentation-fonctionnelle-typage-différé-et-structuration-technique)
+   - [9.14 Difficulté 14 – Définition transversale du cycle de vie métier avant développement des UC](#914-difficulté-14--définition-transversale-du-cycle-de-vie-métier-avant-développement-des-uc)
 10. [🔗 Liens utiles](#10--liens-utiles)
 
 ---
@@ -765,6 +766,49 @@ La résolution de cette difficulté a permis de :
 
 > Cette difficulté m'a permis de comprendre comment derrière une fonctionnalité métier simple, peut se cacher une 
 > **complexité technique structurante**, qui doit être anticipée, documentée et testée pour garantir la robustesse du projet.
+
+---
+
+### 9.14 Difficulté 14 – Définition transversale du cycle de vie métier avant développement des UC
+
+#### a) Contexte de la difficulté
+
+Après la validation du cycle de vie des entités `Media` dans [`Analyse_LifeCycle_Medias.md`](Analyse_LifeCycle_Medias.md), 
+il est apparu nécessaire de formaliser **les interactions métier entre les entités `Media`, `Membre`, et `Emprunt`** avant 
+de poursuivre le développement des fonctionnalités associées aux UC-MEMBRE et UC-EMPRUNT.
+
+#### b) Résolution adoptée
+
+Cette difficulté a conduit à la rédaction d’un document transversal :
+
+➡️ [`Analyse_LifeCycle_Bibliothecaire.md`](Analyse_LifeCycle_Bibliothecaire.md)
+
+Ce document :
+- Définit les **vecteurs de contexte** de chaque entité
+- Clarifie les **transitions typées** (saisie, fonction métier, DDM)
+- Formalise les **règles DDM** qui automatisent les états métier
+- Présente les **interactions croisées** entre les objets manipulés par le profil Bibliothécaire
+
+Il constitue une **base métier stable** pour la validation des UC et la rédaction des tests fonctionnels du Bloc 3.
+
+> 📌 Ce document est rattaché à la task6 et figé à l’index H-1.
+
+#### c) Conclusion
+
+La résolution de cette difficulté a permis de poser une **architecture métier claire et cohérente** avant toute 
+implémentation technique.  
+En définissant les vecteurs de contexte, les transitions typées et les règles DDM, le document `Analyse_LifeCycle_Bibliothecaire.md` 
+offre :
+
+- Une **vision unifiée** du fonctionnement des entités `Media`, `Membre`, et `Emprunt`
+- Une **base stable** pour la validation des UC-MEMBRE et UC-EMPRUNT
+- Une **réduction des ambiguïtés fonctionnelles** en amont du développement
+- Une **structuration méthodologique** utile à mes futurs développements.
+
+
+> 📌 Cette difficulté a permis de stabiliser les fondations métier du Bloc 3.  
+> Elle garantit que les développements des UC-MEMBRE et UC-EMPRUNT reposent sur une logique métier claire, testable et extensible.  
+> Elle constitue l'application des difficultés 12 et 13 précédentes.
 
 ---
 
