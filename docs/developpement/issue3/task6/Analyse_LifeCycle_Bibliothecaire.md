@@ -1,7 +1,7 @@
 # 🔄 Analyse du cycle de vie métier – Profil Bibliothécaire
 
 📁 `/docs/fonctionnel/Analyse_LifeCycle_Bibliothecaire.md`  
-📌 Version : index H-1  
+📌 Version : index H-3  
 🧩 Sujet : synthèse des états métier et des interactions entre les entités `Media`, `Membre`, et `Emprunt` dans le 
 cadre du profil Bibliothécaire.
 
@@ -17,7 +17,7 @@ cadre du profil Bibliothécaire.
    - [3.3 Emprunt](#33-emprunt)  
 4. [Typologie des transitions](#4-typologie-des-transitions)  
 5. [Interactions entre entités](#5-interactions-entre-entités)  
-6. [Règles DDM (Modèle Dérivé des Données)](#6-règles-ddm-modèle-dérivé-des-données)  
+6. [Règles DDM – Cycle métier du profil Bibliothécaire](#6-règles-ddm--cycle-métier-du-profil-bibliothécaire)  
 7. [Références croisées](#7-références-croisées)  
 
 ---
@@ -70,13 +70,16 @@ Elles présentent :
 La recherche de la cohérence du cycle de vie de chaque entité s'est traduite par l'identification d'une représentation 
 simplifiée dans un tableau spécifique à chaque entité avec sa situation amont et aval de chaque état.
 
-Pour l'entité Media :
+**Pour l'entité Media :**
+
 ![img.png](img_LifeCycle_TableauMedia.png)
 
-Pour l'entité Membre
+**Pour l'entité Membre :**
+
 ![img.png](img_LifeCycle_tableauMembre.png)
 
-Pour l'entité Emprunt
+**Pour l'entité Emprunt :**
+
 ![img.png](img_LifeCycle_TableauEmprunt.png)
 
 ---
@@ -85,33 +88,41 @@ Pour l'entité Emprunt
 
 ### 3.1 Media
 
-| Composante | Signification métier                     | Type       |
-|------------|------------------------------------------|------------|
-| `C`        | consultable (`True` / `False`)           | booléen    |
-| `D`        | disponible (`True` / `False`)            | booléen    |
-| `T`        | typage réel (`Livre`, `Dvd`, `Cd`, etc.) | catégoriel |
+| Composante | Signification métier | Type    | Valeurs typiques |
+|------------|----------------------|---------|-----------------|
+| `C`        | consultable          | booléen | `!C`, `C`       |
+| `D`        | disponible           | booléen | `!D`, `D`       |
+| `T`        | typé                 | booléen | `!T`, `T`       |
+
+> 🔸 `!C` et `!D` indiquent un état non consultable ou non disponible.  
+> 🔸 `!T` désigne un média non typé (état initial ou hors gestion).  
 
 ---
 
 ### 3.2 Membre
 
-| Composante | Signification métier                          | Type       |
-|------------|-----------------------------------------------|------------|
-| `S`        | suspendu (`True` / `False`)                   | booléen    |
-| `A`        | abonné (`True` / `False`)                     | booléen    |
-| `I`        | inscrit à un emprunt en cours                 | booléen    |
-| `Q`        | quota d’emprunt disponible                    | entier     |
-| `R`        | retour enregistré (`True` / `False`)          | booléen    |
+| Composante | Signification métier       | Type       | Valeurs typiques |
+|------------|----------------------------|------------|------------------|
+| `S`        | supprimé (archivé)         | booléen    | `!S`, `S`        |
+| `A`        | abonné                     | booléen    | `!A`, `A`        |
+| `Q`        | quota d’emprunt disponible | entier     | `!Q`, `nQ`, `mQ` |
+| `R`        | retour enregistré          | booléen    | `!R`, `R`        |
+
+> 🔸 `!Q` = quota nul (initial), `nQ` = quota intermédiaire (1 ou 2), `mQ` = quota maximal (3).  
+> 🔸 `!R` = aucun retour enregistré, `R` = retour effectué.  
 
 ---
 
 ### 3.3 Emprunt
 
-| Composante | Signification métier                       | Type           | Source |
-|------------|--------------------------------------------|----------------|--------|
-| `sE`       | statut d’emprunt valide (`True` / `False`) | booléen dérivé | DDM    |
-| `dE`       | date d’emprunt valide (`True` / `False`)   | booléen dérivé | DDM    |
-| `dR`       | date de retour valide (`True` / `False`)   | booléen dérivé | DDM    |
+| Composante | Signification métier                       | Type           | Valeurs typiques |
+|------------|--------------------------------------------|----------------|------------------|
+| `sE`       | statut d’emprunt valide                    | booléen dérivé | `!sE`, `sE`      |
+| `dE`       | date d’emprunt valide                      | booléen dérivé | `!dE`, `dE`      |
+| `dR`       | date de retour valide                      | booléen dérivé | `!dR`, `dR`      |
+
+> 🔸 Ces valeurs sont dérivées automatiquement par le `DDM` selon les règles métier.  
+> 🔸 Elles ne sont pas saisies, mais calculées à partir du contexte `Media` et `Membre`.  
 
 ---
 
@@ -130,37 +141,69 @@ Pour l'entité Emprunt
 ### 5.1 Media → Emprunt
 
 - Un média doit être `consultable=True` et `disponible=True` pour être emprunté.
-- La transition `EmpruntCreateView` vérifie ces conditions via `sE`.
+- Les transitions d'un emprunt évoluent séquentiellement sans intervention directe de l'utilisateur.
 
 ### 5.2 Emprunt → Membre
 
-- La création d’un emprunt modifie le vecteur `[I/Q]` du membre.
-- Le retour d’un emprunt modifie `R`, et peut lever une suspension (`S=False`).
+- La création d’un emprunt modifie le vecteur `[Q/R]` du membre.
+- Le retour d’un emprunt modifie `Q`, et peut lever une suspension (`R`).
 
 ### 5.3 Membre → Media
 
-- Un membre suspendu ne peut pas emprunter → bloque la transition `T:3-4` (emprunt).
-- Le retour d’un emprunt peut rendre le média `disponible=True` via `T:4-3`.
+- Un membre suspendu ne peut pas emprunter → bloque la transition.
+- Le retour d’un emprunt peut rendre le média `D` et peut débloquer un membre en retard `R`.
 
 ---
 
-## 6. Règles DDM (Modèle Dérivé des Données)
+## 6. Règles DDM – Cycle métier du profil Bibliothécaire
 
-| Règle ID | Condition déclencheuse                         | Action métier déclenchée   |
-|----------|------------------------------------------------|----------------------------|
-| DDM-01   | `dR > date_retour_prevue`                      | `statut_emprunt = RETARD`  |
-| DDM-02   | `statut_emprunt = RETARD`                      | `membre.suspendu = True`   |
-| DDM-03   | `membre.retard_en_cours = False`               | `membre.suspendu = False`  |
-| DDM-04   | `media.consultable = False`                    | `media.disponible = False` |
-| DDM-05   | `media.disponible = False` and `emprunt.rendu` | `media.disponible = True`  |
+Ce tableau présente les règles de dérivation automatique (DDM) déclenchées par les actions du profil Bibliothécaire ou 
+par le système. Chaque règle modifie une ou plusieurs composantes du vecteur de contexte d’une entité (`Media`, `Membre`, `Emprunt`).
+
+| ID DDM | Action déclencheuse (métier)    | Entité  | Condition métier simplifiée          | Effet sur le vecteur de contexte                          |
+|--------|---------------------------------|---------|--------------------------------------|-----------------------------------------------------------|
+| DDM_01 | Retrait d’un média              | Media   | Média typé consultable et disponible | `Disponible -> !D` → Média non disponible                 |
+| DDM_02 | Création d’un emprunt           | Membre  | Emprunt du Média                     | `Disponible -> !D` → Média non disponible                 |
+| DDM_03 | Retour d’un emprunt             | Membre  | Retour en cours                      | `Disponible -> D` → Média disponible                      |
+| DDM_04 | Création d’un emprunt           | Membre  | Emprunt défini                       | `Quota -> nQ` ou `Q -> mQ` → quota actualisé              |
+| DDM_05 | Retour d’un emprunt             | Membre  | Emprunt rendu défini                 | `Quota -> nQ` ou `Q -> mQ` → quota actualisé              |
+| DDM_06 | Activation système quotidienne  | Membre  | Retard constaté sur emprunt en cours | `Retard -> R` → retard constaté                           |
+| DDM_07 | Retour enregistré               | Membre  | Aucun retard en cours                | `Retard -> !R` → membre débloqué                          |
+| DDM_08 | Suppression d’un membre         | Membre  | Action de suppression validée        | `Supprimé -> !S`, `Actif -> !A` → membre retiré (archivé) |
+| DDM_09 | Création d’un emprunt           | Emprunt | Membre et média éligibles            | `statut Emprunt -> sE` → emprunt activé                   |
+| DDM_10 | Validation de la date d’emprunt | Emprunt | Emprunt activé                       | `date Emprunt -> dE` → date enregistrée                   |
+| DDM_11 | Enregistrement du retour        | Emprunt | retour d'emprunt activé              | `date Retour -> dR` → date de retour enregistrée          |
+| DDM_12 | Archivage de l’emprunt          | Emprunt | Retour effectué                      | `statut EmpruntE -> !sE` → emprunt terminé                |
+
+> Les règles s'appuient sur un vecteur de contexte unique à dix composantes : 
+> - Consultable : {C ; !C}
+> - Disponible : {D ; !D}
+> - Typé : {T ; !T}
+> - Supprimé : {S ; !S}
+> - Abonné : {A ; !A}
+> - Quota : {!Q ; nQ ; mQ}
+> - Retard : {R ; !R}
+> - statut Emprunt : {sE ; !sE}
+> - date Emprunt : {dE ; !dE}
+> - date retour : {dR ; !dR}.
+> 
+> Les symboles `!`, `n`, `m` sont utilisés pour exprimer les valeurs logiques ou bornées des vecteurs de contexte.  
+
+| Action métier déclenchée    | Origine     | DDM déclenchées (enchaînement)             |
+|-----------------------------|-------------|--------------------------------------------|
+| 📕 Retirer un média         | Utilisateur | DDM_01                                     |
+| 👤 Supprimer un membre      | Utilisateur | DDM_08                                     |
+| 📗 Créer un emprunt         | Utilisateur | DDM_09 → DDM_10 → DDM_04 → DDM_02          |
+| 📘 Rentrer un emprunt       | Utilisateur | DDM_11 → DDM_12 → DDM_05 → DDM_03 → DDM_07 |
+| ⏰ Actualisation quotidienne | Système     | DDM_06                                     |
 
 ---
 
 ## 7. Références croisées
 
 - [`Analyse_LifeCycle_Medias.md`](Analyse_LifeCycle_Medias.md)
-- [`Analyse_LifeCycle_Membres.md`](Analyse_LifeCycle_Membres.md)
-- [`Analyse_LifeCycle_Emprunts.md`](Analyse_LifeCycle_Emprunts.md)
+- [`Analyse_LifeCycle_Membres.md`](Analyse_LifeCycle_Membres.md) **à créer**
+- [`Analyse_LifeCycle_Emprunts.md`](Analyse_LifeCycle_Emprunts.md) **à créer**
 - [`Analyse_Fonctionnalites_Bibliothecaire.md`](Analyse_Fonctionnalites_Bibliothecaire.md)
 - [`tests-plan.md`](tests-plan.md)
 
