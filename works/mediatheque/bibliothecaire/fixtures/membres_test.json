@@ -5,7 +5,7 @@
     "fields": {
       "name": "Dupont",
       "compte": "membre1",
-      "bloque": false
+      "statut": 1
     }
   },
   {
@@ -14,7 +14,7 @@
     "fields": {
       "name": "Martin",
       "compte": "membre2",
-      "bloque": true
+      "statut": 1
     }
   },
   {
@@ -23,7 +23,7 @@
     "fields": {
       "name": "Bernard",
       "compte": "membre3",
-      "bloque": false
+      "statut": 1
     }
   },
   {
@@ -32,7 +32,7 @@
     "fields": {
       "name": "Thomas",
       "compte": "membre4",
-      "bloque": false
+      "statut": 1
     }
   },
   {
@@ -41,7 +41,7 @@
     "fields": {
       "name": "Petit",
       "compte": "membre5",
-      "bloque": true
+      "statut": 1
     }
   }
 ]

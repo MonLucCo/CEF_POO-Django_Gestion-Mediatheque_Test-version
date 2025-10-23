@@ -17,7 +17,7 @@
     "fields": {
       "name": "1984",
       "annee_edition": 1949,
-      "consultable": false,
+      "consultable": true,
       "disponible": false,
       "theme": "Science-fiction",
       "media_type": "LIVRE"
@@ -30,7 +30,7 @@
       "name": "Django Unleashed",
       "annee_edition": 2021,
       "consultable": true,
-      "disponible": true,
+      "disponible": false,
       "theme": "Informatique",
       "media_type": "LIVRE"
     }
@@ -54,7 +54,7 @@
       "name": "Les Misérables",
       "annee_edition": 1862,
       "consultable": false,
-      "disponible": false,
+      "disponible": true,
       "theme": "Roman",
       "media_type": "LIVRE"
     }
@@ -127,7 +127,7 @@
     "fields": {
       "name": "Matrix",
       "annee_edition": 1999,
-      "consultable": false,
+      "consultable": true,
       "disponible": false,
       "theme": "Action",
       "media_type": "DVD"

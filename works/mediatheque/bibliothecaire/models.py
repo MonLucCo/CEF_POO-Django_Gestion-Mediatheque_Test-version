@@ -30,6 +30,15 @@ class StatutEmprunt(models.IntegerChoices):
     RENDU    = 2, 'Rendu'
 
 
+class StatutMembre(models.IntegerChoices):
+    """
+    Enumération des statuts possibles pour un membre.
+    """
+    MEMBRE     = 0, 'Non abonné'
+    EMPRUNTEUR = 1, 'Abonné'
+    ARCHIVE    = 2, 'Supprimé'
+
+
 # ── 1. Objets ─────────────────────────────────────────────────────────────────
 
 class Support(models.Model):
@@ -90,7 +99,9 @@ class Media(Support):
     )
 
     def __str__(self):
-        return f"{self.name} ({self.media_type})"
+        consulte = 'Hors gestion' if not self.consultable else 'En gestion'
+        disponible = 'Disponible' if self.disponible else 'Indisponible'
+        return f"{self.name} ({self.media_type}) [{consulte} - {disponible}]"
 
     def is_typed(self):
         return hasattr(self, 'livre') or hasattr(self, 'dvd') or hasattr(self, 'cd')
@@ -282,14 +293,17 @@ class Membre(Utilisateur):
     MAX_RETARDS = 0
 
     compte = models.CharField(max_length=50, unique=True)
-    bloque = models.BooleanField(default=False)
+    statut = models.IntegerField(
+        choices=StatutMembre.choices,
+        default=StatutMembre.MEMBRE
+    )
 
     @property
     def nb_emprunts_en_cours(self):
         """
         Nombre d’emprunts actuellement en cours (statut=EN_COURS).
         """
-        return self.emprunts.filter(statut=StatutEmprunt.EN_COURS).count()
+        return self.emprunts.filter(statut__in=[StatutEmprunt.EN_COURS, StatutEmprunt.RETARD]).count()
 
     @property
     def nb_retards(self):
@@ -304,18 +318,19 @@ class Membre(Utilisateur):
         Conditions :
           - moins de MAX_EMPRUNTS emprunts actifs
           - correspond au retard autorisé
+          - le membre est abonné
         """
         return (
                 (self.nb_emprunts_en_cours < self.MAX_EMPRUNTS)
                 and (self.nb_retards == self.MAX_RETARDS)
+                and (self.statut==StatutMembre.EMPRUNTEUR)
                 )
 
     def __str__(self):
-        etat = 'Bloqué' if self.bloque else 'Actif'
-        return (
-            f"{self.name} ({self.compte}) "
-            f"[{etat}] Emprunts : {self.nb_emprunts_en_cours}/{self.MAX_EMPRUNTS}"
-        )
+        statut_label = StatutMembre(self.statut).label
+        retour = 'Retard' if self.nb_retards > self.MAX_RETARDS else 'À jour'
+        quota = f"{self.nb_emprunts_en_cours}/{self.MAX_EMPRUNTS}"
+        return f"{self.name} ({self.compte}) [{statut_label}] – Emprunts : {quota} – {retour}"
 
 
 class Bibliothecaire(Utilisateur):
