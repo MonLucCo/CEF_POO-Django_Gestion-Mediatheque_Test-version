@@ -2,7 +2,7 @@
 
 📁 `/docs/developpement/issue3/task5/tests-plan.md`  
 
-📌 Version : index H-5 (issue #3 – étape 6 - Bloc 3)
+📌 Version : index H-6 (issue #3 – étape 6 - Bloc 3)
 - Rapport de tests associé : [`test_report_indexH-4.txt`](test_report_indexH-5.txt)
 
 ___
@@ -30,8 +30,10 @@ Il est conçu pour :
     - index F-1, reprise du développement fonctionnel
     - index F-3, fonctions de liste et de création d'un média non typé
     - index F-4, fonctions de création des médias typés. Intégration du cycle de vie de `Media`.
-  - index H-4 (entités Membre) pour le **Bloc 3**, avec :
-    - index H-1 à H-3, restructuration documentaire pour organiser toutes les entités.
+  - index H-6 (entités Membre) pour le **Bloc 3**, avec :
+    - index H-1 à H-4, restructuration documentaire pour organiser toutes les entités.
+    - Index H-5, fonctions de liste des membres et organisation de la navigation.
+    - Index H-6, fonction de création des membres et correction du menu de navigation des Membres.
 - **Périmètre couvert** : site administration, entité `Media` – vues `liste` et `détail`  
 - **Niveau de couverture** : tests de niveau _minimum_ à _intermédiaire_  
 - **Évolutivité prévue** :
@@ -133,21 +135,23 @@ Chaque catégorie de tests est regroupée dans une sous-section spécifique avec
 
 ### 🧪 Navigation (`T-NAV-xxx`)
 
-| Série  | ID Test  | Description                              | URL ciblée                                | Résultat attendu                  | Statut     |
-|--------|----------|------------------------------------------|-------------------------------------------|-----------------------------------|------------|
-| Bloc 1 | T-NAV-01 | Accès à la page d’accueil                | `/bibliothecaire/`                        | Code 200 + template accueil       | ✅ Validé   |
-| Bloc 1 | T-NAV-02 | Accès à la liste des médias              | `/bibliothecaire/media/`                  | Code 200 + template liste         | ✅ Validé   |
-| Bloc 1 | T-NAV-03 | Accès au détail d’un média existant      | `/bibliothecaire/media/1/`                | Code 200 + template détail        | ✅ Validé   |
-| Bloc 1 | T-NAV-04 | Accès à un média inexistant              | `/bibliothecaire/media/999/`              | Code 404                          | ✅ Validé   |
-| Bloc 2 | T-NAV-05 | Accès à la liste des médias consultables | `/bibliothecaire/medias/consultables/`    | Code 200 + template liste         | ✅ Validé   |
-| Bloc 2 | T-NAV-06 | Accès à la liste des médias disponibles  | `/bibliothecaire/medias/disponibles/`     | Code 200 + template liste         | ✅ Validé   |
-| Bloc 2 | T-NAV-07 | Accès à la liste des médias par type     | `/bibliothecaire/medias/type/?type=LIVRE` | Code 200 + template liste         | ✅ Validé   |
-| Bloc 2 | T-NAV-08 | Accès à la création d'un média           | `/bibliothecaire/medias/ajouter/`         | Code 200 + template liste         | ✅ Validé   |
-| Bloc 2 | T-NAV-09 | Accès à la liste des médias non typés    | `/bibliothecaire/medias/non-types/`       | Code 200 + template liste         | ✅ Validé   |
-| Bloc 3 | T-NAV-10 | Accès à la liste des membres (tous)      | `/bibliothecaire/membres/`                | Code 200 + template liste membres | ✅ Validé   |
-| Bloc 3 | T-NAV-11 | Accès à la liste des membres en gestion  | `/bibliothecaire/membres/gestion`         | Code 200 + template liste membres | ✅ Validé   |
-| Bloc 3 | T-NAV-12 | Accès à la liste des membres abonnés     | `/bibliothecaire/membres/emprunteurs`     | Code 200 + template liste membres | ✅ Validé |
-| Bloc 3 | T-NAV-13 | Accès à la liste des membres supprimés   | `/bibliothecaire/membres/supprimes`       | Code 200 + template liste membres | ✅ Validé   |
+| Série  | ID Test  | Description                                | URL ciblée                                   | Résultat attendu                  | Statut   |
+|--------|----------|--------------------------------------------|----------------------------------------------|-----------------------------------|----------|
+| Bloc 1 | T-NAV-01 | Accès à la page d’accueil                  | `/bibliothecaire/`                           | Code 200 + template accueil       | ✅ Validé |
+| Bloc 1 | T-NAV-02 | Accès à la liste des médias                | `/bibliothecaire/media/`                     | Code 200 + template liste         | ✅ Validé |
+| Bloc 1 | T-NAV-03 | Accès au détail d’un média existant        | `/bibliothecaire/media/1/`                   | Code 200 + template détail        | ✅ Validé |
+| Bloc 1 | T-NAV-04 | Accès à un média inexistant                | `/bibliothecaire/media/999/`                 | Code 404                          | ✅ Validé |
+| Bloc 2 | T-NAV-05 | Accès à la liste des médias consultables   | `/bibliothecaire/medias/consultables/`       | Code 200 + template liste         | ✅ Validé |
+| Bloc 2 | T-NAV-06 | Accès à la liste des médias disponibles    | `/bibliothecaire/medias/disponibles/`        | Code 200 + template liste         | ✅ Validé |
+| Bloc 2 | T-NAV-07 | Accès à la liste des médias par type       | `/bibliothecaire/medias/type/?type=LIVRE`    | Code 200 + template liste         | ✅ Validé |
+| Bloc 2 | T-NAV-08 | Accès à la création d'un média             | `/bibliothecaire/medias/ajouter/`            | Code 200 + template liste         | ✅ Validé |
+| Bloc 2 | T-NAV-09 | Accès à la liste des médias non typés      | `/bibliothecaire/medias/non-types/`          | Code 200 + template liste         | ✅ Validé |
+| Bloc 3 | T-NAV-10 | Accès à la liste des membres (tous)        | `/bibliothecaire/membres/`                   | Code 200 + template liste membres | ✅ Validé |
+| Bloc 3 | T-NAV-11 | Accès à la liste des membres en gestion    | `/bibliothecaire/membres/gestion`            | Code 200 + template liste membres | ✅ Validé |
+| Bloc 3 | T-NAV-12 | Accès à la liste des membres abonnés       | `/bibliothecaire/membres/emprunteurs`        | Code 200 + template liste membres | ✅ Validé |
+| Bloc 3 | T-NAV-13 | Accès à la liste des membres supprimés     | `/bibliothecaire/membres/supprimes`          | Code 200 + template liste membres | ✅ Validé |
+| Bloc 3 | T-NAV-14 | Accès à la création d’un membre standard   | `/bibliothecaire/membres/ajouter/`           | Code 200 + formulaire affiché     | ✅ Validé |
+| Bloc 3 | T-NAV-15 | Accès à la création d’un membre emprunteur | `/bibliothecaire/membres/ajouter/emprunteur` | Code 200 + formulaire affiché     | ✅ Validé |
 
 > ❌ Le test T-NAV-03 a révélé une contrainte sur le champ `annee_edition` du modèle `Media`. ✅ Il a été repris 
 > après correction du modèle de données.  
@@ -172,6 +176,8 @@ Chaque catégorie de tests est regroupée dans une sous-section spécifique avec
 | Bloc 3 | T-ENT-10 | Vérifie que les membres affichés sont non archivés (`statut != ARCHIVE`) | `Membre`        | Tous les objets ont `statut` différent de `ARCHIVE`                     | ✅ Validé |
 | Bloc 3 | T-ENT-11 | Vérifie que les membres affichés sont abonnés (`statut == EMPRUNTEUR`)   | `Membre`        | Tous les objets ont `statut == EMPRUNTEUR`                              | ✅ Validé |
 | Bloc 3 | T-ENT-12 | Vérifie que les membres affichés sont archivés (`statut == ARCHIVE`)     | `Membre`        | Tous les objets ont `statut == ARCHIVE`                                 | ✅ Validé |
+| Bloc 3 | T-ENT-13 | Création d’un membre standard : statut et compte                         | `Membre`        | `statut == MEMBRE`, `compte` généré correctement                        | ✅ Validé |
+| Bloc 3 | T-ENT-14 | Création d’un membre emprunteur : statut et compte                       | `Membre`        | `statut == EMPRUNTEUR`, `compte` généré correctement                    | ✅ Validé |
 
 > ✅ Les tests T-ENT-xx sont validés.  
 > ✅ Les assertions couvrent la structure multi-table, les attributs hérités et typés, et la cohérence des enregistrements.  
@@ -182,23 +188,24 @@ Chaque catégorie de tests est regroupée dans une sous-section spécifique avec
 
 ### 🧪 Vues (`T-VUE-xxx`)
 
-| Série  | ID Test  | Vue testée                              | Description                                                            | Résultat attendu                                                       | Statut   |
-|--------|----------|-----------------------------------------|------------------------------------------------------------------------|------------------------------------------------------------------------|----------|
-| Bloc 1 | T-VUE-01 | `MediaListView`                         | Affichage des titres                                                   | Présence dans le HTML                                                  | ✅ Validé |
-| Bloc 1 | T-VUE-02 | `MediaListView`                         | Affichage du type et disponibilité                                     | Présence dans le HTML                                                  | ✅ Validé |
-| Bloc 1 | T-VUE-03 | `MediaDetailView`                       | Affichage des champs spécifiques du sous-type                          | Présence de `auteur`, `resume`, etc. si typé                           | ✅ Validé |
-| Bloc 1 | T-VUE-04 | `MediaDetailView`                       | Utilisation de l’objet typé dans le contexte                           | Instance héritée (`Livre`, `Dvd`, `Cd`) reçue                          | ✅ Validé |
-| Bloc 1 | T-VUE-05 | `MediaDetailView`                       | Affichage d’un objet non typé malgré `media_type` défini               | Absence des champs spécifiques dans le HTML                            | ✅ Ajouté |
-| Bloc 2 | T-VUE-06 | `MediaListConsultableView`              | Le titre <`h2`> du template correspond à la vue consultable            | Présence dans le HTML                                                  | ✅ Validé |
-| Bloc 2 | T-VUE-07 | `MediaDisponibleListView`               | Le titre <`h2`> du template correspond à la vue disponibles            | Présence dans le HTML                                                  | ✅ Validé |
-| Bloc 2 | T-VUE-08 | `MediaTypeListView`                     | Le titre <`h2`> du template correspond au type demandé                 | Présence dans le HTML                                                  | ✅ Validé |
-| Bloc 2 | T-VUE-09 | `MediaCreateView`                       | Affichage du formulaire `MediaForm` dans le template `media_form.html` | Présence du template dans le HTML                                      | ✅ Validé |
-| Bloc 2 | T-VUE-10 | `MediaNonTypeListView`                  | Le titre <`h2`> du template correspond à la vue des non typés          | Présence dans le HTML                                                  | ✅ Validé |
-| Bloc 3 | T-VUE-11 | `MembreListView` (vue tous les membres) | Affichage du tableau avec les colonnes attendues                       | Présence des colonnes `Nom`, `Compte`, `Statut`, `Emprunts`, `Retards` | ✅ Validé |
-| Bloc 3 | T-VUE-12 | `MembreEnGestionView`                   | Affichage filtrée des membres non archivés                             | Présence des membres avec `statut != ARCHIVE`                          | ✅ Validé |
-| Bloc 3 | T-VUE-13 | `MembreEmprunteursView`                 | Affichage filtrée des membres abonnés                                  | Présence des membres avec `statut == EMPRUNTEUR`                       | ✅ Validé |
-| Bloc 3 | T-VUE-14 | `MembreArchivesView`                    | Affichage filtrée des membres supprimés                                | Présence des membres avec `statut == ARCHIVE`                          | ✅ Validé |
-| Bloc 3 | T-VUE-15 | `membre_list.html` (template)           | Affichage conditionnel du tableau                                      | Tableau affiché uniquement si `membres` non vide                       | ✅ Validé |
+| Série  | ID Test  | Vue testée                                        | Description                                                            | Résultat attendu                                                       | Statut   |
+|--------|----------|---------------------------------------------------|------------------------------------------------------------------------|------------------------------------------------------------------------|----------|
+| Bloc 1 | T-VUE-01 | `MediaListView`                                   | Affichage des titres                                                   | Présence dans le HTML                                                  | ✅ Validé |
+| Bloc 1 | T-VUE-02 | `MediaListView`                                   | Affichage du type et disponibilité                                     | Présence dans le HTML                                                  | ✅ Validé |
+| Bloc 1 | T-VUE-03 | `MediaDetailView`                                 | Affichage des champs spécifiques du sous-type                          | Présence de `auteur`, `resume`, etc. si typé                           | ✅ Validé |
+| Bloc 1 | T-VUE-04 | `MediaDetailView`                                 | Utilisation de l’objet typé dans le contexte                           | Instance héritée (`Livre`, `Dvd`, `Cd`) reçue                          | ✅ Validé |
+| Bloc 1 | T-VUE-05 | `MediaDetailView`                                 | Affichage d’un objet non typé malgré `media_type` défini               | Absence des champs spécifiques dans le HTML                            | ✅ Ajouté |
+| Bloc 2 | T-VUE-06 | `MediaListConsultableView`                        | Le titre <`h2`> du template correspond à la vue consultable            | Présence dans le HTML                                                  | ✅ Validé |
+| Bloc 2 | T-VUE-07 | `MediaDisponibleListView`                         | Le titre <`h2`> du template correspond à la vue disponibles            | Présence dans le HTML                                                  | ✅ Validé |
+| Bloc 2 | T-VUE-08 | `MediaTypeListView`                               | Le titre <`h2`> du template correspond au type demandé                 | Présence dans le HTML                                                  | ✅ Validé |
+| Bloc 2 | T-VUE-09 | `MediaCreateView`                                 | Affichage du formulaire `MediaForm` dans le template `media_form.html` | Présence du template dans le HTML                                      | ✅ Validé |
+| Bloc 2 | T-VUE-10 | `MediaNonTypeListView`                            | Le titre <`h2`> du template correspond à la vue des non typés          | Présence dans le HTML                                                  | ✅ Validé |
+| Bloc 3 | T-VUE-11 | `MembreListView` (vue tous les membres)           | Affichage du tableau avec les colonnes attendues                       | Présence des colonnes `Nom`, `Compte`, `Statut`, `Emprunts`, `Retards` | ✅ Validé |
+| Bloc 3 | T-VUE-12 | `MembreEnGestionView`                             | Affichage filtrée des membres non archivés                             | Présence des membres avec `statut != ARCHIVE`                          | ✅ Validé |
+| Bloc 3 | T-VUE-13 | `MembreEmprunteursView`                           | Affichage filtrée des membres abonnés                                  | Présence des membres avec `statut == EMPRUNTEUR`                       | ✅ Validé |
+| Bloc 3 | T-VUE-14 | `MembreArchivesView`                              | Affichage filtrée des membres supprimés                                | Présence des membres avec `statut == ARCHIVE`                          | ✅ Validé |
+| Bloc 3 | T-VUE-15 | `membre_list.html` (template)                     | Affichage conditionnel du tableau                                      | Tableau affiché uniquement si `membres` non vide                       | ✅ Validé |
+| Bloc 3 | T-VUE-16 | `MembreCreateView` / `MembreCreateEmprunteurView` | Affichage du titre `<h2>` selon le contexte `is_emprunteur`            | Texte dynamique : “Créer un Membre…”                                   | ✅ Validé |
 
 > ✅ La distinction entre typage réel et simple valeur `media_type` est désormais testée.  
 > ✅ La logique de typage dynamique est assurée par la surcharge de `get_object()` dans `MediaDetailView`.  
@@ -214,6 +221,7 @@ Chaque catégorie de tests est regroupée dans une sous-section spécifique avec
 | Bloc 2 | T-FORM-01 | `MediaForm`      | Vérifie que les champs attendus sont présents dans le formulaire    | Champs `name`, `theme`, `annee_edition` visibles dans le HTML                 | ✅ Validé |
 | Bloc 2 | T-FORM-02 | `MediaForm`      | Vérifie que les labels personnalisés sont affichés                  | `Titre du média`, `Thématique`, `Année d'édition` présents dans le formulaire | ✅ Validé |
 | Bloc 2 | T-FORM-03 | `MediaForm`      | Vérifie les contraintes de validation (obligatoires vs facultatifs) | `name` et `theme` obligatoires, `annee_edition` facultatif                    | ✅ Validé |
+| Bloc 3 | T-FORM-04 | `MembreForm`     | Vérifie que seul le champ `name` est exposé avec le bon label       | Champ `name` visible, label = “Nom du Membre”                                 | ✅ Validé |
 
 > 🔧 Ces tests permettent de valider la structure, la lisibilité et la robustesse du formulaire `MediaForm`, 
 > indépendamment de la logique métier.  
@@ -254,6 +262,8 @@ Chaque catégorie de tests est regroupée dans une sous-section spécifique avec
 | Bloc 3 | T-FUN-11 | Vérifie que la vue tous les membres respecte les règles métier (MEMBRE-UC-LIST-02)    | Code 200 + template + membres non archivés (`statut != ARCHIVE`)                                                            | ✅ Validé |
 | Bloc 3 | T-FUN-12 | Vérifie que la vue abonnés respecte les règles métier (MEMBRE-UC-LIST-03)             | Code 200 + template + membres abonnés (`statut == EMPRUNTEUR`)                                                              | ✅ Validé |
 | Bloc 3 | T-FUN-13 | Vérifie que la vue supprimés respecte les règles métier (MEMBRE-UC-LIST-04)           | Code 200 + template + membres archivés (`statut == ARCHIVE`)                                                                | ✅ Validé |
+| Bloc 3 | T-FUN-14 | Création de plusieurs membres standards avec données valides                          | Redirection + `statut == MEMBRE` + `compte` généré                                                                          | ✅ Validé |
+| Bloc 3 | T-FUN-15 | Création de plusieurs membres emprunteurs avec données valides                        | Redirection + `statut == EMPRUNTEUR` + `compte` généré                                                                      | ✅ Validé |
 
 > 🔧 Les tests unitaires _fonctionnels_ sont définis pour être autonome. Ils peuvent se rapprocher de tests unitaires
 > _techniques_ qui sont indiqués dans le _résultat attendu_. 
@@ -274,6 +284,10 @@ Chaque catégorie de tests est regroupée dans une sous-section spécifique avec
 > 🔧 Les tests T-FUN-08 à T-FUN-10 valident la logique métier du typage différé, la cohérence des transitions, 
 > et la robustesse des vues associées.  
 > Ces tests consolident le fonctionnement de la fonction **ajouter un média**.
+
+> 🔧 Les tests T-FUN-14 à T-FUN-15 valident la logique métier du compte défini automatiquement par une règle métier d'unicité, 
+> la cohérence et la robustesse des créations sont réalisées dans une boucle de `subTest()`.  
+> Ces tests consolident le fonctionnement de la fonction **créer un membre**.
 
 ---
 
@@ -319,17 +333,18 @@ Chaque catégorie de tests est regroupée dans une sous-section spécifique avec
 
 ## 🔹 6. Liens vers les fichiers de test
 
-| Fichier                     | Fonctionnalité ciblée                                                     | Catégorie                |
-|-----------------------------|---------------------------------------------------------------------------|--------------------------|
-| `test_urls.py`              | Routage et accès (URLs locales)                                           | Navigation               |
-| `test_entites_media.py`     | Modèle `Media` et sous-types                                              | Entités                  |
-| `test_vues_media_detail.py` | Détail d’un média typé                                                    | Vues                     |
-| `test_vues_media_list.py`   | Liste des médias                                                          | Vues                     |
-| `test_admin.py`             | Interface d’administration                                                | Administration           |
-| `test_uc_list_media.py`     | Cas d’usage des listes de médias (consultables, disponibles, typés)       | Fonctionnel              |
-| `test_uc_create_media.py`   | Cas d'usage des créations de médias (non typé, livre, dvd, cd)            | Fonctionnel              |
-| `test_uc_typage_media.py`   | Cas d’usage du typage et rollback des médias non typés                    | Fonctionnel              |
-| `test_uc_list_membre.py`    | Cas d'usage des listes des membres (tous, en gestion, abonnés, supprimés) | Technique et Fonctionnel |
+| Fichier                     | Fonctionnalité ciblée                                                      | Catégorie                |
+|-----------------------------|----------------------------------------------------------------------------|--------------------------|
+| `test_urls.py`              | Routage et accès (URLs locales)                                            | Navigation               |
+| `test_entites_media.py`     | Modèle `Media` et sous-types                                               | Entités                  |
+| `test_vues_media_detail.py` | Détail d’un média typé                                                     | Vues                     |
+| `test_vues_media_list.py`   | Liste des médias                                                           | Vues                     |
+| `test_admin.py`             | Interface d’administration                                                 | Administration           |
+| `test_uc_list_media.py`     | Cas d’usage des listes de médias (consultables, disponibles, typés)        | Fonctionnel              |
+| `test_uc_create_media.py`   | Cas d'usage des créations de médias (non typé, livre, dvd, cd)             | Fonctionnel              |
+| `test_uc_typage_media.py`   | Cas d’usage du typage et rollback des médias non typés                     | Fonctionnel              |
+| `test_uc_list_membre.py`    | Cas d'usage des listes des membres (membres, emprunteurs, supprimés, tous) | Technique et Fonctionnel |
+| `test_uc_create_membre.py`  | Cas d'usage de création des membres (membre, emprunteur)                   | Technique et Fonctionnel |
 
 > Les fichiers de tests **technique et fonctionnel** correspondent au regroupement des catégories par classe de tests 
 > (cf. [Difficulté 15](_Frontend-main-courante.md#915-difficulté-15--regroupement-des-tests-techniques-et-fonctionnels-dans-un-même-groupe-de-tests)).

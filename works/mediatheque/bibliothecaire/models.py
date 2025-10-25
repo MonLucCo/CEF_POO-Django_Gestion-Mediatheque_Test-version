@@ -298,6 +298,15 @@ class Membre(Utilisateur):
         default=StatutMembre.MEMBRE
     )
 
+    @classmethod
+    def generer_compte(cls, nom_utilisateur: str) -> str:
+        from datetime import datetime
+        annee = datetime.now().year
+        nom_tronque = nom_utilisateur.strip().replace(" ", "_")[:30]
+        prefixe = f"{annee}_{nom_tronque}_"
+        compteur = cls.objects.filter(compte__startswith=prefixe).count() + 1
+        return f"{prefixe}{compteur}"
+
     @property
     def nb_emprunts_en_cours(self):
         """

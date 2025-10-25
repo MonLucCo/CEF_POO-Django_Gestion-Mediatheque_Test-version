@@ -4,7 +4,7 @@ from django.views import View
 from django.views.generic import TemplateView, ListView, DetailView, CreateView, UpdateView, FormView
 
 from bibliothecaire.models import Media, Livre, Dvd, Cd, Membre, StatutMembre
-from bibliothecaire.forms import MediaForm, LivreForm, DvdForm, CdForm
+from bibliothecaire.forms import MediaForm, LivreForm, DvdForm, CdForm, MembreForm
 from django.db import transaction
 
 
@@ -479,3 +479,32 @@ class MembreEmprunteursView(MembreListView):
 class MembreArchivesView(MembreListView):
     def get_queryset(self):
         return Membre.objects.filter(statut=StatutMembre.ARCHIVE).order_by("name")
+
+
+class MembreCreateView(CreateView):
+    model = Membre
+    form_class = MembreForm
+    template_name = 'bibliothecaire/membres/membre_form.html'
+    success_url = reverse_lazy('bibliothecaire:membre_list_gestion')
+
+    def form_valid(self, form):
+        form.instance.statut = StatutMembre.MEMBRE
+        form.instance.compte = Membre.generer_compte(form.cleaned_data['name'])
+        return super(MembreCreateView, self).form_valid(form)
+
+
+class MembreCreateEmprunteurView(CreateView):
+    model = Membre
+    form_class = MembreForm
+    template_name = 'bibliothecaire/membres/membre_form.html'
+    success_url = reverse_lazy('bibliothecaire:membre_list_gestion')
+
+    def get_context_data(self, **kwargs):
+        context = super(MembreCreateEmprunteurView, self).get_context_data(**kwargs)
+        context['is_emprunteur'] = True
+        return context
+
+    def form_valid(self, form):
+        form.instance.statut = StatutMembre.EMPRUNTEUR
+        form.instance.compte = Membre.generer_compte(form.cleaned_data['name'])
+        return super(MembreCreateEmprunteurView, self).form_valid(form)

@@ -64,12 +64,19 @@
                 <td style="vertical-align: top;">
                   <ul>
                     <li>
-                      <strong>Annuaires :</strong>
+                      <strong>Créer :</strong>
                       <ul>
-                        <li><a href="{% url 'bibliothecaire:membre_list' %}">Tous</a></li>
-                        <li><a href="{% url 'bibliothecaire:membre_list_gestion' %}">En gestion</a></li>
-                        <li><a href="{% url 'bibliothecaire:membre_list_emprunteurs' %}">Abonnés</a></li>
+                        <li><a href="{% url 'bibliothecaire:membre_create' %}">Membre</a></li>
+                        <li><a href="{% url 'bibliothecaire:membre_create_emprunteur' %}">Emprunteur</a></li>
+                      </ul>
+                    </li>
+                    <li>
+                      <strong>lister :</strong>
+                      <ul>
+                        <li><a href="{% url 'bibliothecaire:membre_list_gestion' %}">Membres</a></li>
+                        <li><a href="{% url 'bibliothecaire:membre_list_emprunteurs' %}">Emprunteurs</a></li>
                         <li><a href="{% url 'bibliothecaire:membre_list_archives' %}">Supprimés</a></li>
+                        <li><a href="{% url 'bibliothecaire:membre_list' %}">Tous</a></li>
                       </ul>
                     </li>
                   </ul>
