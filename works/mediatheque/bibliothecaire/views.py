@@ -3,7 +3,7 @@ from django.urls import reverse_lazy, reverse
 from django.views import View
 from django.views.generic import TemplateView, ListView, DetailView, CreateView, UpdateView, FormView
 
-from bibliothecaire.models import Media, Livre, Dvd, Cd
+from bibliothecaire.models import Media, Livre, Dvd, Cd, Membre, StatutMembre
 from bibliothecaire.forms import MediaForm, LivreForm, DvdForm, CdForm
 from django.db import transaction
 
@@ -458,3 +458,24 @@ class MediaTypageCdView(FormView):
 
     def get_success_url(self):
         return reverse('bibliothecaire:media_list')
+
+
+class MembreListView(ListView):
+    model = Membre
+    context_object_name = 'membres'
+    template_name = 'bibliothecaire/membres/membre_list.html'
+
+
+class MembreEnGestionView(MembreListView):
+    def get_queryset(self):
+        return Membre.objects.exclude(statut=StatutMembre.ARCHIVE).order_by("name")
+
+
+class MembreEmprunteursView(MembreListView):
+    def get_queryset(self):
+        return Membre.objects.filter(statut=StatutMembre.EMPRUNTEUR).order_by("name")
+
+
+class MembreArchivesView(MembreListView):
+    def get_queryset(self):
+        return Membre.objects.filter(statut=StatutMembre.ARCHIVE).order_by("name")
