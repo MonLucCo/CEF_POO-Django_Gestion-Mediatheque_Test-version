@@ -82,17 +82,17 @@ class JeuDePlateauAdmin(admin.ModelAdmin):
 
 @admin.register(Membre)
 class MembreAdmin(admin.ModelAdmin):
-    list_display = ['bloque', 'name', 'compte', 'nb_emprunts_en_cours', 'nb_retards']
+    list_display = ['statut', 'name', 'compte', 'nb_emprunts_en_cours', 'nb_retards']
     search_fields = ['name', 'compte']
-    list_filter = ['bloque']
-    ordering = ['-bloque', 'name', 'compte']
+    list_filter = ['statut']
+    ordering = ['statut', 'name', 'compte']
     readonly_fields = ['nb_emprunts_en_cours', 'nb_retards']
     fieldsets = (
         ('Identité du membre', {
             'fields': ('name', 'compte')
         }),
         ('Statut et suivi', {
-            'fields': ('bloque', 'nb_emprunts_en_cours', 'nb_retards')
+            'fields': ('statut', 'nb_emprunts_en_cours', 'nb_retards')
         }),
     )
 

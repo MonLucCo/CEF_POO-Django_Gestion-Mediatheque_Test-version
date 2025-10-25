@@ -25,7 +25,7 @@ et couvre :
 - Les vues CRUD, les transitions métier, les historiques
 - La préparation des tests fonctionnels et des fixtures
 
-📌 Version : index H-1 (issue #3 – étape 6)
+📌 Version : index H-5 (issue #3 – étape 6 - Bloc 3)
 
 ---
 
@@ -53,6 +53,8 @@ et couvre :
    - [9.11 Difficulté 11 – Visualisation des contraintes du formulaire](#911-difficulté-11--visualisation-des-contraintes-du-formulaire)
    - [9.12 Difficulté 12 - Formalisation du cycle de vie initial et typé des médias](#912-difficulté-12---formalisation-du-cycle-de-vie-initial-et-typé-des-médias)
    - [9.13 Difficulté 13 : Définir ce que signifie “ajouter un média” – segmentation fonctionnelle, typage différé et structuration technique](#913-difficulté-13--définir-ce-que-signifie-ajouter-un-média--segmentation-fonctionnelle-typage-différé-et-structuration-technique)
+   - [9.14 Difficulté 14 – Définition transversale du cycle de vie métier avant développement des UC](#914-difficulté-14--définition-transversale-du-cycle-de-vie-métier-avant-développement-des-uc)
+   - [9.15 Difficulté 15 – Regroupement des tests techniques et fonctionnels dans un même groupe de tests](#915-difficulté-15--regroupement-des-tests-techniques-et-fonctionnels-dans-un-même-groupe-de-tests)
 10. [🔗 Liens utiles](#10--liens-utiles)
 
 ---
@@ -765,6 +767,143 @@ La résolution de cette difficulté a permis de :
 
 > Cette difficulté m'a permis de comprendre comment derrière une fonctionnalité métier simple, peut se cacher une 
 > **complexité technique structurante**, qui doit être anticipée, documentée et testée pour garantir la robustesse du projet.
+
+---
+
+### 9.14 Difficulté 14 – Définition transversale du cycle de vie métier avant développement des UC
+
+#### a) Contexte de la difficulté
+
+Après la validation du cycle de vie des entités `Media` dans [`Analyse_LifeCycle_Medias.md`](Analyse_LifeCycle_Medias.md), 
+il est apparu nécessaire de formaliser **les interactions métier entre les entités `Media`, `Membre`, et `Emprunt`** avant 
+de poursuivre le développement des fonctionnalités associées aux UC-MEMBRE et UC-EMPRUNT.
+
+#### b) Résolution adoptée
+
+Cette difficulté a conduit à la rédaction d’un document transversal :
+
+➡️ [`Analyse_LifeCycle_Bibliothecaire.md`](Analyse_LifeCycle_Bibliothecaire.md)
+
+Ce document :
+- Définit les **vecteurs de contexte** de chaque entité
+- Clarifie les **transitions typées** (saisie, fonction métier, DDM)
+- Formalise les **règles DDM** qui automatisent les états métier
+- Présente les **interactions croisées** entre les objets manipulés par le profil Bibliothécaire
+
+Il constitue une **base métier stable** pour la validation des UC et la rédaction des tests fonctionnels du Bloc 3.
+
+> 📌 Ce document est rattaché à la task6 et figé à l’index H-1.
+
+#### c) Conclusion
+
+La résolution de cette difficulté a permis de poser une **architecture métier claire et cohérente** avant toute 
+implémentation technique.  
+En définissant les vecteurs de contexte, les transitions typées et les règles DDM, le document `Analyse_LifeCycle_Bibliothecaire.md` 
+offre :
+
+- Une **vision unifiée** du fonctionnement des entités `Media`, `Membre`, et `Emprunt`
+- Une **base stable** pour la validation des UC-MEMBRE et UC-EMPRUNT
+- Une **réduction des ambiguïtés fonctionnelles** en amont du développement
+- Une **structuration méthodologique** utile à mes futurs développements.
+
+
+> 📌 Cette difficulté a permis de stabiliser les fondations métier du Bloc 3.  
+> Elle garantit que les développements des UC-MEMBRE et UC-EMPRUNT reposent sur une logique métier claire, testable et extensible.  
+> Elle constitue l'application des difficultés 12 et 13 précédentes.
+
+---
+
+### 9.15 Difficulté 15 – Regroupement des tests techniques et fonctionnels dans un même groupe de tests
+
+#### a) Contexte de la difficulté
+
+Lors du développement de l’UC MEMBRE-UC-LIST, pour faciliter leur définition, les tests ont été regroupés dans un fichier 
+unique `test_uc_list_membre.py`, incluant à la fois :
+- des tests techniques (modèle, vue, template)
+- des tests fonctionnels (filtrage métier, affichage conditionnel).
+
+Ce choix diffère de l’organisation adoptée pour les UC liées à `Media`, où les tests sont répartis par typologie 
+(`test_entites_media.py`, `test_vues_media_list.py`, etc.).
+
+#### b) Analyse et décision
+
+📌 Avantages :
+- Regroupement homogène par UC
+- Lecture métier facilitée
+- Maintenance localisée
+
+📌 Inconvénients :
+- Typologie technique moins explicite
+- Asymétrie documentaire entre entités
+- Risque de confusion dans l’indexation des tests
+
+📌 Décision :
+Le regroupement est conservé pour les UC `Membre` et `Emprunt`, afin de favoriser la lisibilité métier et la validation 
+incrémentale par commit. Chaque test portera dans sa dénomination l'identifiant (catégorie et index) définie dans 
+le [plan de tests](tests-plan.md).  
+Une harmonisation documentaire pourra être envisagée avec les tests des UC `Media`pourra être envisagée ultérieurement. 
+Toutefois, la nature indépendante de chaque test permet une poursuite du projet sans _refactorisation_ de ces tests.
+
+#### c) Résolution adoptée
+
+Pour répondre à la difficulté de structuration des tests identifiée dans cette UC, une organisation modulaire a été mise 
+en place dans le fichier `test_uc_list_membre.py`, selon les principes suivants :
+
+##### 🔹 Dénomination explicite des tests
+Chaque méthode de test est nommée selon le schéma `test_aaa_xx_description`, où :
+- `aaa` est le préfixe de catégorie (`nav`, `ent`, `vue`, `fun`)
+- `xx` est l’identifiant du test tel que défini dans `tests-plan.md`
+- `description` est un résumé fonctionnel du test
+
+> Exemple : `test_fun_11_uc_list_01_membres_non_archives`
+
+Cette convention garantit une traçabilité directe entre le plan de test et le code source.
+
+##### 🔹 Regroupement par catégorie dans des classes dédiées
+Les tests sont répartis dans des classes distinctes selon leur nature :
+
+| Classe de test                | Catégorie couverte              |
+|-------------------------------|---------------------------------|
+| `TestNavigationMembreUcList`  | Navigation (`T-NAV-xx`)         |
+| `TestEntitesMembreUcList`     | Modèle / Entités (`T-ENT-xx`)   |
+| `TestVuesMembreUcList`        | Vues / Templates (`T-VUE-xx`)   |
+| `TestFonctionnelMembreUcList` | Fonctionnel métier (`T-FUN-xx`) |
+
+Cette segmentation permet une exécution ciblée, une maintenance facilitée et une documentation alignée.
+
+##### 🔹 Création d’une classe de base pour le jeu de données
+Une classe `BaseMembreTestCaseData` a été introduite pour centraliser le chargement des données via `setUpTestData()` :
+
+```python
+class BaseMembreTestCaseData(TestCase):
+    @classmethod
+    def setUpTestData(cls):
+        ...
+```
+
+Les classes `ENT`, `VUE` et `FUN` héritent de cette base, garantissant la cohérence du jeu de données tout en évitant 
+les duplications.
+
+##### 🔹 Maintien de l’indépendance des tests unitaires
+Chaque méthode de test :
+- est autonome et isolée
+- ne dépend pas de l’ordre d’exécution
+- ne modifie pas l’état global partagé
+- respecte les bonnes pratiques Django (`TestCase`, `setUpTestData`, assertions explicites)
+
+#### d) Conclusion
+
+La résolution de cette difficulté (mineure) est suffisamment significative pour refléter une problématique liée à la 
+prolifération des fichiers de code et de documentation. La démarche des tests indépendants m'a permis de changer la 
+structure des tests sans action de _refactorisation_ technique et documentaire. 
+
+Cette mise en œuvre d'une structure organisationnelle des fichiers de tests m'a permis d'améliorer mes connaissances dans 
+la mise en œuvre des tests, tout en les rendant plus lisible pour la suite du développement. Elle constitue le lien entre 
+les analyses fonctionnelles, le plan de tests et la validation technique et fonctionnelle du code.
+
+Cette difficulté, bien que mineure en apparence, m'a permis de consolider la cohérence entre les documents d’analyse, les 
+conventions de nommage du code, et la structure des tests. Elle constitue un point d’ancrage méthodologique pour les UC 
+suivantes du Bloc 3.
 
 ---
 

@@ -8,46 +8,85 @@
     <header>
         <h1>Médiathèque – Bibliothécaire</h1>
         <nav>
-            <ul>
-                <li>
-                    <a href="{% url 'bibliothecaire:accueil' %}">Aller à l'accueil</a>
-                </li>
-                <li>
-                    Lister les médias :
-                    <ul>
-                        <li><a href="{% url 'bibliothecaire:media_list' %}">Tous </a></li>
-                        <li><a href="{% url 'bibliothecaire:media_list_consultables' %}">Consultables</a></li>
-                        <li><a href="{% url 'bibliothecaire:media_list_disponibles' %}">Disponibles</a></li>
-                        <li>
-                          Par type :
-                          <ul>
-                            <li><a href="{% url 'bibliothecaire:media_list_by_type' %}?type=LIVRE">Livres</a></li>
-                            <li><a href="{% url 'bibliothecaire:media_list_by_type' %}?type=DVD">DVD</a></li>
-                            <li><a href="{% url 'bibliothecaire:media_list_by_type' %}?type=CD">CD</a></li>
-                            <li><a href="{% url 'bibliothecaire:media_list_non_types' %}?type=NON_DEFINI">Non défini</a></li>
-                          </ul>
-                        </li>
-                    </ul>
-                </li>
-                <li>
-                    Créer un média :
-                    <ul>
-                        <li><a href="{% url 'bibliothecaire:media_create' %}">Type "non défini"</a></li>
+          <table style="width:100%; text-align:left;">
+            <thead>
+              <tr>
+                <th>Applications</th>
+                <th>Médias</th>
+                <th>Membres</th>
+                <th>Emprunts</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td style="vertical-align: top;">
+                  <ul>
+                    <li>
+                      <strong>Aller à l'accueil :</strong>
+                      <ul>
+                        <li><a href="#">Médiathèque</a></li>
+                        <li><a href="{% url 'bibliothecaire:accueil' %}">Bibliothécaire</a></li>
+                        <li><a href="#">Consultation</a></li>
+                      </ul>
+                    </li>
+                  </ul>
+                </td>
+                <td style="vertical-align: top;">
+                  <ul>
+                    <li>
+                      <strong>Créer :</strong>
+                      <ul>
                         <li><a href="{% url 'bibliothecaire:media_create_livre' %}">Type LIVRE</a></li>
                         <li><a href="{% url 'bibliothecaire:media_create_dvd' %}">Type DVD</a></li>
                         <li><a href="{% url 'bibliothecaire:media_create_cd' %}">Type CD</a></li>
-                    </ul>
-                </li>
-
-                {% comment %}
-
-                <li><a href="{% url 'bibliothecaire:emprunt_list' %}">Emprunts</a></li>
-                <li><a href="{% url 'bibliothecaire:membre_list' %}">Membres</a></li>
-                <li><a href="{% url 'bibliothecaire:jeu_list' %}">Jeux</a></li>
-
-                {% endcomment %}
-            </ul>
+                        <li><a href="{% url 'bibliothecaire:media_create' %}">Type Non défini</a></li>
+                      </ul>
+                    </li>
+                    <li>
+                      <strong>Lister :</strong>
+                      <ul>
+                        <li><a href="{% url 'bibliothecaire:media_list' %}">Tous</a></li>
+                        <li><a href="{% url 'bibliothecaire:media_list_consultables' %}">Consultables</a></li>
+                        <li><a href="{% url 'bibliothecaire:media_list_disponibles' %}">Disponibles</a></li>
+                      </ul>
+                    </li>
+                    <li>
+                      <strong>Filtrer par type :</strong>
+                      <ul>
+                        <li><a href="{% url 'bibliothecaire:media_list_by_type' %}?type=LIVRE">Livres</a></li>
+                        <li><a href="{% url 'bibliothecaire:media_list_by_type' %}?type=DVD">DVD</a></li>
+                        <li><a href="{% url 'bibliothecaire:media_list_by_type' %}?type=CD">CD</a></li>
+                        <li><a href="{% url 'bibliothecaire:media_list_non_types' %}?type=NON_DEFINI">Non typés</a></li>
+                      </ul>
+                    </li>
+                  </ul>
+                </td>
+                <td style="vertical-align: top;">
+                  <ul>
+                    <li>
+                      <strong>Annuaires :</strong>
+                      <ul>
+                        <li><a href="{% url 'bibliothecaire:membre_list' %}">Tous</a></li>
+                        <li><a href="{% url 'bibliothecaire:membre_list_gestion' %}">En gestion</a></li>
+                        <li><a href="{% url 'bibliothecaire:membre_list_emprunteurs' %}">Abonnés</a></li>
+                        <li><a href="{% url 'bibliothecaire:membre_list_archives' %}">Supprimés</a></li>
+                      </ul>
+                    </li>
+                  </ul>
+                </td>
+                <td style="vertical-align: top;">
+                  <ul>
+                    <li><a href="#">Liste des emprunts</a></li>
+                    <li><a href="#">Créer un emprunt</a></li>
+                    <li><a href="#">Retours</a></li>
+                    <li><a href="#">Retards</a></li>
+                  </ul>
+                </td>
+              </tr>
+            </tbody>
+          </table>
         </nav>
+
     </header>
 
     <main>

@@ -42,8 +42,11 @@ urlpatterns = [
  #   path('emprunts/<int:pk>/retour/', views.RetourUpdateView.as_view(), name='emprunt_retour'),
 
     # Membres
- #    path('membres/', views.MembreListView.as_view(), name='membre_list'),
- #   path('membres/ajouter/', views.MembreCreateView.as_view(), name='membre_create'),
+    path('membres/', views.MembreListView.as_view(), name='membre_list'),
+    path('membres/gestion', views.MembreEnGestionView.as_view(), name='membre_list_gestion'),
+    path('membres/emprunteurs', views.MembreEmprunteursView.as_view(), name='membre_list_emprunteurs'),
+    path('membres/supprimes', views.MembreArchivesView.as_view(), name='membre_list_archives'),
+    #   path('membres/ajouter/', views.MembreCreateView.as_view(), name='membre_create'),
  #   path('membres/<int:pk>/', views.MembreDetailView.as_view(), name='membre_detail'),
  #   path('membres/<int:pk>/modifier/', views.MembreUpdateView.as_view(), name='membre_update'),
  #   path('membres/<int:pk>/supprimer/', views.MembreDeleteView.as_view(), name='membre_delete'),

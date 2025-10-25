@@ -23,7 +23,7 @@
     "fields": {
       "name": "Dupont",
       "compte": "membre1",
-      "bloque": false
+      "statut": 1
     }
   },
   {
@@ -32,7 +32,7 @@
     "fields": {
       "name": "Martin",
       "compte": "membre2",
-      "bloque": true
+      "statut": 1
     }
   },
   {
@@ -41,7 +41,7 @@
     "fields": {
       "name": "Bernard",
       "compte": "membre3",
-      "bloque": false
+      "statut": 1
     }
   },
   {
@@ -50,7 +50,7 @@
     "fields": {
       "name": "Thomas",
       "compte": "membre4",
-      "bloque": false
+      "statut": 1
     }
   },
   {
@@ -59,7 +59,7 @@
     "fields": {
       "name": "Petit",
       "compte": "membre5",
-      "bloque": true
+      "statut": 1
     }
   },
   {
@@ -94,7 +94,7 @@
     "fields": {
       "name": "1984",
       "annee_edition": 1949,
-      "consultable": false,
+      "consultable": true,
       "disponible": false,
       "theme": "Science-fiction",
       "media_type": "LIVRE"
@@ -107,7 +107,7 @@
       "name": "Django Unleashed",
       "annee_edition": 2021,
       "consultable": true,
-      "disponible": true,
+      "disponible": false,
       "theme": "Informatique",
       "media_type": "LIVRE"
     }
@@ -131,7 +131,7 @@
       "name": "Les Misérables",
       "annee_edition": 1862,
       "consultable": false,
-      "disponible": false,
+      "disponible": true,
       "theme": "Roman",
       "media_type": "LIVRE"
     }
@@ -204,7 +204,7 @@
     "fields": {
       "name": "Matrix",
       "annee_edition": 1999,
-      "consultable": false,
+      "consultable": true,
       "disponible": false,
       "theme": "Action",
       "media_type": "DVD"
@@ -503,7 +503,7 @@
     "fields": {
       "media": 2,
       "emprunteur": 2,
-      "date_emprunt": "2025-09-05",
+      "date_emprunt": "2025-10-05",
       "date_retour": null,
       "statut": 1
     }
@@ -525,7 +525,7 @@
     "fields": {
       "media": 7,
       "emprunteur": 4,
-      "date_emprunt": "2025-09-10",
+      "date_emprunt": "2025-10-20",
       "date_retour": null,
       "statut": 1
     }

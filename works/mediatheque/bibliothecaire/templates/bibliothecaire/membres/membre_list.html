@@ -1,0 +1,46 @@
+<!-- templates/bibliothecaire/membres/membre_list.html -->
+{% extends 'bibliothecaire/_base.html' %}
+
+{% block title %}Annuaire des membres{% endblock %}
+
+{% block content %}
+
+<h2>Annuaire des membres</h2>
+
+{% if membres %}
+<table id="liste-annuaire">
+  <thead>
+    <tr>
+      <th>Nom</th>
+      <th>Compte</th>
+      <th>Statut</th>
+      <th>Emprunts</th>
+      <th>Retards</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for membre in membres %}
+    <tr>
+      <td>{{ membre.name }}</td>
+      <td>{{ membre.compte }}</td>
+      <td>{{ membre.get_statut_display }}</td>
+      <td>{{ membre.nb_emprunts_en_cours }}</td>
+      <td>{{ membre.nb_retards }}</td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% else %}
+<p>Aucun membre trouvé.</p>
+{% endif %}
+
+
+<div style="margin-top: 20px;">
+{% comment %}
+    <a href="{% url membre.get_update_url_name membre.pk %}">Modifier</a> |
+    <a href="{% url 'bibliothecaire:membre_delete' media.pk %}">Supprimer</a> |
+{% endcomment %}
+    <a href="{% url 'bibliothecaire:accueil' %}">Retour à l'accueil</a>
+</div>
+
+{% endblock %}

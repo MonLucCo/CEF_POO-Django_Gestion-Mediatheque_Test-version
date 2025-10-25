@@ -28,6 +28,7 @@ class MediaForm(forms.ModelForm):
         if is_update != True:
             self.fields.pop('media_type', None)
 
+
 class LivreForm(forms.ModelForm):
     class Meta:
         model = Livre
