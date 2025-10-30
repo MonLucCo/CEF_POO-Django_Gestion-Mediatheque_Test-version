@@ -25,7 +25,7 @@ et couvre :
 - Les vues CRUD, les transitions métier, les historiques
 - La préparation des tests fonctionnels et des fixtures
 
-📌 Version : index H-5 (issue #3 – étape 6 - Bloc 3)
+📌 Version : index H-7 (issue #3 – étape 6 - Bloc 3)
 
 ---
 
@@ -55,6 +55,8 @@ et couvre :
    - [9.13 Difficulté 13 : Définir ce que signifie “ajouter un média” – segmentation fonctionnelle, typage différé et structuration technique](#913-difficulté-13--définir-ce-que-signifie-ajouter-un-média--segmentation-fonctionnelle-typage-différé-et-structuration-technique)
    - [9.14 Difficulté 14 – Définition transversale du cycle de vie métier avant développement des UC](#914-difficulté-14--définition-transversale-du-cycle-de-vie-métier-avant-développement-des-uc)
    - [9.15 Difficulté 15 – Regroupement des tests techniques et fonctionnels dans un même groupe de tests](#915-difficulté-15--regroupement-des-tests-techniques-et-fonctionnels-dans-un-même-groupe-de-tests)
+   - [9.16 Difficulté 16 – Redondance du champ `bloqué` et modélisation du blocage métier](#916-difficulté-16--redondance-du-champ-bloqué-et-modélisation-du-blocage-métier)
+   - [9.17 Difficulté 17 – Cohérence UX et gestion du contexte métier via session](#917-difficulté-17--cohérence-ux-et-gestion-du-contexte-métier-via-session)
 10. [🔗 Liens utiles](#10--liens-utiles)
 
 ---
@@ -904,6 +906,142 @@ les analyses fonctionnelles, le plan de tests et la validation technique et fonc
 Cette difficulté, bien que mineure en apparence, m'a permis de consolider la cohérence entre les documents d’analyse, les 
 conventions de nommage du code, et la structure des tests. Elle constitue un point d’ancrage méthodologique pour les UC 
 suivantes du Bloc 3.
+
+---
+
+### 9.16 Difficulté 16 – Redondance du champ `bloqué` et modélisation du blocage métier
+
+#### a) Contexte de la difficulté
+
+Cette difficulté est apparue lors de l'analyse de la modélisation issue du modèle initial de l’entité `Membre`, pour 
+développer les fonctionnalités du Bibliothécaire liées aux membres de la médiathèque.
+La première version du modèle de l'entité `Membre` s'appuie sur la réutilisation du code à reprendre qui introduit un champ
+`bloqué` sans typage ni logique métier associée à un _Emprunteur_. Ce champ suggérait une suspension manuelle du droit 
+d’emprunter pour un membre de la médiathèque.
+Le cycle de vie des fonctionnalités métier du projet (cf. Difficulté 14) permet une gestion dynamique de la capacité 
+d'emprunter du membre de la médiathèque. Ainsi la modélisation nécessaire pour développer les fonctions métier du 
+Bibliothécaire a dû être reprise pour éviter un conflit avec les règles métier dynamiques déjà définies dans le modèle 
+`Membre`.
+
+#### b) Nature de la difficulté
+
+Le champ `bloqué` était censé représenter un état d’interdiction d’emprunt. Or, cette logique est déjà encapsulée dans 
+la méthode `peut_emprunter()` du modèle `Membre`, qui prend en compte :
+- les retards en cours,
+- le quota d’emprunts autorisés,
+- le statut du membre (`EMPRUNTEUR`, `ARCHIVE`, etc.).
+
+Ainsi, cela se traduit par :
+- Risque de **redondance fonctionnelle** : deux mécanismes pour une même logique métier.
+- Risque d’**incohérence** : un membre pourrait être marqué comme `bloqué=True` tout en étant autorisé à emprunter
+selon `peut_emprunter()`.
+- Absence de typage ou de validation sur le champ `bloqué`.
+
+#### c) Résolution mise en œuvre
+
+La méthode `peut_emprunter()` encapsule les contraintes métier (retards, quota, statut), ce qui rend inutile toute 
+persistance d’un état `bloqué`. Ce champ introduit une duplication de logique et une source potentielle de divergence 
+entre l’état stocké et l’état calculé.
+
+✅ Le champ `bloqué` a été **supprimé** du modèle final.  
+✅ Le blocage est désormais **géré exclusivement** par les règles métier dynamiques dans `peut_emprunter()`.
+
+#### d) Enseignements et bonnes pratiques
+
+- La logique métier doit être **centralisée** dans des méthodes explicites (`peut_emprunter()`), et non dispersée dans 
+des champs de contrôle.
+- Les états fonctionnels doivent être **déduits** à partir des données métier, et non stockés de manière redondante.
+- Cette approche garantit :
+  - une **cohérence fonctionnelle**,
+  - une **traçabilité claire**,
+  - une **extensibilité** du modèle sans duplication.
+
+#### e) Impact technique
+
+- Suppression du champ `bloqué` dans le modèle `Emprunteur`.
+- Renforcement de la méthode `peut_emprunter()` comme point d’entrée métier.
+- Mise à jour des vues et des tests pour s’appuyer sur cette logique dynamique.
+
+#### f) Conclusion
+
+La résolution de cette difficulté (mineure) est suffisamment significative pour refléter une problématique majeure liée 
+à la cohérence entre la modélisation d'une entité et les fonctionnalités métier associées. Cela s'est traduit par une 
+simplification de la structure du modèle de l'entité `Membre` associé à des méthodes centralisées dans son modèle. 
+Le contrôle du droit d'emprunter est désormais centralisé dans `peut_emprunter()`, ce qui garantit une cohérence métier 
+sans surcharge technique.
+Ainsi la base de données est allégée (suppression du champ `bloque`) au profit de méthodes et de contrôles dynamiques 
+associés aux fonctionnalités du Bibliothécaire.
+
+Cette difficulté, bien que mineure en apparence, m'a permis de consolider la cohérence entre les champs de données d'une 
+entité et ses méthodes centralisées dans la modélisation. Cette suppression m'a permis de simplifier la logique des vues, 
+des formulaires et des templates. 
+
+---
+
+### 9.17 Difficulté 17 – Cohérence UX et gestion du contexte métier via session
+
+#### a) Contexte de la difficulté
+
+Cette difficulté est apparue lors de la mise en œuvre de la navigation entre les vues de liste (`MembreListView`) et les 
+vues de détail ou de modification (`MembreDetailView`, `MembreUpdateView`) tout en recherchant à préserver le contexte 
+métier d’origine (ex. : liste des membres en gestion), sans recourir à des paramètres visibles dans l’URL. 
+Le but visé est que ce contexte permette une redirection cohérente après modification, même en cas de rupture UX (accès 
+direct, historique, menu).
+
+Cette volonté d'une cohérence de gestion métier et d'UX s'est accompagnée de contraintes techniques et de sécurité :
+- Pour permettre un retour fluide vers la liste initiale après modification.
+- Pour éviter d’exposer des paramètres dans l’URL.
+- Pour tolérer les ruptures UX (accès direct, absence de contexte).
+
+#### b) Nature de la difficulté
+
+- Le contexte de navigation (`liste_origine`) n’est pas toujours disponible.
+- Les vues doivent être **résilientes** à l’absence de contexte.
+- Le moteur de template doit pouvoir injecter dynamiquement les liens de retour (`Annuler`, `Retour à la liste`).
+
+#### c) Résolution mise en œuvre
+
+✅ Création d’un **mixin `OrigineSessionMixin`** :
+- Injecte l’origine de navigation dans la session (`liste_origine`).
+- Utilisé dans `MembreListView`, `MembreDetailView`, `MembreUpdateView`.
+
+✅ Nettoyage explicite du contexte dans les vues de sortie métier :
+- Réinitialisation à l’accueil si navigation directe.
+- Fallback vers `membre_list_gestion` en cas de rupture.
+
+#### d) Enseignements et bonnes pratiques
+
+- L’usage de **mixins** permet une propagation invisible du contexte UX.
+- La session est un vecteur robuste pour maintenir la continuité métier.
+- Il est essentiel de :
+  - injecter le contexte à l’entrée,
+  - le nettoyer à la sortie,
+  - prévoir des comportements par défaut en cas de rupture.
+
+#### e) Impact technique
+
+- Création du mixin `OrigineSessionMixin`.
+- Mise à jour des vues pour intégrer le mixin et gérer le contexte.
+- Injection des liens dynamiques dans `get_context_data()`.
+- Tests validés (`T-VUE-16`, `T-VUE-18`, `T-FUN-18`) avec navigation cohérente.
+
+#### f) Conclusion
+
+La résolution de cette difficulté masquée (pas de difficulté technique, mais une volonté de cohérence Métier et UX) est 
+suffisamment significative pour refléter une problématique majeure qui m'a conduit à revoir la gestion des contextes 
+techniques et d'exploitation de l'application.
+
+Cette difficulté m'a été compliquée à résoudre pour maintenir en cohérence :
+- la logique métier basé sur le cycle de vie des entités avec un contexte dynamique de gestion
+- la sécurité et le routage avec des URLs sans paramètre apparent
+- la logique de développement et de maintenance du code des vues, des formulaires et des templates de l'application.
+
+La mise en œuvre de la solution technique de _contexte de session_ associé à la technique de _multi-héritage_ m'a permis 
+de proposer dans un fichier `mixins.py` une solution complète et extensible pour la cohérence métier et la maîtrise du 
+contexte d'UX.
+
+Cette difficulté m'a conduit à revoir la notion de contexte, à maîtriser la gestion des URLs et à exploiter l'architecture 
+d'héritage et d'ORM de Django.
 
 ---
 

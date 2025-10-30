@@ -1,7 +1,7 @@
 # 📘 Analyse des fonctionnalités – Bibliothécaire
 
 📁 `/docs/developpement/issue3/task5/Analyse_Fonctionnalites_indexH-4.md`  
-📌 Version : index H-6 (issue #3 – Bloc 3 - étape 6)
+📌 Version : index H-7 (issue #3 – Bloc 3 - étape 6)
 
 ---
 
@@ -65,8 +65,8 @@ Il permet de :
 | Media   | MEDIA-UC-ROLLBACK    | Rollback d'un typage en cours        | 🔸 Souhaitable | 🟢 Implémenté        |
 | Media   | MEDIA-UC-DELETE      | Suppression logique d'un média       | 🔸 Souhaitable | ⚪ À définir          |
 | Membre  | MEMBRE-UC-LIST       | Affichage de la liste des membres    | ✅ Demandée     | 🟢 Implémenté        |
-| Membre  | MEMBRE-UC-CREATE     | Création d’un membre                 | ✅ Demandée     | 🟢 Implémenté       |
-| Membre  | MEMBRE-UC-UPDATE     | Mise à jour d’un membre              | ✅ Demandée     | ⚪ À développer       |
+| Membre  | MEMBRE-UC-CREATE     | Création d’un membre                 | ✅ Demandée     | 🟢 Implémenté        |
+| Membre  | MEMBRE-UC-UPDATE     | Mise à jour d’un membre              | ✅ Demandée     | 🟢 Implémenté        |
 | Membre  | MEMBRE-UC-DELETE     | Suppression logique d’un membre      | ✅ Demandée     | ⚪ À développer       |
 | Membre  | MEMBRE-UC-HISTORIQUE | Consultation des emprunts passés     | 🔸 Souhaitable | ⚪ À définir          |
 | Emprunt | EMPRUNT-UC-CREATE    | Création d’un emprunt                | ✅ Demandée     | ⚪ À développer       |
@@ -328,30 +328,27 @@ La donnée du compte est générée automatiquement à la création, selon une l
 ### ##### 3.2.1.3 Cas d’usage MEMBRE-UC-UPDATE – Mise à jour d’un membre
 
 ###### 🎯 Objectif métier  
-Permettre au bibliothécaire de modifier les informations générales d’un membre, d’activer son statut d’emprunteur, ou de 
-le supprimer logiquement.  
+Permettre au bibliothécaire de modifier les informations générales d’un membre ou d’activer son statut d’emprunteur.  
 La modification du statut est déclenchée par une commande explicite (lien d’activation), et non par saisie directe.
 
 ###### 🧩 Cas d’usage
 
-| ID (MEMBRE-*) | Description métier                                 | Action métier appliquée                     | Avancement     |
-|---------------|----------------------------------------------------|---------------------------------------------|----------------|
-| UC-UPDATE-01  | Modifier les informations générales du membre      | Mise à jour du champ `Utilisateur.name`     | ⚪ À développer |
-| UC-UPDATE-02  | Activer le statut emprunteur d’un membre standard  | `statut = StatutMembre.EMPRUNTEUR`          | ⚪ À développer |
-| UC-UPDATE-03  | Supprimer logiquement un membre                    | `statut = StatutMembre.ARCHIVE`             | ⚪ À développer |
+| ID (MEMBRE-*) | Description métier                                | Action métier appliquée                 | Avancement   |
+|---------------|---------------------------------------------------|-----------------------------------------|--------------|
+| UC-UPDATE-01  | Modifier les informations générales du membre     | Mise à jour du champ `Utilisateur.name` | ✅ Implémenté |
+| UC-UPDATE-02  | Activer le statut emprunteur d’un membre standard | `statut = StatutMembre.EMPRUNTEUR`      | ✅ Implémenté |
 
 ###### 🧠 Analyse technique associée
 
 - Chaque fonction est identifiée avec une route unique.
-- Le formulaire `MembreForm` expose uniquement les champs généraux (`name`, `email`, etc.).
+- Le formulaire `MembreForm` expose uniquement les champs généraux (`name`, etc.).
 - La commande d’activation du statut emprunteur est une vue dédiée (`MembreActivateEmprunteurView`) qui modifie le champ `statut`.
-- La suppression logique est une transition métier vers `ARCHIVE`, gérée par une vue `MembreSupprimeView`.
 
 ###### 🔧 Impacts techniques
 
-- Vue : `MembreUpdateView`, `MembreActivateEmprunteurView`, `MembreSupprimeView`  
-- Template : `membre_form.html`, `membre_detail.html` avec lien d’activation  
-- Tests : `T-FORM-15`, `T-VUE-15`, `T-FUN-15` à définir dans `test_uc_update_membre.py`
+- Vue : `MembreUpdateView`, `MembreActivateEmprunteurView`  
+- Template : `membre_form.html`, `membre_detail.html` et `membre_activation_emprunteur.html` avec lien d’activation  
+- Tests : `T-NAV-xx`, `T-ENT-xx`, `T-FORM-xx`, `T-VUE-xx`, `T-FUN-xx` à définir dans `test_uc_update_membre.py`
 
 ---
 
@@ -435,7 +432,7 @@ Cette opération est autorisée uniquement si le membre **a rendu tous ses empru
 |------------|----------------------------------------------------------------------------------------------------------------|
 | Modèle     | `Membre`                                                                                                       |
 | Vue        | `MembreListView`, `MembreDetailView`, `MembreCreateView`, `MembreUpdateView`, `MembreSupprimeView`             |
-| Template   | `membre_list.html`, `membre_detail.html`, `membre_form.html`                                                   |
+| Template   | `membre_list.html`, `membre_detail.html`, `membre_form.html`, `membre_activate_emprunteur.html`                |
 | Formulaire | `MembreForm`                                                                                                   |
 | Tests      | `test_uc_list_membre.py`, `test_uc_create_membre.py`, `test_uc_update_membre.py`, `test_uc_supprime_membre.py` |
 

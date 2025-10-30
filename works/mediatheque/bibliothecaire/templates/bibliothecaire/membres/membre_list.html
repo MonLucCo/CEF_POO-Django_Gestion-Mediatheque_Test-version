@@ -5,7 +5,15 @@
 
 {% block content %}
 
-<h2>Annuaire des membres</h2>
+{% if request.session.liste_origine == "membre_list_gestion" %}
+  <h2>Membres actifs en gestion</h2>
+{% elif request.session.liste_origine == "membre_list_emprunteurs" %}
+  <h2>Liste des emprunteurs</h2>
+{% elif request.session.liste_origine == "membre_list_archives" %}
+  <h2>Membres archivés ou supprimés</h2>
+{% else %}
+  <h2>Annuaire complet des membres</h2>
+{% endif %}
 
 {% if membres %}
 <table id="liste-annuaire">
@@ -21,7 +29,10 @@
   <tbody>
     {% for membre in membres %}
     <tr>
-      <td>{{ membre.name }}</td>
+      <td>
+          <a href="{% url 'bibliothecaire:membre_detail' membre.pk %}">
+          {{ membre.name }}
+      </td>
       <td>{{ membre.compte }}</td>
       <td>{{ membre.get_statut_display }}</td>
       <td>{{ membre.nb_emprunts_en_cours }}</td>
@@ -36,10 +47,6 @@
 
 
 <div style="margin-top: 20px;">
-{% comment %}
-    <a href="{% url membre.get_update_url_name membre.pk %}">Modifier</a> |
-    <a href="{% url 'bibliothecaire:membre_delete' media.pk %}">Supprimer</a> |
-{% endcomment %}
     <a href="{% url 'bibliothecaire:accueil' %}">Retour à l'accueil</a>
 </div>
 
