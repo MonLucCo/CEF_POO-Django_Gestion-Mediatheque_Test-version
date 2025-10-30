@@ -1,0 +1,20 @@
+{% extends 'bibliothecaire/_base.html' %}
+{% block title %}Confirmation de suppression{% endblock %}
+
+{% block content %}
+<h2>Supprimer ce Membre</h2>
+
+<p>Vous êtes sur le point de <strong>supprimer</strong> de la gestion ce membre :</p>
+<ul>
+  <li><strong>Nom :</strong> {{ membre.name }}</li>
+  <li><strong>Compte :</strong> {{ membre.compte }}</li>
+</ul>
+
+<p style="color: red;"><strong>Attention :</strong> cette opération est <u>irréversible</u>.</p>
+
+<form method="post">
+  {% csrf_token %}
+  <button type="submit">Confirmer la suppression</button>
+  <a href="{% url 'bibliothecaire:membre_detail' membre.pk %}">Annuler</a>
+</form>
+{% endblock %}

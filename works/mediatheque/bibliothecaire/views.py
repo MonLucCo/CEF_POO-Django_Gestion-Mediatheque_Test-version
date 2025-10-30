@@ -2,9 +2,9 @@ from django.shortcuts import redirect, get_object_or_404, render
 from django.contrib import messages
 from django.urls import reverse_lazy, reverse
 from django.views import View
-from django.views.generic import TemplateView, ListView, DetailView, CreateView, UpdateView, FormView
+from django.views.generic import TemplateView, ListView, DetailView, CreateView, UpdateView, FormView, DeleteView
 
-from bibliothecaire.mixins import OrigineSessionMixin
+from bibliothecaire.mixins import OrigineSessionMixin, MembreSuppressionContextMixin
 from bibliothecaire.models import Media, Livre, Dvd, Cd, Membre, StatutMembre
 from bibliothecaire.forms import MediaForm, LivreForm, DvdForm, CdForm, MembreForm
 from django.db import transaction
@@ -543,15 +543,16 @@ class MembreCreateEmprunteurView(CreateView):
         return reverse('bibliothecaire:membre_detail', kwargs={'pk': self.object.pk})
 
 
-class MembreDetailView(DetailView):
+class MembreDetailView(MembreSuppressionContextMixin, DetailView):
     model = Membre
     context_object_name = 'membre'
     template_name = 'bibliothecaire/membres/membre_detail.html'
 
     def get(self, request, pk):
-        membre = get_object_or_404(Membre, pk=pk)
-        liste_origine = request.session.get("liste_origine", "membre_list_gestion")
-        return render(request, self.template_name, {"membre": membre, "liste_origine": liste_origine})
+        self.object = self.get_object()
+        context = self.get_context_data(object=self.object)
+        context["liste_origine"] = request.session.get("liste_origine", "membre_list_gestion")
+        return self.render_to_response(context)
 
     def post(self, request, pk):
         # Nettoyage du contexte
@@ -591,4 +592,21 @@ class MembreActivateEmprunteurView(View):
             messages.success(request, f"Le statut du membre « {membre.name} » a été activé en emprunteur.")
         else:
             messages.warning(request, f"Aucune modification effectuée : le membre n'était pas éligible.")
+        return redirect("bibliothecaire:membre_detail", pk=pk)
+
+
+class MembreDeleteView(View):
+    model = Membre
+    template_name = 'bibliothecaire/membres/membre_supprime_confirm.html'
+
+    def get(self, request, pk):
+        membre = get_object_or_404(Membre, pk=pk)
+        return render(request, self.template_name, {"membre": membre})
+
+    def post(self, request, pk):
+        membre = get_object_or_404(Membre, pk=pk)
+        if membre.supprimer_membre_emprunteur():
+            messages.success(request, "Le membre a été supprimé de la gestion.")
+        else:
+            messages.error(request,"Ce membre ne peut pas être supprimé : emprunt(s) en cours")
         return redirect("bibliothecaire:membre_detail", pk=pk)

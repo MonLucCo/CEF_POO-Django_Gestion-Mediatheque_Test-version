@@ -2,7 +2,7 @@
 
 📁 `/docs/developpement/issue3/task5/tests-plan.md`  
 
-📌 Version : index H-7 (issue #3 – étape 6 - Bloc 3)
+📌 Version : index H-8 (issue #3 – étape 6 - Bloc 3)
 - Rapport de tests associé : [`test_report_indexH-7.txt`](test_report_indexH-7.txt)
 
 ___
@@ -30,11 +30,12 @@ Il est conçu pour :
     - index F-1, reprise du développement fonctionnel
     - index F-3, fonctions de liste et de création d'un média non typé
     - index F-4, fonctions de création des médias typés. Intégration du cycle de vie de `Media`.
-  - index H-7 (entités Membre) pour le **Bloc 3**, avec :
+  - index H-8 (entités Membre) pour le **Bloc 3**, avec :
     - index H-1 à H-4, restructuration documentaire pour organiser toutes les entités.
     - Index H-5, fonctions de liste des membres et organisation de la navigation.
     - Index H-6, fonction de création des membres et correction du menu de navigation des Membres.
     - Index H-7, fonction de mise à jour des membres et gestion du contexte de session pour l'UX.
+    - Index H-8, fonction de suppression (logique) des membres de la gestion du Bibliothécaire.
 - **Périmètre couvert** : site administration, entité `Media` – vues `liste` et `détail`  
 - **Niveau de couverture** : tests de niveau _minimum_ à _intermédiaire_  
 - **Évolutivité prévue** :
@@ -155,6 +156,7 @@ Chaque catégorie de tests est regroupée dans une sous-section spécifique avec
 | Bloc 3 | T-NAV-15 | Accès à la création d’un membre emprunteur | `/bibliothecaire/membres/ajouter/emprunteur`       | Code 200 + formulaire affiché     | ✅ Validé |
 | Bloc 3 | T-NAV-16 | Accès à la mise à jour d’un membre         | `/bibliothecaire/membres/<pk>/modifier/`           | Code 200 + formulaire affiché     | ✅ Validé |
 | Bloc 3 | T-NAV-17 | Accès à l’activation du statut emprunteur  | `/bibliothecaire/membres/<pk>/activer/emprunteur/` | Code 200 + page de confirmation   | ✅ Validé |
+| Bloc 3 | T-NAV-18 | Accès à la page de confirmation            | `/membres/<pk>/supprimer/`                         | Code 200 + template affiché       | ✅ Validé |
 
 > ❌ Le test T-NAV-03 a révélé une contrainte sur le champ `annee_edition` du modèle `Media`. ✅ Il a été repris 
 > après correction du modèle de données.  
@@ -183,6 +185,8 @@ Chaque catégorie de tests est regroupée dans une sous-section spécifique avec
 | Bloc 3 | T-ENT-14 | Création d’un membre emprunteur : statut et compte                       | `Membre`        | `statut == EMPRUNTEUR`, `compte` généré correctement                    | ✅ Validé |
 | Bloc 3 | T-ENT-15 | Mise à jour du nom (informations générales) d’un membre                  | `Membre`        | Le champ `name` est modifié et persisté                                 | ✅ Validé |
 | Bloc 3 | T-ENT-16 | Activation du statut emprunteur                                          | `Membre`        | `statut == EMPRUNTEUR` après appel à la vue dédiée                      | ✅ Validé |
+| Bloc 3 | T-ENT-17 | Suppression logique d’un membre sans emprunt                             | `Membre`        | `statut == ARCHIVE` après suppression                                   | ✅ Validé |
+| Bloc 3 | T-ENT-18 | Refus de suppression si emprunt en cours                                 | `Membre`        | `statut != ARCHIVE` + message d’erreur                                  | ✅ Validé |
 
 > ✅ Les tests T-ENT-xx sont validés.  
 > ✅ Les assertions couvrent la structure multi-table, les attributs hérités et typés, et la cohérence des enregistrements.  
@@ -213,6 +217,8 @@ Chaque catégorie de tests est regroupée dans une sous-section spécifique avec
 | Bloc 3 | T-VUE-16 | `MembreCreateView` / `MembreCreateEmprunteurView` | Affichage du titre `<h2>` selon le contexte `is_emprunteur`            | Texte dynamique : “Créer un Membre…”                                   | ✅ Validé |
 | Bloc 3 | T-VUE-17 | `MembreUpdateView`                                | Affichage du formulaire avec données préremplies                       | Formulaire affiché avec `name` initialisé                              | ✅ Validé |
 | Bloc 3 | T-VUE-18 | `MembreActivateEmprunteurView`                    | Affichage de la page de confirmation d’activation                      | Présence du nom du membre et bouton de validation                      | ✅ Validé |
+| Bloc 3 | T-VUE-19 | `MembreDetailView`                                | Affichage conditionnel du lien “Supprimer”                             | Présence si `peut_etre_supprime == True`                               | ✅ Validé |
+| Bloc 3 | T-VUE-20 | `membre_supprime_confirm.html`                    | Affichage des données du membre + mise en garde                        | Présence du nom, compte, message d’alerte                              | ✅ Validé |
 
 > ✅ La distinction entre typage réel et simple valeur `media_type` est désormais testée.  
 > ✅ La logique de typage dynamique est assurée par la surcharge de `get_object()` dans `MediaDetailView`.  
@@ -231,6 +237,7 @@ Chaque catégorie de tests est regroupée dans une sous-section spécifique avec
 | Bloc 3 | T-FORM-04 | `MembreForm`     | Vérifie que seul le champ `name` est exposé avec le bon label       | Champ `name` visible, label = “Nom du Membre”                                 | ✅ Validé |
 | Bloc 3 | T-FORM-05 | `MembreForm`     | Vérifie que le champ `name` est prérempli et modifiable             | Champ visible, valeur initiale correcte                                       | ✅ Validé |
 | Bloc 3 | T-FORM-06 | `MembreForm`     | Vérifie que le champ `statut` n’est pas exposé                      | Champ absent du formulaire HTML                                               | ✅ Validé |
+| Bloc 3 | T-FORM-07 | `MembreForm`     | Formulaire de confirmation de suppression                           | Bouton “Confirmer” + lien “Annuler” présents                                  | ✅ Validé |
 
 > 🔧 Ces tests permettent de valider la structure, la lisibilité et la robustesse du formulaire `MediaForm`, 
 > indépendamment de la logique métier.  
@@ -276,7 +283,8 @@ Chaque catégorie de tests est regroupée dans une sous-section spécifique avec
 | Bloc 3 | T-FUN-16 | Mise à jour réussie du nom d’un membre (MEMBRE-UC-UPDATE-01)                                 | Redirection vers `membre_detail` + nom modifié visible                                                                      | ✅ Validé |
 | Bloc 3 | T-FUN-17 | Activation du statut emprunteur (MEMBRE-UC-UPDATE-02)                                        | Redirection vers `membre_detail` + `statut == EMPRUNTEUR` + message de succès                                               | ✅ Validé |
 | Bloc 3 | T-FUN-18 | Enchaînement métier complet d’activation emprunteur (affichage + confirmation + redirection) | Page affichée, bouton cliqué, redirection vers `membre_detail`, `statut == EMPRUNTEUR`                                      | ✅ Validé |
-
+| Bloc 3 | T-FUN-19 | Suppression réussie d’un membre sans emprunt                                                 | Redirection vers `membre_detail` + `statut == ARCHIVE` + message de succès                                                  | ✅ Validé |
+| Bloc 3 | T-FUN-20 | Suppression refusée si emprunt en cours                                                      | Redirection vers `membre_detail` + `statut != ARCHIVE` + message d’erreur                                                   | ✅ Validé |
 
 > 🔧 Les tests unitaires _fonctionnels_ sont définis pour être autonome. Ils peuvent se rapprocher de tests unitaires
 > _techniques_ qui sont indiqués dans le _résultat attendu_. 
@@ -362,6 +370,7 @@ Chaque catégorie de tests est regroupée dans une sous-section spécifique avec
 | `test_uc_list_membre.py`    | Cas d'usage des listes des membres (membres, emprunteurs, supprimés, tous) | Technique et Fonctionnel |
 | `test_uc_create_membre.py`  | Cas d'usage de création des membres (membre, emprunteur)                   | Technique et Fonctionnel |
 | `test_uc_update_membre.py`  | Cas d'usage de modification des membres (membre, emprunteur)               | Technique et Fonctionnel |
+| `test_uc_delete_membre.py`  | Cas d'usage de suppression des membres (membre, emprunteur) de la gestion  | Technique et Fonctionnel |
 
 > Les fichiers de tests **technique et fonctionnel** correspondent au regroupement des catégories par classe de tests 
 > (cf. [Difficulté 15](_Frontend-main-courante.md#915-difficulté-15--regroupement-des-tests-techniques-et-fonctionnels-dans-un-même-groupe-de-tests)).

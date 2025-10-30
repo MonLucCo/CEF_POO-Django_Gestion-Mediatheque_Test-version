@@ -24,14 +24,15 @@
   <form method="post" action="{% url 'bibliothecaire:membre_detail' membre.pk %}">
     {% csrf_token %}
     <button type="submit">Fermer</button>
-    |
-  <a href="{% url 'bibliothecaire:membre_update' membre.pk %}">Modifier les informations</a>
-  {% if membre.is_membre %}
-    |
-   <a href="{% url 'bibliothecaire:membre_activate_emprunteur' membre.pk %}">
-    Activer le statut d'emprunteur
-   </a>
-  {% endif %}
+    {% if not membre.is_supprime %}
+      | <a href="{% url 'bibliothecaire:membre_update' membre.pk %}">Modifier les informations</a>
+    {% endif %}
+    {% if membre.is_membre %}
+      | <a href="{% url 'bibliothecaire:membre_activate_emprunteur' membre.pk %}">Activer le statut d'emprunteur</a>
+    {% endif %}
+    {% if peut_etre_supprime %}
+      | <a href="{% url 'bibliothecaire:membre_delete' membre.pk %}">Supprimer ce membre</a>
+    {% endif %}
   </form>
 </div>
 {% endblock %}

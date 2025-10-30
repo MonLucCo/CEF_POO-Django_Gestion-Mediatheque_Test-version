@@ -51,7 +51,7 @@ urlpatterns = [
     path('membres/<int:pk>/', views.MembreDetailView.as_view(), name='membre_detail'),
     path('membres/<int:pk>/modifier/', views.MembreUpdateView.as_view(), name='membre_update'),
     path('membres/<int:pk>/activer/emprunteur', views.MembreActivateEmprunteurView.as_view(), name='membre_activate_emprunteur'),
-    #   path('membres/<int:pk>/supprimer/', views.MembreDeleteView.as_view(), name='membre_delete'),
+    path('membres/<int:pk>/supprimer/', views.MembreDeleteView.as_view(), name='membre_delete'),
 
     # Fonctionnalités souhaitables (optionnelles)
  #   path('medias/type/<str:type>/', views.MediaFilteredListView.as_view(), name='media_filtered'),

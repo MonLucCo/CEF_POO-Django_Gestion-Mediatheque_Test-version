@@ -377,6 +377,9 @@ class Membre(Utilisateur):
                 and not ( self.is_max_emprunt or self.is_retard )
                 )
 
+    def peut_etre_supprime(self):
+        return self.is_min_emprunt and not self.is_supprime
+
     def __str__(self):
         statut_label = StatutMembre(self.statut).label
         retour = 'Retard' if self.is_retard else 'À jour'
@@ -392,6 +395,17 @@ class Membre(Utilisateur):
             self.statut = StatutMembre.EMPRUNTEUR
             self.save()
             return self.is_emprunteur
+        return False
+
+    def supprimer_membre_emprunteur(self):
+        """
+        Supprime (suppression logique) le membre (standard ou emprunteur) de la gestion.
+        Retourne True si la transition a été effectuée.
+        """
+        if self.peut_etre_supprime():
+            self.statut = StatutMembre.ARCHIVE
+            self.save()
+            return self.is_supprime
         return False
 
 
