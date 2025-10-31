@@ -3,6 +3,23 @@
 <head>
     <meta charset="UTF-8">
     <title>{% block title %}Espace Bibliothécaire{% endblock %}</title>
+    <style>
+      .messages {
+        list-style: none;
+        padding: 0;
+        margin: 10px 0;
+      }
+      .messages li {
+        padding: 6px 12px;
+        margin-bottom: 5px;
+        border-radius: 4px;
+        font-weight: bold;
+      }
+
+      .success { background-color: #e6ffe6; color: #2d662d; }
+      .error   { background-color: #ffe6e6; color: #992d2d; }
+      .warning { background-color: #fff8e6; color: #996600; }
+    </style>
 </head>
 <body>
     <header>
@@ -45,9 +62,9 @@
                     <li>
                       <strong>Lister :</strong>
                       <ul>
-                        <li><a href="{% url 'bibliothecaire:media_list' %}">Tous</a></li>
                         <li><a href="{% url 'bibliothecaire:media_list_consultables' %}">Consultables</a></li>
                         <li><a href="{% url 'bibliothecaire:media_list_disponibles' %}">Disponibles</a></li>
+                        <li><a href="{% url 'bibliothecaire:media_list' %}">Tous</a></li>
                       </ul>
                     </li>
                     <li>
@@ -64,12 +81,19 @@
                 <td style="vertical-align: top;">
                   <ul>
                     <li>
-                      <strong>Annuaires :</strong>
+                      <strong>Créer :</strong>
                       <ul>
-                        <li><a href="{% url 'bibliothecaire:membre_list' %}">Tous</a></li>
-                        <li><a href="{% url 'bibliothecaire:membre_list_gestion' %}">En gestion</a></li>
-                        <li><a href="{% url 'bibliothecaire:membre_list_emprunteurs' %}">Abonnés</a></li>
+                        <li><a href="{% url 'bibliothecaire:membre_create' %}">Membre</a></li>
+                        <li><a href="{% url 'bibliothecaire:membre_create_emprunteur' %}">Emprunteur</a></li>
+                      </ul>
+                    </li>
+                    <li>
+                      <strong>lister :</strong>
+                      <ul>
+                        <li><a href="{% url 'bibliothecaire:membre_list_gestion' %}">Membres</a></li>
+                        <li><a href="{% url 'bibliothecaire:membre_list_emprunteurs' %}">Emprunteurs</a></li>
                         <li><a href="{% url 'bibliothecaire:membre_list_archives' %}">Supprimés</a></li>
+                        <li><a href="{% url 'bibliothecaire:membre_list' %}">Tous</a></li>
                       </ul>
                     </li>
                   </ul>

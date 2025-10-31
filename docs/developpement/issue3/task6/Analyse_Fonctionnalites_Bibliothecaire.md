@@ -1,7 +1,7 @@
 # 📘 Analyse des fonctionnalités – Bibliothécaire
 
-📁 `/docs/developpement/issue3/task5/Analyse_Fonctionnalites_indexH-4.md`  
-📌 Version : index H-5 (issue #3 – Bloc 3 - étape 6)
+📁 `/docs/developpement/issue3/task6/Analyse_Fonctionnalites.md`  
+📌 Version : index H-8 (issue #3 – Bloc 3 - étape 6)
 
 ---
 
@@ -64,12 +64,11 @@ Il permet de :
 | Media   | MEDIA-UC-TYPAGE      | Transformation en sous-type          | 🔸 Souhaitable | 🟢 Implémenté        |
 | Media   | MEDIA-UC-ROLLBACK    | Rollback d'un typage en cours        | 🔸 Souhaitable | 🟢 Implémenté        |
 | Media   | MEDIA-UC-DELETE      | Suppression logique d'un média       | 🔸 Souhaitable | ⚪ À définir          |
-| Membre  | MEMBRE-UC-LIST       | Affichage de la liste des membres    | ✅ Demandée     | ⚪ À développer       |
-| Membre  | MEMBRE-UC-CREATE     | Création d’un membre                 | ✅ Demandée     | ⚪ À développer       |
-| Membre  | MEMBRE-UC-UPDATE     | Mise à jour d’un membre              | ✅ Demandée     | ⚪ À développer       |
-| Membre  | MEMBRE-UC-DELETE     | Suppression logique d’un membre      | ✅ Demandée     | ⚪ À développer       |
+| Membre  | MEMBRE-UC-LIST       | Affichage de la liste des membres    | ✅ Demandée     | 🟢 Implémenté        |
+| Membre  | MEMBRE-UC-CREATE     | Création d’un membre                 | ✅ Demandée     | 🟢 Implémenté        |
+| Membre  | MEMBRE-UC-UPDATE     | Mise à jour d’un membre              | ✅ Demandée     | 🟢 Implémenté        |
+| Membre  | MEMBRE-UC-DELETE     | Suppression logique d’un membre      | ✅ Demandée     | 🟢 Implémenté        |
 | Membre  | MEMBRE-UC-HISTORIQUE | Consultation des emprunts passés     | 🔸 Souhaitable | ⚪ À définir          |
-| Membre  | MEMBRE-UC-ARCHIVE    | Archivage d’un membre                | 🔸 Souhaitable | ⚪ À définir          |
 | Emprunt | EMPRUNT-UC-CREATE    | Création d’un emprunt                | ✅ Demandée     | ⚪ À développer       |
 | Emprunt | EMPRUNT-UC-RETOUR    | Enregistrement du retour             | ✅ Demandée     | ⚪ À développer       |
 | Emprunt | EMPRUNT-UC-RETARD    | Détection et marquage du retard      | ✅ Demandée     | ⚪ À développer       |
@@ -247,12 +246,12 @@ Cette UC sera intégrée dans une future étape, en cohérence avec les transiti
 
 #### 3.2.1 Fonctionnalités primordiales – Cas d’usage MEMBRE-UC-LIST, MEMBRE-UC-CREATE, MEMBRE-UC-UPDATE et MEMBRE-UC-DELETE
 
-- À rédiger dans la version H-5 à partir des vues `MembreListView`, `MembreCreateView`, etc.
-- Structure attendue :
+Ces fonctionnalités sont développées à partir des vues `MembreListView`, `MembreCreateView`, etc.
+La structure attendue :
   - MEMBRE-UC-LIST : affichage filtré par statut
-  - MEMBRE-UC-CREATE : initialisation du statut
-  - MEMBRE-UC-UPDATE : modification du nom, compte, statut
-  - MEMBRE-UC-DELETE : suppression logique (statut = ARCHIVE)
+  - MEMBRE-UC-CREATE : initialisation des données du membre 
+  - MEMBRE-UC-UPDATE : actualisation des données du membre
+  - MEMBRE-UC-DELETE : suppression logique du membre
 
 ##### 3.2.1.1 Cas d’usage MEMBRE-UC-LIST – Affichage de la liste des membres
 
@@ -276,7 +275,7 @@ des emprunts).
 
 ###### 🧠 Analyse technique associée
 
-- chaque fonction est identifiée avec une route unique
+- Chaque fonction est identifiée avec une route unique
 
 ###### 🔧 Impacts techniques
 
@@ -286,11 +285,114 @@ des emprunts).
 
 ---
 
+##### 3.2.1.2 Cas d’usage MEMBRE-UC-CREATE – Création d’un membre
+
+###### 🎯 Objectif métier  
+Permettre au bibliothécaire de créer un nouveau membre à partir des seules _informations générales_ de l’utilisateur.  
+Le champ `statut` n’est pas saisissable : il est défini par le contexte d’appel (via la navigation ou une commande métier).  
+La création d’un membre abonné (emprunteur) se fait via un lien spécifique dans la navigation ou une commande de mise à jour.
+
+La donnée du compte est générée automatiquement à la création, selon une logique métier non modifiable ensuite :
+- `compte = <année>_<nom_tronqué>_<compteur>`
+  - `année` : année courante (format AAAA)
+  - `nom_tronqué` : 30 premiers caractères du champ `Utilisateur.name`
+  - `compteur` : nombre d’occurrences existantes en base pour ce préfixe + 1
+
+> 🔹 Le champ `compte` est unique, non modifiable, et sert d’identifiant fonctionnel.  
+> 🔹 Le champ `statut` est initialisé à `MEMBRE` par défaut, sauf appel explicite à la commande de création d’un emprunteur.
+
+###### 🧩 Cas d’usage
+
+| ID (MEMBRE-*) | Description métier                               | Initialisation appliquée           | Avancement   |
+|---------------|--------------------------------------------------|------------------------------------|--------------|
+| UC-CREATE-01  | Créer un membre standard (non abonné)            | `statut = StatutMembre.MEMBRE`     | ✅ Implémenté |
+| UC-CREATE-02  | Créer un membre abonné (emprunteur) via commande | `statut = StatutMembre.EMPRUNTEUR` | ✅ Implémenté |
+
+###### 🧠 Analyse technique associée
+
+- Chaque fonction est identifiée avec une route unique.
+- Le champ `statut` est exclu du formulaire, mais initialisé dans la vue selon le contexte.
+- Le champ `compte` est généré dynamiquement à partir du nom et de l’année, avec recherche du compteur en base.
+- La vue `MembreCreateView` est déclinée en deux variantes :
+  - `MembreCreateView` → création standard
+  - `MembreCreateEmprunteurView` → création abonné
+
+###### 🔧 Impacts techniques
+
+- Vue : `MembreCreateView`, `MembreCreateEmprunteurView`  
+- Template : `membre_form.html` (sans champ `statut`)  
+- Tests : `T-NAV-xx`, `T-ENT-xx`, `T-FORM-xx`, `T-VUE-xx`, `T-FUN-xx` définis dans `test_uc_create_membre.py`
+
+---
+
+##### 3.2.1.3 Cas d’usage MEMBRE-UC-UPDATE – Mise à jour d’un membre
+
+###### 🎯 Objectif métier  
+Permettre au bibliothécaire de modifier les informations générales d’un membre ou d’activer son statut d’emprunteur.  
+La modification du statut est déclenchée par une commande explicite (lien d’activation), et non par saisie directe.
+
+###### 🧩 Cas d’usage
+
+| ID (MEMBRE-*) | Description métier                                | Action métier appliquée                 | Avancement   |
+|---------------|---------------------------------------------------|-----------------------------------------|--------------|
+| UC-UPDATE-01  | Modifier les informations générales du membre     | Mise à jour du champ `Utilisateur.name` | ✅ Implémenté |
+| UC-UPDATE-02  | Activer le statut emprunteur d’un membre standard | `statut = StatutMembre.EMPRUNTEUR`      | ✅ Implémenté |
+
+###### 🧠 Analyse technique associée
+
+- Chaque fonction est identifiée avec une route unique.
+- Le formulaire `MembreForm` expose uniquement les champs généraux (`name`, etc.).
+- La commande d’activation du statut emprunteur est une vue dédiée (`MembreActivateEmprunteurView`) qui modifie le champ `statut`.
+
+###### 🔧 Impacts techniques
+
+- Vue : `MembreUpdateView`, `MembreActivateEmprunteurView`  
+- Template : `membre_form.html`, `membre_detail.html` et `membre_activation_emprunteur.html` avec lien d’activation  
+- Tests : `T-NAV-xx`, `T-ENT-xx`, `T-FORM-xx`, `T-VUE-xx`, `T-FUN-xx` à définir dans `test_uc_update_membre.py`
+
+---
+
+##### 3.2.1.4 Cas d’usage MEMBRE-UC-DELETE – Suppression logique d’un membre
+
+###### 🎯 Objectif métier
+
+Permettre au bibliothécaire de retirer un membre de la gestion active, de manière irréversible, en cohérence avec les 
+exigences d’historisation des emprunts.  
+La suppression est réalisée par une transition métier : le champ `statut` est modifié en `ARCHIVE`.  
+Cette opération est autorisée uniquement si le membre **a rendu tous ses emprunts**.
+
+    > 🔹 La suppression physique est interdite pour garantir la traçabilité.  
+    > 🔹 Le membre supprimé est exclu des vues de gestion (`UC-LIST-02`) et des vues emprunteurs (`UC-LIST-03`).  
+    > 🔹 Il reste accessible via la vue `UC-LIST-04` (membres archivés).  
+    > 🔹 Une **validation explicite** est requise avant exécution, pour éviter toute suppression accidentelle.
+
+###### 🧩 Cas d’usage
+
+| ID (MEMBRE-*) | Description métier               | Condition métier               | Transition appliquée            | Avancement   |
+|---------------|----------------------------------|--------------------------------|---------------------------------|--------------|
+| UC-DELETE-01  | Supprimer un membre sans emprunt | `membre.emprunts.count() == 0` | `statut = StatutMembre.ARCHIVE` | ✅ Implémenté |
+
+###### 🧠 Analyse technique associée
+
+- La suppression est une transition métier, non une opération de base de données.
+- Le champ `statut` est modifié dans une vue dédiée (`MembreSupprimeView`), après validation.
+- La vérification des emprunts est effectuée via une méthode métier (`peut_etre_supprime()` ou équivalent).
+- Le membre reste en base, mais est exclu des vues actives.
+
+###### 🔧 Impacts techniques
+
+- Vue : `MembreDeleteView` avec validation et transition vers `ARCHIVE`  
+- Template : `membre_detail.html` avec lien de suppression et confirmation dans `membre_supprime_confirm.html` 
+- Tests : `T-NAV-xx`, `T-ENT-xx`, `T-FORM-xx`, `T-VUE-xx`, `T-FUN-xx` à définir dans `test_uc_delete_membre.py`
+
+---
+
 #### 3.2.2 Fonctionnalités souhaitables – Cas d’usage MEMBRE-UC-HISTORIQUE et MEMBRE-UC-ARCHIVE
 
 - À définir dans une version ultérieure
-- Historique = vue des emprunts passés
-- Archivage = transition métier complète (statut, désactivation)
+  - Historique d'un membre :
+    - vue des emprunts passés (rendus).
+    - vue des emprunts en cours (non rendus).
 
 ---
 
@@ -307,8 +409,6 @@ des emprunts).
 #### 3.3.2 Fonctionnalités souhaitables – Cas d’usage EMPRUNT-UC-ARCHIVE
 
 - Archivage métier : passage à `statut = RENDU`, désactivation du lien
-
----
 
 ---
 
@@ -329,14 +429,13 @@ des emprunts).
 
 #### 4.1.2 Membres
 
-| Élément            | Source technique                                                                                               |
-|--------------------|----------------------------------------------------------------------------------------------------------------|
-| Modèle             | `Membre`                                                                                                       |
-| Vue                | `MembreListView`, `MembreDetailView`, `MembreCreateView`, `MembreUpdateView`, `MembreSupprimeView`             |
-| Template           | `membre_list.html`, `membre_detail.html`, `membre_form.html`                                                   |
-| Formulaire         | `MembreForm`                                                                                                   |
-| Tests techniques   | `test_vues_membre_list.py`, `test_vues_membre_detail.py`, `test_entites_membre.py`                             |
-| Tests fonctionnels | `test_uc_list_membre.py`, `test_uc_create_membre.py`, `test_uc_update_membre.py`, `test_uc_supprime_membre.py` |
+| Élément    | Source technique                                                                                                                |
+|------------|---------------------------------------------------------------------------------------------------------------------------------|
+| Modèle     | `Membre`                                                                                                                        |
+| Vue        | `MembreListView`, `MembreDetailView`, `MembreCreateView`, `MembreUpdateView`, `MembreDeleteView`                                |
+| Template   | `membre_list.html`, `membre_detail.html`, `membre_form.html`, `membre_activate_emprunteur.html`, `membre_supprime_confirm.html` |
+| Formulaire | `MembreForm`                                                                                                                    |
+| Tests      | `test_uc_list_membre.py`, `test_uc_create_membre.py`, `test_uc_update_membre.py`, `test_uc_supprime_membre.py`                  |
 
 #### 4.1.3 Emprunts
 

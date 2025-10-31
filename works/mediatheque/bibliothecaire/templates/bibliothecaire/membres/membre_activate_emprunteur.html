@@ -1,0 +1,20 @@
+{% extends 'bibliothecaire/_base.html' %}
+{% block title %}Confirmation d'activation{% endblock %}
+
+{% block content %}
+<h2>Activer le statut emprunteur</h2>
+
+<p>Vous êtes sur le point d’activer le statut <strong>emprunteur</strong> pour le membre :</p>
+<ul>
+  <li><strong>Nom :</strong> {{ membre.name }}</li>
+  <li><strong>Compte :</strong> {{ membre.compte }}</li>
+</ul>
+
+<p style="color: red;"><strong>Attention :</strong> cette opération est <u>irréversible</u>.</p>
+
+<form method="post">
+  {% csrf_token %}
+  <button type="submit">Confirmer l’activation</button>
+  <a href="{% url 'bibliothecaire:membre_detail' membre.pk %}">Annuler</a>
+</form>
+{% endblock %}

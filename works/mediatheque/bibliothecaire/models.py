@@ -279,18 +279,37 @@ class Membre(Utilisateur):
 
     Attributs :
       - compte : string, identifiant unique, max_length=50
-      - bloque : booléen, True si compte temporairement suspendu
+      - statut : entier, défini par l'enum StatutMembre (MEMBRE, EMPRUNTEUR, ARCHIVE)
+      - bloque : booléen, True si le compte est temporairement suspendu
+
     Constantes :
-      - MAX_EMPRUNTS : nombre maximal d’emprunts simultanés
-      - MAX_RETARDS : nombre maximal de retards autorisés (0 = aucun)
+      - MAX_EMPRUNTS : nombre maximal d’emprunts simultanés autorisés
+      - MIN_EMPRUNTS : borne minimale (toujours 0)
+      - MAX_RETARDS  : nombre maximal de retards autorisés (0 = aucun)
+      - MIN_RETARDS  : borne minimale (toujours 0)
+
     Propriétés :
-      - nb_emprunts_en_cours
-      - nb_retards
+      - nb_emprunts_en_cours : entier ≥ 0, nombre d’emprunts actifs (EN_COURS ou RETARD)
+      - nb_retards            : entier ≥ 0, nombre d’emprunts en retard
+      - is_membre             : True si statut == MEMBRE
+      - is_emprunteur         : True si statut == EMPRUNTEUR
+      - is_supprime           : True si statut == ARCHIVE
+      - is_retard             : True si nb_retards > MAX_RETARDS
+      - is_max_emprunt        : True si nb_emprunts_en_cours == MAX_EMPRUNTS
+      - is_min_emprunt        : True si nb_emprunts_en_cours == MIN_EMPRUNTS
+
     Méthodes :
-      - peut_emprunter()
+      - generer_compte(nom_utilisateur) : génère un identifiant unique basé sur le nom et l’année
+      - peut_emprunter() : retourne True si le membre est autorisé à emprunter selon les règles métier
+
+    Remarques :
+      - Les propriétés d’état permettent une lecture métier directe dans les vues et les templates.
+      - Les compteurs sont toujours des entiers positifs ou nuls, calculés dynamiquement.
     """
     MAX_EMPRUNTS = 3
+    MIN_EMPRUNTS = 0
     MAX_RETARDS = 0
+    MIN_RETARDS = 0
 
     compte = models.CharField(max_length=50, unique=True)
     statut = models.IntegerField(
@@ -298,15 +317,48 @@ class Membre(Utilisateur):
         default=StatutMembre.MEMBRE
     )
 
+    @classmethod
+    def generer_compte(cls, nom_utilisateur: str) -> str:
+        from datetime import datetime
+        annee = datetime.now().year
+        nom_tronque = nom_utilisateur.strip().replace(" ", "_")[:30]
+        prefixe = f"{annee}_{nom_tronque}_"
+        compteur = cls.objects.filter(compte__startswith=prefixe).count() + 1
+        return f"{prefixe}{compteur}"
+
     @property
-    def nb_emprunts_en_cours(self):
+    def is_membre(self):
+        return self.statut == StatutMembre.MEMBRE
+
+    @property
+    def is_emprunteur(self):
+        return self.statut == StatutMembre.EMPRUNTEUR
+
+    @property
+    def is_supprime(self):
+        return self.statut == StatutMembre.ARCHIVE
+
+    @property
+    def is_retard(self):
+        return self.nb_retards > self.MAX_RETARDS
+
+    @property
+    def is_max_emprunt(self):
+        return self.nb_emprunts_en_cours == self.MAX_EMPRUNTS
+
+    @property
+    def is_min_emprunt(self):
+        return self.nb_emprunts_en_cours == self.MIN_EMPRUNTS
+
+    @property
+    def nb_emprunts_en_cours(self) -> int:
         """
         Nombre d’emprunts actuellement en cours (statut=EN_COURS).
         """
         return self.emprunts.filter(statut__in=[StatutEmprunt.EN_COURS, StatutEmprunt.RETARD]).count()
 
     @property
-    def nb_retards(self):
+    def nb_retards(self) -> int:
         """
         Nombre d’emprunts actuellement en retard (statut=RETARD).
         """
@@ -321,16 +373,40 @@ class Membre(Utilisateur):
           - le membre est abonné
         """
         return (
-                (self.nb_emprunts_en_cours < self.MAX_EMPRUNTS)
-                and (self.nb_retards == self.MAX_RETARDS)
-                and (self.statut==StatutMembre.EMPRUNTEUR)
+                self.is_emprunteur
+                and not ( self.is_max_emprunt or self.is_retard )
                 )
+
+    def peut_etre_supprime(self):
+        return self.is_min_emprunt and not self.is_supprime
 
     def __str__(self):
         statut_label = StatutMembre(self.statut).label
-        retour = 'Retard' if self.nb_retards > self.MAX_RETARDS else 'À jour'
+        retour = 'Retard' if self.is_retard else 'À jour'
         quota = f"{self.nb_emprunts_en_cours}/{self.MAX_EMPRUNTS}"
         return f"{self.name} ({self.compte}) [{statut_label}] – Emprunts : {quota} – {retour}"
+
+    def activer_emprunteur(self):
+        """
+        Active le statut emprunteur si le membre est standard.
+        Retourne True si la transition a été effectuée.
+        """
+        if self.is_membre:
+            self.statut = StatutMembre.EMPRUNTEUR
+            self.save()
+            return self.is_emprunteur
+        return False
+
+    def supprimer_membre_emprunteur(self):
+        """
+        Supprime (suppression logique) le membre (standard ou emprunteur) de la gestion.
+        Retourne True si la transition a été effectuée.
+        """
+        if self.peut_etre_supprime():
+            self.statut = StatutMembre.ARCHIVE
+            self.save()
+            return self.is_supprime
+        return False
 
 
 class Bibliothecaire(Utilisateur):

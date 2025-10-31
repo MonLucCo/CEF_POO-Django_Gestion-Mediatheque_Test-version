@@ -1,0 +1,38 @@
+{% extends 'bibliothecaire/_base.html' %}
+{% block title %}Fiche du membre{% endblock %}
+
+{% block content %}
+<h2>Fiche du membre</h2>
+
+{% if messages %}
+<ul class="messages">
+  {% for message in messages %}
+    <li class="{{ message.tags }}">{{ message }}</li>
+  {% endfor %}
+</ul>
+{% endif %}
+
+<ul>
+  <li><strong>Nom :</strong> {{ membre.name }}</li>
+  <li><strong>Compte :</strong> {{ membre.compte }}</li>
+  <li><strong>Statut :</strong> {{ membre.get_statut_display }}</li>
+  <li><strong>Emprunts en cours :</strong> {{ membre.nb_emprunts_en_cours }}</li>
+  <li><strong>Retards :</strong> {{ membre.nb_retards }}</li>
+</ul>
+
+<div style="margin-top: 20px;">
+  <form method="post" action="{% url 'bibliothecaire:membre_detail' membre.pk %}">
+    {% csrf_token %}
+    <button type="submit">Fermer</button>
+    {% if not membre.is_supprime %}
+      | <a href="{% url 'bibliothecaire:membre_update' membre.pk %}">Modifier les informations</a>
+    {% endif %}
+    {% if membre.is_membre %}
+      | <a href="{% url 'bibliothecaire:membre_activate_emprunteur' membre.pk %}">Activer le statut d'emprunteur</a>
+    {% endif %}
+    {% if peut_etre_supprime %}
+      | <a href="{% url 'bibliothecaire:membre_delete' membre.pk %}">Supprimer ce membre</a>
+    {% endif %}
+  </form>
+</div>
+{% endblock %}

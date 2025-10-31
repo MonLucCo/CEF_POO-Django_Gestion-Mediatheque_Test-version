@@ -1,7 +1,7 @@
 from django import forms
 from django.http.request import MediaType
 
-from bibliothecaire.models import Media, Livre, Dvd, Cd
+from bibliothecaire.models import Media, Livre, Dvd, Cd, Membre
 
 
 class MediaForm(forms.ModelForm):
@@ -75,3 +75,10 @@ class CdForm(forms.ModelForm):
             # disponible est fixé dans la vue
             # media_type est fixé dans la vue
         ]
+
+
+class MembreForm(forms.ModelForm):
+    class Meta:
+        model = Membre
+        fields = ["name"]  # uniquement les champs saisissables
+        labels = {'name':'Nom du Membre'}

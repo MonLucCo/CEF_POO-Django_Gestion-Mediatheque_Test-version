@@ -1,0 +1,10 @@
+{% extends "bibliothecaire/_base.html" %}
+{% block content %}
+  <h2>{% if is_create %}Créer un {% else %}Modifier les informations d'un {% endif %}Membre{% if is_emprunteur %}-Emprunteur{% else %} (sans droit d'emprunt){% endif %}</h2>
+  <form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">{% if is_create %}Créer{% else %}Modifier{% endif %}</button>
+    <a href="{{ url_retour }}">Annuler</a>
+  </form>
+{% endblock %}

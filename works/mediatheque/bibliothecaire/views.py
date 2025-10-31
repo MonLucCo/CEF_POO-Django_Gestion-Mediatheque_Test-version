@@ -1,18 +1,22 @@
-from django.shortcuts import redirect, get_object_or_404
+from django.shortcuts import redirect, get_object_or_404, render
+from django.contrib import messages
 from django.urls import reverse_lazy, reverse
 from django.views import View
-from django.views.generic import TemplateView, ListView, DetailView, CreateView, UpdateView, FormView
+from django.views.generic import TemplateView, ListView, DetailView, CreateView, UpdateView, FormView, DeleteView
 
+from bibliothecaire.mixins import OrigineSessionMixin, MembreSuppressionContextMixin
 from bibliothecaire.models import Media, Livre, Dvd, Cd, Membre, StatutMembre
-from bibliothecaire.forms import MediaForm, LivreForm, DvdForm, CdForm
+from bibliothecaire.forms import MediaForm, LivreForm, DvdForm, CdForm, MembreForm
 from django.db import transaction
 
 
 # Create your views here.
 
 # accueil
-class AccueilBibliothecaireView(TemplateView):
+class AccueilBibliothecaireView(OrigineSessionMixin, TemplateView):
     template_name = 'bibliothecaire/accueil.html'
+
+    origine_key = 'accueil'
 
 
 # Media
@@ -460,22 +464,149 @@ class MediaTypageCdView(FormView):
         return reverse('bibliothecaire:media_list')
 
 
-class MembreListView(ListView):
+class MembreListView(OrigineSessionMixin, ListView):
     model = Membre
     context_object_name = 'membres'
     template_name = 'bibliothecaire/membres/membre_list.html'
 
+    origine_key = "membre_list"
+
 
 class MembreEnGestionView(MembreListView):
+    origine_key =  "membre_list_gestion"
+
     def get_queryset(self):
         return Membre.objects.exclude(statut=StatutMembre.ARCHIVE).order_by("name")
 
 
 class MembreEmprunteursView(MembreListView):
+    origine_key = "membre_list_emprunteurs"
+
     def get_queryset(self):
         return Membre.objects.filter(statut=StatutMembre.EMPRUNTEUR).order_by("name")
 
 
 class MembreArchivesView(MembreListView):
+    origine_key = "membre_list_archives"
+
     def get_queryset(self):
         return Membre.objects.filter(statut=StatutMembre.ARCHIVE).order_by("name")
+
+
+class MembreCreateView(CreateView):
+    model = Membre
+    form_class = MembreForm
+    template_name = 'bibliothecaire/membres/membre_form.html'
+
+    def get_context_data(self, **kwargs):
+        context = super(MembreCreateView, self).get_context_data(**kwargs)
+        context['is_create'] = True
+        origine = self.request.session.get("liste_origine")
+        if origine:
+            context['url_retour'] = reverse(f"bibliothecaire:{origine}")
+        else:
+            context['url_retour'] = reverse("bibliothecaire:accueil")
+        return context
+
+    def form_valid(self, form):
+        form.instance.statut = StatutMembre.MEMBRE
+        form.instance.compte = Membre.generer_compte(form.cleaned_data['name'])
+        return super(MembreCreateView, self).form_valid(form)
+
+    def get_success_url(self):
+        return reverse('bibliothecaire:membre_detail', kwargs={'pk': self.object.pk})
+
+
+class MembreCreateEmprunteurView(CreateView):
+    model = Membre
+    form_class = MembreForm
+    template_name = 'bibliothecaire/membres/membre_form.html'
+    success_url = reverse_lazy('bibliothecaire:membre_list_gestion')
+
+    def get_context_data(self, **kwargs):
+        context = super(MembreCreateEmprunteurView, self).get_context_data(**kwargs)
+        context['is_create'] = True
+        context['is_emprunteur'] = True
+        origine = self.request.session.get("liste_origine")
+        if origine:
+            context['url_retour'] = reverse(f"bibliothecaire:{origine}")
+        else:
+            context['url_retour'] = reverse("bibliothecaire:accueil")
+        return context
+
+    def form_valid(self, form):
+        form.instance.statut = StatutMembre.EMPRUNTEUR
+        form.instance.compte = Membre.generer_compte(form.cleaned_data['name'])
+        return super(MembreCreateEmprunteurView, self).form_valid(form)
+
+    def get_success_url(self):
+        return reverse('bibliothecaire:membre_detail', kwargs={'pk': self.object.pk})
+
+
+class MembreDetailView(MembreSuppressionContextMixin, DetailView):
+    model = Membre
+    context_object_name = 'membre'
+    template_name = 'bibliothecaire/membres/membre_detail.html'
+
+    def get(self, request, pk):
+        self.object = self.get_object()
+        context = self.get_context_data(object=self.object)
+        context["liste_origine"] = request.session.get("liste_origine", "membre_list_gestion")
+        return self.render_to_response(context)
+
+    def post(self, request, pk):
+        # Nettoyage du contexte
+        if "liste_origine" in request.session:
+            origine = request.session.pop("liste_origine")
+        else:
+            origine = "membre_list_gestion"
+        return redirect(f"bibliothecaire:{origine}")
+
+
+class MembreUpdateView(UpdateView):
+    model = Membre
+    form_class = MembreForm
+    template_name = 'bibliothecaire/membres/membre_form.html'
+    context_object_name = 'membre'
+
+    def get_success_url(self):
+        return reverse('bibliothecaire:membre_detail', kwargs={'pk': self.object.pk})
+
+    def get_context_data(self, **kwargs):
+        context = super(MembreUpdateView, self).get_context_data(**kwargs)
+        context['is_emprunteur'] = self.object.is_emprunteur
+        context['url_retour'] = reverse('bibliothecaire:membre_detail', kwargs={'pk': self.object.pk})
+        return context
+
+
+class MembreActivateEmprunteurView(View):
+    template_name = 'bibliothecaire/membres/membre_activate_emprunteur.html'
+
+    def get(self, request, pk):
+        membre = get_object_or_404(Membre, pk=pk)
+        return render(request, self.template_name, {"membre": membre})
+
+    def post(self, request, pk):
+        membre = get_object_or_404(Membre, pk=pk)
+        if membre.activer_emprunteur():
+            messages.success(request, f"Le statut du membre « {membre.name} » a été activé en emprunteur.")
+        else:
+            messages.warning(request, f"Aucune modification effectuée : le membre n'était pas éligible.")
+        return redirect("bibliothecaire:membre_detail", pk=pk)
+
+
+class MembreDeleteView(View):
+    model = Membre
+    template_name = 'bibliothecaire/membres/membre_supprime_confirm.html'
+
+    def get(self, request, pk):
+        membre = get_object_or_404(Membre, pk=pk)
+        return render(request, self.template_name, {"membre": membre})
+
+    def post(self, request, pk):
+        membre = get_object_or_404(Membre, pk=pk)
+        if membre.supprimer_membre_emprunteur():
+            messages.success(request, "Le membre a été supprimé de la gestion.")
+        else:
+            messages.error(request,"Ce membre ne peut pas être supprimé : emprunt(s) en cours")
+        return redirect("bibliothecaire:membre_detail", pk=pk)
