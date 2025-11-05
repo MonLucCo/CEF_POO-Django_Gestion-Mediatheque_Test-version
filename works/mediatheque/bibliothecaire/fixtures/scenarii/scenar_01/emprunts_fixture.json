@@ -1,0 +1,101 @@
+[
+  {
+    "model": "bibliothecaire.emprunt",
+    "pk": 1,
+    "fields": {
+      "media": 1,
+      "emprunteur": 1,
+      "date_emprunt": "2025-09-01",
+      "date_retour": "2025-09-10",
+      "statut": 2
+    }
+  },
+  {
+    "model": "bibliothecaire.emprunt",
+    "pk": 2,
+    "fields": {
+      "media": 2,
+      "emprunteur": 2,
+      "date_emprunt": "2025-10-05",
+      "date_retour": null,
+      "statut": 1
+    }
+  },
+  {
+    "model": "bibliothecaire.emprunt",
+    "pk": 3,
+    "fields": {
+      "media": 3,
+      "emprunteur": 3,
+      "date_emprunt": "2025-08-20",
+      "date_retour": null,
+      "statut": 0
+    }
+  },
+  {
+    "model": "bibliothecaire.emprunt",
+    "pk": 4,
+    "fields": {
+      "media": 7,
+      "emprunteur": 4,
+      "date_emprunt": "2025-10-20",
+      "date_retour": null,
+      "statut": 1
+    }
+  },
+  {
+    "model": "bibliothecaire.emprunt",
+    "pk": 5,
+    "fields": {
+      "media": 12,
+      "emprunteur": 5,
+      "date_emprunt": "2025-07-01",
+      "date_retour": "2025-07-15",
+      "statut": 2
+    }
+  },
+  {
+    "model": "bibliothecaire.emprunt",
+    "pk": 6,
+    "fields": {
+      "media": 6,
+      "emprunteur": 5,
+      "date_emprunt": "2025-10-26",
+      "date_retour": null,
+      "statut": 1
+    }
+  },
+  {
+    "model": "bibliothecaire.emprunt",
+    "pk": 7,
+    "fields": {
+      "media": 8,
+      "emprunteur": 2,
+      "date_emprunt": "2025-10-27",
+      "date_retour": null,
+      "statut": 1
+    }
+  },
+  {
+    "model": "bibliothecaire.emprunt",
+    "pk": 8,
+    "fields": {
+      "media": 4,
+      "emprunteur": 1,
+      "date_emprunt": "2025-10-28",
+      "date_retour": null,
+      "statut": 1
+    }
+  },
+  {
+    "model": "bibliothecaire.emprunt",
+    "pk": 9,
+    "fields": {
+      "media": 1,
+      "emprunteur": 1,
+      "date_emprunt": "2025-11-03",
+      "date_retour": null,
+      "statut": 1
+    }
+  }
+]

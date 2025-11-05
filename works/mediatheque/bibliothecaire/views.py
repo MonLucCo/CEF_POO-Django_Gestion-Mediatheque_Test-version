@@ -1,3 +1,5 @@
+from datetime import date
+
 from django.shortcuts import redirect, get_object_or_404, render
 from django.contrib import messages
 from django.urls import reverse_lazy, reverse
@@ -5,7 +7,7 @@ from django.views import View
 from django.views.generic import TemplateView, ListView, DetailView, CreateView, UpdateView, FormView, DeleteView
 
 from bibliothecaire.mixins import OrigineSessionMixin, MembreSuppressionContextMixin
-from bibliothecaire.models import Media, Livre, Dvd, Cd, Membre, StatutMembre
+from bibliothecaire.models import Media, Livre, Dvd, Cd, Membre, StatutMembre, Emprunt, StatutEmprunt
 from bibliothecaire.forms import MediaForm, LivreForm, DvdForm, CdForm, MembreForm
 from django.db import transaction
 
@@ -17,6 +19,52 @@ class AccueilBibliothecaireView(OrigineSessionMixin, TemplateView):
     template_name = 'bibliothecaire/accueil.html'
 
     origine_key = 'accueil'
+
+    def post(self, request, *args, **kwargs):
+        # Traitement du bouton d'affichage
+        toggle = request.POST.get("toggle_table")
+        if toggle in ["true", "false"]:
+            request.session["affiche_table"] = toggle == "true"
+        return redirect("bibliothecaire:accueil")
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        # Déclenchement automatique du marquage des retards
+        today = date.today()
+        last_check = self.request.session.get("retard_last_check_date")
+        if last_check != str(today):
+            # Actualisation du contexte de session (action quotidienne unique)
+            self.request.session.pop("retard_message", None)
+            self.request.session.pop("emprunts_marques_ids", None)
+            resultat = Emprunt.marquer_retard()
+            self.request.session["retard_last_check_date"] = str(today)
+            self.request.session["retard_message"] = resultat["message"]["text"]
+            self.request.session["emprunts_marques_ids"] = [e.id for e in resultat["emprunts_marques"]]
+
+        # Actualisation du contexte de la vue à partir du contexte de session
+        context["retard_message"] = self.request.session.get("retard_message")
+        ids = self.request.session.get("emprunts_marques_ids", [])
+        context["emprunts_marques"] = Emprunt.objects.filter(id__in=ids) if ids else []
+
+        # Affichage conditionnel
+        context["affiche_table"] = self.request.session.get("affiche_table", False)
+
+        # Indicateurs de gestion
+        context["nb_medias_total"] = Media.count_total()
+        context["nb_medias_empruntes"] = Media.count_empruntes()
+        context["nb_medias_retards"] = Media.count_retards()
+        context["nb_medias_livre"] = Livre.count_total()
+        context["nb_medias_livre_emprunte"] = Livre.count_empruntes()
+        context["nb_medias_dvd"] = Dvd.count_total()
+        context["nb_medias_dvd_emprunte"] = Dvd.count_empruntes()
+        context["nb_medias_cd"] = Cd.count_total()
+        context["nb_medias_cd_emprunte"] = Cd.count_empruntes()
+        context["nb_membres_total"] = Membre.count_total()
+        context["nb_membres_emprunteurs"] = Membre.count_emprunteurs()
+        context["nb_membres_supprimes"] = Membre.count_supprimes()
+
+        return context
 
 
 # Media
@@ -610,3 +658,38 @@ class MembreDeleteView(View):
         else:
             messages.error(request,"Ce membre ne peut pas être supprimé : emprunt(s) en cours")
         return redirect("bibliothecaire:membre_detail", pk=pk)
+
+
+class EmpruntRetardView(TemplateView):
+    """
+    Vue métier pour déclencher manuellement le marquage des emprunts en retard.
+    Affiche un message UX avec le nombre d’emprunts marqués.
+    """
+    template_name = 'bibliothecaire/emprunts/emprunt_retard_result.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        resultat = Emprunt.marquer_retard()
+
+        context.update(resultat)  # injecte toutes les clés du dictionnaire dans le contexte
+        tag = resultat["message"]["tag"]
+        text = resultat["message"]["text"]
+
+        if tag == "success":
+            messages.success(self.request, text)
+        elif tag == "warning":
+            messages.warning(self.request, text)
+        else:
+            messages.info(self.request, text)  # fallback
+        return context
+
+class EmpruntListView(ListView):
+    """
+    Vue pour afficher la liste des emprunts.
+    """
+    model = Emprunt
+    template_name = 'bibliothecaire/emprunts/emprunt_list.html'
+    context_object_name = 'emprunts'
+
+    def get_queryset(self):
+        return Emprunt.objects.all().order_by('-date_emprunt')

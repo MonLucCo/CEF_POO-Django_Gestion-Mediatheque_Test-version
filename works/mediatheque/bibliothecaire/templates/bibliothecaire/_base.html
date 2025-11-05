@@ -46,6 +46,18 @@
                         <li><a href="#">Consultation</a></li>
                       </ul>
                     </li>
+                    <li>
+                      <strong>Fonctions techniques :</strong>
+                      <ul>
+                        <li><a href="{% url 'bibliothecaire:emprunt_retard' %}">Marquage des retards</a></li>
+                      </ul>
+                    </li>
+                    <li>
+                      <strong>Fonctions de rejeu :</strong>
+                      <ul>
+                        <li><a href="{% url 'bibliothecaire:rejeu_reset_retard_session' %}">Changer date de marquage</a></li>
+                      </ul>
+                    </li>
                   </ul>
                 </td>
                 <td style="vertical-align: top;">
@@ -100,10 +112,9 @@
                 </td>
                 <td style="vertical-align: top;">
                   <ul>
-                    <li><a href="#">Liste des emprunts</a></li>
-                    <li><a href="#">Créer un emprunt</a></li>
-                    <li><a href="#">Retours</a></li>
-                    <li><a href="#">Retards</a></li>
+                    <li><a href="{% url 'bibliothecaire:emprunt_list' %}">Lister</a></li>
+                    <li><a href="#">Créer</a></li>
+                    <li><a href="#">Rendre</a></li>
                   </ul>
                 </td>
               </tr>

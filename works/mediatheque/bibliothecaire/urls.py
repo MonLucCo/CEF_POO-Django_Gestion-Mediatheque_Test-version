@@ -1,5 +1,6 @@
 from django.urls import path
 from . import views
+from .views_debug import ResetRetardSessionView
 
 app_name = 'bibliothecaire'
 
@@ -37,7 +38,8 @@ urlpatterns = [
     #    path('medias/<int:pk>/supprimer/', views.MediaDeleteView.as_view(), name='media_delete'),
 
     # Emprunts
- #   path('emprunts/', views.EmpruntListView.as_view(), name='emprunt_list'),
+     path('emprunts/', views.EmpruntListView.as_view(), name='emprunt_list'),
+     path('emprunts/retards/', views.EmpruntRetardView.as_view(), name='emprunt_retard'),
  #   path('emprunts/ajouter/', views.EmpruntCreateView.as_view(), name='emprunt_create'),
  #   path('emprunts/<int:pk>/retour/', views.RetourUpdateView.as_view(), name='emprunt_retour'),
 
@@ -61,4 +63,8 @@ urlpatterns = [
  #   path('jeux/ajouter/', views.JeuCreateView.as_view(), name='jeu_create'),
  #   path('jeux/<int:pk>/', views.JeuDetailView.as_view(), name='jeu_detail'),
  #   path('jeux/<int:pk>/modifier/', views.JeuUpdateView.as_view(), name='jeu_update'),
+
+    # Fonctionnalités de DEBUG pour rejeu UX
+    path("rejeu-ux/retard/reset-session/", ResetRetardSessionView.as_view(), name="rejeu_reset_retard_session"),
+
 ]

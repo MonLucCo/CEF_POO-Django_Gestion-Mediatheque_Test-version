@@ -1,0 +1,383 @@
+[
+  {
+    "model": "bibliothecaire.media",
+    "pk": 1,
+    "fields": {
+      "name": "Le Petit Prince",
+      "annee_edition": 1943,
+      "consultable": true,
+      "disponible": false,
+      "theme": "Roman",
+      "media_type": "LIVRE"
+    }
+  },
+  {
+    "model": "bibliothecaire.media",
+    "pk": 2,
+    "fields": {
+      "name": "1984",
+      "annee_edition": 1949,
+      "consultable": true,
+      "disponible": false,
+      "theme": "Science-fiction",
+      "media_type": "LIVRE"
+    }
+  },
+  {
+    "model": "bibliothecaire.media",
+    "pk": 3,
+    "fields": {
+      "name": "Django Unleashed",
+      "annee_edition": 2021,
+      "consultable": true,
+      "disponible": false,
+      "theme": "Informatique",
+      "media_type": "LIVRE"
+    }
+  },
+  {
+    "model": "bibliothecaire.media",
+    "pk": 4,
+    "fields": {
+      "name": "Python Cookbook",
+      "annee_edition": 2019,
+      "consultable": true,
+      "disponible": false,
+      "theme": "Informatique",
+      "media_type": "LIVRE"
+    }
+  },
+  {
+    "model": "bibliothecaire.media",
+    "pk": 5,
+    "fields": {
+      "name": "Les Misérables",
+      "annee_edition": 1862,
+      "consultable": false,
+      "disponible": true,
+      "theme": "Roman",
+      "media_type": "LIVRE"
+    }
+  },
+  {
+    "model": "bibliothecaire.media",
+    "pk": 6,
+    "fields": {
+      "name": "Inception",
+      "annee_edition": 2010,
+      "consultable": true,
+      "disponible": false,
+      "theme": "Thriller",
+      "media_type": "DVD"
+    }
+  },
+  {
+    "model": "bibliothecaire.media",
+    "pk": 7,
+    "fields": {
+      "name": "Matrix",
+      "annee_edition": 1999,
+      "consultable": true,
+      "disponible": false,
+      "theme": "Action",
+      "media_type": "DVD"
+    }
+  },
+  {
+    "model": "bibliothecaire.media",
+    "pk": 8,
+    "fields": {
+      "name": "Le Fabuleux Destin d'Amélie Poulain",
+      "annee_edition": 2001,
+      "consultable": true,
+      "disponible": false,
+      "theme": "ComÚdie",
+      "media_type": "DVD"
+    }
+  },
+  {
+    "model": "bibliothecaire.media",
+    "pk": 9,
+    "fields": {
+      "name": "Interstellar",
+      "annee_edition": 2014,
+      "consultable": true,
+      "disponible": true,
+      "theme": "Science-fiction",
+      "media_type": "DVD"
+    }
+  },
+  {
+    "model": "bibliothecaire.media",
+    "pk": 10,
+    "fields": {
+      "name": "Le Seigneur des Anneaux",
+      "annee_edition": 2001,
+      "consultable": false,
+      "disponible": false,
+      "theme": "Fantasy",
+      "media_type": "DVD"
+    }
+  },
+  {
+    "model": "bibliothecaire.media",
+    "pk": 11,
+    "fields": {
+      "name": "Thriller",
+      "annee_edition": 1982,
+      "consultable": true,
+      "disponible": true,
+      "theme": "Pop",
+      "media_type": "CD"
+    }
+  },
+  {
+    "model": "bibliothecaire.media",
+    "pk": 12,
+    "fields": {
+      "name": "Back in Black",
+      "annee_edition": 1980,
+      "consultable": false,
+      "disponible": false,
+      "theme": "Rock",
+      "media_type": "CD"
+    }
+  },
+  {
+    "model": "bibliothecaire.media",
+    "pk": 13,
+    "fields": {
+      "name": "The Dark Side of the Moon",
+      "annee_edition": 1973,
+      "consultable": true,
+      "disponible": true,
+      "theme": "Progressive",
+      "media_type": "CD"
+    }
+  },
+  {
+    "model": "bibliothecaire.media",
+    "pk": 14,
+    "fields": {
+      "name": "Abbey Road",
+      "annee_edition": 1969,
+      "consultable": true,
+      "disponible": true,
+      "theme": "Rock",
+      "media_type": "CD"
+    }
+  },
+  {
+    "model": "bibliothecaire.media",
+    "pk": 15,
+    "fields": {
+      "name": "Kind of Blue",
+      "annee_edition": 1959,
+      "consultable": false,
+      "disponible": false,
+      "theme": "Jazz",
+      "media_type": "CD"
+    }
+  },
+  {
+    "model": "bibliothecaire.media",
+    "pk": 901,
+    "fields": {
+      "name": "Média minimal -sans type-disponible-sans date",
+      "annee_edition": null,
+      "consultable": false,
+      "disponible": false,
+      "theme": "",
+      "media_type": "NON_DEFINI"
+    }
+  },
+  {
+    "model": "bibliothecaire.media",
+    "pk": 902,
+    "fields": {
+      "name": "Média minimal -sans type-indisponible-sans date",
+      "annee_edition": null,
+      "consultable": false,
+      "disponible": false,
+      "theme": "",
+      "media_type": "NON_DEFINI"
+    }
+  },
+  {
+    "model": "bibliothecaire.media",
+    "pk": 903,
+    "fields": {
+      "name": "Média minimal -sans type-indisponible-date",
+      "annee_edition": 1980,
+      "consultable": false,
+      "disponible": false,
+      "theme": "",
+      "media_type": "NON_DEFINI"
+    }
+  },
+  {
+    "model": "bibliothecaire.media",
+    "pk": 904,
+    "fields": {
+      "name": "Média minimal & insertion automatique",
+      "annee_edition": null,
+      "consultable": false,
+      "disponible": false,
+      "theme": "",
+      "media_type": "NON_DEFINI"
+    }
+  },
+  {
+    "model": "bibliothecaire.membre",
+    "pk": 1,
+    "fields": {
+      "name": "Dupont",
+      "compte": "membre1",
+      "statut": 1
+    }
+  },
+  {
+    "model": "bibliothecaire.membre",
+    "pk": 2,
+    "fields": {
+      "name": "Martin",
+      "compte": "membre2",
+      "statut": 1
+    }
+  },
+  {
+    "model": "bibliothecaire.membre",
+    "pk": 3,
+    "fields": {
+      "name": "Bernard",
+      "compte": "membre3",
+      "statut": 1
+    }
+  },
+  {
+    "model": "bibliothecaire.membre",
+    "pk": 4,
+    "fields": {
+      "name": "Thomas",
+      "compte": "membre4",
+      "statut": 1
+    }
+  },
+  {
+    "model": "bibliothecaire.membre",
+    "pk": 5,
+    "fields": {
+      "name": "Petit",
+      "compte": "membre5",
+      "statut": 1
+    }
+  },
+  {
+    "model": "bibliothecaire.membre",
+    "pk": 7,
+    "fields": {
+      "name": "premier membre",
+      "compte": "2025_premier_membre_1",
+      "statut": 1
+    }
+  },
+  {
+    "model": "bibliothecaire.membre",
+    "pk": 8,
+    "fields": {
+      "name": "second membre *222",
+      "compte": "2025_second_membre_!_1",
+      "statut": 1
+    }
+  },
+  {
+    "model": "bibliothecaire.membre",
+    "pk": 9,
+    "fields": {
+      "name": "troisième membre",
+      "compte": "2025_troisième_membre_1",
+      "statut": 1
+    }
+  },
+  {
+    "model": "bibliothecaire.membre",
+    "pk": 10,
+    "fields": {
+      "name": "second membre",
+      "compte": "2025_second_membre_!_2",
+      "statut": 1
+    }
+  },
+  {
+    "model": "bibliothecaire.membre",
+    "pk": 11,
+    "fields": {
+      "name": "second membre**",
+      "compte": "2025_second_membre_1",
+      "statut": 1
+    }
+  },
+  {
+    "model": "bibliothecaire.membre",
+    "pk": 12,
+    "fields": {
+      "name": "test membre",
+      "compte": "2025_test_membre_1",
+      "statut": 1
+    }
+  },
+  {
+    "model": "bibliothecaire.membre",
+    "pk": 13,
+    "fields": {
+      "name": "test membre 2",
+      "compte": "2025_test_membre_2_1",
+      "statut": 1
+    }
+  },
+  {
+    "model": "bibliothecaire.membre",
+    "pk": 14,
+    "fields": {
+      "name": "test membre rigolo",
+      "compte": "2025_test_membre_rigolo_1",
+      "statut": 1
+    }
+  },
+  {
+    "model": "bibliothecaire.membre",
+    "pk": 15,
+    "fields": {
+      "name": "petit test final",
+      "compte": "2025_petit_test_final_1",
+      "statut": 0
+    }
+  },
+  {
+    "model": "bibliothecaire.membre",
+    "pk": 16,
+    "fields": {
+      "name": "membre seul",
+      "compte": "2025_membre_seul_1",
+      "statut": 2
+    }
+  },
+  {
+    "model": "bibliothecaire.membre",
+    "pk": 17,
+    "fields": {
+      "name": "membre de test**",
+      "compte": "2025_membre_de_test_1",
+      "statut": 2
+    }
+  },
+  {
+    "model": "bibliothecaire.membre",
+    "pk": 18,
+    "fields": {
+      "name": "test membre avec historique",
+      "compte": "2025_test_membre_avec_historique_1",
+      "statut": 0
+    }
+  }
+]

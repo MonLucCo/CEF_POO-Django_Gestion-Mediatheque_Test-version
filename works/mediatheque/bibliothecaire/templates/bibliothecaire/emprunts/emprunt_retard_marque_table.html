@@ -1,0 +1,22 @@
+{% block emprunts_marques_table %}
+  <table id="retards_marques">
+    <thead>
+      <tr>
+        <th>Membre</th>
+        <th>Média</th>
+        <th>Date emprunt</th>
+        <th>Date retour prévu</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for emprunt in emprunts_marques %}
+      <tr>
+        <td>{{ emprunt.emprunteur.name }}</td>
+        <td>{{ emprunt.media.name }}</td>
+        <td>{{ emprunt.date_emprunt }}</td>
+        <td>{{ emprunt.date_retour_prevu }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+{% endblock %}

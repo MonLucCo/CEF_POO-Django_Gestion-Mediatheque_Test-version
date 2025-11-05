@@ -1,0 +1,28 @@
+{% extends "bibliothecaire/_base.html" %}
+{% block content %}
+  <h2>Marquage des emprunts en retard</h2>
+
+  <p><strong>Date du jour :</strong> {{ date_du_jour }}</p>
+  <p><strong>Date seuil de retard :</strong> {{ date_seuil_retard }}</p>
+  <p><strong>Nombre d’analyse (emprunts en cours) :</strong> {{ emprunts_en_cours|length }} </p>
+
+  {% if messages %}
+  <ul class="messages">
+    {% for message in messages %}
+      <li class="{{ message.tags }}">{{ message }}</li>
+    {% endfor %}
+  </ul>
+  {% endif %}
+
+  {% if emprunts_marques %}
+    {% include "bibliothecaire/emprunts/emprunt_retard_marque_table.html" %}
+
+    {% if date_premier_retard == date_dernier_retard %}
+        <p>Le retard est marqué pour le {{ date_premier_retard }}.</p>
+    {% else %}
+        <p>Les retards sont marqués entre le {{ date_premier_retard }} et le {{ date_dernier_retard }}.</p>
+    {% endif %}
+  {% endif %}
+
+  <p><a href="{% url 'bibliothecaire:emprunt_list' %}">Retour à la liste des emprunts</a></p>
+{% endblock %}
