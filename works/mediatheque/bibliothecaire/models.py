@@ -90,8 +90,12 @@ class Media(Support):
       - media_type   : string, choix parmi ['NON_DEFINI', 'LIVRE', 'DVD', 'CD']
 
     Propriétés
-      - `is_disponible`     : Retourne True si le média est disponible
-      - `is_consultable`    : Retourne True si le média est visible en catalogue
+      - is_disponible   : Retourne True si le média est disponible.
+      - is_consultable  : Retourne True si le média est visible en catalogue.
+      - est_empruntable : Retourne True si le média est empruntable.
+      - est_archivable  : Retourne True si le média est archivable.
+      - est_emprunte    : Retourne True si le média est emprunté.
+      - est_archive     : Retourne True si le média est archivé.
 
     Méthodes :
       - __str__()                       : Affiche le nom et le type déclaré du média.
@@ -150,6 +154,22 @@ class Media(Support):
 
     def is_typage_incomplete(self):
         return self.media_type != 'NON_DEFINI' and not self.is_typed()
+
+    @property
+    def est_empruntable(self):
+        return self.is_typed() and self.is_consultable and self.is_disponible
+
+    @property
+    def est_archivable(self):
+        return self.is_typed() and not self.is_consultable and self.is_disponible
+
+    @property
+    def est_emprunte(self):
+        return self.is_typed() and self.is_consultable and not self.is_disponible
+
+    @property
+    def est_archive(self):
+        return self.is_typed() and not self.is_consultable and not self.is_disponible
 
     def get_real_instance(self):
         if hasattr(self, 'livre'):

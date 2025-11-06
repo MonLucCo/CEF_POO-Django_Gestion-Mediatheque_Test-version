@@ -1,7 +1,8 @@
 from django import forms
+from django.db.models import Case, When, IntegerField
 from django.http.request import MediaType
 
-from bibliothecaire.models import Media, Livre, Dvd, Cd, Membre
+from bibliothecaire.models import Media, Livre, Dvd, Cd, Membre, Emprunt
 
 
 class MediaForm(forms.ModelForm):
@@ -82,3 +83,33 @@ class MembreForm(forms.ModelForm):
         model = Membre
         fields = ["name"]  # uniquement les champs saisissables
         labels = {'name':'Nom du Membre'}
+
+
+class EmpruntForm(forms.ModelForm):
+    class Meta:
+        model = Emprunt
+        fields = ["emprunteur", "media"]
+        labels = {
+            "emprunteur": "Membre emprunteur",
+            "media": "Média à emprunter",
+        }
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        # Tri des membres : nom puis compte
+        self.fields["emprunteur"].queryset = Membre.objects.order_by("name", "compte")
+
+        # Tri métier des médias : nom puis type (CD > DVD > LIVRE > NON_DEFINI)
+        media_queryset = Media.objects.annotate(
+            type_priority=Case(
+                When(media_type='CD', then=4),
+                When(media_type='DVD', then=3),
+                When(media_type='LIVRE', then=2),
+                When(media_type='NON_DEFINI', then=1),
+                default=0,
+                output_field=IntegerField()
+            )
+        ).order_by("name", "-type_priority")
+
+        self.fields["media"].queryset = media_queryset

@@ -1,7 +1,7 @@
 # 📘 Analyse des fonctionnalités – Bibliothécaire
 
 📁 `/docs/developpement/issue3/task6/Analyse_Fonctionnalites.md`  
-📌 Version : index H-9 (issue #3 – Bloc 3 - étape 6)
+📌 Version : index H-10 (issue #3 – Bloc 3 - étape 6)
 
 ---
 
@@ -15,7 +15,7 @@
       - [3.1.1.1 Cas d’usage MEDIA-UC-LIST – Affichage de la liste des médias](#3111-cas-dusage-media-uc-list--affichage-de-la-liste-des-médias)
       - [3.1.1.2 Cas d’usage MEDIA-UC-CREATE – Création d’un média](#3112-cas-dusage-uc-create--création-dun-média)
     - [3.1.2 Fonctionnalités souhaitables – Cas d’usage MEDIA-UC-UPDATE et MEDIA-UC-TYPAGE](#312-fonctionnalités-souhaitables--cas-dusage-media-uc-update-et-media-uc-typage)
-      - [3.1.2.1 Cas d’usage MEDIA-UC-UPDATE et MEDIA-UC-TYPAGE – Mise à jour et transformation](#3121-cas-dusage-media-uc-update-et-media-uc-typage--mise-à-jour-et-transformation)
+      - [3.1.2.1 Cas d’usage MEDIA-UC-UPDATE et MEDIA-UC-TYPAGE – Mise à jour et transformation](#3121-cas-dusage-uc-update-et-uc-typage--mise-à-jour-et-transformation-dun-média)
       - [3.1.2.2 Cas d’usage MEDIA-UC-DELETE – Masquer un média](#3122-cas-dusage-uc-delete--masquer-un-média-sans-suppression-physique)
   - [3.2 Membres – Fonctionnalités associées directement](#32-membres--fonctionnalités-associées-directement)
     - [3.2.1 Fonctionnalités primordiales – Cas d’usage MEMBRE-UC-LIST, MEMBRE-UC-CREATE, MEMBRE-UC-UPDATE et MEMBRE-UC-DELETE](#321-fonctionnalités-primordiales--cas-dusage-membre-uc-list-membre-uc-create-membre-uc-update-et-membre-uc-delete)
@@ -26,7 +26,7 @@
     - [3.2.2 Fonctionnalités souhaitables – Cas d’usage MEMBRE-UC-HISTORIQUE et MEMBRE-UC-ARCHIVE](#322-fonctionnalités-souhaitables--cas-dusage-membre-uc-historique-et-membre-uc-archive)
   - [3.3 Emprunts – Fonctionnalités associées directement](#33-emprunts--fonctionnalités-associées-directement)
     - [3.3.1 Fonctionnalités primordiales – Cas d’usage EMPRUNT-UC-CREATE, EMPRUNT-UC-RETOUR et EMPRUNT-UC-RETARD](#331-fonctionnalités-primordiales--cas-dusage-emprunt-uc-create-emprunt-uc-retour-et-emprunt-uc-retard)
-      - [3.3.1.1 Cas d’usage MEMBRE-UC-RETARD – Marquage automatique des emprunts en retard](#3311-cas-dusage-membre-uc-retard--marquage-automatique-des-emprunts-en-retard)
+      - [3.3.1.1 Cas d’usage EMPRUNT-UC-RETARD – Marquage automatique des emprunts en retard](#3311-cas-dusage-emprunt-uc-retard--marquage-des-emprunts-en-retard)
       - [3.3.1.2 Cas d’usage EMPRUNT-UC-CREATE – Création d’un emprunt](#3312-cas-dusage-emprunt-uc-create--création-dun-emprunt)
       - [3.3.1.3 Cas d’usage EMPRUNT-UC-RETOUR – Retour d’un média emprunté](#3313-cas-dusage-emprunt-uc-retour--retour-dun-média-emprunté)
     - [3.3.2 Fonctionnalités souhaitables – Cas d’usage EMPRUNT-UC-ARCHIVE](#332-fonctionnalités-souhaitables--cas-dusage-emprunt-uc-archive)
@@ -442,7 +442,7 @@ La structure attendue :
 - EMPRUNT-UC-CREATE : création avec vérification `peut_emprunter()`
 - EMPRUNT-UC-RETOUR : mise à jour du statut et du média
 
-##### 3.3.1.1 Cas d’usage MEMBRE-UC-RETARD – Marquage des emprunts en retard
+##### 3.3.1.1 Cas d’usage EMPRUNT-UC-RETARD – Marquage des emprunts en retard
 
 ###### 🎯 Objectif métier  
 Permettre au système de détecter les emprunts dont la date de retour est dépassée, et de les marquer comme `RETARD`.  
@@ -547,7 +547,7 @@ La méthode `Emprunt.marquer_retard()` retourne un dictionnaire structuré, dire
 
 ---
 
-##### 🔧 Impacts techniques
+###### 🔧 Impacts techniques
 
 - Méthode : `Emprunt.marquer_retard()`  
 - Vue automatique : `AccueilBibliothecaireView`  
@@ -578,63 +578,153 @@ Permettre au bibliothécaire de créer un emprunt pour un membre emprunteur, en 
 La création est déclenchée à partir d’un membre, ce qui permet de vérifier immédiatement sa capacité à emprunter 
 (`peut_emprunter()`), avant toute sélection technique du média.
 
+Permettre au bibliothécaire d’enregistrer un emprunt entre un membre et un média typé, en respectant les règles métier 
+suivantes :
+- Le membre doit être abonné (`statut = EMPRUNTEUR`)
+- Le membre ne doit pas avoir atteint le quota d’emprunts (`MAX_EMPRUNTS = 3`)
+- Le membre ne doit pas avoir de retard (`nb_retards = 0`)
+- Le média doit être typé et disponible (`is_typed() and is_disponible`)
+
+Trois parcours UX sont proposés pour couvrir les usages métier :
+- Créer un emprunt avec un membre éligible et un média disponible.
+- Avec un média disponible, créer un emprunt pour un membre éligible.
+- Avec un membre éligible, créer un emprunt pour un média disponible.
+
 ###### 🧩 Cas d’usage
 
-| ID (EMPRUNT-*) | Description métier                       | Condition métier          | Transition appliquée          | Déclenchement                    | Avancement   |
-|----------------|------------------------------------------|---------------------------|-------------------------------|----------------------------------|--------------|
-| UC-CREATE-01   | Créer un emprunt pour un membre éligible | `Membre.peut_emprunter()` | Création d’un objet `Emprunt` | À partir du membre (`Membre.pk`) | ✅ Implémenté |
-| UC-CREATE-02   | Sélectionner un média disponible         | `Media.is_empruntable`    | Création d’un objet `Emprunt` | Interface filtrée (`Media.pk`)   | ✅ Implémenté |
+| ID (EMPRUNT-*) | Description métier                                                      | Déclenchement UX                  | Validation métier appliquée              | Avancement     |
+|----------------|-------------------------------------------------------------------------|-----------------------------------|------------------------------------------|----------------|
+| UC-CREATE-01   | Créer un emprunt via formulaire global                                  | Vue `EmpruntCreateView`           | Validation complète dans la vue          | ✅ Implémenté   |
+| UC-CREATE-02   | Créer un emprunt depuis la fiche membre (sélection du média disponible) | Vue `EmpruntCreateFromMembreView` | Validation implicite via choix du média  | ⚪ À développer |
+| UC-CREATE-03   | Créer un emprunt depuis la fiche média (sélection du membre emprunteur) | Vue `EmpruntCreateFromMediaView`  | Validation implicite via choix du membre | ⚪ À développer |
+
+> 🔹 Ces trois UC partagent la même logique métier (`peut_emprunter()` + `is_disponible`) mais diffèrent par leur 
+> parcours UX.  
+> 🔹 Chaque UC doit être testée indépendamment pour garantir la robustesse des transitions et des validations.
 
 ###### 🧠 Analyse technique associée
 
-- La vue `EmpruntCreateView` est déclenchée depuis la fiche d’un membre.
-- La méthode `Membre.peut_emprunter()` vérifie :
-  - le statut du membre
-  - le nombre d’emprunts en cours
-  - l’absence de retard
-- Une liste filtrée de médias disponibles est proposée à l’utilisateur.
+- Le modèle `Emprunt` encapsule les règles métier via :
+  - `Emprunt.DELAI_EMPRUNT = 7` jours.
+  - `Emprunt.date_retour_prevu` calculée dynamiquement.
+  - `Membre.peut_emprunter()` : validation croisée du statut, quota et retard.
+  - `Media.peut_etre_emprunte()` : validation du typage et de la disponibilité.
+
+- Les vues `EmpruntCreateView`, `EmpruntCreateFromMembreView` et `EmpruntCreateFromMediaView` doivent :
+  - préremplir les champs selon le contexte.
+  - afficher les listes filtrées (`membres_emprunteurs`, `medias_disponibles`).
+  - gérer les erreurs métier via `messages.error`, et les confirmations via `messages.success`.
+
+- Le formulaire `EmpruntForm` est partagé entre les trois vues, avec des champs conditionnels selon le contexte.
+  - liste de choix des membres triée par `name` puis `compte`
+  - les médias par `name` puis priorité métier (`CD > DVD > LIVRE > NON_DEFINI`).
+
+- La validation métier est effectuée dans `EmpruntCreateView`, avec :
+  - accumulation des messages d’erreur via `messages.error`.
+  - un message de validation via `messages.success`.
+
+- Les messages sont affichées dans le template :
+  - `emprunt_form.html`, avec les erreurs métier et la persistance des sélections en cas d’échec.
+  - `emprunt_list.html`, avec l'information de succès en cas de validation.
+
+- La logique métier repose sur :
+  - `Membre.peut_emprunter()` pour valider le membre.
+  - `Media.est_empruntable` pour valider le média.
+
 - À la validation de la création de l'emprunt :
-  - un objet `Emprunt` est créé
-  - le média est marqué `Media.disponible = False`
+  - un objet `Emprunt` est créé.
+  - le média est marqué `Media.disponible = False`.
+  - un message de succès est créé vis `messages`.
+
+> 🔹 L’état du membre (`peut_emprunter`, `is_retard`, etc.) est calculé dynamiquement via des propriétés métier. 
+> Aucune actualisation explicite n’est requise.
 
 ###### 🔧 Impacts techniques
 
-- Vue : `EmpruntCreateView`  
-- Template : `emprunt_form.html` avec sélection dynamique du média  
-- Formulaire : `EmpruntForm` avec validation métier  
-- Méthodes : `Membre.peut_emprunter()`, `Media.est_empruntable()`  
-- Tests : `T-FORM-xx`, `T-VUE-xx`, `T-FUN-xx` dans `test_uc_create_emprunt.py`
+- Vues (selon le parcourt UX) :
+  - `EmpruntCreateView` (formulaire global).
+  - `EmpruntCreateFromMembreView` (membre prérempli).
+  - `EmpruntCreateFromMediaView` (média prérempli).
+
+- Formulaire :
+  - `EmpruntForm` avec champs `emprunteur`, `media`
+  - validation métier.
+
+- Templates :
+  - `emprunt_form.html` (formulaire principal de création).
+  - `emprunt_list.html` (formulaire de visualisation du résultat)
+  - `media_detail.html` et `membre_detail.html` : ajout du lien “Créer emprunt”.
+
+- Méthodes métier :
+  - `Membre.peut_emprunter()`.
+  - `Media.est_empruntable`.
+  - `Emprunt.__str__()` pour affichage clair.
+
+- Tests : `T-NAV-xx`, `T-ENT-xx`, `T-VUE-xx`, `T-FORM-xx`, `T-FUN-xx` dans `test_uc_create_emprunt.py`.
 
 ---
 
 ##### 3.3.1.3 Cas d’usage EMPRUNT-UC-RETOUR – Retour d’un média emprunté
 
 ###### 🎯 Objectif métier  
-Permettre au bibliothécaire d’enregistrer le retour d’un média emprunté.  
-L’UC est déclenchée à partir du média, ce qui permet de retrouver l’emprunt actif et le membre associé.  
-Le retour déclenche une double mise à jour : l’emprunt (date de retour et statut) et le média (disponibilité).
+Permettre au bibliothécaire d’enregistrer le retour d’un média emprunté, en mettant à jour :
+- la date de retour (`date_retour = date.today()`)
+- le statut de l’emprunt (`statut = RENDU`)
+- la disponibilité du média (`media.disponible = True`)
+
+Trois parcours UX sont proposés pour couvrir les usages métier :
+- enregistrer la rentrée d'un emprunt.
+- enregistrer le rendu d'un membre emprunteur.
+- enregistrer le retour d'un média.
 
 ###### 🧩 Cas d’usage
 
-| ID (EMPRUNT-*) | Description métier               | Condition métier                                           | Transition appliquée  | Déclenchement                  | Avancement   |
-|----------------|----------------------------------|------------------------------------------------------------|-----------------------|--------------------------------|--------------|
-| UC-RETOUR-01   | Enregistrer le retour d’un média | `Media.disponible = False` AND `Emprunt.statut = EN_COURS` | `Emprunt.est_rendu()` | À partir du média (`Media.pk`) | ✅ Implémenté |
+| ID (EMPRUNT-*) | Description métier                                       | Déclenchement UX                  | Validation métier appliquée           | Avancement     |
+|----------------|----------------------------------------------------------|-----------------------------------|---------------------------------------|----------------|
+| UC-RETOUR-01   | Enregistrer le retour via la liste des emprunts en cours | Vue `EmpruntRetourView`           | Validation complète dans la vue       | ⚪ À développer |
+| UC-RETOUR-02   | Enregistrer le retour depuis la fiche membre emprunteur  | Vue `EmpruntRetourFromMembreView` | Validation implicite via choix média  | ⚪ À développer |
+| UC-RETOUR-03   | Enregistrer le retour depuis la fiche média emprunté     | Vue `EmpruntRetourFromMediaView`  | Validation implicite via choix membre | ⚪ À développer |
+
+> 🔹 Ces trois UC partagent la même logique métier (`enregistrer_retour()`), mais diffèrent par leur parcours UX.  
+> 🔹 Chaque UC doit être testée indépendamment pour garantir la robustesse des transitions et des validations.
 
 ###### 🧠 Analyse technique associée
 
-- La vue `EmpruntRetourView` est déclenchée depuis la fiche d’un média.
-- Le système retrouve l’emprunt actif lié à ce média.
-- À la validation :
-  - le statut de l’emprunt passe à `RENDU`
-  - le média est libéré (`disponible = True`)
-- Un message de confirmation est affiché.
+- Le modèle `Emprunt` encapsule la logique métier via :
+  - `Emprunt.enregistrer_retour()` : méthode centrale pour le retour.
+  - Mise à jour du statut, de la date, et de la disponibilité du média.
+  - Vérification de la cohérence logique entre l’état du média et celui de l’emprunt avant enregistrement du retour.
+  
+- Les vues `EmpruntRetourView`, `EmpruntRetourFromMembreView`, `EmpruntRetourFromMediaView` doivent :
+  - préremplir les champs selon le contexte.
+  - afficher les listes filtrées (`emprunts_en_cours`, `membre.emprunts`, `media.emprunts`).
+  - gérer les erreurs métier via `messages.error`, et les confirmations via `messages.success`.
+
+- Le formulaire est minimal : confirmation du retour, sans saisie libre.
+  - À la validation :
+    - le statut de l’emprunt passe à `RENDU`.
+    - le média est libéré (`disponible = True`).
+  - Un message de confirmation est affiché.
+
+> 🔹 L’état du membre (`nb_emprunts_en_cours`, `nb_retards`, etc.) est calculé dynamiquement via des propriétés métier. 
+> Aucune actualisation explicite n’est requise.
 
 ###### 🔧 Impacts techniques
 
-- Vue : `EmpruntRetourView`  
-- Template : `emprunt_retour_form.html` avec confirmation  
-- Méthodes : `Emprunt.marquer_rendu()`, `Media.libérer()`, `Membre.décharger_emprunt()`  
-- Tests : `T-FORM-xx`, `T-VUE-xx`, `T-FUN-xx` dans `test_uc_retour_emprunt.py`
+- Vues :
+  - `EmpruntRetourView` (formulaire global).
+  - `EmpruntRetourFromMembreView` (membre prérempli).
+  - `EmpruntRetourFromMediaView` (média prérempli).
+
+- Templates :
+  - `emprunt_retour_form.html` (formulaire principal).
+  - `media_detail.html` et `membre_detail.html` : ajout du lien “Enregistrer retour”.
+
+- Méthodes métier :
+  - `Emprunt.enregistrer_retour()`, `Media.rendre_disponible()`.
+  - `Emprunt.__str__()` pour affichage clair.
+
+- Tests : `T-NAV-xx`, `T-ENT-xx`, `T-VUE-xx`, `T-FORM-xx`, `T-FUN-xx` dans `test_uc_retour_emprunt.py`.
 
 ---
 
@@ -675,8 +765,12 @@ métier.
 - Hérite de `Support(models.Model)`.
 
 **Propriétés**
-- `is_disponible` → True si le média est disponible à l’emprunt.
-- `is_consultable` → True si le média est visible en catalogue.
+- `is_disponible` → True si le média est disponible.
+- `is_consultable` → True si le média est consultable.
+- `est_empruntable` → True si le média est empruntable (éligible à un emprunt).
+- `est_archivable` → True si le média est archivable (peut être supprimé de la gestion).
+- `est_emprunte` → True si le média est emprunté.
+- `est_archive` → True si le média est retiré de la gestion (archive).
 
 **Méthodes**
 - `count_total()` → **Méthode de classe**, Retourne le nombre total d'enregistrements.
@@ -697,6 +791,14 @@ métier.
 
 **Entité**
 - Hérite de `Media`.
+
+**Propriétés**
+- `is_disponible` → True si le média est disponible.
+- `is_consultable` → True si le média est consultable.
+- `is_empruntable` → True si le média est empruntable (éligible à un emprunt).
+- `is_archivable` → True si le média est archivable (peut être supprimé de la gestion).
+- `is_emprunte` → True si le média est emprunté.
+- `is_archive` → True si le média est retiré de la gestion (archive).
 
 **Méthodes**
 - `count_total()` → **Méthode de classe**, Retourne le nombre total d'enregistrements.

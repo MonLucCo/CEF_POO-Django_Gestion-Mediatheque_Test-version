@@ -2,8 +2,8 @@
 
 📁 `/docs/developpement/issue3/task5/tests-plan.md`  
 
-📌 Version : index H-9 (issue #3 – étape 6 - Bloc 3)
-- Rapport de tests associé : [`test_report_indexH-9.txt`](test_report_indexH-9.txt)
+📌 Version : index H-10 (issue #3 – étape 6 - Bloc 3)
+- Rapport de tests associé : [`test_report_indexH-10.txt`](test_report_indexH-10.txt)
 
 ___
 
@@ -30,13 +30,14 @@ Il est conçu pour :
     - index F-1, reprise du développement fonctionnel
     - index F-3, fonctions de liste et de création d'un média non typé
     - index F-4, fonctions de création des médias typés. Intégration du cycle de vie de `Media`.
-  - index H-9 (entités Emprunt) pour le **Bloc 3**, avec :
+  - index H-10 (entités Emprunt) pour le **Bloc 3**, avec :
     - index H-1 à H-4, restructuration documentaire pour organiser toutes les entités.
     - Index H-5, fonctions de liste des membres et organisation de la navigation.
     - Index H-6, fonction de création des membres et correction du menu de navigation des Membres.
     - Index H-7, fonction de mise à jour des membres et gestion du contexte de session pour l'UX.
     - Index H-8, fonction de suppression (logique) des membres de la gestion du Bibliothécaire.
     - Index H-9, fonction de marquage du retard des emprunts avec une logique combinée `actions techniques` vs `UX`.
+    - index H10, fonction de création d'un emprunt.
 - **Périmètre couvert** : site administration, entité `Media` – vues `liste` et `détail`  
 - **Niveau de couverture** : tests de niveau _minimum_ à _intermédiaire_  
 - **Évolutivité prévue** :
@@ -161,7 +162,7 @@ Chaque catégorie de tests est regroupée dans une sous-section spécifique avec
 | Bloc 3 | T-NAV-18 | Accès à la page de confirmation               | `/membres/<pk>/supprimer/`                         | Code 200 + template affiché                      | ✅ Validé |
 | Bloc 3 | T-NAV-19 | Accès à la vue de marquage manuel des retards | `/bibliothecaire/emprunts/retard/`                 | Code 200 + template `emprunt_retard_result.html` | ✅ Validé |
 | Bloc 3 | T-NAV-20 | Accès à la liste des emprunts                 | `/bibliothecaire/emprunts/`                        | Code 200 + template `emprunt_list.html`          | ✅ Validé |
-
+| Bloc 3 | T-NAV-21 | Accès à la création d’un emprunt              | `/bibliothecaire/emprunts/ajouter/`                | Code 200 + formulaire affiché                    | ✅ Validé |
 
 > ❌ Le test T-NAV-03 a révélé une contrainte sur le champ `annee_edition` du modèle `Media`. ✅ Il a été repris 
 > après correction du modèle de données.  
@@ -172,27 +173,28 @@ Chaque catégorie de tests est regroupée dans une sous-section spécifique avec
 
 ### 🧪 Entités (`T-ENT-xxx`)
 
-| Série  | ID Test  | Description                                                              | Modèle testé    | Résultat attendu                                                        | Statut   |
-|--------|----------|--------------------------------------------------------------------------|-----------------|-------------------------------------------------------------------------|----------|
-| Bloc 1 | T-ENT-01 | Création d’un `Media` non typé (création minimaliste)                    | `Media`         | Attributs cohérents (`name`, `media_type`, `theme`, etc.)               | ✅ Validé |
-| Bloc 1 | T-ENT-02 | Vérification des attributs par défaut                                    | `Media`         | `consultable=True`, `disponible=True`                                   | ✅ Validé |
-| Bloc 1 | T-ENT-03 | Vérification des attributs accessibles selon le typage                   | `Media`         | Champs spécifiques (`auteur`, `resume`, etc.) absents si non typé       | ✅ Validé |
-| Bloc 1 | T-ENT-04 | Vérification du typage multi-table et de la structure en base            | `Media → Livre` | `Media.count() == 2`, `Livre.count() == 1`, `Livre.pk == Media.pk`      | ✅ Validé |
-| Bloc 2 | T-ENT-05 | Vérification de tous les objets affichés ont `consultable=True`          | `Media`         | `consultable=True` pour une sélection de `Media`                        | ✅ Validé |
-| Bloc 2 | T-ENT-06 | Vérifie que tous les objets affichés ont `disponible=True`               | `Media`         | `disponible=True` (et `consultable=True`) pour une sélection de `Media` | ✅ Validé |
-| Bloc 2 | T-ENT-07 | Vérifie que tous les objets affichés ont `media_type='LIVRE'`            | `Media`         | `media_type='LIVRE'` pour une sélection de `Media`                      | ✅ Validé |
-| Bloc 2 | T-ENT-08 | Création d'un `Media` (non typé) avec des valeurs minimales              | `Media`         | Valeurs cohérentes avec la définition minimale d'un `Media` non typé    | ✅ Validé |
-| Bloc 2 | T-ENT-09 | Vérifie que tous les objets affichés ont `media_type='NON_DEFINI'`       | `Media`         | Tous les objets de la vue ont `media_type='NON_DEFINI'`                 | ✅ Validé |
-| Bloc 3 | T-ENT-10 | Vérifie que les membres affichés sont non archivés (`statut != ARCHIVE`) | `Membre`        | Tous les objets ont `statut` différent de `ARCHIVE`                     | ✅ Validé |
-| Bloc 3 | T-ENT-11 | Vérifie que les membres affichés sont abonnés (`statut == EMPRUNTEUR`)   | `Membre`        | Tous les objets ont `statut == EMPRUNTEUR`                              | ✅ Validé |
-| Bloc 3 | T-ENT-12 | Vérifie que les membres affichés sont archivés (`statut == ARCHIVE`)     | `Membre`        | Tous les objets ont `statut == ARCHIVE`                                 | ✅ Validé |
-| Bloc 3 | T-ENT-13 | Création d’un membre standard : statut et compte                         | `Membre`        | `statut == MEMBRE`, `compte` généré correctement                        | ✅ Validé |
-| Bloc 3 | T-ENT-14 | Création d’un membre emprunteur : statut et compte                       | `Membre`        | `statut == EMPRUNTEUR`, `compte` généré correctement                    | ✅ Validé |
-| Bloc 3 | T-ENT-15 | Mise à jour du nom (informations générales) d’un membre                  | `Membre`        | Le champ `name` est modifié et persisté                                 | ✅ Validé |
-| Bloc 3 | T-ENT-16 | Activation du statut emprunteur                                          | `Membre`        | `statut == EMPRUNTEUR` après appel à la vue dédiée                      | ✅ Validé |
-| Bloc 3 | T-ENT-17 | Suppression logique d’un membre sans emprunt                             | `Membre`        | `statut == ARCHIVE` après suppression                                   | ✅ Validé |
-| Bloc 3 | T-ENT-18 | Refus de suppression si emprunt en cours                                 | `Membre`        | `statut != ARCHIVE` + message d’erreur                                  | ✅ Validé |
-| Bloc 3 | T-ENT-19 | Vérifie que le changement de statut lors du marquage du retard           | `Emprunt`       | `statut == EN_COURS` avant marquage, `statut == RETARD` avant marquage  | ✅ Validé |
+| Série  | ID Test  | Description                                                              | Modèle testé    | Résultat attendu                                                                        | Statut   |
+|--------|----------|--------------------------------------------------------------------------|-----------------|-----------------------------------------------------------------------------------------|----------|
+| Bloc 1 | T-ENT-01 | Création d’un `Media` non typé (création minimaliste)                    | `Media`         | Attributs cohérents (`name`, `media_type`, `theme`, etc.)                               | ✅ Validé |
+| Bloc 1 | T-ENT-02 | Vérification des attributs par défaut                                    | `Media`         | `consultable=True`, `disponible=True`                                                   | ✅ Validé |
+| Bloc 1 | T-ENT-03 | Vérification des attributs accessibles selon le typage                   | `Media`         | Champs spécifiques (`auteur`, `resume`, etc.) absents si non typé                       | ✅ Validé |
+| Bloc 1 | T-ENT-04 | Vérification du typage multi-table et de la structure en base            | `Media → Livre` | `Media.count() == 2`, `Livre.count() == 1`, `Livre.pk == Media.pk`                      | ✅ Validé |
+| Bloc 2 | T-ENT-05 | Vérification de tous les objets affichés ont `consultable=True`          | `Media`         | `consultable=True` pour une sélection de `Media`                                        | ✅ Validé |
+| Bloc 2 | T-ENT-06 | Vérifie que tous les objets affichés ont `disponible=True`               | `Media`         | `disponible=True` (et `consultable=True`) pour une sélection de `Media`                 | ✅ Validé |
+| Bloc 2 | T-ENT-07 | Vérifie que tous les objets affichés ont `media_type='LIVRE'`            | `Media`         | `media_type='LIVRE'` pour une sélection de `Media`                                      | ✅ Validé |
+| Bloc 2 | T-ENT-08 | Création d'un `Media` (non typé) avec des valeurs minimales              | `Media`         | Valeurs cohérentes avec la définition minimale d'un `Media` non typé                    | ✅ Validé |
+| Bloc 2 | T-ENT-09 | Vérifie que tous les objets affichés ont `media_type='NON_DEFINI'`       | `Media`         | Tous les objets de la vue ont `media_type='NON_DEFINI'`                                 | ✅ Validé |
+| Bloc 3 | T-ENT-10 | Vérifie que les membres affichés sont non archivés (`statut != ARCHIVE`) | `Membre`        | Tous les objets ont `statut` différent de `ARCHIVE`                                     | ✅ Validé |
+| Bloc 3 | T-ENT-11 | Vérifie que les membres affichés sont abonnés (`statut == EMPRUNTEUR`)   | `Membre`        | Tous les objets ont `statut == EMPRUNTEUR`                                              | ✅ Validé |
+| Bloc 3 | T-ENT-12 | Vérifie que les membres affichés sont archivés (`statut == ARCHIVE`)     | `Membre`        | Tous les objets ont `statut == ARCHIVE`                                                 | ✅ Validé |
+| Bloc 3 | T-ENT-13 | Création d’un membre standard : statut et compte                         | `Membre`        | `statut == MEMBRE`, `compte` généré correctement                                        | ✅ Validé |
+| Bloc 3 | T-ENT-14 | Création d’un membre emprunteur : statut et compte                       | `Membre`        | `statut == EMPRUNTEUR`, `compte` généré correctement                                    | ✅ Validé |
+| Bloc 3 | T-ENT-15 | Mise à jour du nom (informations générales) d’un membre                  | `Membre`        | Le champ `name` est modifié et persisté                                                 | ✅ Validé |
+| Bloc 3 | T-ENT-16 | Activation du statut emprunteur                                          | `Membre`        | `statut == EMPRUNTEUR` après appel à la vue dédiée                                      | ✅ Validé |
+| Bloc 3 | T-ENT-17 | Suppression logique d’un membre sans emprunt                             | `Membre`        | `statut == ARCHIVE` après suppression                                                   | ✅ Validé |
+| Bloc 3 | T-ENT-18 | Refus de suppression si emprunt en cours                                 | `Membre`        | `statut != ARCHIVE` + message d’erreur                                                  | ✅ Validé |
+| Bloc 3 | T-ENT-19 | Vérifie que le changement de statut lors du marquage du retard           | `Emprunt`       | `statut == EN_COURS` avant marquage, `statut == RETARD` avant marquage                  | ✅ Validé |
+| Bloc 3 | T-ENT-20 | Création d’un emprunt valide                                             | `Emprunt`       | Objet créé avec `statut == EN_COURS`, `date_emprunt` initialisée, `date_retour == None` | ✅ Validé |
 
 > ✅ Les tests T-ENT-xx sont validés.  
 > ✅ Les assertions couvrent la structure multi-table, les attributs hérités et typés, et la cohérence des enregistrements.  
@@ -229,6 +231,9 @@ Chaque catégorie de tests est regroupée dans une sous-section spécifique avec
 | Bloc 3 | T-VUE-22 | `AccueilBibliothecaireView`                       | Affichage conditionnel du tableau (`accueil.html`)                       | Tableau affiché si `affiche_table == True`                             | ✅ Validé |
 | Bloc 3 | T-VUE-23 | `EmpruntRetardView`                               | Affichage du tableau des emprunts marqués (`emprunt_retard_result.html`) | Tableau affiché avec les emprunts marqués                              | ✅ Validé |
 | Bloc 3 | T-VUE-24 | `emprunt_retard_marque_table.html`                | Affichage correct des colonnes  (`include`)                              | Colonnes : Membre, Média, Date emprunt, Date retour prévu              | ✅ Validé |
+| Bloc 3 | T-VUE-25 | `EmpruntCreateView`                               | Persistance des sélections en cas d’erreur                               | Champs `emprunteur` et `media` préremplis après échec                  | ✅ Validé |
+| Bloc 3 | T-VUE-26 | `EmpruntCreateView`                               | Accumulation des messages d’erreur métier                                | Plusieurs messages affichés dans `<ul class="messages">`               | ✅ Validé |
+| Bloc 3 | T-VUE-27 | `EmpruntCreateView`                               | Redirection vers la liste après création                                 | Redirection vers `emprunt_list` + message de succès affiché            | ✅ Validé |
 
 > ✅ La distinction entre typage réel et simple valeur `media_type` est désormais testée.  
 > ✅ La logique de typage dynamique est assurée par la surcharge de `get_object()` dans `MediaDetailView`.  
@@ -273,33 +278,40 @@ Chaque catégorie de tests est regroupée dans une sous-section spécifique avec
 
 ### 🧪 Fonctionnel (`T-FUN-xxx`)
 
-| Série  | ID Test  | Description                                                                                  | Résultat attendu                                                                                                            | Statut            |
-|--------|----------|----------------------------------------------------------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------|-------------------|
-| Bloc 2 | T-FUN-01 | Vérifie que la vue consultable respecte les règles métier définies (MEDIA-UC-LIST-01)        | Code 200 + template (T-NAV-05), Booléen vrai (T-ENT-05), Contenu HTML (T-VUE-06)                                            | ✅ Validé          |
-| Bloc 2 | T-FUN-02 | Vérifie que la vue disponibles respecte les règles métier définies (MEDIA-UC-LIST-02)        | Code 200 + template (T-NAV-06), Booléen vrai (T-ENT-06), Contenu HTML (T-VUE-07)                                            | ✅ Validé          |
-| Bloc 2 | T-FUN-03 | Vérifie que la vue par type respecte les règles métier définies (MEDIA-UC-LIST-03)           | Code 200 + template (T-NAV-07), Type exact (T-ENT-07), Contenu HTML (T-VUE-08)                                              | ✅ Validé          |
-| Bloc 2 | T-FUN-04 | Création réussie d'un média (non typé) avec les données valides                              | Code 302 + Redirection finale correcte + Objet `Media` (non typé) créé en base                                              | ✅ Validé          |
-| Bloc 2 | T-FUN-05 | Vérifie le refus de création d'un média (non typé) avec champ obligatoire manquant           | Code 200 + Template Form avec message d'erreur + Objet `Media` non créé en base                                             | ✅ Validé          |
-| Bloc 2 | T-FUN-06 | Vérifie que la vue non typée respecte les règles métier définies (MEDIA-UC-LIST-04)          | Code 200 + template (T-NAV-09), Type exact (NON_DEFINI), Contenu HTML spécifique                                            | ✅ Validé          |
-| Bloc 2 | T-FUN-07 | Vérifie la création d’un média typé selon l’état métier attendu                              | Création via formulaire : état 1 (`consultable=False`, `disponible=True`) ou état 3 (`consultable=True`, `disponible=True`) | ✅ Validé          |
-| Bloc 2 | T-FUN-08 | Création d’un sous-type via typage (`MediaTypage<Type>View`)                                 | Objet typé créé, champs spécifiques appliqués, redirection vers la liste                                                    | ✅ Validé          |
-| Bloc 2 | T-FUN-09 | Annulation du typage (`MediaCancelTypingView`)                                               | Sous-type supprimé, `media_type` réinitialisé à `'NON_DEFINI'`, redirection OK                                              | ✅ Validé          |
-| Bloc 2 | T-FUN-10 | Redirection vers typage depuis `MediaUpdateView` si `media_type` modifié                     | Redirection vers la vue `MediaTypage<Type>View` sans enregistrement préalable                                               | ✅ Validé          |
-| Bloc 3 | T-FUN-11 | Vérifie que la vue tous les membres respecte les règles métier (MEMBRE-UC-LIST-02)           | Code 200 + template + membres non archivés (`statut != ARCHIVE`)                                                            | ✅ Validé          |
-| Bloc 3 | T-FUN-12 | Vérifie que la vue abonnés respecte les règles métier (MEMBRE-UC-LIST-03)                    | Code 200 + template + membres abonnés (`statut == EMPRUNTEUR`)                                                              | ✅ Validé          |
-| Bloc 3 | T-FUN-13 | Vérifie que la vue supprimés respecte les règles métier (MEMBRE-UC-LIST-04)                  | Code 200 + template + membres archivés (`statut == ARCHIVE`)                                                                | ✅ Validé          |
-| Bloc 3 | T-FUN-14 | Création de plusieurs membres standards avec données valides                                 | Redirection + `statut == MEMBRE` + `compte` généré                                                                          | ✅ Validé          |
-| Bloc 3 | T-FUN-15 | Création de plusieurs membres emprunteurs avec données valides                               | Redirection + `statut == EMPRUNTEUR` + `compte` généré                                                                      | ✅ Validé          |
-| Bloc 3 | T-FUN-16 | Mise à jour réussie du nom d’un membre (MEMBRE-UC-UPDATE-01)                                 | Redirection vers `membre_detail` + nom modifié visible                                                                      | ✅ Validé          |
-| Bloc 3 | T-FUN-17 | Activation du statut emprunteur (MEMBRE-UC-UPDATE-02)                                        | Redirection vers `membre_detail` + `statut == EMPRUNTEUR` + message de succès                                               | ✅ Validé          |
-| Bloc 3 | T-FUN-18 | Enchaînement métier complet d’activation emprunteur (affichage + confirmation + redirection) | Page affichée, bouton cliqué, redirection vers `membre_detail`, `statut == EMPRUNTEUR`                                      | ✅ Validé          |
-| Bloc 3 | T-FUN-19 | Suppression réussie d’un membre sans emprunt                                                 | Redirection vers `membre_detail` + `statut == ARCHIVE` + message de succès                                                  | ✅ Validé          |
-| Bloc 3 | T-FUN-20 | Suppression refusée si emprunt en cours                                                      | Redirection vers `membre_detail` + `statut != ARCHIVE` + message d’erreur                                                   | ✅ Validé          |
-| Bloc 3 | T-FUN-21 | Marquage manuel des retards via vue dédiée (Accès à `EmpruntRetardView`)                     | Message UX affiché + tableau mis à jour                                                                                     | ✅ Validé          |
-| Bloc 3 | T-FUN-22 | Marquage automatique à la première connexion (`retard_last_check_date` < aujourd’hui )       | Marquage déclenché + message et tableau affichés - Accès à `AccueilBibliothecaireView`                                      | ✅ Validé          |
-| Bloc 3 | T-FUN-23 | Masquage du tableau via bouton POST (`affiche_table == True` - POST `toggle_table=false`)    | Tableau masqué, session mise à jour - Accès à `AccueilBibliothecaireView`                                                   | ✅ Validé          |
-| Bloc 3 | T-FUN-24 | Affichage du tableau via bouton POST (`affiche_table == False` - POST `toggle_table=true`)   | Tableau affiché, session mise à jour - Accès à `AccueilBibliothecaireView`                                                  | ✅ Validé          |
-| Bloc 3 | T-FUN-25 | Rejeu du marquage automatique via fonction de debug (`retard_last_check_date` modifiée)      | Marquage relancé, message et tableau mis à jour - Accès à `AccueilBibliothecaireView`                                       | 🟡 Non implémenté |
+| Série  | ID Test  | Description                                                                                                        | Résultat attendu                                                                                                            | Statut            |
+|--------|----------|--------------------------------------------------------------------------------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------|-------------------|
+| Bloc 2 | T-FUN-01 | Vérifie que la vue consultable respecte les règles métier définies (MEDIA-UC-LIST-01)                              | Code 200 + template (T-NAV-05), Booléen vrai (T-ENT-05), Contenu HTML (T-VUE-06)                                            | ✅ Validé          |
+| Bloc 2 | T-FUN-02 | Vérifie que la vue disponibles respecte les règles métier définies (MEDIA-UC-LIST-02)                              | Code 200 + template (T-NAV-06), Booléen vrai (T-ENT-06), Contenu HTML (T-VUE-07)                                            | ✅ Validé          |
+| Bloc 2 | T-FUN-03 | Vérifie que la vue par type respecte les règles métier définies (MEDIA-UC-LIST-03)                                 | Code 200 + template (T-NAV-07), Type exact (T-ENT-07), Contenu HTML (T-VUE-08)                                              | ✅ Validé          |
+| Bloc 2 | T-FUN-04 | Création réussie d'un média (non typé) avec les données valides                                                    | Code 302 + Redirection finale correcte + Objet `Media` (non typé) créé en base                                              | ✅ Validé          |
+| Bloc 2 | T-FUN-05 | Vérifie le refus de création d'un média (non typé) avec champ obligatoire manquant                                 | Code 200 + Template Form avec message d'erreur + Objet `Media` non créé en base                                             | ✅ Validé          |
+| Bloc 2 | T-FUN-06 | Vérifie que la vue non typée respecte les règles métier définies (MEDIA-UC-LIST-04)                                | Code 200 + template (T-NAV-09), Type exact (NON_DEFINI), Contenu HTML spécifique                                            | ✅ Validé          |
+| Bloc 2 | T-FUN-07 | Vérifie la création d’un média typé selon l’état métier attendu                                                    | Création via formulaire : état 1 (`consultable=False`, `disponible=True`) ou état 3 (`consultable=True`, `disponible=True`) | ✅ Validé          |
+| Bloc 2 | T-FUN-08 | Création d’un sous-type via typage (`MediaTypage<Type>View`)                                                       | Objet typé créé, champs spécifiques appliqués, redirection vers la liste                                                    | ✅ Validé          |
+| Bloc 2 | T-FUN-09 | Annulation du typage (`MediaCancelTypingView`)                                                                     | Sous-type supprimé, `media_type` réinitialisé à `'NON_DEFINI'`, redirection OK                                              | ✅ Validé          |
+| Bloc 2 | T-FUN-10 | Redirection vers typage depuis `MediaUpdateView` si `media_type` modifié                                           | Redirection vers la vue `MediaTypage<Type>View` sans enregistrement préalable                                               | ✅ Validé          |
+| Bloc 3 | T-FUN-11 | Vérifie que la vue tous les membres respecte les règles métier (MEMBRE-UC-LIST-02)                                 | Code 200 + template + membres non archivés (`statut != ARCHIVE`)                                                            | ✅ Validé          |
+| Bloc 3 | T-FUN-12 | Vérifie que la vue abonnés respecte les règles métier (MEMBRE-UC-LIST-03)                                          | Code 200 + template + membres abonnés (`statut == EMPRUNTEUR`)                                                              | ✅ Validé          |
+| Bloc 3 | T-FUN-13 | Vérifie que la vue supprimés respecte les règles métier (MEMBRE-UC-LIST-04)                                        | Code 200 + template + membres archivés (`statut == ARCHIVE`)                                                                | ✅ Validé          |
+| Bloc 3 | T-FUN-14 | Création de plusieurs membres standards avec données valides                                                       | Redirection + `statut == MEMBRE` + `compte` généré                                                                          | ✅ Validé          |
+| Bloc 3 | T-FUN-15 | Création de plusieurs membres emprunteurs avec données valides                                                     | Redirection + `statut == EMPRUNTEUR` + `compte` généré                                                                      | ✅ Validé          |
+| Bloc 3 | T-FUN-16 | Mise à jour réussie du nom d’un membre (MEMBRE-UC-UPDATE-01)                                                       | Redirection vers `membre_detail` + nom modifié visible                                                                      | ✅ Validé          |
+| Bloc 3 | T-FUN-17 | Activation du statut emprunteur (MEMBRE-UC-UPDATE-02)                                                              | Redirection vers `membre_detail` + `statut == EMPRUNTEUR` + message de succès                                               | ✅ Validé          |
+| Bloc 3 | T-FUN-18 | Enchaînement métier complet d’activation emprunteur (affichage + confirmation + redirection) (MEMBRE-UC-UPDATE-02) | Page affichée, bouton cliqué, redirection vers `membre_detail`, `statut == EMPRUNTEUR`                                      | ✅ Validé          |
+| Bloc 3 | T-FUN-19 | Suppression réussie d’un membre sans emprunt (MEMBRE-UC-DELETE-01)                                                 | Redirection vers `membre_detail` + `statut == ARCHIVE` + message de succès                                                  | ✅ Validé          |
+| Bloc 3 | T-FUN-20 | Suppression refusée si emprunt en cours (MEMBRE-UC-DELETE-01)                                                      | Redirection vers `membre_detail` + `statut != ARCHIVE` + message d’erreur                                                   | ✅ Validé          |
+| Bloc 3 | T-FUN-21 | Marquage manuel des retards via vue dédiée (Accès à `EmpruntRetardView`) (EMPRUNT-UC-RETARD-01)                    | Message UX affiché + tableau mis à jour                                                                                     | ✅ Validé          |
+| Bloc 3 | T-FUN-22 | Marquage automatique à la première connexion (`retard_last_check_date` < aujourd’hui ) (EMPRUNT-UC-RETARD-01)      | Marquage déclenché + message et tableau affichés - Accès à `AccueilBibliothecaireView`                                      | ✅ Validé          |
+| Bloc 3 | T-FUN-23 | Masquage du tableau via bouton POST (`affiche_table == True` - POST `toggle_table=false`) (EMPRUNT-UC-RETARD-01)   | Tableau masqué, session mise à jour - Accès à `AccueilBibliothecaireView`                                                   | ✅ Validé          |
+| Bloc 3 | T-FUN-24 | Affichage du tableau via bouton POST (`affiche_table == False` - POST `toggle_table=true`) (EMPRUNT-UC-RETARD-01)  | Tableau affiché, session mise à jour - Accès à `AccueilBibliothecaireView`                                                  | ✅ Validé          |
+| Bloc 3 | T-FUN-25 | Rejeu du marquage automatique via fonction de debug (`retard_last_check_date` modifiée) (EMPRUNT-UC-RETARD-01)     | Marquage relancé, message et tableau mis à jour - Accès à `AccueilBibliothecaireView`                                       | 🟡 Non implémenté |
+| Bloc 3 | T-FUN-26 | Création réussie d’un emprunt (EMPRUNT-UC-CREATE-01)                                                               | Emprunt enregistré, média rendu indisponible, message de validation affiché                                                 | ✅ Validé       |
+| Bloc 3 | T-FUN-27 | Refus si membre non abonné (EMPRUNT-UC-CREATE-01)                                                                  | Aucun emprunt créé, message : “abonnement non validé”, sélection conservée                                                  | ✅ Validé       |
+| Bloc 3 | T-FUN-28 | Refus si membre avec retard (EMPRUNT-UC-CREATE-01)                                                                 | Aucun emprunt créé, message : “retard en cours”, sélection conservée                                                        | ✅ Validé       |
+| Bloc 3 | T-FUN-29 | Refus si membre au quota max (EMPRUNT-UC-CREATE-01)                                                                | Aucun emprunt créé, message : “quota d’emprunts atteint”, sélection conservée                                               | ✅ Validé       |
+| Bloc 3 | T-FUN-30 | Refus si média non typé (EMPRUNT-UC-CREATE-01)                                                                     | Aucun emprunt créé, message : “média non typé”, sélection conservée                                                         | ✅ Validé       |
+| Bloc 3 | T-FUN-31 | Refus si média non consultable (EMPRUNT-UC-CREATE-01)                                                              | Aucun emprunt créé, message : “hors gestion”, sélection conservée                                                           | ✅ Validé       |
+| Bloc 3 | T-FUN-32 | Refus si média non disponible (EMPRUNT-UC-CREATE-01)                                                               | Aucun emprunt créé, message : “pas disponible”, sélection conservée                                                         | ✅ Validé       |
 
 > 🔧 Les tests unitaires _fonctionnels_ sont définis pour être autonome. Ils peuvent se rapprocher de tests unitaires
 > _techniques_ qui sont indiqués dans le _résultat attendu_. 

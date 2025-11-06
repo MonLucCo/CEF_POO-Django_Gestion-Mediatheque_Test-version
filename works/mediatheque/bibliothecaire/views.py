@@ -8,7 +8,7 @@ from django.views.generic import TemplateView, ListView, DetailView, CreateView,
 
 from bibliothecaire.mixins import OrigineSessionMixin, MembreSuppressionContextMixin
 from bibliothecaire.models import Media, Livre, Dvd, Cd, Membre, StatutMembre, Emprunt, StatutEmprunt
-from bibliothecaire.forms import MediaForm, LivreForm, DvdForm, CdForm, MembreForm
+from bibliothecaire.forms import MediaForm, LivreForm, DvdForm, CdForm, MembreForm, EmpruntForm
 from django.db import transaction
 
 
@@ -692,4 +692,45 @@ class EmpruntListView(ListView):
     context_object_name = 'emprunts'
 
     def get_queryset(self):
-        return Emprunt.objects.all().order_by('-date_emprunt')
+        return Emprunt.objects.all().order_by('-id')
+
+
+class EmpruntCreateView(CreateView):
+    model = Emprunt
+    form_class = EmpruntForm
+    template_name = "bibliothecaire/emprunts/emprunt_form.html"
+
+    def form_valid(self, form):
+        emprunt = form.save(commit=False)
+        membre = emprunt.emprunteur
+        media = emprunt.media
+
+        erreurs = []
+
+        if not membre.peut_emprunter():
+            if membre.is_emprunteur:
+                if membre.is_retard:
+                    erreurs.append("Ce membre ne peut pas emprunter : retard en cours.")
+                if membre.is_max_emprunt:
+                    erreurs.append("Ce membre ne peut pas emprunter : quota des emprunts atteint.")
+            else:
+                erreurs.append("Ce membre ne peut pas emprunter : abonnement non validé.")
+
+        if not media.est_empruntable:
+            if not media.is_disponible:
+                erreurs.append("Ce média ne peut pas être emprunté : pas disponible.")
+            if not media.is_consultable:
+                erreurs.append("Ce média ne peut pas être emprunté : hors gestion.")
+            if not media.is_typed():
+                erreurs.append("Ce média ne peut pas être emprunté : hors gestion car non typé.")
+
+        if erreurs:
+            for msg in erreurs:
+                messages.error(self.request, msg)
+            return self.form_invalid(form)
+
+        emprunt.save()
+        media.disponible = False
+        media.save()
+        messages.success(self.request, f"Emprunt enregistré : {membre.name} → {media.name}")
+        return redirect("bibliothecaire:emprunt_list")

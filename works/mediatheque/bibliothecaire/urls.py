@@ -40,7 +40,7 @@ urlpatterns = [
     # Emprunts
      path('emprunts/', views.EmpruntListView.as_view(), name='emprunt_list'),
      path('emprunts/retards/', views.EmpruntRetardView.as_view(), name='emprunt_retard'),
- #   path('emprunts/ajouter/', views.EmpruntCreateView.as_view(), name='emprunt_create'),
+     path('emprunts/ajouter/', views.EmpruntCreateView.as_view(), name='emprunt_create'),
  #   path('emprunts/<int:pk>/retour/', views.RetourUpdateView.as_view(), name='emprunt_retour'),
 
     # Membres

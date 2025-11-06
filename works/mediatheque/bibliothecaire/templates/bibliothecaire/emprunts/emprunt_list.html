@@ -8,7 +8,15 @@
     </a>
   </p>
 
-  <table>
+  {% if messages %}
+  <ul class="messages">
+    {% for message in messages %}
+      <li class="{{ message.tags }}">{{ message }}</li>
+    {% endfor %}
+  </ul>
+  {% endif %}
+
+  <table id="list_emprunt">
     <thead>
       <tr>
         <th>Membre</th>

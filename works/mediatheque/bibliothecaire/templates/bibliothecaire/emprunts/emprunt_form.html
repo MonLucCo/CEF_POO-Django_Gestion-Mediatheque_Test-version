@@ -1,0 +1,26 @@
+{% extends "bibliothecaire/_base.html" %}
+{% block content %}
+  <h2>Créer un emprunt</h2>
+  <form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+
+    {% if messages %}
+        <ul class="messages">
+          {% for message in messages %}
+            <li class="{{ message.tags }}">{{ message }}</li>
+          {% endfor %}
+        </ul>
+    {% endif %}
+
+
+    <div style="margin-top: 20px;">
+       <button type="submit">Valider l'emprunt</button>
+        |
+       <a href="{% url 'bibliothecaire:emprunt_list' %}">Retour à la liste des emprunts</a>
+        |
+       <a href="{% url 'bibliothecaire:accueil' %}">Retour à l'accueil</a>
+    </div>
+
+  </form>
+{% endblock %}
