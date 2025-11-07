@@ -96,6 +96,9 @@
 {% comment %}
     <a href="{% url 'bibliothecaire:media_delete' media.pk %}">Supprimer</a> |
 {% endcomment %}
+    {% if media.est_empruntable %}
+        <a href="{% url 'bibliothecaire:media_emprunter' media.pk %}">Créer un emprunt</a> |
+    {% endif %}
     <a href="{% url 'bibliothecaire:media_list' %}">Retour à la liste</a>
 </div>
 

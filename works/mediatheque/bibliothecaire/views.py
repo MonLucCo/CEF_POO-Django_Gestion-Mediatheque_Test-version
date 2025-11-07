@@ -732,7 +732,7 @@ class EmpruntCreateView(CreateView):
         emprunt.save()
         media.disponible = False
         media.save()
-        messages.success(self.request, f"Emprunt enregistré : {membre.name} → {media.name}")
+        messages.success(self.request, f"Emprunt enregistré : {membre.name} → {media.name} ({media.media_type})")
         return redirect("bibliothecaire:emprunt_list")
 
 
@@ -760,3 +760,27 @@ class EmpruntCreateFromMembreView(EmpruntCreateView):
         context["is_from_membre"] = True
         return context
 
+
+class EmpruntCreateFromMediaView(EmpruntCreateView):
+    """
+    Vue UC-CREATE-03 : création d’un emprunt à partir d’un média disponible.
+    Le champ 'media' est figé dans le formulaire.
+    """
+    def dispatch(self, request, *args, **kwargs):
+        self.media = get_object_or_404(Media, pk=kwargs["pk"]).get_real_instance()
+        return super().dispatch(request, *args, **kwargs)
+
+    def get_initial(self):
+        return {"media": self.media}
+
+    def get_form(self, form_class=None):
+        form = super().get_form(form_class)
+        form.fields["media"].initial = self.media
+        form.fields["media"].disabled = True
+        return form
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["media"] = self.media
+        context["is_from_media"] = True
+        return context

@@ -7,6 +7,13 @@
         <p>Ce formulaire permet de créer un emprunt pour <strong>ce membre</strong>. Veuillez sélectionner un média <strong>en gestion et disponible</strong>.</p>
     </div>
   {% endif %}
+  {% if is_from_media %}
+    <div id="emprunt_media_info" class="info" style="margin-top: 20px; padding: 0.5rem">
+        <p>Ce formulaire permet de créer un emprunt pour <strong>ce média</strong>. Veuillez sélectionner un membre <strong>abonné et autorisé à emprunter</strong>.</p>
+    </div>
+  {% endif %}
+
+
 
   <form method="post">
     {% csrf_token %}

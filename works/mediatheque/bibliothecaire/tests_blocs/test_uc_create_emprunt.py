@@ -19,6 +19,7 @@ class BaseEmpruntCreateTestCase(TestCase):
         cls.template_list = "bibliothecaire/emprunts/emprunt_list.html"
 
         cls.url_create_from_membre = reverse("bibliothecaire:membre_emprunter", args=[cls.membre_valide.id])
+        cls.url_create_from_media = reverse("bibliothecaire:media_emprunter", args=[cls.media_valide.id])
 
     def post_emprunt(self, membre_id, media_id, follow=False):
         return self.client.post(self.url_create, data={
@@ -38,6 +39,13 @@ class TestNavigationEmpruntUcCreate(BaseEmpruntCreateTestCase):
 class TestNavigationEmpruntUcCreateFromMembre(BaseEmpruntCreateTestCase):
     def test_nav_22_acces_vue_creation_emprunt_depuis_membre(self):
         response = self.client.get(self.url_create_from_membre)
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, self.template_create)
+
+
+class TestNavigationEmpruntUcCreateFromMedia(BaseEmpruntCreateTestCase):
+    def test_nav_23_acces_vue_creation_emprunt_depuis_media(self):
+        response = self.client.get(self.url_create_from_media)
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, self.template_create)
 
@@ -83,6 +91,18 @@ class TestVuesEmpruntUcCreateFromMembre(BaseEmpruntCreateTestCase):
         response = self.client.get(self.url_create_from_membre)
         self.assertContains(response, 'id="emprunt_membre_info"')
         self.assertContains(response, "Veuillez sélectionner un média")
+
+
+class TestVuesEmpruntUcCreateFromMedia(BaseEmpruntCreateTestCase):
+    def test_vue_30_champ_media_fige(self):
+        response = self.client.get(self.url_create_from_media)
+        self.assertContains(response, f'value="{self.media_valide.id}"')
+        self.assertContains(response, 'disabled')
+
+    def test_vue_31_bloc_info_present(self):
+        response = self.client.get(self.url_create_from_media)
+        self.assertContains(response, 'id="emprunt_media_info"')
+        self.assertContains(response, "Veuillez sélectionner un membre")
 
 
 # 🧪 Fonctionnel
@@ -138,7 +158,7 @@ class TestFonctionnelEmpruntUcCreate(BaseEmpruntCreateTestCase):
 
 
 class TestFonctionnelEmpruntUcCreateFromMembre(BaseEmpruntCreateTestCase):
-    def test_fun_38_creation_emprunt_depuis_membre_valide(self):
+    def test_fun_33_creation_emprunt_depuis_membre_valide(self):
         response = self.client.post(self.url_create_from_membre, data={
             "media": self.media_valide.id
         }, follow=True)
@@ -149,10 +169,31 @@ class TestFonctionnelEmpruntUcCreateFromMembre(BaseEmpruntCreateTestCase):
         self.media_valide.refresh_from_db()
         self.assertFalse(self.media_valide.disponible)
 
-    def test_fun_39_refus_media_non_empruntable_depuis_membre(self):
+    def test_fun_34_refus_media_non_empruntable_depuis_membre(self):
         media_non_consultable = Media.objects.get(pk=5)
         response = self.client.post(self.url_create_from_membre, data={
             "media": media_non_consultable.id
         })
         self.assertContains(response, "Ce média ne peut pas être emprunté")
+        self.assertTemplateUsed(response, self.template_create)
+
+
+class TestFonctionnelEmpruntUcCreateFromMedia(BaseEmpruntCreateTestCase):
+    def test_fun_35_creation_emprunt_depuis_media_valide(self):
+        response = self.client.post(self.url_create_from_media, data={
+            "emprunteur": self.membre_valide.id
+        }, follow=True)
+        self.assertRedirects(response, self.url_list)
+        self.assertContains(response, "Emprunt enregistré")
+        emprunt = Emprunt.objects.get(emprunteur=self.membre_valide, media=self.media_valide)
+        self.assertEqual(emprunt.statut, StatutEmprunt.EN_COURS)
+        self.media_valide.refresh_from_db()
+        self.assertFalse(self.media_valide.disponible)
+
+    def test_fun_36_refus_membre_non_emprunteur_depuis_media(self):
+        membre_non_abonne = Membre.objects.create(name="Test", compte="2025_Test_2", statut=0)
+        response = self.client.post(self.url_create_from_media, data={
+            "emprunteur": membre_non_abonne.id
+        })
+        self.assertContains(response, "abonnement non validé")
         self.assertTemplateUsed(response, self.template_create)

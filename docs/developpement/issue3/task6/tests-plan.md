@@ -164,7 +164,7 @@ Chaque catégorie de tests est regroupée dans une sous-section spécifique avec
 | Bloc 3 | T-NAV-20 | Accès à la liste des emprunts                     | `/bibliothecaire/emprunts/`                        | Code 200 + template `emprunt_list.html`          | ✅ Validé |
 | Bloc 3 | T-NAV-21 | Accès à la création d’un emprunt                  | `/bibliothecaire/emprunts/ajouter/`                | Code 200 + formulaire affiché                    | ✅ Validé |
 | Bloc 3 | T-NAV-22 | Accès à la création d’un emprunt depuis un membre | `/bibliothecaire/membres/<pk>/emprunter/`          | Code 200 + formulaire affiché                    | ✅ Validé |
-
+| Bloc 3 | T-NAV-22 | Accès à la création d’un emprunt depuis un média  | `/bibliothecaire/medias/<pk>/emprunter/`           | Code 200 + formulaire affiché                    | ✅ Validé |
 > ❌ Le test T-NAV-03 a révélé une contrainte sur le champ `annee_edition` du modèle `Media`. ✅ Il a été repris 
 > après correction du modèle de données.  
 > 🔧 La correction a été intégrée et documentée dans [`Modelisation_correction-erreurs-suite-tests-unitaires.md`](../task5/Modelisation_correction-erreurs-suite-tests-unitaires.md).  
@@ -237,6 +237,8 @@ Chaque catégorie de tests est regroupée dans une sous-section spécifique avec
 | Bloc 3 | T-VUE-27 | `EmpruntCreateView`                               | Redirection vers la liste après création                                 | Redirection vers `emprunt_list` + message de succès affiché            | ✅ Validé |
 | Bloc 3 | T-VUE-28 | `EmpruntCreateFromMembreView`                     | Affichage du formulaire avec champ `emprunteur` figé                     | Champ désactivé + valeur initiale correcte                             | ✅ Validé |
 | Bloc 3 | T-VUE-29 | `emprunt_form.html`                               | Présence du bloc informatif `#emprunt_membre_info`                       | Texte explicite + ID HTML présent                                      | ✅ Validé |
+| Bloc 3 | T-VUE-30 | `EmpruntCreateFromMediaView`                      | Affichage du formulaire avec champ `media` figé                          | Champ désactivé + valeur initiale correcte                             | ✅ Validé |
+| Bloc 3 | T-VUE-31 | `emprunt_form.html`                               | Présence du bloc informatif `#emprunt_media_info`                        | Texte explicite + ID HTML présent                                      | ✅ Validé |
 
 > ✅ La distinction entre typage réel et simple valeur `media_type` est désormais testée.  
 > ✅ La logique de typage dynamique est assurée par la surcharge de `get_object()` dans `MediaDetailView`.  
@@ -315,8 +317,10 @@ Chaque catégorie de tests est regroupée dans une sous-section spécifique avec
 | Bloc 3 | T-FUN-30 | Refus si média non typé (EMPRUNT-UC-CREATE-01)                                                                     | Aucun emprunt créé, message : “média non typé”, sélection conservée                                                         | ✅ Validé          |
 | Bloc 3 | T-FUN-31 | Refus si média non consultable (EMPRUNT-UC-CREATE-01)                                                              | Aucun emprunt créé, message : “hors gestion”, sélection conservée                                                           | ✅ Validé          |
 | Bloc 3 | T-FUN-32 | Refus si média non disponible (EMPRUNT-UC-CREATE-01)                                                               | Aucun emprunt créé, message : “pas disponible”, sélection conservée                                                         | ✅ Validé          |
-| Bloc 3 | T-FUN-33 | Création d’un emprunt valide via membre                                                                            | Emprunt créé avec `statut = EN_COURS`, média rendu indisponible                                                             | ✅ Validé          |
-| Bloc 3 | T-FUN-34 | Refus si média non empruntable (via formulaire)                                                                    | Message d’erreur affiché, emprunt non créé                                                                                  | ✅ Validé          |
+| Bloc 3 | T-FUN-33 | Création d’un emprunt valide via membre (EMPRUNT-UC-CREATE-02)                                                     | Emprunt créé avec `statut = EN_COURS`, média rendu indisponible                                                             | ✅ Validé          |
+| Bloc 3 | T-FUN-34 | Refus si média non empruntable depuis membre (via formulaire) (EMPRUNT-UC-CREATE-02)                               | Message d’erreur affiché, emprunt non créé                                                                                  | ✅ Validé          |
+| Bloc 3 | T-FUN-35 | Création d’un emprunt valide via media (EMPRUNT-UC-CREATE-03)                                                      | Emprunt créé avec `statut = EN_COURS`, média rendu indisponible                                                             | ✅ Validé          |
+| Bloc 3 | T-FUN-36 | Refus si membre non éligible à un emprunt depuis media (via formulaire) (EMPRUNT-UC-CREATE-03)                     | Message d’erreur affiché, emprunt non créé                                                                                  | ✅ Validé          |
 
 > 🔧 Les tests unitaires _fonctionnels_ sont définis pour être autonome. Ils peuvent se rapprocher de tests unitaires
 > _techniques_ qui sont indiqués dans le _résultat attendu_. 
