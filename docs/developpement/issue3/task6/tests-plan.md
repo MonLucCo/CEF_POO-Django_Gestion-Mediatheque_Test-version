@@ -140,29 +140,30 @@ Chaque catégorie de tests est regroupée dans une sous-section spécifique avec
 
 ### 🧪 Navigation (`T-NAV-xxx`)
 
-| Série  | ID Test  | Description                                   | URL ciblée                                         | Résultat attendu                                 | Statut   |
-|--------|----------|-----------------------------------------------|----------------------------------------------------|--------------------------------------------------|----------|
-| Bloc 1 | T-NAV-01 | Accès à la page d’accueil                     | `/bibliothecaire/`                                 | Code 200 + template accueil                      | ✅ Validé |
-| Bloc 1 | T-NAV-02 | Accès à la liste des médias                   | `/bibliothecaire/media/`                           | Code 200 + template liste                        | ✅ Validé |
-| Bloc 1 | T-NAV-03 | Accès au détail d’un média existant           | `/bibliothecaire/media/1/`                         | Code 200 + template détail                       | ✅ Validé |
-| Bloc 1 | T-NAV-04 | Accès à un média inexistant                   | `/bibliothecaire/media/999/`                       | Code 404                                         | ✅ Validé |
-| Bloc 2 | T-NAV-05 | Accès à la liste des médias consultables      | `/bibliothecaire/medias/consultables/`             | Code 200 + template liste                        | ✅ Validé |
-| Bloc 2 | T-NAV-06 | Accès à la liste des médias disponibles       | `/bibliothecaire/medias/disponibles/`              | Code 200 + template liste                        | ✅ Validé |
-| Bloc 2 | T-NAV-07 | Accès à la liste des médias par type          | `/bibliothecaire/medias/type/?type=LIVRE`          | Code 200 + template liste                        | ✅ Validé |
-| Bloc 2 | T-NAV-08 | Accès à la création d'un média                | `/bibliothecaire/medias/ajouter/`                  | Code 200 + template liste                        | ✅ Validé |
-| Bloc 2 | T-NAV-09 | Accès à la liste des médias non typés         | `/bibliothecaire/medias/non-types/`                | Code 200 + template liste                        | ✅ Validé |
-| Bloc 3 | T-NAV-10 | Accès à la liste des membres (tous)           | `/bibliothecaire/membres/`                         | Code 200 + template liste membres                | ✅ Validé |
-| Bloc 3 | T-NAV-11 | Accès à la liste des membres en gestion       | `/bibliothecaire/membres/gestion`                  | Code 200 + template liste membres                | ✅ Validé |
-| Bloc 3 | T-NAV-12 | Accès à la liste des membres abonnés          | `/bibliothecaire/membres/emprunteurs`              | Code 200 + template liste membres                | ✅ Validé |
-| Bloc 3 | T-NAV-13 | Accès à la liste des membres supprimés        | `/bibliothecaire/membres/supprimes`                | Code 200 + template liste membres                | ✅ Validé |
-| Bloc 3 | T-NAV-14 | Accès à la création d’un membre standard      | `/bibliothecaire/membres/ajouter/`                 | Code 200 + formulaire affiché                    | ✅ Validé |
-| Bloc 3 | T-NAV-15 | Accès à la création d’un membre emprunteur    | `/bibliothecaire/membres/ajouter/emprunteur`       | Code 200 + formulaire affiché                    | ✅ Validé |
-| Bloc 3 | T-NAV-16 | Accès à la mise à jour d’un membre            | `/bibliothecaire/membres/<pk>/modifier/`           | Code 200 + formulaire affiché                    | ✅ Validé |
-| Bloc 3 | T-NAV-17 | Accès à l’activation du statut emprunteur     | `/bibliothecaire/membres/<pk>/activer/emprunteur/` | Code 200 + page de confirmation                  | ✅ Validé |
-| Bloc 3 | T-NAV-18 | Accès à la page de confirmation               | `/membres/<pk>/supprimer/`                         | Code 200 + template affiché                      | ✅ Validé |
-| Bloc 3 | T-NAV-19 | Accès à la vue de marquage manuel des retards | `/bibliothecaire/emprunts/retard/`                 | Code 200 + template `emprunt_retard_result.html` | ✅ Validé |
-| Bloc 3 | T-NAV-20 | Accès à la liste des emprunts                 | `/bibliothecaire/emprunts/`                        | Code 200 + template `emprunt_list.html`          | ✅ Validé |
-| Bloc 3 | T-NAV-21 | Accès à la création d’un emprunt              | `/bibliothecaire/emprunts/ajouter/`                | Code 200 + formulaire affiché                    | ✅ Validé |
+| Série  | ID Test  | Description                                       | URL ciblée                                         | Résultat attendu                                 | Statut   |
+|--------|----------|---------------------------------------------------|----------------------------------------------------|--------------------------------------------------|----------|
+| Bloc 1 | T-NAV-01 | Accès à la page d’accueil                         | `/bibliothecaire/`                                 | Code 200 + template accueil                      | ✅ Validé |
+| Bloc 1 | T-NAV-02 | Accès à la liste des médias                       | `/bibliothecaire/media/`                           | Code 200 + template liste                        | ✅ Validé |
+| Bloc 1 | T-NAV-03 | Accès au détail d’un média existant               | `/bibliothecaire/media/1/`                         | Code 200 + template détail                       | ✅ Validé |
+| Bloc 1 | T-NAV-04 | Accès à un média inexistant                       | `/bibliothecaire/media/999/`                       | Code 404                                         | ✅ Validé |
+| Bloc 2 | T-NAV-05 | Accès à la liste des médias consultables          | `/bibliothecaire/medias/consultables/`             | Code 200 + template liste                        | ✅ Validé |
+| Bloc 2 | T-NAV-06 | Accès à la liste des médias disponibles           | `/bibliothecaire/medias/disponibles/`              | Code 200 + template liste                        | ✅ Validé |
+| Bloc 2 | T-NAV-07 | Accès à la liste des médias par type              | `/bibliothecaire/medias/type/?type=LIVRE`          | Code 200 + template liste                        | ✅ Validé |
+| Bloc 2 | T-NAV-08 | Accès à la création d'un média                    | `/bibliothecaire/medias/ajouter/`                  | Code 200 + template liste                        | ✅ Validé |
+| Bloc 2 | T-NAV-09 | Accès à la liste des médias non typés             | `/bibliothecaire/medias/non-types/`                | Code 200 + template liste                        | ✅ Validé |
+| Bloc 3 | T-NAV-10 | Accès à la liste des membres (tous)               | `/bibliothecaire/membres/`                         | Code 200 + template liste membres                | ✅ Validé |
+| Bloc 3 | T-NAV-11 | Accès à la liste des membres en gestion           | `/bibliothecaire/membres/gestion`                  | Code 200 + template liste membres                | ✅ Validé |
+| Bloc 3 | T-NAV-12 | Accès à la liste des membres abonnés              | `/bibliothecaire/membres/emprunteurs`              | Code 200 + template liste membres                | ✅ Validé |
+| Bloc 3 | T-NAV-13 | Accès à la liste des membres supprimés            | `/bibliothecaire/membres/supprimes`                | Code 200 + template liste membres                | ✅ Validé |
+| Bloc 3 | T-NAV-14 | Accès à la création d’un membre standard          | `/bibliothecaire/membres/ajouter/`                 | Code 200 + formulaire affiché                    | ✅ Validé |
+| Bloc 3 | T-NAV-15 | Accès à la création d’un membre emprunteur        | `/bibliothecaire/membres/ajouter/emprunteur`       | Code 200 + formulaire affiché                    | ✅ Validé |
+| Bloc 3 | T-NAV-16 | Accès à la mise à jour d’un membre                | `/bibliothecaire/membres/<pk>/modifier/`           | Code 200 + formulaire affiché                    | ✅ Validé |
+| Bloc 3 | T-NAV-17 | Accès à l’activation du statut emprunteur         | `/bibliothecaire/membres/<pk>/activer/emprunteur/` | Code 200 + page de confirmation                  | ✅ Validé |
+| Bloc 3 | T-NAV-18 | Accès à la page de confirmation                   | `/membres/<pk>/supprimer/`                         | Code 200 + template affiché                      | ✅ Validé |
+| Bloc 3 | T-NAV-19 | Accès à la vue de marquage manuel des retards     | `/bibliothecaire/emprunts/retard/`                 | Code 200 + template `emprunt_retard_result.html` | ✅ Validé |
+| Bloc 3 | T-NAV-20 | Accès à la liste des emprunts                     | `/bibliothecaire/emprunts/`                        | Code 200 + template `emprunt_list.html`          | ✅ Validé |
+| Bloc 3 | T-NAV-21 | Accès à la création d’un emprunt                  | `/bibliothecaire/emprunts/ajouter/`                | Code 200 + formulaire affiché                    | ✅ Validé |
+| Bloc 3 | T-NAV-22 | Accès à la création d’un emprunt depuis un membre | `/bibliothecaire/membres/<pk>/emprunter/`          | Code 200 + formulaire affiché                    | ✅ Validé |
 
 > ❌ Le test T-NAV-03 a révélé une contrainte sur le champ `annee_edition` du modèle `Media`. ✅ Il a été repris 
 > après correction du modèle de données.  
@@ -234,6 +235,8 @@ Chaque catégorie de tests est regroupée dans une sous-section spécifique avec
 | Bloc 3 | T-VUE-25 | `EmpruntCreateView`                               | Persistance des sélections en cas d’erreur                               | Champs `emprunteur` et `media` préremplis après échec                  | ✅ Validé |
 | Bloc 3 | T-VUE-26 | `EmpruntCreateView`                               | Accumulation des messages d’erreur métier                                | Plusieurs messages affichés dans `<ul class="messages">`               | ✅ Validé |
 | Bloc 3 | T-VUE-27 | `EmpruntCreateView`                               | Redirection vers la liste après création                                 | Redirection vers `emprunt_list` + message de succès affiché            | ✅ Validé |
+| Bloc 3 | T-VUE-28 | `EmpruntCreateFromMembreView`                     | Affichage du formulaire avec champ `emprunteur` figé                     | Champ désactivé + valeur initiale correcte                             | ✅ Validé |
+| Bloc 3 | T-VUE-29 | `emprunt_form.html`                               | Présence du bloc informatif `#emprunt_membre_info`                       | Texte explicite + ID HTML présent                                      | ✅ Validé |
 
 > ✅ La distinction entre typage réel et simple valeur `media_type` est désormais testée.  
 > ✅ La logique de typage dynamique est assurée par la surcharge de `get_object()` dans `MediaDetailView`.  
@@ -305,13 +308,15 @@ Chaque catégorie de tests est regroupée dans une sous-section spécifique avec
 | Bloc 3 | T-FUN-23 | Masquage du tableau via bouton POST (`affiche_table == True` - POST `toggle_table=false`) (EMPRUNT-UC-RETARD-01)   | Tableau masqué, session mise à jour - Accès à `AccueilBibliothecaireView`                                                   | ✅ Validé          |
 | Bloc 3 | T-FUN-24 | Affichage du tableau via bouton POST (`affiche_table == False` - POST `toggle_table=true`) (EMPRUNT-UC-RETARD-01)  | Tableau affiché, session mise à jour - Accès à `AccueilBibliothecaireView`                                                  | ✅ Validé          |
 | Bloc 3 | T-FUN-25 | Rejeu du marquage automatique via fonction de debug (`retard_last_check_date` modifiée) (EMPRUNT-UC-RETARD-01)     | Marquage relancé, message et tableau mis à jour - Accès à `AccueilBibliothecaireView`                                       | 🟡 Non implémenté |
-| Bloc 3 | T-FUN-26 | Création réussie d’un emprunt (EMPRUNT-UC-CREATE-01)                                                               | Emprunt enregistré, média rendu indisponible, message de validation affiché                                                 | ✅ Validé       |
-| Bloc 3 | T-FUN-27 | Refus si membre non abonné (EMPRUNT-UC-CREATE-01)                                                                  | Aucun emprunt créé, message : “abonnement non validé”, sélection conservée                                                  | ✅ Validé       |
-| Bloc 3 | T-FUN-28 | Refus si membre avec retard (EMPRUNT-UC-CREATE-01)                                                                 | Aucun emprunt créé, message : “retard en cours”, sélection conservée                                                        | ✅ Validé       |
-| Bloc 3 | T-FUN-29 | Refus si membre au quota max (EMPRUNT-UC-CREATE-01)                                                                | Aucun emprunt créé, message : “quota d’emprunts atteint”, sélection conservée                                               | ✅ Validé       |
-| Bloc 3 | T-FUN-30 | Refus si média non typé (EMPRUNT-UC-CREATE-01)                                                                     | Aucun emprunt créé, message : “média non typé”, sélection conservée                                                         | ✅ Validé       |
-| Bloc 3 | T-FUN-31 | Refus si média non consultable (EMPRUNT-UC-CREATE-01)                                                              | Aucun emprunt créé, message : “hors gestion”, sélection conservée                                                           | ✅ Validé       |
-| Bloc 3 | T-FUN-32 | Refus si média non disponible (EMPRUNT-UC-CREATE-01)                                                               | Aucun emprunt créé, message : “pas disponible”, sélection conservée                                                         | ✅ Validé       |
+| Bloc 3 | T-FUN-26 | Création réussie d’un emprunt (EMPRUNT-UC-CREATE-01)                                                               | Emprunt enregistré, média rendu indisponible, message de validation affiché                                                 | ✅ Validé          |
+| Bloc 3 | T-FUN-27 | Refus si membre non abonné (EMPRUNT-UC-CREATE-01)                                                                  | Aucun emprunt créé, message : “abonnement non validé”, sélection conservée                                                  | ✅ Validé          |
+| Bloc 3 | T-FUN-28 | Refus si membre avec retard (EMPRUNT-UC-CREATE-01)                                                                 | Aucun emprunt créé, message : “retard en cours”, sélection conservée                                                        | ✅ Validé          |
+| Bloc 3 | T-FUN-29 | Refus si membre au quota max (EMPRUNT-UC-CREATE-01)                                                                | Aucun emprunt créé, message : “quota d’emprunts atteint”, sélection conservée                                               | ✅ Validé          |
+| Bloc 3 | T-FUN-30 | Refus si média non typé (EMPRUNT-UC-CREATE-01)                                                                     | Aucun emprunt créé, message : “média non typé”, sélection conservée                                                         | ✅ Validé          |
+| Bloc 3 | T-FUN-31 | Refus si média non consultable (EMPRUNT-UC-CREATE-01)                                                              | Aucun emprunt créé, message : “hors gestion”, sélection conservée                                                           | ✅ Validé          |
+| Bloc 3 | T-FUN-32 | Refus si média non disponible (EMPRUNT-UC-CREATE-01)                                                               | Aucun emprunt créé, message : “pas disponible”, sélection conservée                                                         | ✅ Validé          |
+| Bloc 3 | T-FUN-33 | Création d’un emprunt valide via membre                                                                            | Emprunt créé avec `statut = EN_COURS`, média rendu indisponible                                                             | ✅ Validé          |
+| Bloc 3 | T-FUN-34 | Refus si média non empruntable (via formulaire)                                                                    | Message d’erreur affiché, emprunt non créé                                                                                  | ✅ Validé          |
 
 > 🔧 Les tests unitaires _fonctionnels_ sont définis pour être autonome. Ils peuvent se rapprocher de tests unitaires
 > _techniques_ qui sont indiqués dans le _résultat attendu_. 

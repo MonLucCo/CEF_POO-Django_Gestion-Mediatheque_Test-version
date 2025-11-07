@@ -734,3 +734,29 @@ class EmpruntCreateView(CreateView):
         media.save()
         messages.success(self.request, f"Emprunt enregistré : {membre.name} → {media.name}")
         return redirect("bibliothecaire:emprunt_list")
+
+
+class EmpruntCreateFromMembreView(EmpruntCreateView):
+    """
+    Vue UC-CREATE-02 : création d’un emprunt à partir d’un membre emprunteur.
+    Le champ 'emprunteur' est figé dans le formulaire.
+    """
+    def dispatch(self, request, *args, **kwargs):
+        self.membre = get_object_or_404(Membre, pk=kwargs["pk"])
+        return super().dispatch(request, *args, **kwargs)
+
+    def get_initial(self):
+        return {"emprunteur": self.membre}
+
+    def get_form(self, form_class=None):
+        form = super().get_form(form_class)
+        form.fields["emprunteur"].initial = self.membre
+        form.fields["emprunteur"].disabled = True
+        return form
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["membre"] = self.membre
+        context["is_from_membre"] = True
+        return context
+

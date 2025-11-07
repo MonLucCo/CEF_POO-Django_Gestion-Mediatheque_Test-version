@@ -595,7 +595,7 @@ Trois parcours UX sont proposés pour couvrir les usages métier :
 | ID (EMPRUNT-*) | Description métier                                                      | Déclenchement UX                  | Validation métier appliquée              | Avancement     |
 |----------------|-------------------------------------------------------------------------|-----------------------------------|------------------------------------------|----------------|
 | UC-CREATE-01   | Créer un emprunt via formulaire global                                  | Vue `EmpruntCreateView`           | Validation complète dans la vue          | ✅ Implémenté   |
-| UC-CREATE-02   | Créer un emprunt depuis la fiche membre (sélection du média disponible) | Vue `EmpruntCreateFromMembreView` | Validation implicite via choix du média  | ⚪ À développer |
+| UC-CREATE-02   | Créer un emprunt depuis la fiche membre (sélection du média disponible) | Vue `EmpruntCreateFromMembreView` | Validation implicite via choix du média  | ✅ Implémenté   |
 | UC-CREATE-03   | Créer un emprunt depuis la fiche média (sélection du membre emprunteur) | Vue `EmpruntCreateFromMediaView`  | Validation implicite via choix du membre | ⚪ À développer |
 
 > 🔹 Ces trois UC partagent la même logique métier (`peut_emprunter()` + `is_disponible`) mais diffèrent par leur 
