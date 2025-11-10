@@ -27,7 +27,7 @@ et couvre :
 - Les vues CRUD, les transitions métier, les historiques
 - La préparation des tests fonctionnels et des fixtures
 
-📌 Version : index H-9 (issue #3 – étape 6 - Bloc 3)
+📌 Version : index H-11 (issue #3 – étape 6 - Bloc 3)
 
 ---
 
@@ -75,6 +75,7 @@ et couvre :
    - [9.22 Difficulté 22 : Gestion des messages d’incohérence (Logs) et d’information utilisateur (UX)](#922-difficulté-22--gestion-des-messages-dincohérence-logs-et-dinformation-utilisateur-ux)
    - [9.23 Difficulté 23 : Formalisation des scenarii métier](#923-difficulté-23--formalisation-des-scenarii-métier)
    - [9.24 Difficulté 24 : Traçabilité UX des actions métier et synchronisation du contexte d’affichage](#924-difficulté-24--traçabilité-ux-des-actions-métier-et-synchronisation-du-contexte-daffichage)
+   - [9.25 Difficulté 25 : Choix du modèle de vue pour une confirmation métier liée à un objet](#925-difficulté-25--choix-du-modèle-de-vue-pour-une-confirmation-métier-liée-à-un-objet)
 10. [📌 Décisions structurantes du projet](#10--décisions-structurantes-du-projet)
     - [10.1 Décision 1 (D-01) – Structuration progressive du développement par blocs fonctionnels](#101-décision-1-d-01--structuration-progressive-du-développement-par-blocs-fonctionnels)
     - [10.2 Décision 2 (D-02) – Centralisation des vues sur l’entité Media avec typage différé](#102-décision-2-d-02--centralisation-des-vues-sur-lentité-media-avec-typage-différé)
@@ -1594,6 +1595,113 @@ répétition (concept DRY de la POO).
 
 La résolution de cette difficulté m'a permis de capitaliser dans le codage de ce cas d'usage (EMPRUNT-UC-RETARD) 
 l'expérience de développement issue des difficultés précédentes.
+
+---
+
+### 9.25 Difficulté 25 : Choix du modèle de vue pour une confirmation métier liée à un objet
+
+Cette difficulté est apparue lors de la mise en œuvre de la vue `EmpruntRetourConfirmView`, qui doit permettre au 
+bibliothécaire de confirmer le retour d’un emprunt sans modifier les champs résultants de sélections antérieures.
+La recherche d'une solution de modélisation (architecture) m'a conduit à rejeter la solution à partir d'un modèle 
+`UpdateView` pour me concentrer sur une modélisation basée sur `FormView`.
+
+#### a) Contexte de la difficulté
+
+La confirmation d’un retour est une action métier :
+- elle ne modifie pas les champs via formulaire.
+- elle repose sur une instance existante (`Emprunt`).
+- elle doit afficher les données de l’objet (`media`, `emprunteur`, `date_emprunt`) dans le template.
+
+Le besoin est donc :
+- un formulaire statique (sans champs éditables).
+- un accès à l’objet métier (`self.object` ou `get_object()`).
+
+#### b) Problème rencontré
+
+Le modèle `FormView` ne fournit pas `get_object()` ni `self.object` par défaut.  
+Cela empêche l’accès aux données de l’objet `Emprunt` dans le template ou dans la logique métier.
+
+#### c) Solution retenue
+
+Ajout du mixin `SingleObjectMixin` à la vue :
+
+```python
+class EmpruntRetourConfirmView(SingleObjectMixin, FormView):
+    model = Emprunt
+    ...
+```
+
+Ce mixin permet :
+- d’accéder à `self.object` dans `get()`, `form_valid()`, `get_context_data()`.
+- d’utiliser `get_object()` sans redéfinition manuelle.
+
+La vue devient ainsi capable :
+- d’afficher les données de l’objet dans le template.
+- d’exécuter la logique métier (`enregistrer_retour()`).
+- de rediriger selon le contexte UX.
+
+#### d) Enseignement
+
+Le mixin `SingleObjectMixin` est indispensable pour toute **vue de confirmation métier liée à un objet**, lorsqu’on 
+utilise `FormView`.  
+Il permet de respecter la séparation des responsabilités :
+- le formulaire reste statique.
+- la logique métier reste dans la vue.
+- l’accès aux données reste encapsulé.
+
+Cette difficulté a également permis de clarifier le rôle des mixins :
+- ils doivent **compléter** les vues, sans empiéter sur leur logique métier.
+- ils ne doivent pas effectuer de calculs de redirection (`reverse()`), qui relèvent de la vue.
+
+> 🔹 Cette clarification est intégrée dans l’AFBib (section 3.3.1.3 – UC-RETOUR)  
+> 🔹 Elle permet de structurer les futures vues de confirmation (suppression, archivage, etc.)
+
+#### e) Alternatives envisagées
+
+Une alternative envisagée était l’utilisation de `UpdateView`, qui permet d’accéder à `get_object()` et `self.object` 
+nativement.  
+Cependant, cette classe est conçue pour des **vues de modification** de champs via formulaire, ce qui ne correspond pas 
+au besoin métier ici.
+
+Dans le cas de `EmpruntRetourConfirmView`, aucun champ n’est modifié par l’utilisateur :
+- le formulaire est statique (pas de saisie).
+- la logique métier est déclenchée par validation (`enregistrer_retour()`).
+
+Utiliser `UpdateView` aurait impliqué :
+- une surcharge inutile du comportement de mise à jour.
+- une confusion sur l’intention métier (édition vs confirmation).
+
+La solution `FormView` + `SingleObjectMixin` est donc plus adaptée :
+- elle permet un formulaire statique.
+- elle donne accès à l’objet métier.
+- elle respecte la séparation des responsabilités.
+
+> 🔹 Cette clarification permet de poser une convention pour les vues de confirmation métier :  
+> 👉 **Utiliser `FormView` + `SingleObjectMixin` pour les actions métier sans édition de champs**.
+
+#### f) Conclusion
+
+La solution retenue résulte d’une recherche d’adéquation entre le besoin métier — une confirmation d’action sans 
+modification de données — et les modèles de vue proposés par Django.  
+Plutôt que d’utiliser `UpdateView`, conçu pour des formulaires évolutifs et des mises à jour de champs, le choix s’est 
+porté sur `FormView` associé à `SingleObjectMixin`, permettant de gérer un formulaire statique tout en accédant à 
+l’objet métier via `get_object()`.
+
+Ce choix, qui peut sembler _puriste_ dans une première approche, a été déterminant pour approfondir ma compréhension des 
+**Mixins**.  
+Il illustre leur rôle fondamental : **étendre les capacités d’une vue sans en altérer la logique métier**, en injectant 
+des comportements ciblés par héritage.  
+L’exemple de `SingleObjectMixin`, qui ajoute l’accès à l’objet sans modifier le code existant, démontre la puissance de 
+cette approche non intrusive.
+
+Cette difficulté m’a permis :
+- de clarifier les responsabilités entre vue, formulaire et modèle.
+- de structurer une architecture extensible pour les confirmations métier.
+- d’éviter toute _refactorisation_ des vues antérieures, conformément à la 
+[décision D-03](#103-décision-3-d-03--gel-de-la-première-version-avant-_refactorisation_-métier).
+
+Elle constitue un **point d’inflexion dans le raisonnement architectural** du projet, et mérite d’être documentée comme 
+un fait marquant du développement.
 
 ---
 

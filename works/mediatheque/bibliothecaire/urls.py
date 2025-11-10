@@ -1,6 +1,7 @@
 from django.urls import path
 from . import views
-from .views import EmpruntCreateFromMembreView, EmpruntCreateFromMediaView, EmpruntRendreView, EmpruntRetourConfirmView
+from .views import EmpruntCreateFromMembreView, EmpruntCreateFromMediaView, EmpruntRendreView, EmpruntRetourConfirmView, \
+    EmpruntRendreFromMediaView
 from .views_debug import ResetRetardSessionView
 
 app_name = 'bibliothecaire'
@@ -31,6 +32,7 @@ urlpatterns = [
     path('medias/<int:pk>/modifier/cd/', views.MediaTypageCdView.as_view(), name='media_typage_cd'),
 
     path("medias/<int:pk>/emprunter", EmpruntCreateFromMediaView.as_view(), name="media_emprunter"),
+    path("medias/<int:pk>/rendre/", EmpruntRendreFromMediaView.as_view(), name="media_rendre"),
 
     path('medias/<int:pk>/livre/modifier/', views.LivreUpdateView.as_view(), name='media_update_livre'),
     path('medias/<int:pk>/dvd/modifier/', views.DvdUpdateView.as_view(), name='media_update_dvd'),

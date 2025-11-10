@@ -108,6 +108,7 @@ class Media(Support):
       - mutate_to_typed()               : Crée dynamiquement le sous-type à partir du `media_type`.
       - get_update_url_name()           : Retourne le nom de route Django pour la mise à jour selon le type.
       - get_typage_url_name()           : Retourne le nom de route Django pour le typage selon le type.
+      - get_emprunt_actif()             : Retourne l'emprunt actif (EN_COURS ou RETARD) associé à ce média. Si aucun emprunt, retourne `None`.
       - rendre_disponible(force=False)  : Rend le média disponible s’il est typé. Si déjà disponible, ne fait rien sauf si `force=True`.
 
     Remarques :
@@ -230,6 +231,13 @@ class Media(Support):
         self.disponible = True
         self.save()
         return True
+
+    def get_emprunt_actif(self):
+        """
+        Retourne l’emprunt actif (EN_COURS ou RETARD) associé à ce média.
+        Si aucun emprunt actif, retourne None.
+        """
+        return self.emprunts.filter(statut__in=[StatutEmprunt.EN_COURS, StatutEmprunt.RETARD]).first()
 
 
 class Livre(Media):

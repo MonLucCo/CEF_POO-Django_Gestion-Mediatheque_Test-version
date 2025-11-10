@@ -681,9 +681,9 @@ Trois parcours UX sont proposés pour couvrir les usages métier :
 
 | ID (EMPRUNT-*) | Description métier                                       | Déclenchement UX                  | Validation métier appliquée           | Avancement     |
 |----------------|----------------------------------------------------------|-----------------------------------|---------------------------------------|----------------|
-| UC-RETOUR-01   | Enregistrer le retour via la liste des emprunts en cours | Vue `EmpruntRetourView`           | Validation complète dans la vue       | ⚪ À développer |
-| UC-RETOUR-02   | Enregistrer le retour depuis la fiche membre emprunteur  | Vue `EmpruntRetourFromMembreView` | Validation implicite via choix média  | ⚪ À développer |
-| UC-RETOUR-03   | Enregistrer le retour depuis la fiche média emprunté     | Vue `EmpruntRetourFromMediaView`  | Validation implicite via choix membre | ⚪ À développer |
+| UC-RETOUR-01   | Enregistrer le retour via la liste des emprunts en cours | Vue `EmpruntRendreView`           | Validation complète dans la vue       | ⚪ À développer |
+| UC-RETOUR-02   | Enregistrer le retour depuis la fiche membre emprunteur  | Vue `EmpruntRendreFromMembreView` | Validation implicite via choix média  | ⚪ À développer |
+| UC-RETOUR-03   | Enregistrer le retour depuis la fiche média emprunté     | Vue `EmpruntRendreFromMediaView`  | Validation implicite via choix membre | ⚪ À développer |
 
 > 🔹 Ces trois UC partagent la même logique métier (`enregistrer_retour()`), mais diffèrent par leur parcours UX.  
 > 🔹 Chaque UC doit être testée indépendamment pour garantir la robustesse des transitions et des validations.
@@ -695,19 +695,40 @@ Trois parcours UX sont proposés pour couvrir les usages métier :
   - Mise à jour du statut, de la date, et de la disponibilité du média.
   - Vérification de la cohérence logique entre l’état du média et celui de l’emprunt avant enregistrement du retour.
   
-- Les vues `EmpruntRetourView`, `EmpruntRetourFromMembreView`, `EmpruntRetourFromMediaView` doivent :
+- Les vues `EmpruntRendreView`, `EmpruntRendreFromMembreView`, `EmpruntRendreFromMediaView` doivent :
   - préremplir les champs selon le contexte.
   - afficher les listes filtrées (`emprunt.est_a_rendre`, `membre.emprunts`, `media.emprunts`).
   - gérer les erreurs métier via `messages.error`, et les confirmations via `messages.success`.
 
-- Le formulaire est minimal : confirmation du retour, sans saisie libre.
+- Le formulaire est minimal et sans saisie libre. Il est suivi d'une confirmation (`EmpruntRetourConfirmView`) pour 
+validation.
   - À la validation :
     - le statut de l’emprunt passe à `RENDU`.
     - le média est libéré (`disponible = True`).
   - Un message de confirmation est affiché.
+  - > L’état du membre (`nb_emprunts_en_cours`, `nb_retards`, etc.) est calculé dynamiquement via des propriétés métier. 
+    > Aucune actualisation explicite n’est requise.
 
-> 🔹 L’état du membre (`nb_emprunts_en_cours`, `nb_retards`, etc.) est calculé dynamiquement via des propriétés métier. 
-> Aucune actualisation explicite n’est requise.
+**La vue `EmpruntRetourConfirmView` repose sur une architecture spécifique :**
+  - `FormView` : pour un formulaire statique, sans champs éditables.
+  - `SingleObjectMixin` : pour accéder à l’objet `Emprunt` via `get_object()` et `self.object`.
+
+Ce choix permet :
+- d’afficher les données métier dans le template (`media`, `emprunteur`, `date_emprunt`).
+- d’exécuter la logique métier (`enregistrer_retour()`) dans `form_valid()`.
+- de rediriger selon le contexte UX (`get_success_url()`).
+
+Le mixin `EmpruntRetourContextMixin` a été supprimé car il était redondant :
+- les données injectées (`media`, `emprunteur`, etc.) sont déjà accessibles via `self.object`.
+- le calcul de l’URL de retour est effectué dans la vue, pas dans le mixin.
+
+Cette structuration garantit :
+- une séparation claire des responsabilités.
+- une extensibilité pour les futurs UC (suppression, archivage, etc.).
+- une cohérence UX sans URL visible (`?origine=...`).
+
+> 🔹 Voir [Difficulté 25](_Frontend-main-courante.md#925-difficulté-25--choix-du-modèle-de-vue-pour-une-confirmation-métier-liée-à-un-objet) 
+> dans la main-courante pour le raisonnement complet.
 
 ###### 🔧 Impacts techniques
 
@@ -782,6 +803,7 @@ métier.
 - `mutate_to_typed()` → Crée dynamiquement le sous-type à partir du champ `media_type`.
 - `get_update_url_name()` → Retourne le nom de route Django pour la mise à jour selon le type.
 - `get_typage_url_name()` → Retourne le nom de route Django pour le typage selon le type.
+- `get_emprunt_actif()` → Retourne l'emprunt actif (EN_COURS ou RETARD) associé à ce média. Si aucun emprunt, retourne `None`.
 - `rendre_disponible(force=False)` → Rend le média disponible s’il est typé. Si déjà disponible, ne fait rien sauf si 
 `force=True`.
 

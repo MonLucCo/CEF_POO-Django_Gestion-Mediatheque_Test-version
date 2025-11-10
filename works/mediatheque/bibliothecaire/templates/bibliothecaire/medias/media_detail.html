@@ -91,6 +91,14 @@
   {% endif %}
 </table>
 
+{% if messages %}
+  <ul class="messages">
+    {% for message in messages %}
+      <li class="{{ message.tags }}">{{ message }}</li>
+    {% endfor %}
+  </ul>
+{% endif %}
+
 <div style="margin-top: 20px;">
     <a href="{% url media.get_update_url_name media.pk %}">Modifier</a> |
 {% comment %}
@@ -98,6 +106,9 @@
 {% endcomment %}
     {% if media.est_empruntable %}
         <a href="{% url 'bibliothecaire:media_emprunter' media.pk %}">Créer un emprunt</a> |
+    {% endif %}
+    {% if media.est_emprunte %}
+        <a href="{% url 'bibliothecaire:media_rendre' media.pk %}">Rendre ce média</a> |
     {% endif %}
     <a href="{% url 'bibliothecaire:media_list' %}">Retour à la liste</a>
 </div>

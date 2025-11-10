@@ -10,6 +10,6 @@
     {% csrf_token %}
     <button type="submit">Confirmer le retour</button>
     |
-    <a href="{% url 'bibliothecaire:emprunt_rendre' %}">Annuler</a>
+    <a href="{{ url_retour }}">Annuler</a>
   </form>
 {% endblock %}

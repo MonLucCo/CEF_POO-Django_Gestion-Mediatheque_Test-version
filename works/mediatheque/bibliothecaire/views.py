@@ -5,6 +5,7 @@ from django.contrib import messages
 from django.urls import reverse_lazy, reverse
 from django.views import View
 from django.views.generic import TemplateView, ListView, DetailView, CreateView, UpdateView, FormView
+from django.views.generic.detail import SingleObjectMixin
 
 from bibliothecaire.mixins import OrigineSessionMixin, MembreSuppressionContextMixin
 from bibliothecaire.models import Media, Livre, Dvd, Cd, Membre, StatutMembre, Emprunt
@@ -75,10 +76,11 @@ class MediaListView(ListView):
     template_name = 'bibliothecaire/medias/media_list.html'
 
 
-class MediaDetailView(DetailView):
+class MediaDetailView(OrigineSessionMixin, DetailView):
     model = Media
     context_object_name = 'media'
     template_name = 'bibliothecaire/medias/media_detail.html'
+    origine_key = 'media_detail'
 
     def get_object(self, queryset=None):
         obj = super(MediaDetailView, self).get_object(queryset)
@@ -684,6 +686,7 @@ class EmpruntRetardView(TemplateView):
             messages.info(self.request, text)  # fallback
         return context
 
+
 class EmpruntListView(ListView):
     """
     Vue pour afficher la liste des emprunts.
@@ -804,19 +807,59 @@ class EmpruntRendreView(FormView):
         return redirect("bibliothecaire:emprunt_retour_confirm", pk=emprunt.pk)
 
 
-class EmpruntRetourConfirmView(UpdateView):
+class EmpruntRetourConfirmView(SingleObjectMixin, FormView):
     model = Emprunt
     form_class = EmpruntRetourForm
     template_name = "bibliothecaire/emprunts/emprunt_retour_confirm.html"
-    success_url = reverse_lazy("bibliothecaire:emprunt_list")
+
+    def get(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        return super().get(request, *args, **kwargs)
+
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs["instance"] = self.get_object()
+        return kwargs
+
+    def get_success_url(self):
+        origine_key = self.request.session.pop("origine_retour", "rendre")
+        if origine_key == "media":
+            return reverse("bibliothecaire:media_detail", kwargs={"pk": self.get_object().media.pk})
+        return reverse("bibliothecaire:emprunt_list")
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        # Calcul explicite de l’URL de retour pour le template
+        origine_key = self.request.session.get("origine_retour", "rendre")
+        if origine_key == "media":
+            context["url_retour"] = reverse("bibliothecaire:media_detail", kwargs={"pk": self.get_object().media.pk})
+        else:
+            context["url_retour"] = reverse("bibliothecaire:emprunt_rendre")
+        return context
 
     def form_valid(self, form):
         emprunt = self.get_object()
-        if not emprunt.enregistrer_retour():
+        if emprunt.enregistrer_retour():
+            media = emprunt.media
+            membre = emprunt.emprunteur
+            messages.success(self.request, f"Emprunt rendu : {membre.name} → {media.name} ({media.media_type})")
+        else:
             messages.warning("Cet emprunt ne peut pas être rendu.")
-            return self.form_invalid(form)
+        return redirect(self.get_success_url())
 
-        media=emprunt.media
-        membre=emprunt.emprunteur
-        messages.success(self.request, f"Emprunt rendu : {membre.name} → {media.name} ({media.media_type})")
-        return redirect("bibliothecaire:emprunt_list")
+
+class EmpruntRendreFromMediaView(View):
+    """
+    UC-RETOUR-02 : retour direct à partir d’un média emprunté.
+    Redirige vers la confirmation du seul emprunt actif.
+    """
+    def get(self, request, pk):
+        media = get_object_or_404(Media, pk=pk)
+        emprunt = media.get_emprunt_actif()
+
+        if emprunt:
+            request.session["origine_retour"] = "media"
+            return redirect("bibliothecaire:emprunt_retour_confirm", pk=emprunt.pk)
+
+        messages.warning(request, f"Aucun emprunt actif trouvé pour le média : {media.name} ({media.media_type})")
+        return redirect("bibliothecaire:media_detail", pk=media.pk)
