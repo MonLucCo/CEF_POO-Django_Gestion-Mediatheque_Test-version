@@ -554,12 +554,13 @@ class Emprunt(models.Model):
     Propriétés :
     - date_retour_prevu : Date prévue du retour (calculée dynamiquement avec DELAI_EMPRUNT)
     - est_en_retard     : Retourne True si l’emprunt est en retard par rapport à `date_retour_prevu`
+    - est_non_rendu      : Retourne True si l'emprunt est à rendre
 
     Méthodes :
     - count_total()         : Méthode de classe, compteur du nombre total d'enregistrements
     - count_en_cours()      : Méthode de classe, compteur du nombre d'emprunts non-rendus et dans les délais (en cours)
     - count_en_retard()     : Méthode de classe, compteur du nombre d'emprunts non-rendus et hors délais (en retard)
-    - enregistrer_retour()  : Enregistre le retour du média : met à jour la date, le statut, et la disponibilité
+    - enregistrer_retour()  : Retourne True si : média rendu disponible vérifié, puis met à jour la date, le statut, et la disponibilité
     - marquer_retard()      : Méthode de classe, parcourt les emprunts en cours et marque ceux en retard
 
     """
@@ -612,6 +613,13 @@ class Emprunt(models.Model):
         """
         return self.statut == StatutEmprunt.EN_COURS and self.date_retour_prevu < date.today()
 
+    @property
+    def est_a_rendre(self):
+        """
+        Retourne True si l’emprunt est à rendre.
+        """
+        return self.statut != StatutEmprunt.RENDU
+
     def enregistrer_retour(self):
         """
         Enregistre le retour du média :
@@ -620,12 +628,13 @@ class Emprunt(models.Model):
         - change le statut en RENDU
         - rend le média disponible
         """
-        if self.media.is_disponible:
-            warnings.warn(f"Le média '{self.media}' est déjà disponible. Rendu redondant.")
+        if not self.media.rendre_disponible():
+            warnings.warn(f"Le média '{self.media}' ne peut pas être rendu disponible.")
+            return False
         self.date_retour = date.today()
         self.statut = StatutEmprunt.RENDU
-        self.media.rendre_disponible()
         self.save()
+        return True
 
     @classmethod
     def marquer_retard(cls):

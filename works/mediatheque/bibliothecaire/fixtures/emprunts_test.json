@@ -38,7 +38,7 @@
     "fields": {
       "media": 7,
       "emprunteur": 4,
-      "date_emprunt": "025-10-20",
+      "date_emprunt": "2025-10-20",
       "date_retour": null,
       "statut": 1
     }

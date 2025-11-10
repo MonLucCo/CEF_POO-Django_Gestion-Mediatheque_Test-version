@@ -1,0 +1,15 @@
+{% extends "bibliothecaire/_base.html" %}
+{% block content %}
+  <h2>Confirmer le retour</h2>
+
+  <p><strong>Média :</strong> {{ object.media }}</p>
+  <p><strong>Membre :</strong> {{ object.emprunteur }}</p>
+  <p><strong>Date d’emprunt :</strong> {{ object.date_emprunt }}</p>
+
+  <form method="post">
+    {% csrf_token %}
+    <button type="submit">Confirmer le retour</button>
+    |
+    <a href="{% url 'bibliothecaire:emprunt_rendre' %}">Annuler</a>
+  </form>
+{% endblock %}

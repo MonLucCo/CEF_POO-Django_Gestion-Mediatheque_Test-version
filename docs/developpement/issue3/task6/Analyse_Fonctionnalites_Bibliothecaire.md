@@ -1,7 +1,7 @@
 # 📘 Analyse des fonctionnalités – Bibliothécaire
 
 📁 `/docs/developpement/issue3/task6/Analyse_Fonctionnalites.md`  
-📌 Version : index H-10 (issue #3 – Bloc 3 - étape 6)
+📌 Version : index H-11 (issue #3 – Bloc 3 - étape 6)
 
 ---
 
@@ -68,23 +68,23 @@ Il permet de :
 
 ## 2. Synthèse des fonctions demandées
 
-| Entité  | UC                   | Description métier                   | Statut         | Avancement technique |
-|---------|----------------------|--------------------------------------|----------------|----------------------|
-| Media   | MEDIA-UC-LIST        | Affichage filtré des médias          | ✅ Demandée     | 🟢 Implémenté        |
-| Media   | MEDIA-UC-CREATE      | Création d’un média typé ou non typé | ✅ Demandée     | 🟢 Implémenté        |
-| Media   | MEDIA-UC-UPDATE      | Modification d’un média              | 🔸 Souhaitable | 🟢 Implémenté        |
-| Media   | MEDIA-UC-TYPAGE      | Transformation en sous-type          | 🔸 Souhaitable | 🟢 Implémenté        |
-| Media   | MEDIA-UC-ROLLBACK    | Rollback d'un typage en cours        | 🔸 Souhaitable | 🟢 Implémenté        |
-| Media   | MEDIA-UC-DELETE      | Suppression logique d'un média       | 🔸 Souhaitable | ⚪ À définir          |
-| Membre  | MEMBRE-UC-LIST       | Affichage de la liste des membres    | ✅ Demandée     | 🟢 Implémenté        |
-| Membre  | MEMBRE-UC-CREATE     | Création d’un membre                 | ✅ Demandée     | 🟢 Implémenté        |
-| Membre  | MEMBRE-UC-UPDATE     | Mise à jour d’un membre              | ✅ Demandée     | 🟢 Implémenté        |
-| Membre  | MEMBRE-UC-DELETE     | Suppression logique d’un membre      | ✅ Demandée     | 🟢 Implémenté        |
-| Membre  | MEMBRE-UC-HISTORIQUE | Consultation des emprunts passés     | 🔸 Souhaitable | ⚪ À définir          |
-| Emprunt | EMPRUNT-UC-CREATE    | Création d’un emprunt                | ✅ Demandée     | ⚪ À développer       |
-| Emprunt | EMPRUNT-UC-RETOUR    | Enregistrement du retour             | ✅ Demandée     | ⚪ À développer       |
-| Emprunt | EMPRUNT-UC-RETARD    | Détection et marquage du retard      | ✅ Demandée     | ⚪ À développer       |
-| Emprunt | EMPRUNT-UC-ARCHIVE   | Archivage d’un emprunt               | 🔸 Souhaitable | ⚪ À définir          |
+| Entité  | UC                   | Description métier                   | Statut         | Avancement technique       |
+|---------|----------------------|--------------------------------------|----------------|----------------------------|
+| Media   | MEDIA-UC-LIST        | Affichage filtré des médias          | ✅ Demandée     | 🟢 Implémenté              |
+| Media   | MEDIA-UC-CREATE      | Création d’un média typé ou non typé | ✅ Demandée     | 🟢 Implémenté              |
+| Media   | MEDIA-UC-UPDATE      | Modification d’un média              | 🔸 Souhaitable | 🟢 Implémenté              |
+| Media   | MEDIA-UC-TYPAGE      | Transformation en sous-type          | 🔸 Souhaitable | 🟢 Implémenté              |
+| Media   | MEDIA-UC-ROLLBACK    | Rollback d'un typage en cours        | 🔸 Souhaitable | 🟢 Implémenté              |
+| Media   | MEDIA-UC-DELETE      | Suppression logique d'un média       | 🔸 Souhaitable | ⚪ À définir                |
+| Membre  | MEMBRE-UC-LIST       | Affichage de la liste des membres    | ✅ Demandée     | 🟢 Implémenté              |
+| Membre  | MEMBRE-UC-CREATE     | Création d’un membre                 | ✅ Demandée     | 🟢 Implémenté              |
+| Membre  | MEMBRE-UC-UPDATE     | Mise à jour d’un membre              | ✅ Demandée     | 🟢 Implémenté              |
+| Membre  | MEMBRE-UC-DELETE     | Suppression logique d’un membre      | ✅ Demandée     | 🟢 Implémenté              |
+| Membre  | MEMBRE-UC-HISTORIQUE | Consultation des emprunts passés     | 🔸 Souhaitable | ⚪ À définir                |
+| Emprunt | EMPRUNT-UC-CREATE    | Création d’un emprunt                | ✅ Demandée     | 🟢 Implémenté              |
+| Emprunt | EMPRUNT-UC-RETOUR    | Enregistrement du retour             | ✅ Demandée     | 🟡 Implémentation en cours |
+| Emprunt | EMPRUNT-UC-RETARD    | Détection et marquage du retard      | ✅ Demandée     | 🟢 Implémenté              |
+| Emprunt | EMPRUNT-UC-ARCHIVE   | Archivage d’un emprunt               | 🔸 Souhaitable | ⚪ À définir                |
 
 > 🔹 L’interface doit rester **basique**, sans mise en forme avancée : un designer Web prendra le relai.  
 > 🔹 Les vues doivent être **fonctionnelles, testables et extensibles**.
@@ -592,11 +592,11 @@ Trois parcours UX sont proposés pour couvrir les usages métier :
 
 ###### 🧩 Cas d’usage
 
-| ID (EMPRUNT-*) | Description métier                                                      | Déclenchement UX                  | Validation métier appliquée              | Avancement     |
-|----------------|-------------------------------------------------------------------------|-----------------------------------|------------------------------------------|----------------|
-| UC-CREATE-01   | Créer un emprunt via formulaire global                                  | Vue `EmpruntCreateView`           | Validation complète dans la vue          | ✅ Implémenté   |
-| UC-CREATE-02   | Créer un emprunt depuis la fiche membre (sélection du média disponible) | Vue `EmpruntCreateFromMembreView` | Validation implicite via choix du média  | ✅ Implémenté   |
-| UC-CREATE-03   | Créer un emprunt depuis la fiche média (sélection du membre emprunteur) | Vue `EmpruntCreateFromMediaView`  | Validation implicite via choix du membre | ⚪ À développer |
+| ID (EMPRUNT-*) | Description métier                                                      | Déclenchement UX                  | Validation métier appliquée              | Avancement   |
+|----------------|-------------------------------------------------------------------------|-----------------------------------|------------------------------------------|--------------|
+| UC-CREATE-01   | Créer un emprunt via formulaire global                                  | Vue `EmpruntCreateView`           | Validation complète dans la vue          | ✅ Implémenté |
+| UC-CREATE-02   | Créer un emprunt depuis la fiche membre (sélection du média disponible) | Vue `EmpruntCreateFromMembreView` | Validation implicite via choix du média  | ✅ Implémenté |
+| UC-CREATE-03   | Créer un emprunt depuis la fiche média (sélection du membre emprunteur) | Vue `EmpruntCreateFromMediaView`  | Validation implicite via choix du membre | ✅ Implémenté |
 
 > 🔹 Ces trois UC partagent la même logique métier (`peut_emprunter()` + `is_disponible`) mais diffèrent par leur 
 > parcours UX.  
@@ -697,7 +697,7 @@ Trois parcours UX sont proposés pour couvrir les usages métier :
   
 - Les vues `EmpruntRetourView`, `EmpruntRetourFromMembreView`, `EmpruntRetourFromMediaView` doivent :
   - préremplir les champs selon le contexte.
-  - afficher les listes filtrées (`emprunts_en_cours`, `membre.emprunts`, `media.emprunts`).
+  - afficher les listes filtrées (`emprunt.est_a_rendre`, `membre.emprunts`, `media.emprunts`).
   - gérer les erreurs métier via `messages.error`, et les confirmations via `messages.success`.
 
 - Le formulaire est minimal : confirmation du retour, sans saisie libre.
@@ -845,12 +845,14 @@ métier.
 **Propriétés**
 - `date_retour_prevu` → Date prévue du retour (calculée dynamiquement avec `DELAI_EMPRUNT`).
 - `est_en_retard` → True si l’emprunt est en retard par rapport à `date_retour_prevu`.
+- `est_a_rendre` → True si l’emprunt est à rendre.
 
 **Méthodes**
 - `count_total()` → **Méthode de classe**, Retourne le nombre total d'enregistrements.
 - `count_en_cours()` → **Méthode de classe**, Retourne le nombre total d'emprunts non-rendus et dans les délais (en cours).
 - `count_en_retard()` → **Méthode de classe**, Retourne le nombre total d'emprunts non-rendus et hors délais (en retard).
-- `enregistrer_retour()` → Enregistre le retour du média : met à jour la date, le statut, et la disponibilité.
+- `enregistrer_retour()` → Retourne True si : média rendu disponible vérifié, puis met à jour la date, le statut, et la 
+disponibilité.
 - `marquer_retard()` → **Méthode de classe**, parcourt les emprunts en cours et marque ceux en retard.
 
 ---

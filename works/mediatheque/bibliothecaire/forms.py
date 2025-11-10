@@ -1,8 +1,7 @@
 from django import forms
 from django.db.models import Case, When, IntegerField
-from django.http.request import MediaType
 
-from bibliothecaire.models import Media, Livre, Dvd, Cd, Membre, Emprunt
+from bibliothecaire.models import Media, Livre, Dvd, Cd, Membre, Emprunt, StatutEmprunt
 
 
 class MediaForm(forms.ModelForm):
@@ -113,3 +112,30 @@ class EmpruntForm(forms.ModelForm):
         ).order_by("name", "-type_priority")
 
         self.fields["media"].queryset = media_queryset
+
+
+class EmpruntRendreForm(forms.Form):
+    emprunt = forms.ModelChoiceField(
+        queryset=Emprunt.objects.exclude(statut=StatutEmprunt.RENDU),
+        label="Emprunt à rendre"
+    )
+
+    media = forms.ModelChoiceField(
+        queryset=Media.objects.filter(disponible=False),
+        label="Média emprunté",
+        required=False,
+        disabled=True
+    )
+
+    emprunteur = forms.ModelChoiceField(
+        queryset=Membre.objects.filter(emprunts__statut__in=[StatutEmprunt.EN_COURS, StatutEmprunt.RETARD]).distinct(),
+        label="Membre emprunteur",
+        required=False,
+        disabled=True
+    )
+
+
+class EmpruntRetourForm(forms.ModelForm):
+    class Meta:
+        model = Emprunt
+        fields = []  # Aucun champ modifiable

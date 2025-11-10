@@ -4,11 +4,12 @@ from django.shortcuts import redirect, get_object_or_404, render
 from django.contrib import messages
 from django.urls import reverse_lazy, reverse
 from django.views import View
-from django.views.generic import TemplateView, ListView, DetailView, CreateView, UpdateView, FormView, DeleteView
+from django.views.generic import TemplateView, ListView, DetailView, CreateView, UpdateView, FormView
 
 from bibliothecaire.mixins import OrigineSessionMixin, MembreSuppressionContextMixin
-from bibliothecaire.models import Media, Livre, Dvd, Cd, Membre, StatutMembre, Emprunt, StatutEmprunt
-from bibliothecaire.forms import MediaForm, LivreForm, DvdForm, CdForm, MembreForm, EmpruntForm
+from bibliothecaire.models import Media, Livre, Dvd, Cd, Membre, StatutMembre, Emprunt
+from bibliothecaire.forms import MediaForm, LivreForm, DvdForm, CdForm, MembreForm, EmpruntForm, EmpruntRendreForm, \
+    EmpruntRetourForm
 from django.db import transaction
 
 
@@ -784,3 +785,38 @@ class EmpruntCreateFromMediaView(EmpruntCreateView):
         context["media"] = self.media
         context["is_from_media"] = True
         return context
+
+
+class EmpruntRendreView(FormView):
+    """
+    UC-RETOUR-1 : rendre un emprunt
+    """
+    form_class = EmpruntRendreForm
+    template_name = "bibliothecaire/emprunts/emprunt_form.html"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["is_rendre"] = True
+        return context
+
+    def form_valid(self, form):
+        emprunt = form.cleaned_data["emprunt"]
+        return redirect("bibliothecaire:emprunt_retour_confirm", pk=emprunt.pk)
+
+
+class EmpruntRetourConfirmView(UpdateView):
+    model = Emprunt
+    form_class = EmpruntRetourForm
+    template_name = "bibliothecaire/emprunts/emprunt_retour_confirm.html"
+    success_url = reverse_lazy("bibliothecaire:emprunt_list")
+
+    def form_valid(self, form):
+        emprunt = self.get_object()
+        if not emprunt.enregistrer_retour():
+            messages.warning("Cet emprunt ne peut pas être rendu.")
+            return self.form_invalid(form)
+
+        media=emprunt.media
+        membre=emprunt.emprunteur
+        messages.success(self.request, f"Emprunt rendu : {membre.name} → {media.name} ({media.media_type})")
+        return redirect("bibliothecaire:emprunt_list")

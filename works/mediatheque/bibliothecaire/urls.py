@@ -1,6 +1,6 @@
 from django.urls import path
 from . import views
-from .views import EmpruntCreateFromMembreView, EmpruntCreateFromMediaView
+from .views import EmpruntCreateFromMembreView, EmpruntCreateFromMediaView, EmpruntRendreView, EmpruntRetourConfirmView
 from .views_debug import ResetRetardSessionView
 
 app_name = 'bibliothecaire'
@@ -41,10 +41,11 @@ urlpatterns = [
     #    path('medias/<int:pk>/supprimer/', views.MediaDeleteView.as_view(), name='media_delete'),
 
     # Emprunts
-     path('emprunts/', views.EmpruntListView.as_view(), name='emprunt_list'),
-     path('emprunts/retards/', views.EmpruntRetardView.as_view(), name='emprunt_retard'),
-     path('emprunts/ajouter/', views.EmpruntCreateView.as_view(), name='emprunt_create'),
- #   path('emprunts/<int:pk>/retour/', views.RetourUpdateView.as_view(), name='emprunt_retour'),
+    path('emprunts/', views.EmpruntListView.as_view(), name='emprunt_list'),
+    path('emprunts/retards/', views.EmpruntRetardView.as_view(), name='emprunt_retard'),
+    path('emprunts/ajouter/', views.EmpruntCreateView.as_view(), name='emprunt_create'),
+    path("emprunts/rendre/", EmpruntRendreView.as_view(), name="emprunt_rendre"),
+    path("emprunts/<int:pk>/retour/confirmation/", EmpruntRetourConfirmView.as_view(), name="emprunt_retour_confirm"),
 
     # Membres
     path('membres/', views.MembreListView.as_view(), name='membre_list'),
