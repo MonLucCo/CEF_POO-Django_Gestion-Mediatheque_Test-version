@@ -53,5 +53,49 @@
       "date_retour": "2025-07-15",
       "statut": 2
     }
+  },
+  {
+    "model": "bibliothecaire.emprunt",
+    "pk": 6,
+    "fields": {
+      "media": 6,
+      "emprunteur": 5,
+      "date_emprunt": "2025-10-26",
+      "date_retour": null,
+      "statut": 1
+    }
+  },
+  {
+    "model": "bibliothecaire.emprunt",
+    "pk": 7,
+    "fields": {
+      "media": 8,
+      "emprunteur": 2,
+      "date_emprunt": "2025-10-27",
+      "date_retour": null,
+      "statut": 1
+    }
+  },
+  {
+    "model": "bibliothecaire.emprunt",
+    "pk": 8,
+    "fields": {
+      "media": 4,
+      "emprunteur": 1,
+      "date_emprunt": "2025-10-28",
+      "date_retour": null,
+      "statut": 1
+    }
+  },
+  {
+    "model": "bibliothecaire.emprunt",
+    "pk": 9,
+    "fields": {
+      "media": 1,
+      "emprunteur": 1,
+      "date_emprunt": "2025-11-03",
+      "date_retour": null,
+      "statut": 1
+    }
   }
 ]

@@ -1,0 +1,29 @@
+{% extends 'bibliothecaire/_base.html' %}
+
+{% block content %}
+  <h2>🛠 Rejeux – Marquage automatique</h2>
+
+  <p><strong>Date actuelle en session :</strong> {{ current_date|default:"(aucune)" }}</p>
+
+  <form method="post">
+    {% csrf_token %}
+    <label for="nb_jours">Nombre de jours à retirer :</label>
+    <input type="number" name="nb_jours" id="nb_jours" value="1" min="1" />
+    <button type="submit">Valider</button>
+  </form>
+
+  {% if messages %}
+  <ul class="messages">
+    {% for message in messages %}
+      <li class="{{ message.tags }}">{{ message }}</li>
+    {% endfor %}
+  </ul>
+  {% endif %}
+
+  <div style="margin-top: 20px;">
+      <hr>
+      <a href="{% url 'bibliothecaire:emprunt_list' %}">📚 Voir les emprunts</a>
+         |
+      <a href="{% url 'bibliothecaire:accueil' %}">↩ Retour à l’accueil</a>
+  </div>
+{% endblock %}

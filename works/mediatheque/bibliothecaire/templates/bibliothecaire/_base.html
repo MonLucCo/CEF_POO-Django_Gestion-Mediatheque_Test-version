@@ -19,6 +19,10 @@
       .success { background-color: #e6ffe6; color: #2d662d; }
       .error   { background-color: #ffe6e6; color: #992d2d; }
       .warning { background-color: #fff8e6; color: #996600; }
+
+      .info { background-color: #e6f0ff; color: #2d4d99;
+}
+
     </style>
 </head>
 <body>
@@ -44,6 +48,18 @@
                         <li><a href="#">Médiathèque</a></li>
                         <li><a href="{% url 'bibliothecaire:accueil' %}">Bibliothécaire</a></li>
                         <li><a href="#">Consultation</a></li>
+                      </ul>
+                    </li>
+                    <li>
+                      <strong>Fonctions techniques :</strong>
+                      <ul>
+                        <li><a href="{% url 'bibliothecaire:emprunt_retard' %}">Marquage des retards</a></li>
+                      </ul>
+                    </li>
+                    <li>
+                      <strong>Fonctions de rejeu :</strong>
+                      <ul>
+                        <li><a href="{% url 'bibliothecaire:rejeu_reset_retard_session' %}">Changer date de marquage</a></li>
                       </ul>
                     </li>
                   </ul>
@@ -100,10 +116,9 @@
                 </td>
                 <td style="vertical-align: top;">
                   <ul>
-                    <li><a href="#">Liste des emprunts</a></li>
-                    <li><a href="#">Créer un emprunt</a></li>
-                    <li><a href="#">Retours</a></li>
-                    <li><a href="#">Retards</a></li>
+                    <li><a href="{% url 'bibliothecaire:emprunt_list' %}">Lister</a></li>
+                    <li><a href="{% url 'bibliothecaire:emprunt_create' %}">Créer</a></li>
+                    <li><a href="{% url 'bibliothecaire:emprunt_rendre' %}">Rendre</a></li>
                   </ul>
                 </td>
               </tr>

@@ -9,6 +9,8 @@ Elle vise à :
 - Clarifier les rôles utilisateurs et les accès
 - Suivre les fichiers à produire et les tests à mettre en œuvre
 - Documenter les difficultés rencontrées et les arbitrages méthodologiques
+- Expliciter les décisions structurantes pour le développement
+- Lister les documents techniques de référence.
 
 La rédaction s’appuie sur le modèle métier du projet, les exigences explicites du sujet, et les bonnes pratiques Django 
 issues de la documentation officielle.
@@ -25,7 +27,16 @@ et couvre :
 - Les vues CRUD, les transitions métier, les historiques
 - La préparation des tests fonctionnels et des fixtures
 
-📌 Version : index H-8 (issue #3 – étape 6 - Bloc 3)
+📌 Version : index H-11 (issue #3 – étape 6 - Bloc 3)
+
+---
+
+> 🔗 Liens utiles
+>
+>> - [Issue #3 – Développement de l’application fonctionnelle bibliothécaire](https://github.com/MonLucCo/CEF_POO-Django_Gestion-Mediatheque_Test-version/issues/3)  
+>> - [README-tech.md](../../technique/README-tech.md)  
+>> - [Analyse_Fonctionnalites.md](../../fonctionnel/Analyse_Fonctionnalites.md)  
+>> - [tests-plan.md](tests-plan.md)
 
 ---
 
@@ -50,16 +61,34 @@ et couvre :
    - [9.8 Difficulté 8 : nommage des dossiers du projet](#98-difficulté-8--nommage-des-dossiers-du-projet)
    - [9.9 Difficulté 9 : interactions entre les tests unitaires techniques et fonctionnels métier](#99-difficulté-9--interactions-entre-les-tests-unitaires-techniques-et-fonctionnels-métier)
    - [9.10 Difficulté 10 : Organisation et clarté du routage lié aux médias](#910-difficulté-10--organisation-et-clarté-du-routage-lié-aux-médias)
-   - [9.11 Difficulté 11 – Visualisation des contraintes du formulaire](#911-difficulté-11--visualisation-des-contraintes-du-formulaire)
-   - [9.12 Difficulté 12 - Formalisation du cycle de vie initial et typé des médias](#912-difficulté-12---formalisation-du-cycle-de-vie-initial-et-typé-des-médias)
+   - [9.11 Difficulté 11 : Visualisation des contraintes du formulaire](#911-difficulté-11--visualisation-des-contraintes-du-formulaire)
+   - [9.12 Difficulté 12 : Formalisation du cycle de vie initial et typé des médias](#912-difficulté-12---formalisation-du-cycle-de-vie-initial-et-typé-des-médias)
    - [9.13 Difficulté 13 : Définir ce que signifie “ajouter un média” – segmentation fonctionnelle, typage différé et structuration technique](#913-difficulté-13--définir-ce-que-signifie-ajouter-un-média--segmentation-fonctionnelle-typage-différé-et-structuration-technique)
-   - [9.14 Difficulté 14 – Définition transversale du cycle de vie métier avant développement des UC](#914-difficulté-14--définition-transversale-du-cycle-de-vie-métier-avant-développement-des-uc)
-   - [9.15 Difficulté 15 – Regroupement des tests techniques et fonctionnels dans un même groupe de tests](#915-difficulté-15--regroupement-des-tests-techniques-et-fonctionnels-dans-un-même-groupe-de-tests)
-   - [9.16 Difficulté 16 – Redondance du champ `bloqué` et modélisation du blocage métier](#916-difficulté-16--redondance-du-champ-bloqué-et-modélisation-du-blocage-métier)
-   - [9.17 Difficulté 17 – Cohérence UX et gestion du contexte métier via session](#917-difficulté-17--cohérence-ux-et-gestion-du-contexte-métier-via-session)
-   - [9.18 Difficulté 18 – Appel implicite d’une méthode sans argument dans un template Django](#918-difficulté-18--appel-implicite-dune-méthode-sans-argument-dans-un-template-django)
-   - [9.19 Section 9.19 – Stylisation minimale des messages utilisateur](#919-section-919--stylisation-minimale-des-messages-utilisateur)
-10. [🔗 Liens utiles](#10--liens-utiles)
+   - [9.14 Difficulté 14 : Définition transversale du cycle de vie métier avant développement des UC](#914-difficulté-14--définition-transversale-du-cycle-de-vie-métier-avant-développement-des-uc)
+   - [9.15 Difficulté 15 : Regroupement des tests techniques et fonctionnels dans un même groupe de tests](#915-difficulté-15--regroupement-des-tests-techniques-et-fonctionnels-dans-un-même-groupe-de-tests)
+   - [9.16 Difficulté 16 : Redondance du champ `bloqué` et modélisation du blocage métier](#916-difficulté-16--redondance-du-champ-bloqué-et-modélisation-du-blocage-métier)
+   - [9.17 Difficulté 17 : Cohérence UX et gestion du contexte métier via session](#917-difficulté-17--cohérence-ux-et-gestion-du-contexte-métier-via-session)
+   - [9.18 Difficulté 18 : Appel implicite d’une méthode sans argument dans un template Django](#918-difficulté-18--appel-implicite-dune-méthode-sans-argument-dans-un-template-django)
+   - [9.19 Difficulté 19 : Stylisation minimale des messages utilisateur](#919-difficulté-19--stylisation-minimale-des-messages-utilisateur)
+   - [9.20 Difficulté 20 : Activation du calcul des retards des emprunts en cours](#920-difficulté-20--activation-du-calcul-des-retards-des-emprunts-en-cours)
+   - [9.21 Difficulté 21 : Formalisation des méthodes métier et transitions d’état](#921-difficulté-21--formalisation-des-méthodes-métier-et-transitions-détat)
+   - [9.22 Difficulté 22 : Gestion des messages d’incohérence (Logs) et d’information utilisateur (UX)](#922-difficulté-22--gestion-des-messages-dincohérence-logs-et-dinformation-utilisateur-ux)
+   - [9.23 Difficulté 23 : Formalisation des scenarii métier](#923-difficulté-23--formalisation-des-scenarii-métier)
+   - [9.24 Difficulté 24 : Traçabilité UX des actions métier et synchronisation du contexte d’affichage](#924-difficulté-24--traçabilité-ux-des-actions-métier-et-synchronisation-du-contexte-daffichage)
+   - [9.25 Difficulté 25 : Choix du modèle de vue pour une confirmation métier liée à un objet](#925-difficulté-25--choix-du-modèle-de-vue-pour-une-confirmation-métier-liée-à-un-objet)
+10. [📌 Décisions structurantes du projet](#10--décisions-structurantes-du-projet)
+    - [10.1 Décision 1 (D-01) – Structuration progressive du développement par blocs fonctionnels](#101-décision-1-d-01--structuration-progressive-du-développement-par-blocs-fonctionnels)
+    - [10.2 Décision 2 (D-02) – Centralisation des vues sur l’entité Media avec typage différé](#102-décision-2-d-02--centralisation-des-vues-sur-lentité-media-avec-typage-différé)
+    - [10.3 Décision 3 (D-03) – Gel de la première version avant _refactorisation_ métier](#103-décision-3-d-03--gel-de-la-première-version-avant-_refactorisation_-métier)
+    - [10.4 Décision 4 (D-04) – Clarification du champ `Support.consultable` selon le sous-type](#104-décision-4-d-04--clarification-du-champ-supportconsultable-selon-le-sous-type)
+    - [10.5 Décision 5 (D-05) – Stratégie de gestion des messages et des logs](#105-décision-5-d-05--stratégie-de-gestion-des-messages-et-des-logs)
+    - [10.6 Décision 6 (D-06) – Structuration des scenarii métier](#106-décision-6-d-06--structuration-des-scenarii-métier)
+11. [📚 Références techniques et documentaires](#11--références-techniques-et-documentaires)
+    - [11.1 Documentation officielle (Django et Python)](#111-documentation-officielle-django-et-python)
+    - [11.2 Structuration des modèles et logique métier](#112-structuration-des-modèles-et-logique-métier)
+    - [11.3 Tests, fixtures et organisation du code](#113-tests-fixtures-et-organisation-du-code)
+    - [11.4 Modélisation métier et architecture logicielle](#114-modélisation-métier-et-architecture-logicielle)
+    - [11.5 Modélisation métier et architecture logicielle](#115-modélisation-métier-et-architecture-logicielle)
 
 ---
 
@@ -464,7 +493,8 @@ La solution a consisté en trois points d'organisation :
 
 La résolution de cette difficulté a démontré :
 - l'importance de coder au plus tôt les tests unitaires sur les objets du modèle.
-- qu'un test unitaire peut fonctionner correctement tout en étant "non vérifié" (Ko) lors de la découverte d'une erreur (bogue).
+- qu'un test unitaire peut fonctionner correctement tout en étant "non vérifié" (Ko) lors de la découverte d'une erreur 
+(bogue).
 - l'efficacité d'une démarche itérative qui reprend tous les tests unitaires.
 
 ### 9.7 Difficulté 7 : gestion des contrôles de validité sur les champs numériques de données
@@ -479,7 +509,8 @@ Mais cette propriété étant statique lors du chargement du module au démarrag
 j'ai ensuite (second temps) mis en œuvre une définition dynamique et définissant une surcharge de la méthode `clean()` 
 de l'entité du modèle (il s'agissait de `Support`).
 Ceci m'a conduit à distinguer la portée de cette définition du contrôle de validité. 
-Soit définir un contrôle centralisé métier dans l'entité _mère_ (`Media`), soit dans les entités typées (`Livre`, `Dvd` et `Cd`). 
+Soit définir un contrôle centralisé métier dans l'entité _mère_ (`Media`), soit dans les entités typées (`Livre`, `Dvd` 
+et `Cd`). 
 
 Cette mise en évidence de la logique métier de validation m'a conduit à la solution finale retenue consistant à reporter 
 la logique métier de contrôle de validité de la donnée dans les formulaires, 
@@ -591,7 +622,7 @@ non comme une simple convention technique.
 
 ---
 
-### 9.11 Difficulté 11 – Visualisation des contraintes du formulaire
+### 9.11 Difficulté 11 : Visualisation des contraintes du formulaire
 
 #### a) Problématique
 
@@ -627,7 +658,7 @@ Cette réflexion m'a permis :
 
 ---
 
-### 9.12 Difficulté 12 - Formalisation du cycle de vie initial et typé des médias
+### 9.12 Difficulté 12 : Formalisation du cycle de vie initial et typé des médias
 
 #### a) Contexte de la difficulté
 
@@ -774,7 +805,7 @@ La résolution de cette difficulté a permis de :
 
 ---
 
-### 9.14 Difficulté 14 – Définition transversale du cycle de vie métier avant développement des UC
+### 9.14 Difficulté 14 : Définition transversale du cycle de vie métier avant développement des UC
 
 #### a) Contexte de la difficulté
 
@@ -817,7 +848,7 @@ offre :
 
 ---
 
-### 9.15 Difficulté 15 – Regroupement des tests techniques et fonctionnels dans un même groupe de tests
+### 9.15 Difficulté 15 : Regroupement des tests techniques et fonctionnels dans un même groupe de tests
 
 #### a) Contexte de la difficulté
 
@@ -911,7 +942,7 @@ suivantes du Bloc 3.
 
 ---
 
-### 9.16 Difficulté 16 – Redondance du champ `bloqué` et modélisation du blocage métier
+### 9.16 Difficulté 16 : Redondance du champ `bloqué` et modélisation du blocage métier
 
 #### a) Contexte de la difficulté
 
@@ -980,7 +1011,7 @@ des formulaires et des templates.
 
 ---
 
-### 9.17 Difficulté 17 – Cohérence UX et gestion du contexte métier via session
+### 9.17 Difficulté 17 : Cohérence UX et gestion du contexte métier via session
 
 #### a) Contexte de la difficulté
 
@@ -1047,7 +1078,7 @@ d'héritage et d'ORM de Django.
 
 ---
 
-### 9.18 Difficulté 18 – Appel implicite d’une méthode sans argument dans un template Django
+### 9.18 Difficulté 18 : Appel implicite d’une méthode sans argument dans un template Django
 
 #### a) Contexte de la difficulté
 
@@ -1116,7 +1147,7 @@ reprendre selon ces orientations le code établi dans le développement fonction
 
 ---
 
-### 9.19 Section 9.19 – Stylisation minimale des messages utilisateur
+### 9.19 Difficulté 19 : Stylisation minimale des messages utilisateur
 
 #### a) Contexte de la difficulté
 
@@ -1172,11 +1203,750 @@ sans figer la conception ultérieure d'un designer.
 
 ---
 
-## 10. 🔗 Liens utiles
+### 9.20 Difficulté 20 : Activation du calcul des retards des emprunts en cours
 
-- [Issue #3 – Développement de l’application fonctionnelle bibliothécaire](https://github.com/MonLucCo/CEF_POO-Django_Gestion-Mediatheque_Test-version/issues/3)  
-- [README-tech.md](../../technique/README-tech.md)  
-- [Analyse_Fonctionnalites.md](../../fonctionnel/Analyse_Fonctionnalites.md)  
-- [tests-plan.md](tests-plan.md)
+Cette difficulté est apparue lors de la mise en œuvre des UC liées à l’entité `Emprunt`, en particulier `EMPRUNT-UC-CREATE`.  
+Le sujet impose que les membres ne puissent emprunter que s’ils ne sont pas en retard.  
+Il est donc nécessaire de disposer d’un mécanisme de **mise à jour quotidienne** du statut des emprunts (`EN_COURS` → 
+`RETARD`) avant toute opération métier.
+
+#### a) Contexte de la difficulté
+
+Le calcul du retard repose sur une comparaison entre la date de retour prévue (`date_retour`) et la date du jour.  
+Ce calcul doit être effectué **une fois par jour**, idéalement à la première connexion du bibliothécaire, pour éviter 
+les traitements automatiques non maîtrisés.  
+Il doit également être **accessible manuellement** pour vérification ou relance.
+
+#### b) Problème rencontré
+
+- Django ne propose pas de tâche planifiée native (cron, scheduler) dans le périmètre du sujet.
+- Le calcul doit être déclenché sans dépendance serveur, mais avec une garantie de fréquence (une fois par jour).
+- Le déclenchement doit être **invisible ou intégré naturellement** dans l’interface métier.
+
+#### c) Solution technique mise en œuvre
+
+- Création d’une méthode `Emprunt.marquer_retards()` qui parcourt les emprunts `EN_COURS` et met à jour leur statut si 
+`date_retour < date.today()`.
+- Stockage dans la session Django (`request.session`) d’une clé `retard_last_check_date`.
+- Vérification à chaque connexion du bibliothécaire :
+  - Si la date est différente de `date.today()`, la méthode est déclenchée et la session est mise à jour.
+- Ajout d’un bouton manuel dans `accueil.html` pour relancer la vérification si nécessaire.
+
+#### d) Enseignements et bonnes pratiques
+
+- L’usage de la session permet une activation **simple, traçable et sans dépendance externe**.
+- Le déclenchement à la première connexion garantit une **cohérence métier** sans surcharge serveur.
+- La commande manuelle permet une **vérification explicite** par le bibliothécaire.
+- Cette logique doit être mise en œuvre **avant** les UC `EMPRUNT-UC-CREATE`, car elle conditionne la validité de 
+`peut_emprunter()`.
+
+#### e) Illustration schématique
+
+```txt
+Connexion du bibliothécaire →
+  Vérification de session →
+    Si date ≠ aujourd’hui →
+      Appel Emprunt.marquer_retards() →
+      Mise à jour des statuts →
+      Mise à jour session
+```
+
+#### f) Conclusion
+
+Cette difficulté m'a permis de formaliser un mécanisme métier essentiel, en conciliant :
+- les exigences du sujet (pas de tâche planifiée en Django, codage en Django uniquement)
+- la logique métier (retard = blocage d’emprunt)
+- une UX fluide et invisible pour l’utilisateur
+
+Elle constitue un prérequis technique et fonctionnel primordial pour la mise en œuvre des UC liées aux emprunts.
+
+Elle m'a permis de mettre en application l'exploitation des contextes métier et de session (cf. Difficulté 17) dans une 
+approche UX fluide qui ne met pas de solution technique complexe.
+
+---
+
+### 9.21 Difficulté 21 : Formalisation des méthodes métier et transitions d’état
+
+Cette difficulté est apparue à mesure que les UC liées aux entités `Emprunt`, `Media` et `Membre` se sont précisées.  
+Contrairement aux premières difficultés rencontrées pendant le codage, celle-ci s’est imposée **en amont**, lors de la 
+modélisation métier.  
+Elle concerne la nécessité de **formaliser les méthodes d’état et d’action** dans les modèles, afin de structurer les 
+transitions métier avant toute implémentation technique.
+
+#### a) Contexte de la difficulté
+
+Le projet repose sur des entités dont le comportement métier dépend de leur état :
+- Un `Emprunt` peut être en cours, rendu ou en retard
+- Un `Media` peut être disponible, consultable, empruntable
+- Un `Membre` peut emprunter ou non, selon ses emprunts et retards
+
+Ces états ne sont pas toujours stockés directement dans les champs du modèle, mais sont souvent **calculés dynamiquement** 
+via des méthodes métier (`peut_emprunter()`, `est_empruntable()`, `est_en_retard()`, etc.).
+
+#### b) Problème rencontré
+
+- Sans formalisation préalable, la logique métier risque d’être dispersée dans les vues, les formulaires ou les templates.
+- Les transitions d’état (ex. : retour d’un emprunt) impliquent plusieurs entités, et doivent être synchronisées.
+- La documentation fonctionnelle ([AFBib](Analyse_Fonctionnalites_Bibliothecaire.md)) ne prévoyait initialement pas de 
+section dédiée aux méthodes métier.
+
+#### c) Solution mise en œuvre
+
+- Ajout de méthodes métier dans les modèles :
+  - `Membre.peut_emprunter()`
+  - `Media.est_empruntable()`
+  - `Emprunt.rendre()`, `Emprunt.est_en_retard()`, `Emprunt.date_retour_prévu`.
+- Centralisation des transitions dans des méthodes d’action :
+  - `Emprunt.rendre()` encapsule la mise à jour du statut et du média.
+- Révision de l’analyse fonctionnelle ([AFBib](Analyse_Fonctionnalites_Bibliothecaire.md)) pour intégrer ces méthodes dans 
+les UC, sans détailler leur logique interne.
+- Alignement avec les DDM et vecteurs d’état définis dans le cycle de vie des entités ([ALCBib](Analyse_LifeCycle_Bibliothecaire.md)).
+
+#### d) Enseignements et bonnes pratiques
+
+- Formaliser les méthodes métier **avant le codage** permet :
+  - une meilleure traçabilité des UC
+  - une simplification du code des vues
+  - une documentation plus claire et modulaire.
+- Cette approche s’inscrit dans une démarche de **modélisation orientée métier**, proche du Domain-Driven Design (DDD).
+- Les transitions métier doivent être **encapsulées dans les modèles**, et non dispersées dans les vues.
+- L'analyse fonctionnelle ([AFBib](Analyse_Fonctionnalites_Bibliothecaire.md)) doit prévoir une annexe “Méthodes métier 
+par entité” ou les intégrer directement dans les UC.
+
+#### e) Illustration schématique
+
+```txt
+Emprunt
+   ├── date_retour_prévu = date_emprunt + DELAI_EMPRUNT
+   ├── est_en_retard() → bool
+   ├── rendre() → met à jour statut + média
+Media
+   ├── est_empruntable() → bool
+Membre
+   ├── peut_emprunter() → bool
+```
+
+#### f) Référence conceptuelle associée
+
+La formalisation des méthodes métier et des transitions d’état s’appuie sur des principes issus de la modélisation orientée 
+métier, notamment ceux décrits dans le **catalogue EAA (Enterprise Application Architecture)** de Martin Fowler.
+
+Ce catalogue présente les grands patterns de structuration métier :
+- Domain Model
+- Service Layer
+- Transaction Script
+- Repository
+- Identity Map
+- Unit of Work
+
+Ces concepts ont guidé la structuration des entités `Emprunt`, `Media` et `Membre`, ainsi que la définition des méthodes 
+métier (`peut_emprunter()`, `est_empruntable()`, `rendre()`, etc.).
+
+> 🔗 Référence guide : [Catalogue EAA – Martin Fowler](https://martinfowler.com/eaaCatalog/)
+   >> 🔸 Référence utilisée pour formaliser les transitions métier, les vecteurs d’état, et les méthodes d’action dans les 
+   >> entités.
+
+Cette référence permet de situer les choix de modélisation dans une démarche reconnue, tout en les adaptant aux contraintes 
+du projet Django et aux exigences du sujet. 
+
+Ainsi, cette référence est utilisée comme guide de structuration métier, permettant d’adapter les patterns à la logique 
+Django et aux contraintes du sujet. Elle est venue structurer comme un guide les références Django associées suivantes 
+pour lesquelles :
+- la formalisation des méthodes métier dans les modèles Django est une pratique recommandée par la communauté et la 
+documentation spécialisée.  
+- elle permet de centraliser les règles métier, de simplifier les vues, et de garantir une architecture maintenable.
+
+> 🔗 Référence Django : [Django Best Practices: Models – LearnDjango.com](https://learndjango.com/tutorials/django-best-practices-models)  
+> 🔗 Référence Django : [Separation of Business Logic and Data Access – GeeksforGeeks](https://www.geeksforgeeks.org/python/separation-of-business-logic-and-data-access-in-django/)  
+> 🔗 Référence Django : [Django Models Best Practices – CodezUp](https://codezup.com/django-models-best-practices-for-scalable-applications/)
+
+#### g) Conclusion
+
+Cette difficulté marque une **évolution méthodologique** dans le développement du projet :  
+- les premières difficultés (Difficultés 1 à 13) étaient techniques et survenaient pendant le codage ou en synthèse 
+documentaire (pour le `commit` vers GitHub).  
+- les dernières (à partir de Difficulté 14) sont **conceptuelles**, anticipées en amont, et structurent le développement.  
+La formalisation des méthodes métier et des transitions d’état me permet un codage plus fluide, plus robuste et plus cohérent.
+
+Le traitement de cette difficulté m'a permis de réorganiser ma méthode de développement, d'améliorer ma compréhension de 
+la modélisation orientée métier en associant la modélisation de base de données à l'encapsulation des méthodes métier dans 
+la structure (modèle, url, vue, template) du projet.
+
+---
+
+### 9.22 Difficulté 22 : Gestion des messages d’incohérence (Logs) et d’information utilisateur (UX)
+
+#### a) Contexte de la difficulté
+
+Cette difficulté est apparue lors de la formalisation du rendu d’un emprunt (`Emprunt.rendre()`), qui met en cohérence 
+plusieurs éléments du modèle :
+- l’état du média (`Media.disponible`).
+- la date de retour (`Emprunt.date_retour`).
+- le statut de l’emprunt (`StatutEmprunt`).
+
+La combinaison de ces éléments a révélé la nécessité de :
+- signaler les incohérences métier (ex. : média déjà disponible alors que l’emprunt est encore actif).
+- informer l’utilisateur via des messages UX clairs.
+- tracer les anomalies via des messages de log (`warnings.warn()` ou `logger.warning()`).
+
+Cette difficulté, bien que tardivement identifiée, est au cœur de la robustesse métier du projet.
+
+#### b) Nature de la difficulté
+
+- Le sujet du projet mentionne la journalisation des actions, mais sans en préciser le périmètre ni le moment 
+d’implémentation.
+- Les incohérences métier ne doivent pas bloquer l’exécution, mais doivent être visibles pour le développeur et 
+l’utilisateur.
+- La gestion des logs ne peut pas être rétroactive sur les issues déjà développées sans casser la traçabilité.
+
+#### c) Analyse
+
+Deux types de messages doivent être distingués :
+- **Messages UX** : affichés dans les vues ou les templates pour informer l’utilisateur (ex. : “Ce média est déjà 
+disponible”).
+- **Messages de log** : enregistrés dans les logs techniques pour tracer les anomalies ou incohérences 
+(ex. : `warnings.warn()`).
+
+#### d) Résolution
+
+- Intégration progressive des messages :
+  - Dans les méthodes métier du modèle : ajout de `warnings.warn()` pour les incohérences détectées.
+  - Dans les vues : ajout de messages UX via `messages.warning()` ou `messages.info()` pour informer l’utilisateur.
+- Centralisation de la journalisation complète dans l’issue #6, lors de la phase de validation finale.
+
+> 🔸 Cette difficulté est transversale et impacte toutes les entités métier.  
+> 🔸 Elle est documentée pour garantir la cohérence des données et la traçabilité des actions métier.
+
+#### e) Références techniques
+
+- [Python – Module `warnings`](https://docs.python.org/3/library/warnings.html)  
+  > 🔹 Utilisé pour émettre des messages d’avertissement non bloquants dans les méthodes métier du modèle.
+
+- [Django – Framework messages](https://docs.djangoproject.com/fr/5.2/ref/contrib/messages/)  
+  > 🔹 Permet d’afficher des messages UX dans les vues et les templates (`messages.info()`, `messages.warning()`).
+
+- [Django – Logging configuration](https://docs.djangoproject.com/fr/5.2/topics/logging/)  
+  > 🔹 Guide pour configurer la journalisation technique dans `settings.py` (niveaux, formats, handlers).
+
+> 🔸 Ces références sont à exploiter dans l’issue #6 pour la centralisation de la journalisation et la validation des 
+> logs.
+
+#### f) Conclusion
+
+La gestion des messages métier (logs et UX) est une composante transversale du projet, apparue tardivement, mais 
+essentielle pour :
+- garantir la cohérence des données.
+- informer l’utilisateur de manière claire.
+- tracer les anomalies pour le développeur.
+
+Cette difficulté a été identifiée lors du développement de la méthode `Emprunt.rendre()`, qui cristallise les enjeux de
+cohérence métier.  
+Elle a conduit à une stratégie en deux phases :
+- intégration progressive dans les méthodes et vues (issues #3 à #5).
+- centralisation et validation dans l’issue #6.
+
+> 🔹 Cette approche permet de respecter la traçabilité pédagogique tout en assurant la robustesse fonctionnelle du projet.
+
+Cette difficulté m'a permis de compléter ma connaissance dans les méthodes utilisées en Python et par Django pour gérer 
+les logs d'une application. Sa résolution m'a permis de revoir et de consolider le plan de développement des issues 
+(GitHub), sans rompre la traçabilité et la logique initiale du développement.
+
+---
+
+### 9.23 Difficulté 23 : Formalisation des scenarii métier
+
+#### a) Contexte de la difficulté
+
+Cette difficulté est apparue lors des premiers tests de validation de la fonction de _marquage des retards_. La situation 
+dépendait, par choix fonctionnel, de données non saisissables et ni modifiables par l'administrateur. Ainsi, pour pouvoir 
+mener des tests de validation en exploitant l'UI/UX de l'application et la base de données, j'ai dû mettre en place une 
+solution reproductible et contrôlée.
+
+La difficulté porte sur la nécessité de disposer de scenarii métier pour tester les fonctions d’emprunt, notamment celles 
+qui exploitent des dates système (`auto_now_add`) ou des champs non saisissables par l’utilisateur. Ces fonctions ne 
+peuvent pas être testées directement via l’interface sans attendre des jours réels pour constater des retards ou des 
+transitions d’état.
+
+#### b) Problème rencontré
+
+Les tests fonctionnels deviennent difficilement réalisables sans injection directe de données. Or, les fixtures permettent 
+de créer un contexte métier en base, avec des dates simulées, des statuts précis, et des emprunts typés. La définition 
+du contenu des fixtures devient alors un **scénario métier**, qui permet une mise en œuvre immédiate dans l’UX et une 
+validation reproductible.
+
+#### c) Solution mise en œuvre
+
+Chaque scénario est structuré dans un dossier `scenarii/scenar_X/` contenant :
+- les fixtures `medias`, `membres`, `emprunts`, `superuser`
+- un contexte métier simulé
+- un effet attendu sur l’UX ou les fonctions métier
+
+Un fichier `README.md` minimal est placé dans `/works/.../fixtures/scenarii/scenar_X/`, pointant vers la documentation 
+complète dans `/docs/fonctionnel/scenarii/scenar_X.md`.
+
+#### d) Extension du périmètre
+
+Ce besoin, non explicitement formulé dans le sujet, devient transversal à toutes les applications du projet. Il constitue 
+les prémisses de l’issue #6, qui vise à compléter les tests fonctionnels développés selon l’[AFBib](Analyse_Fonctionnalites_Bibliothecaire.md) 
+et le [plan de tests](tests-plan.md).
+
+#### e) Justification de la formalisation
+
+La charge de travail induite est significative. Elle justifie une structuration documentaire dédiée, sans remettre en 
+cause les développements antérieurs. La formalisation permet une validation fonctionnelle reproductible, une traçabilité 
+des cas métier, et une extension progressive.
+
+#### f) Références techniques
+
+La formalisation des scenarii métier s’appuie sur plusieurs sources techniques et communautaires :
+
+- [Django – Fixtures](https://docs.djangoproject.com/fr/5.2/topics/db/fixtures/)  
+  > 🔹 Documentation officielle sur les formats (`JSON`, `XML`, `YAML`), les commandes `dumpdata` et `loaddata`, et les 
+  > emplacements reconnus (`fixtures/`, `FIXTURE_DIRS`).
+
+- [Django – Tests](https://docs.djangoproject.com/fr/5.2/topics/testing/)  
+  > 🔹 Guide sur l’utilisation des fixtures dans les tests unitaires (`fixtures = [...]`), la préparation de l’état de 
+  > la base, et la validation des comportements métier.
+
+- [RealPython – Django Pytest Fixtures](https://realpython.com/django-pytest-fixtures/)  
+  > 🔹 Tutoriel sur l’usage de `pytest` et de fixtures modulaires pour tester des modèles Django avec des données 
+  > injectées.
+
+- [Dev.to – Writing Scalable Unit Tests in Django](https://dev.to/shreyash_jhon_doe/writing-scalable-maintainable-unit-tests-in-django-a-practical-guide-with-real-examples-47a4)  
+  > 🔹 Guide communautaire sur la structuration des tests, la modularisation, et la réutilisation des fixtures dans des 
+  > cas métier.
+
+Ces références m'ont confirmé que la structuration des scenarii métier est une bonne pratique pour garantir la 
+reproductibilité des tests, la traçabilité des cas métier, et l’extensibilité du projet.
+
+#### g) Conclusion
+
+Cette difficulté m'a permis de reprendre la notion de tests fonctionnels dans une situation _bloquée_ du fait d'une 
+impossibilité de saisir des données en base. La mise en place de scenarii m'a conduit à étendre ma compréhension des 
+fixtures et à comprendre les notions de **sérialisation** associées à la production de ces fichiers à partir des données
+de la base de données.
+La résolution de cette difficulté m'a permis de réaliser et de reproduire tous les types de tests fonctionnels à partir 
+de l'UI/UX de l'application (Bibliothecaire).
+
+---
+
+### 9.24 Difficulté 24 : Traçabilité UX des actions métier et synchronisation du contexte d’affichage
+
+Cette difficulté est apparue lors de la mise en œuvre de l’UC `EMPRUNT-UC-RETARD`, en prolongement direct de la 
+difficulté 17 (gestion du contexte métier via session).  
+Elle concerne la **traçabilité UX des actions métier** (marquage des retards) et la **synchronisation du contexte 
+d’affichage** dans une logique de persistance utilisateur de la page d'accueil du profil Bibliothecaire.
+
+#### a) Contexte de la difficulté
+
+L’UC `EMPRUNT-UC-RETARD` repose sur une action métier automatique (détection des retards) déclenchée une fois par jour.  
+Cette action doit être **visible et compréhensible** par le bibliothécaire, sans recalcul ni perte d’information.  
+La difficulté est apparue dans la gestion du **message UX**, du **tableau des emprunts marqués**, et du **bouton 
+d’affichage conditionnel**, tous dépendants d’un contexte partagé entre session et vue.
+
+#### b) Problèmes rencontrés
+
+- Confusion entre `self.request.session[...]` (persistant) et `context[...]` (temporaire).
+- Perte du message UX après navigation ou affichage conditionnel.
+- Absence de nettoyage du contexte UX avant réinjection.
+- Risque de désynchronisation entre les emprunts marqués et le message affiché.
+- Besoin de mémoriser l’état d’affichage (`affiche_table`) sans exposer de paramètre GET.
+
+#### c) Résolution technique
+
+- Stockage explicite des clés UX dans la session : `retard_message`, `emprunts_marques_ids`, `affiche_table`.
+- Injection systématique dans le contexte de la vue à chaque appel.
+- Nettoyage préventif des clés UX avant marquage quotidien.
+- Passage à un contrôle POST pour l’affichage conditionnel (évite les paramètres GET).
+- Découplage clair entre logique métier (marquage) et logique UX (affichage).
+
+#### d) Enseignements et bonnes pratiques
+
+- La session est un outil puissant pour **mémoriser l’état UX**, mais nécessite une gestion rigoureuse.
+- Le découplage entre logique métier et logique UX permet une meilleure traçabilité.
+- Le bouton POST est préférable au paramètre GET pour éviter les fuites d’état dans l’URL.
+- Le nettoyage du contexte UX avant injection garantit la cohérence des données affichées.
+- Cette difficulté illustre l’importance de **formaliser les transitions UX** dans les vues métier.
+
+#### e) Illustration UX
+
+L'analyse fonctionnelle (AFBib) illustre le cas d'usage avec les UX associés :
+- Exemple 1 : [marquage automatique à la première connexion (message et tableau affichés)](Analyse_Fonctionnalites_Bibliothecaire.md#-marquage-automatique---exemple-dux-obtenus-avec-le-scenario-scenar_01)
+- Exemple 2 : [marquage manuel via commande dédiée (message injecté, tableau affiché)](Analyse_Fonctionnalites_Bibliothecaire.md#-marquage-manuel---exemple-dux-obtenus-avec-le-scenario-scenar_01)
+
+#### f) Conclusion
+
+Cette difficulté est une extension directe de la 
+[difficulté 17](#917-difficulté-17--cohérence-ux-et-gestion-du-contexte-métier-via-session), appliquée à une UC métier. 
+Elle combine des enjeux techniques (session, injection de contexte) et UX (affichage conditionnel, lisibilité des 
+actions). C'est pourquoi j'ai choisi une formalisation spécifique pour documenter les choix de traçabilité UX et de 
+synchronisation du contexte.
+
+La recherche d'une solution pour réaliser à la fois une action automatisée (marquage des retards) et de disposer d'une 
+persistance UX des résultats de ce traitement dans la page d'accueil, ma permis d'exploiter plus précisément les capacités 
+de gestion du contexte de Django en distinguant particulièrement le contexte de session et le contexte de la vue.
+
+La recherche d'une solution pour disposer d'URLs propres (sans paramètre GET) m'a permis de mieux exploiter les méthodes 
+GET et POST dans les templates.
+
+Associé à une optimisation des méthodes (méthodes de classe) des entités de la base, cette solution technique m'a permis 
+de développer le cas d'usage du marquage des retards d'emprunt (EMPRUNT-UC-RETARD) dans un code très épuré et sans 
+répétition (concept DRY de la POO).
+
+La résolution de cette difficulté m'a permis de capitaliser dans le codage de ce cas d'usage (EMPRUNT-UC-RETARD) 
+l'expérience de développement issue des difficultés précédentes.
+
+---
+
+### 9.25 Difficulté 25 : Choix du modèle de vue pour une confirmation métier liée à un objet
+
+Cette difficulté est apparue lors de la mise en œuvre de la vue `EmpruntRetourConfirmView`, qui doit permettre au 
+bibliothécaire de confirmer le retour d’un emprunt sans modifier les champs résultants de sélections antérieures.
+La recherche d'une solution de modélisation (architecture) m'a conduit à rejeter la solution à partir d'un modèle 
+`UpdateView` pour me concentrer sur une modélisation basée sur `FormView`.
+
+#### a) Contexte de la difficulté
+
+La confirmation d’un retour est une action métier :
+- elle ne modifie pas les champs via formulaire.
+- elle repose sur une instance existante (`Emprunt`).
+- elle doit afficher les données de l’objet (`media`, `emprunteur`, `date_emprunt`) dans le template.
+
+Le besoin est donc :
+- un formulaire statique (sans champs éditables).
+- un accès à l’objet métier (`self.object` ou `get_object()`).
+
+#### b) Problème rencontré
+
+Le modèle `FormView` ne fournit pas `get_object()` ni `self.object` par défaut.  
+Cela empêche l’accès aux données de l’objet `Emprunt` dans le template ou dans la logique métier.
+
+#### c) Solution retenue
+
+Ajout du mixin `SingleObjectMixin` à la vue :
+
+```python
+class EmpruntRetourConfirmView(SingleObjectMixin, FormView):
+    model = Emprunt
+    ...
+```
+
+Ce mixin permet :
+- d’accéder à `self.object` dans `get()`, `form_valid()`, `get_context_data()`.
+- d’utiliser `get_object()` sans redéfinition manuelle.
+
+La vue devient ainsi capable :
+- d’afficher les données de l’objet dans le template.
+- d’exécuter la logique métier (`enregistrer_retour()`).
+- de rediriger selon le contexte UX.
+
+#### d) Enseignement
+
+Le mixin `SingleObjectMixin` est indispensable pour toute **vue de confirmation métier liée à un objet**, lorsqu’on 
+utilise `FormView`.  
+Il permet de respecter la séparation des responsabilités :
+- le formulaire reste statique.
+- la logique métier reste dans la vue.
+- l’accès aux données reste encapsulé.
+
+Cette difficulté a également permis de clarifier le rôle des mixins :
+- ils doivent **compléter** les vues, sans empiéter sur leur logique métier.
+- ils ne doivent pas effectuer de calculs de redirection (`reverse()`), qui relèvent de la vue.
+
+> 🔹 Cette clarification est intégrée dans l’AFBib (section 3.3.1.3 – UC-RETOUR)  
+> 🔹 Elle permet de structurer les futures vues de confirmation (suppression, archivage, etc.)
+
+#### e) Alternatives envisagées
+
+Une alternative envisagée était l’utilisation de `UpdateView`, qui permet d’accéder à `get_object()` et `self.object` 
+nativement.  
+Cependant, cette classe est conçue pour des **vues de modification** de champs via formulaire, ce qui ne correspond pas 
+au besoin métier ici.
+
+Dans le cas de `EmpruntRetourConfirmView`, aucun champ n’est modifié par l’utilisateur :
+- le formulaire est statique (pas de saisie).
+- la logique métier est déclenchée par validation (`enregistrer_retour()`).
+
+Utiliser `UpdateView` aurait impliqué :
+- une surcharge inutile du comportement de mise à jour.
+- une confusion sur l’intention métier (édition vs confirmation).
+
+La solution `FormView` + `SingleObjectMixin` est donc plus adaptée :
+- elle permet un formulaire statique.
+- elle donne accès à l’objet métier.
+- elle respecte la séparation des responsabilités.
+
+> 🔹 Cette clarification permet de poser une convention pour les vues de confirmation métier :  
+> 👉 **Utiliser `FormView` + `SingleObjectMixin` pour les actions métier sans édition de champs**.
+
+#### f) Conclusion
+
+La solution retenue résulte d’une recherche d’adéquation entre le besoin métier — une confirmation d’action sans 
+modification de données — et les modèles de vue proposés par Django.  
+Plutôt que d’utiliser `UpdateView`, conçu pour des formulaires évolutifs et des mises à jour de champs, le choix s’est 
+porté sur `FormView` associé à `SingleObjectMixin`, permettant de gérer un formulaire statique tout en accédant à 
+l’objet métier via `get_object()`.
+
+Ce choix, qui peut sembler _puriste_ dans une première approche, a été déterminant pour approfondir ma compréhension des 
+**Mixins**.  
+Il illustre leur rôle fondamental : **étendre les capacités d’une vue sans en altérer la logique métier**, en injectant 
+des comportements ciblés par héritage.  
+L’exemple de `SingleObjectMixin`, qui ajoute l’accès à l’objet sans modifier le code existant, démontre la puissance de 
+cette approche non intrusive.
+
+Cette difficulté m’a permis :
+- de clarifier les responsabilités entre vue, formulaire et modèle.
+- de structurer une architecture extensible pour les confirmations métier.
+- d’éviter toute _refactorisation_ des vues antérieures, conformément à la 
+[décision D-03](#103-décision-3-d-03--gel-de-la-première-version-avant-_refactorisation_-métier).
+
+Elle constitue un **point d’inflexion dans le raisonnement architectural** du projet, et mérite d’être documentée comme 
+un fait marquant du développement.
+
+---
+
+## 10. 📌 Décisions structurantes du projet
+
+Cette section regroupe les décisions techniques et méthodologiques prises au cours du développement, en complément des 
+difficultés rencontrées.  
+Chaque décision est identifiée par un code (`D-01`, `D-02`, etc.) et documentée pour être auto-porteuse selon le même 
+format que les difficultés : objectif, constat, décision.
+
+---
+
+### 10.1 Décision 1 (D-01) – Structuration progressive du développement par blocs fonctionnels
+
+#### 🎯 Objectif  
+Organiser le développement de l’application Bibliothécaire en blocs fonctionnels cohérents, traçables et pédagogiques.
+
+#### 🔍 Constat  
+- Le sujet impose plusieurs entités avec des UC distinctes.
+- Le développement initial ne peut pas être linéaire : certaines entités dépendent d’autres.
+- Une structuration par blocs permet de segmenter les étapes, documenter les difficultés, valider les UC progressivement.
+
+#### 🧠 Décision  
+- Le développement est organisé en blocs :
+  - Bloc 1 : structuration du projet et des entités
+  - Bloc 2 : développement des vues et formulaires de base
+  - Bloc 3 : transitions métier et tests fonctionnels
+- Chaque bloc est indexé dans la main-courante (ex. : G-10, H-9).
+- Les difficultés sont rattachées au bloc concerné.
+
+---
+
+### 10.2 Décision 2 (D-02) – Centralisation des vues sur l’entité Media avec typage différé
+
+#### 🎯 Objectif  
+Respecter les exigences du sujet tout en assurant une architecture extensible pour les entités typées (`Livre`, `Dvd`, 
+`Cd`).
+
+#### 🔍 Constat  
+- Le sujet impose une centralisation des vues sur `Media`.
+- Les sous-types ont des champs spécifiques, mais partagent une logique commune.
+- Le typage différé permet de créer un `Media` non typé, puis de le transformer.
+
+#### 🧠 Décision  
+- Les vues CRUD sont centralisées sur `Media`, avec affichage conditionnel.
+- Le typage différé est géré via :
+  - le champ `media_type`
+  - la méthode `mutate_to_typed()` dans `Media`
+- Les vues de typage sont ajoutées comme extensions, sans modifier la logique centrale.
+
+---
+
+### 10.3 Décision 3 (D-03) – Gel de la première version avant _refactorisation_ métier
+
+#### 🎯 Objectif  
+Garantir la traçabilité pédagogique en distinguant la première version livrable des améliorations métier postérieures.
+
+#### 🔍 Constat  
+- Le modèle métier évolue avec l’analyse métier.
+- Ces évolutions impliquent des ajouts de méthodes métier, mais ne modifient pas les résultats fonctionnels.
+- Une _refactorisation_ anticipée perturberait la traçabilité du développement.
+
+#### 🧠 Décision  
+- Aucune _refactorisation_ avant la finalisation complète de la version relative à l'issue #3 (développement fonctionnel 
+initial de l'application `bibliothecaire`).
+- Les ajouts métier seront :
+  - intégrés dans `models.py_indexJ-5` (et suivant si besoin).
+  - documentés dans AFBib (section 3.4).
+  - exploités sans modifier les résultats fonctionnels existants.
+
+---
+
+### 10.4 Décision 4 (D-04) – Clarification du champ `Support.consultable` selon le sous-type
+
+#### 🎯 Objectif  
+Définir clairement le sens métier du champ `consultable` selon l’entité héritière (`Media` ou `JeuDePlateau`).
+
+#### 🔍 Constat  
+- Le champ `consultable` est défini dans `Support`, mais son interprétation dépend du sous-type.
+- Pour `Media`, il signifie “visible à la consultation et empruntable”.
+- Pour `JeuDePlateau`, il pourrait signifier “règle disponible”, mais ce sens n’est pas requis par le sujet.
+
+#### 🧠 Décision  
+- Le champ `consultable` reste dans `Support` comme capacité technique.
+- La méthode `is_consultable()` est définie dans `Support`, mais son usage métier est limité à `Media`.
+- La méthode `rendre_consultable()` est définie dans `Media` uniquement.
+- L’application Consultation n’affichera que les instances de `Media` consultables.
+
+---
+
+### 10.5 Décision 5 (D-05) – Stratégie de gestion des messages et des logs
+
+#### 🎯 Objectif
+
+Définir une stratégie cohérente pour :
+- la gestion des messages d’information utilisateur (UX).
+- la journalisation des incohérences métier (logs techniques).
+
+Cette décision garantit une traçabilité pédagogique, une UX cohérente, et une journalisation technique conforme aux 
+exigences du projet.
+
+#### 🔍 Constat
+
+- Le sujet du projet mentionne la journalisation, mais sans spécifier son intégration dans les étapes de développement.
+- La détection d’incohérences métier (ex. : tentative de rendu sur un média déjà disponible) nécessite une double 
+signalisation :
+  - à l’utilisateur (UX).
+  - au développeur (logs).
+
+#### 🧠 Décision
+
+- **Phase 1 – Développement (issues #3 à #5)** :
+  - Ajouter des `warnings.warn()` dans les méthodes métier du modèle pour tracer les incohérences.
+  - Ajouter des messages UX dans les vues (`messages.warning()`, `messages.info()`) pour informer l’utilisateur.
+
+- **Phase 2 – Validation (issue #6)** :
+  - Centraliser la configuration du module `logging` dans `settings.py`.
+  - Uniformiser les niveaux (`INFO`, `WARNING`, `ERROR`) et les formats.
+  - Vérifier la cohérence des logs générés lors des tests fonctionnels.
+  - Documenter les cas de journalisation dans la main-courante.
+
+> 🔸 Cette stratégie permet de respecter la traçabilité pédagogique tout en assurant la robustesse métier du projet.
+
+---
+
+### 10.6 Décision 6 (D-06) – Structuration des scenarii métier
+
+#### 🎯 Objectif de la décision
+
+Formaliser la structuration des scenarii métier comme projet-support interne au sein du projet principal, pour accompagner 
+le développement, les tests et la validation fonctionnelle.
+
+#### 🔍 Contenu de chaque scénario
+
+Chaque scénario contient :
+- des fixtures injectables (`medias`, `membres`, `emprunts`, `superuser`)
+- un contexte métier simulé
+- un effet attendu sur l’UX ou les fonctions métier
+
+#### 🧠 Décision
+
+##### Organisation documentaire
+
+La documentation des scenarii est placée dans :
+
+```txt
+/docs/fonctionnel/scenarii/
+├── README_scenar.md
+├── scenar_01.md
+├── scenar_02.md
+└── ...
+```
+
+Un fichier `README.md` minimal est placé dans :
+
+```txt
+/works/.../fixtures/scenarii/scenar_X/
+```
+
+Ce fichier contient un résumé du scénario et un lien vers la documentation fonctionnelle.
+
+##### Portée de la décision
+
+Cette structuration permet :
+- une validation fonctionnelle reproductible
+- une traçabilité des cas métier
+- une extension progressive sans impact sur les développements antérieurs
+
+Elle est volontairement minimaliste pour être exploitée dans la suite du développement sans avoir à reprendre les sujets 
+antérieurs.
+
+---
+
+## 11. 📚 Références techniques et documentaires
+
+Cette section regroupe les ressources utilisées pour guider le développement, la modélisation métier, la structuration 
+des vues, et les bonnes pratiques Django.  
+Elles ont été mobilisées à différentes étapes du projet, notamment pour résoudre les difficultés, formaliser les UC, et 
+structurer les méthodes métier.
+Elles sont rappelées dans cette section pour constituer un regroupement des documents principaux qui m'ont été utiles à 
+la structuration de ma compréhension et à l'application des techniques et concepts employés.
+
+---
+
+### 11.1 Documentation officielle (Django et Python)
+
+- [Django – Documentation officielle (version 5.2)](https://docs.djangoproject.com/fr/5.2/)
+- [Django – Tutoriel d’introduction](https://docs.djangoproject.com/fr/5.2/intro/tutorial01/)
+- [Python – Documentation officielle](https://docs.python.org/3/)
+
+- [Python – Module `warnings`](https://docs.python.org/3/library/warnings.html)  
+- [Django – Framework messages](https://docs.djangoproject.com/fr/5.2/ref/contrib/messages/)  
+- [Django – Logging configuration](https://docs.djangoproject.com/fr/5.2/topics/logging/)  
+- [Django – Tests](https://docs.djangoproject.com/fr/5.2/topics/testing/)
+
+---
+
+### 11.2 Structuration des modèles et logique métier
+
+- [Django – Modèles et ORM](https://docs.djangoproject.com/fr/5.2/topics/db/models/)
+- [Django – Héritage multi-table](https://docs.djangoproject.com/fr/5.2/topics/db/models/#multi-table-inheritance)
+- [Django – Relations inverses et accès typé](https://docs.djangoproject.com/fr/5.2/ref/models/relations/)
+
+- [LearnDjango – Django Best Practices: Models](https://learndjango.com/tutorials/django-best-practices-models)
+- [GeeksforGeeks – Separation of Business Logic and Data Access in Django](https://www.geeksforgeeks.org/python/separation-of-business-logic-and-data-access-in-django/)
+- [CodezUp – Django Models Best Practices](https://codezup.com/django-models-best-practices-for-scalable-applications)
+
+---
+
+### 11.3 Tests, fixtures et organisation du code
+
+#### a) Tests unitaires et fonctionnels
+
+- [Django – Tests](https://docs.djangoproject.com/fr/5.2/topics/testing/)
+- [Django – Tests unitaires (contribution)](https://docs.djangoproject.com/fr/5.2/internals/contributing/writing-code/unit-tests/)
+- [CodezUp – Django Testing Best Practices](https://codezup.com/django-testing-best-practices-unit-tests-integration-tests/)
+
+- [Dev.to – Writing Scalable Unit Tests in Django](https://dev.to/shreyash_jhon_doe/writing-scalable-maintainable-unit-tests-in-django-a-practical-guide-with-real-examples-47a4)
+- [Dev.to – Testing in Django (Ifihanagbara Olusheye)](https://dev.to/ifihan/testing-in-django-26e5)
+- [TestDriven.io – Django Unit Testing Guide](https://testdriven.io/blog/django-unit-testing/) **(avec abonnement)**
+- [LearnDjango – Django Testing Tutorial](https://learndjango.com/tutorials/django-testing-tutorial)
+
+
+#### b) Fixtures et scenarii métier
+
+- [Django – Fixtures](https://docs.djangoproject.com/fr/5.2/topics/db/fixtures/)
+- [RealPython – Django Pytest Fixtures](https://realpython.com/django-pytest-fixtures/)
+
+---
+
+### 11.4 Modélisation métier et architecture logicielle
+
+- [Django – Vue générique basée sur les classes](https://docs.djangoproject.com/fr/5.2/topics/class-based-views/)
+- [Django – Routage et URLconf](https://docs.djangoproject.com/fr/5.2/topics/http/urls/)
+- [Django – Templates et moteur de rendu](https://docs.djangoproject.com/fr/5.2/topics/templates/)
+- [Django – Bonnes pratiques de structuration](https://docs.djangoproject.com/fr/5.2/misc/design-philosophies/)
+
+---
+
+### 11.5 Modélisation métier et architecture logicielle
+
+- [Martin Fowler – Catalogue EAA (Enterprise Application Architecture)](https://martinfowler.com/eaaCatalog/)
+
+---
+
+## > Fin de document - lien vers le [sommaire](#-sommaire)
 
 ---

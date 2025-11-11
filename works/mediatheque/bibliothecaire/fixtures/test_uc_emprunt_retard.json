@@ -1,0 +1,32 @@
+[
+  {
+    "model": "bibliothecaire.membre",
+    "pk": 1,
+    "fields": {
+      "name": "Martin",
+      "compte": "2025_martin_1",
+      "statut": 1
+    }
+  },
+  {
+    "model": "bibliothecaire.media",
+    "pk": 1,
+    "fields": {
+      "name": "1984",
+      "theme": "Anticipation",
+      "consultable": true,
+      "disponible": false,
+      "media_type": "LIVRE"
+    }
+  },
+  {
+    "model": "bibliothecaire.emprunt",
+    "pk": 1,
+    "fields": {
+      "media": 1,
+      "emprunteur": 1,
+      "date_emprunt": "2025-10-20",
+      "statut": 1
+    }
+  }
+]

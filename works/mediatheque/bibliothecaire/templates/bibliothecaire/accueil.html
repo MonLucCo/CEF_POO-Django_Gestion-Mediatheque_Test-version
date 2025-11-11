@@ -5,6 +5,52 @@
 {% endcomment %}
 
 {% block content %}
-    <h2>Bienvenue dans l’espace Bibliothécaire</h2>
-    <p>Utilisez le menu ci-dessus pour accéder aux fonctionnalités.</p>
+  <h2>Bienvenue dans l’espace Bibliothécaire</h2>
+  <p>Utilisez le menu ci-dessus pour accéder aux fonctionnalités.</p>
+
+  {% if retard_message %}
+    <ul class="messages">
+      <li class="success">
+          {{ retard_message }}
+          {% if emprunts_marques %}
+            <form method="post" style="display:inline;">
+                {% csrf_token %}
+                {% if affiche_table %}
+                    <button name="toggle_table" value="false">❌ Masquer les emprunts marqués</button>
+                {% else %}
+                    <button name="toggle_table" value="true">📋 Voir les emprunts marqués</button>
+                {% endif %}
+            </form>
+          {% endif %}
+      </li>
+    </ul>
+  {% endif %}
+
+  {% if affiche_table and emprunts_marques %}
+    <div style="margin-top:20px;">
+        <h3>📌 Emprunts marqués comme en retard</h3>
+        {% include "bibliothecaire/emprunts/emprunt_retard_marque_table.html" %}
+    </div>
+  {% endif %}
+
+  <h3>📊 Situation de la médiathèque</h3>
+  <table>
+    <thead>
+      <tr><th colspan="2">Indicateurs de gestion</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>Médias enregistrés</td><td>{{ nb_medias_total }}</td></tr>
+      <tr><td>— Livres</td><td>{{ nb_medias_livre }}</td></tr>
+      <tr><td>—— empruntés</td><td>{{ nb_medias_livre_emprunte }}</td></tr>
+      <tr><td>— DVDs</td><td>{{ nb_medias_dvd }}</td></tr>
+      <tr><td>—— empruntés</td><td>{{ nb_medias_dvd_emprunte }}</td></tr>
+      <tr><td>— CDs</td><td>{{ nb_medias_cd }}</td></tr>
+      <tr><td>—— empruntés</td><td>{{ nb_medias_cd_emprunte }}</td></tr>
+      <tr><td>Médias empruntés</td><td>{{ nb_medias_empruntes }}</td></tr>
+      <tr><td>— en retard</td><td>{{ nb_medias_retards }}</td></tr>
+      <tr><td>Membres enregistrés</td><td>{{ nb_membres_total }}</td></tr>
+      <tr><td>— emprunteurs</td><td>{{ nb_membres_emprunteurs }}</td></tr>
+      <tr><td>— supprimés</td><td>{{ nb_membres_supprimes }}</td></tr>
+    </tbody>
+  </table>
 {% endblock %}

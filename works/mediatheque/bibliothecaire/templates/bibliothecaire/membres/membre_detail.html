@@ -30,6 +30,12 @@
     {% if membre.is_membre %}
       | <a href="{% url 'bibliothecaire:membre_activate_emprunteur' membre.pk %}">Activer le statut d'emprunteur</a>
     {% endif %}
+    {% if membre.peut_emprunter %}
+      | <a href="{% url 'bibliothecaire:membre_emprunter' membre.pk %}">Créer un emprunt</a>
+    {% endif %}
+    {% if not membre.is_min_emprunt %}
+      | <a href="{% url 'bibliothecaire:membre_rendre' membre.pk %}">Rendre un média</a>
+    {% endif %}
     {% if peut_etre_supprime %}
       | <a href="{% url 'bibliothecaire:membre_delete' membre.pk %}">Supprimer ce membre</a>
     {% endif %}

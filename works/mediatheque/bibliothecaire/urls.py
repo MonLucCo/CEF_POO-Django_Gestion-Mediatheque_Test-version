@@ -1,5 +1,8 @@
 from django.urls import path
 from . import views
+from .views import EmpruntCreateFromMembreView, EmpruntCreateFromMediaView, EmpruntRendreView, EmpruntRetourConfirmView, \
+    EmpruntRendreFromMediaView, EmpruntRendreFromMembreView
+from .views_debug import ResetRetardSessionView
 
 app_name = 'bibliothecaire'
 
@@ -28,6 +31,9 @@ urlpatterns = [
     path('medias/<int:pk>/modifier/dvd/', views.MediaTypageDvdView.as_view(), name='media_typage_dvd'),
     path('medias/<int:pk>/modifier/cd/', views.MediaTypageCdView.as_view(), name='media_typage_cd'),
 
+    path("medias/<int:pk>/emprunter", EmpruntCreateFromMediaView.as_view(), name="media_emprunter"),
+    path("medias/<int:pk>/rendre/", EmpruntRendreFromMediaView.as_view(), name="media_rendre"),
+
     path('medias/<int:pk>/livre/modifier/', views.LivreUpdateView.as_view(), name='media_update_livre'),
     path('medias/<int:pk>/dvd/modifier/', views.DvdUpdateView.as_view(), name='media_update_dvd'),
     path('medias/<int:pk>/cd/modifier/', views.CdUpdateView.as_view(), name='media_update_cd'),
@@ -37,9 +43,11 @@ urlpatterns = [
     #    path('medias/<int:pk>/supprimer/', views.MediaDeleteView.as_view(), name='media_delete'),
 
     # Emprunts
- #   path('emprunts/', views.EmpruntListView.as_view(), name='emprunt_list'),
- #   path('emprunts/ajouter/', views.EmpruntCreateView.as_view(), name='emprunt_create'),
- #   path('emprunts/<int:pk>/retour/', views.RetourUpdateView.as_view(), name='emprunt_retour'),
+    path('emprunts/', views.EmpruntListView.as_view(), name='emprunt_list'),
+    path('emprunts/retards/', views.EmpruntRetardView.as_view(), name='emprunt_retard'),
+    path('emprunts/ajouter/', views.EmpruntCreateView.as_view(), name='emprunt_create'),
+    path("emprunts/rendre/", EmpruntRendreView.as_view(), name="emprunt_rendre"),
+    path("emprunts/<int:pk>/retour/confirmation/", EmpruntRetourConfirmView.as_view(), name="emprunt_retour_confirm"),
 
     # Membres
     path('membres/', views.MembreListView.as_view(), name='membre_list'),
@@ -52,6 +60,8 @@ urlpatterns = [
     path('membres/<int:pk>/modifier/', views.MembreUpdateView.as_view(), name='membre_update'),
     path('membres/<int:pk>/activer/emprunteur', views.MembreActivateEmprunteurView.as_view(), name='membre_activate_emprunteur'),
     path('membres/<int:pk>/supprimer/', views.MembreDeleteView.as_view(), name='membre_delete'),
+    path("membres/<int:pk>/emprunter", EmpruntCreateFromMembreView.as_view(), name="membre_emprunter"),
+    path("membres/<int:pk>/rendre/", EmpruntRendreFromMembreView.as_view(), name="membre_rendre"),
 
     # Fonctionnalités souhaitables (optionnelles)
  #   path('medias/type/<str:type>/', views.MediaFilteredListView.as_view(), name='media_filtered'),
@@ -61,4 +71,8 @@ urlpatterns = [
  #   path('jeux/ajouter/', views.JeuCreateView.as_view(), name='jeu_create'),
  #   path('jeux/<int:pk>/', views.JeuDetailView.as_view(), name='jeu_detail'),
  #   path('jeux/<int:pk>/modifier/', views.JeuUpdateView.as_view(), name='jeu_update'),
+
+    # Fonctionnalités de DEBUG pour rejeu UX
+    path("rejeu-ux/retard/reset-session/", ResetRetardSessionView.as_view(), name="rejeu_reset_retard_session"),
+
 ]

@@ -1,12 +1,16 @@
+from datetime import date
+
 from django.shortcuts import redirect, get_object_or_404, render
 from django.contrib import messages
 from django.urls import reverse_lazy, reverse
 from django.views import View
-from django.views.generic import TemplateView, ListView, DetailView, CreateView, UpdateView, FormView, DeleteView
+from django.views.generic import TemplateView, ListView, DetailView, CreateView, UpdateView, FormView
+from django.views.generic.detail import SingleObjectMixin
 
 from bibliothecaire.mixins import OrigineSessionMixin, MembreSuppressionContextMixin
-from bibliothecaire.models import Media, Livre, Dvd, Cd, Membre, StatutMembre
-from bibliothecaire.forms import MediaForm, LivreForm, DvdForm, CdForm, MembreForm
+from bibliothecaire.models import Media, Livre, Dvd, Cd, Membre, StatutMembre, Emprunt
+from bibliothecaire.forms import MediaForm, LivreForm, DvdForm, CdForm, MembreForm, EmpruntForm, EmpruntRendreForm, \
+    EmpruntRetourForm, EmpruntRendreFromMembreForm
 from django.db import transaction
 
 
@@ -18,6 +22,52 @@ class AccueilBibliothecaireView(OrigineSessionMixin, TemplateView):
 
     origine_key = 'accueil'
 
+    def post(self, request, *args, **kwargs):
+        # Traitement du bouton d'affichage
+        toggle = request.POST.get("toggle_table")
+        if toggle in ["true", "false"]:
+            request.session["affiche_table"] = toggle == "true"
+        return redirect("bibliothecaire:accueil")
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        # Déclenchement automatique du marquage des retards
+        today = date.today()
+        last_check = self.request.session.get("retard_last_check_date")
+        if last_check != str(today):
+            # Actualisation du contexte de session (action quotidienne unique)
+            self.request.session.pop("retard_message", None)
+            self.request.session.pop("emprunts_marques_ids", None)
+            resultat = Emprunt.marquer_retard()
+            self.request.session["retard_last_check_date"] = str(today)
+            self.request.session["retard_message"] = resultat["message"]["text"]
+            self.request.session["emprunts_marques_ids"] = [e.id for e in resultat["emprunts_marques"]]
+
+        # Actualisation du contexte de la vue à partir du contexte de session
+        context["retard_message"] = self.request.session.get("retard_message")
+        ids = self.request.session.get("emprunts_marques_ids", [])
+        context["emprunts_marques"] = Emprunt.objects.filter(id__in=ids) if ids else []
+
+        # Affichage conditionnel
+        context["affiche_table"] = self.request.session.get("affiche_table", False)
+
+        # Indicateurs de gestion
+        context["nb_medias_total"] = Media.count_total()
+        context["nb_medias_empruntes"] = Media.count_empruntes()
+        context["nb_medias_retards"] = Media.count_retards()
+        context["nb_medias_livre"] = Livre.count_total()
+        context["nb_medias_livre_emprunte"] = Livre.count_empruntes()
+        context["nb_medias_dvd"] = Dvd.count_total()
+        context["nb_medias_dvd_emprunte"] = Dvd.count_empruntes()
+        context["nb_medias_cd"] = Cd.count_total()
+        context["nb_medias_cd_emprunte"] = Cd.count_empruntes()
+        context["nb_membres_total"] = Membre.count_total()
+        context["nb_membres_emprunteurs"] = Membre.count_emprunteurs()
+        context["nb_membres_supprimes"] = Membre.count_supprimes()
+
+        return context
+
 
 # Media
 class MediaListView(ListView):
@@ -26,10 +76,11 @@ class MediaListView(ListView):
     template_name = 'bibliothecaire/medias/media_list.html'
 
 
-class MediaDetailView(DetailView):
+class MediaDetailView(OrigineSessionMixin, DetailView):
     model = Media
     context_object_name = 'media'
     template_name = 'bibliothecaire/medias/media_detail.html'
+    origine_key = 'media_detail'
 
     def get_object(self, queryset=None):
         obj = super(MediaDetailView, self).get_object(queryset)
@@ -543,10 +594,11 @@ class MembreCreateEmprunteurView(CreateView):
         return reverse('bibliothecaire:membre_detail', kwargs={'pk': self.object.pk})
 
 
-class MembreDetailView(MembreSuppressionContextMixin, DetailView):
+class MembreDetailView(OrigineSessionMixin, MembreSuppressionContextMixin, DetailView):
     model = Membre
     context_object_name = 'membre'
     template_name = 'bibliothecaire/membres/membre_detail.html'
+    origine_key = 'membre_detail'
 
     def get(self, request, pk):
         self.object = self.get_object()
@@ -610,3 +662,276 @@ class MembreDeleteView(View):
         else:
             messages.error(request,"Ce membre ne peut pas être supprimé : emprunt(s) en cours")
         return redirect("bibliothecaire:membre_detail", pk=pk)
+
+
+class EmpruntRetardView(TemplateView):
+    """
+    Vue métier pour déclencher manuellement le marquage des emprunts en retard.
+    Affiche un message UX avec le nombre d’emprunts marqués.
+    """
+    template_name = 'bibliothecaire/emprunts/emprunt_retard_result.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        resultat = Emprunt.marquer_retard()
+
+        context.update(resultat)  # injecte toutes les clés du dictionnaire dans le contexte
+        tag = resultat["message"]["tag"]
+        text = resultat["message"]["text"]
+
+        if tag == "success":
+            messages.success(self.request, text)
+        elif tag == "warning":
+            messages.warning(self.request, text)
+        else:
+            messages.info(self.request, text)  # fallback
+        return context
+
+
+class EmpruntListView(ListView):
+    """
+    Vue pour afficher la liste des emprunts.
+    """
+    model = Emprunt
+    template_name = 'bibliothecaire/emprunts/emprunt_list.html'
+    context_object_name = 'emprunts'
+
+    def get_queryset(self):
+        return Emprunt.objects.all().order_by('-id')
+
+
+class EmpruntCreateView(CreateView):
+    model = Emprunt
+    form_class = EmpruntForm
+    template_name = "bibliothecaire/emprunts/emprunt_form.html"
+
+    def form_valid(self, form):
+        emprunt = form.save(commit=False)
+        membre = emprunt.emprunteur
+        media = emprunt.media
+
+        erreurs = []
+
+        if not membre.peut_emprunter():
+            if membre.is_emprunteur:
+                if membre.is_retard:
+                    erreurs.append("Ce membre ne peut pas emprunter : retard en cours.")
+                if membre.is_max_emprunt:
+                    erreurs.append("Ce membre ne peut pas emprunter : quota des emprunts atteint.")
+            else:
+                erreurs.append("Ce membre ne peut pas emprunter : abonnement non validé.")
+
+        if not media.est_empruntable:
+            if not media.is_disponible:
+                erreurs.append("Ce média ne peut pas être emprunté : pas disponible.")
+            if not media.is_consultable:
+                erreurs.append("Ce média ne peut pas être emprunté : hors gestion.")
+            if not media.is_typed():
+                erreurs.append("Ce média ne peut pas être emprunté : hors gestion car non typé.")
+
+        if erreurs:
+            for msg in erreurs:
+                messages.error(self.request, msg)
+            return self.form_invalid(form)
+
+        emprunt.save()
+        media.disponible = False
+        media.save()
+        messages.success(self.request, f"Emprunt enregistré : {membre.name} → {media.name} ({media.media_type})")
+        return redirect("bibliothecaire:emprunt_list")
+
+
+class EmpruntCreateFromMembreView(EmpruntCreateView):
+    """
+    Vue UC-CREATE-02 : création d’un emprunt à partir d’un membre emprunteur.
+    Le champ 'emprunteur' est figé dans le formulaire.
+    """
+    def dispatch(self, request, *args, **kwargs):
+        self.membre = get_object_or_404(Membre, pk=kwargs["pk"])
+        return super().dispatch(request, *args, **kwargs)
+
+    def get_initial(self):
+        return {"emprunteur": self.membre}
+
+    def get_form(self, form_class=None):
+        form = super().get_form(form_class)
+        form.fields["emprunteur"].initial = self.membre
+        form.fields["emprunteur"].disabled = True
+        return form
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["membre"] = self.membre
+        context["is_from_membre"] = True
+        return context
+
+
+class EmpruntCreateFromMediaView(EmpruntCreateView):
+    """
+    Vue UC-CREATE-03 : création d’un emprunt à partir d’un média disponible.
+    Le champ 'media' est figé dans le formulaire.
+    """
+    def dispatch(self, request, *args, **kwargs):
+        self.media = get_object_or_404(Media, pk=kwargs["pk"]).get_real_instance()
+        return super().dispatch(request, *args, **kwargs)
+
+    def get_initial(self):
+        return {"media": self.media}
+
+    def get_form(self, form_class=None):
+        form = super().get_form(form_class)
+        form.fields["media"].initial = self.media
+        form.fields["media"].disabled = True
+        return form
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["media"] = self.media
+        context["is_from_media"] = True
+        return context
+
+
+class EmpruntRendreView(FormView):
+    """
+    UC-RETOUR-1 : rendre un emprunt
+    """
+    form_class = EmpruntRendreForm
+    template_name = "bibliothecaire/emprunts/emprunt_form.html"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["is_rendre"] = True
+        return context
+
+    def form_valid(self, form):
+        emprunt = form.cleaned_data["emprunt"]
+        return redirect("bibliothecaire:emprunt_retour_confirm", pk=emprunt.pk)
+
+
+class EmpruntRetourConfirmView(SingleObjectMixin, FormView):
+    model = Emprunt
+    form_class = EmpruntRetourForm
+    template_name = "bibliothecaire/emprunts/emprunt_retour_confirm.html"
+
+    def get(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        return super().get(request, *args, **kwargs)
+
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs["instance"] = self.get_object()
+        return kwargs
+
+    def get_success_url(self):
+        origine_key = self.request.session.pop("origine_retour", "rendre")
+        if origine_key == "media":
+            return reverse("bibliothecaire:media_detail", kwargs={"pk": self.get_object().media.pk})
+        elif origine_key == "membre":
+            return reverse("bibliothecaire:membre_detail", kwargs={"pk": self.get_object().emprunteur.pk})
+        return reverse("bibliothecaire:emprunt_list")
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        # Calcul explicite de l’URL de retour pour le template
+        origine_key = self.request.session.get("origine_retour", "rendre")
+        if origine_key == "media":
+            context["url_retour"] = reverse("bibliothecaire:media_detail", kwargs={"pk": self.get_object().media.pk})
+        elif origine_key == "membre":
+            context["url_retour"] = reverse("bibliothecaire:membre_detail", kwargs={"pk": self.get_object().emprunteur.pk})
+        else:
+            context["url_retour"] = reverse("bibliothecaire:emprunt_rendre")
+        return context
+
+    def form_valid(self, form):
+        emprunt = self.get_object()
+        if emprunt.enregistrer_retour():
+            media = emprunt.media
+            membre = emprunt.emprunteur
+            messages.success(self.request, f"Emprunt rendu : {membre.name} → {media.name} ({media.media_type})")
+        else:
+            messages.warning(self.request, "Cet emprunt ne peut pas être rendu.")
+        return redirect(self.get_success_url())
+
+
+class EmpruntRendreFromMediaView(View):
+    """
+    UC-RETOUR-02 : retour direct à partir d’un média emprunté.
+    Redirige vers la confirmation du seul emprunt actif.
+    """
+    def get(self, request, pk):
+        media = get_object_or_404(Media, pk=pk)
+        emprunt = media.get_emprunt_actif()
+
+        if emprunt:
+            request.session["origine_retour"] = "media"
+            return redirect("bibliothecaire:emprunt_retour_confirm", pk=emprunt.pk)
+
+        messages.warning(request, f"Aucun emprunt actif trouvé pour le média : {media.name} ({media.media_type})")
+        return redirect("bibliothecaire:media_detail", pk=media.pk)
+
+
+class EmpruntRendreFromMembreView(FormView):
+    """
+    UC-RETOUR-03 : retour à partir d’un membre emprunteur.
+    Selon le nombre d'emprunts actifs (en cours ou en retard) :
+        - cas : 1 seul emprunt actif, Redirige vers la confirmation du seul emprunt actif.
+        - cas : plusieurs emprunts actifs, Redirige vers la sélection de l'emprunt ou du média à rendre.
+        - cas autre, affiche un message de warnings et d'erreur dans l'UX.
+    """
+    form_class = EmpruntRendreFromMembreForm
+    template_name = "bibliothecaire/emprunts/emprunt_form.html"
+
+    def dispatch(self, request, *args, **kwargs):
+        self.membre = get_object_or_404(Membre, pk=kwargs["pk"])
+        self.emprunts_actifs = self.membre.get_emprunts_actifs()
+
+        if not self.emprunts_actifs.exists():
+            messages.warning(request, "Ce membre n’a aucun emprunt actif à rendre.")
+            return redirect("bibliothecaire:membre_detail", pk=self.membre.pk)
+
+        request.session["origine_retour"] = "membre"
+
+        if self.emprunts_actifs.count() == 1:
+            emprunt = self.emprunts_actifs.first()
+            return redirect("bibliothecaire:emprunt_retour_confirm", pk=emprunt.pk)
+
+        return super().dispatch(request, *args, **kwargs)
+
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs["membre"] = self.membre
+        kwargs["emprunts"] = self.emprunts_actifs
+        kwargs["medias"] = [e.media for e in self.emprunts_actifs]
+        return kwargs
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["membre"] = self.membre
+        context["emprunts"] = self.emprunts_actifs
+        context["is_rendre"] = True
+        context["is_rendre_membre"] = True
+
+        origine = self.request.session.get("origine_retour")
+        if origine == "membre":
+            context["url_retour"] = reverse("bibliothecaire:membre_detail", kwargs={"pk": self.membre.pk})
+        else:
+            context["url_retour"] = reverse("bibliothecaire:emprunt_list")
+
+        return context
+
+    def form_valid(self, form):
+        emprunt = form.cleaned_data["emprunt"]
+        if emprunt.enregistrer_retour():
+            media = emprunt.media
+            membre = emprunt.emprunteur
+            messages.success(self.request, f"Emprunt rendu : {membre.name} → {media.name} ({media.media_type})")
+        else:
+            messages.warning(self.request, "Cet emprunt ne peut pas être rendu.")
+        return redirect(self.get_success_url())
+
+
+    def get_success_url(self):
+        origine = self.request.session.pop("origine_retour", None)
+        if origine == "membre":
+            return reverse("bibliothecaire:membre_detail", kwargs={"pk": self.membre.pk})
+        return reverse("bibliothecaire:emprunt_list")

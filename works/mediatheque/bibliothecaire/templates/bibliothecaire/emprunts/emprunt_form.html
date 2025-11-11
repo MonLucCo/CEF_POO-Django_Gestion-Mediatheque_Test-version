@@ -1,0 +1,107 @@
+{% extends "bibliothecaire/_base.html" %}
+{% block content %}
+  {% if is_rendre %}
+    <h2>Rendre un emprunt</h2>
+  {% else %}
+    <h2>Créer un emprunt</h2>
+  {% endif %}
+
+  {% if is_from_membre %}
+    <div id="emprunt_membre_info" class="info" style="margin-top: 20px; padding: 0.5rem">
+        <p>Ce formulaire permet de créer un emprunt pour <strong>ce membre</strong>. Veuillez sélectionner un média <strong>en gestion et disponible</strong>.</p>
+    </div>
+  {% endif %}
+  {% if is_from_media %}
+    <div id="emprunt_media_info" class="info" style="margin-top: 20px; padding: 0.5rem">
+        <p>Ce formulaire permet de créer un emprunt pour <strong>ce média</strong>. Veuillez sélectionner un membre <strong>abonné et autorisé à emprunter</strong>.</p>
+    </div>
+  {% endif %}
+  {% if is_rendre_membre %}
+    <div id="emprunt_rendre_membre_info" class="info" style="margin-top: 20px; padding: 0.5rem">
+        <p>Ce formulaire permet de sélectionner un emprunt à rendre pour <strong>ce membre</strong>. Veuillez sélectionner l'un des {{ emprunts.count }} médias (ou emprunts) <strong>à rendre</strong>.</p>
+    </div>
+  {% endif %}
+
+  <form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+
+    {% if messages %}
+        <ul class="messages">
+          {% for message in messages %}
+            <li class="{{ message.tags }}">{{ message }}</li>
+          {% endfor %}
+        </ul>
+    {% endif %}
+
+    <div style="margin-top: 20px;">
+       <button type="submit">Valider {% if is_rendre %}le retour{% else %}l'emprunt{% endif %} </button>
+        |
+       {% if is_rendre_membre %}
+            <a href="{{ url_retour }}">Retour à la fiche du membre</a>
+       {% else %}
+            <a href="{% url 'bibliothecaire:emprunt_list' %}">Retour à la liste des emprunts</a>
+       {% endif %}
+        |
+       <a href="{% url 'bibliothecaire:accueil' %}">Retour à l'accueil</a>
+    </div>
+
+    {% if is_rendre %}
+        <script>
+        document.addEventListener("DOMContentLoaded", function () {
+          const empruntSelect = document.getElementById("id_emprunt");
+          const mediaSelect = document.getElementById("id_media");
+          const emprunteurSelect = document.getElementById("id_emprunteur");
+
+          const empruntData = {
+            {% for emprunt in form.fields.emprunt.queryset %}
+              "{{ emprunt.id }}": {
+                "media": "{{ emprunt.media.id }}",
+                "emprunteur": "{{ emprunt.emprunteur.id }}"
+              },
+            {% endfor %}
+          };
+
+          const mediaData = {
+            {% for media in form.fields.media.queryset %}
+              {% with emprunt=media.get_emprunt_actif %}
+                {% if emprunt %}
+                  "{{ media.id }}": "{{ emprunt.id }}",
+                {% endif %}
+              {% endwith %}
+            {% endfor %}
+          };
+
+          {% if is_rendre %}
+            {% if is_rendre_membre %}
+              // Cas UC-RETOUR-03 : sélection croisée
+              mediaSelect.addEventListener("change", function () {
+                const selectedMedia = mediaSelect.value;
+                if (mediaData[selectedMedia]) {
+                  empruntSelect.value = mediaData[selectedMedia];
+                }
+              });
+
+              empruntSelect.addEventListener("change", function () {
+                const selectedEmprunt = empruntSelect.value;
+                if (empruntData[selectedEmprunt]) {
+                  mediaSelect.value = empruntData[selectedEmprunt].media;
+                }
+              });
+            {% else %}
+              // Cas UC-RETOUR-01 : sélection d’un emprunt
+              empruntSelect.addEventListener("change", function () {
+                const selected = empruntSelect.value;
+                if (empruntData[selected]) {
+                  mediaSelect.value = empruntData[selected].media;
+                  emprunteurSelect.value = empruntData[selected].emprunteur;
+                }
+              });
+            {% endif %}
+          {% endif %}
+        });
+        </script>
+    {% endif %}
+
+  </form>
+{% endblock %}

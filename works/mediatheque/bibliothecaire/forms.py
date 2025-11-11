@@ -1,7 +1,7 @@
 from django import forms
-from django.http.request import MediaType
+from django.db.models import Case, When, IntegerField
 
-from bibliothecaire.models import Media, Livre, Dvd, Cd, Membre
+from bibliothecaire.models import Media, Livre, Dvd, Cd, Membre, Emprunt, StatutEmprunt
 
 
 class MediaForm(forms.ModelForm):
@@ -82,3 +82,83 @@ class MembreForm(forms.ModelForm):
         model = Membre
         fields = ["name"]  # uniquement les champs saisissables
         labels = {'name':'Nom du Membre'}
+
+
+class EmpruntForm(forms.ModelForm):
+    class Meta:
+        model = Emprunt
+        fields = ["emprunteur", "media"]
+        labels = {
+            "emprunteur": "Membre emprunteur",
+            "media": "Média à emprunter",
+        }
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        # Tri des membres : nom puis compte
+        self.fields["emprunteur"].queryset = Membre.objects.order_by("name", "compte")
+
+        # Tri métier des médias : nom puis type (CD > DVD > LIVRE > NON_DEFINI)
+        media_queryset = Media.objects.annotate(
+            type_priority=Case(
+                When(media_type='CD', then=4),
+                When(media_type='DVD', then=3),
+                When(media_type='LIVRE', then=2),
+                When(media_type='NON_DEFINI', then=1),
+                default=0,
+                output_field=IntegerField()
+            )
+        ).order_by("name", "-type_priority")
+
+        self.fields["media"].queryset = media_queryset
+
+
+class EmpruntRendreForm(forms.Form):
+    emprunt = forms.ModelChoiceField(
+        queryset=Emprunt.objects.exclude(statut=StatutEmprunt.RENDU),
+        label="Emprunt à rendre"
+    )
+
+    media = forms.ModelChoiceField(
+        queryset=Media.objects.filter(disponible=False),
+        label="Média emprunté",
+        required=False,
+        disabled=True
+    )
+
+    emprunteur = forms.ModelChoiceField(
+        queryset=Membre.objects.filter(emprunts__statut__in=[StatutEmprunt.EN_COURS, StatutEmprunt.RETARD]).distinct(),
+        label="Membre emprunteur",
+        required=False,
+        disabled=True
+    )
+
+
+class EmpruntRetourForm(forms.ModelForm):
+    class Meta:
+        model = Emprunt
+        fields = []  # Aucun champ modifiable
+
+
+class EmpruntRendreFromMembreForm(forms.Form):
+    emprunteur = forms.CharField(
+        disabled=True,
+        required=False,
+        label="Membre")
+    media = forms.ModelChoiceField(
+        queryset=Media.objects.none(),
+        label="Média à rendre")
+    emprunt = forms.ModelChoiceField(
+        queryset=Emprunt.objects.none(),
+        label="Emprunt à rendre")
+
+    def __init__(self, *args, **kwargs):
+        membre = kwargs.pop("membre")
+        medias = kwargs.pop("medias", [])
+        emprunts = kwargs.pop("emprunts", [])
+        super().__init__(*args, **kwargs)
+
+        self.fields["emprunteur"].initial = f"{membre.name} ({membre.compte})"
+        self.fields["media"].queryset = Media.objects.filter(pk__in=[m.pk for m in medias])
+        self.fields["emprunt"].queryset = Emprunt.objects.filter(pk__in=[e.pk for e in emprunts])
