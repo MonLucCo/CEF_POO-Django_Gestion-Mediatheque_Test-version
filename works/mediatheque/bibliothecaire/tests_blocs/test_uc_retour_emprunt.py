@@ -22,6 +22,10 @@ class BaseEmpruntRetourTestCase(TestCase):
         cls.url_list = reverse("bibliothecaire:emprunt_list")
         cls.url_from_media = reverse("bibliothecaire:media_detail", args=[cls.media.pk])
 
+        cls.url_from_membre = reverse("bibliothecaire:membre_detail", args=[cls.membre.pk])
+        cls.url_rendre_from_membre = reverse("bibliothecaire:membre_rendre", args=[cls.membre.pk])
+        cls.url_rendre_from_membre_confirm = reverse("bibliothecaire:emprunt_retour_confirm", args=[cls.emprunt.pk])
+
         cls.template_form = "bibliothecaire/emprunts/emprunt_form.html"
         cls.template_confirm = "bibliothecaire/emprunts/emprunt_retour_confirm.html"
 
@@ -49,6 +53,11 @@ class TestNavigationEmpruntRetour(BaseEmpruntRetourTestCase):
         response = self.client.get(url)
         self.assertEqual(response.status_code, 302)
         self.assertRedirects(response, self.url_confirm)
+
+    def test_nav_27_acces_vue_retour_depuis_membre(self):
+        url = reverse("bibliothecaire:membre_rendre", args=[self.membre.pk])
+        response = self.client.get(url)
+        self.assertIn(response.status_code, [200, 302])
 
 
 # 🧪 Vues
@@ -78,6 +87,24 @@ class TestVuesEmpruntRetour(BaseEmpruntRetourTestCase):
         self.assertRedirects(response, self.url_confirm)
         self.assertTemplateUsed(response, self.template_confirm)
 
+    def test_vue_36_formulaire_retour_depuis_membre(self):
+        # Préparation : rendre le média indisponible
+        media = Media.objects.get(pk=1)
+        media.disponible = False
+        media.save()
+        # Création d’un emprunt supplémentaire pour le membre (pk=2) avec media (pk=1)
+        Emprunt.objects.create(
+            media=media,
+            emprunteur=self.membre
+        )
+        # Test pour un membre ayant 2 emprunts actifs
+        response = self.client.get(self.url_rendre_from_membre)
+        self.assertContains(response, 'name="media"')
+        self.assertContains(response, 'name="emprunt"')
+        self.assertContains(response, 'name="emprunteur"')
+        self.assertContains(response, 'disabled')
+        self.assertContains(response, 'document.addEventListener')
+
 
 # 🧪 Fonctionnel
 class TestFonctionnelEmpruntRetour(BaseEmpruntRetourTestCase):
@@ -105,6 +132,33 @@ class TestFonctionnelEmpruntRetour(BaseEmpruntRetourTestCase):
         response = self.post_confirmation(follow=True)
         self.assertRedirects(response, self.url_from_media)
         self.assertContains(response, "Emprunt rendu")
+        self.emprunt.refresh_from_db()
+        self.assertEqual(self.emprunt.statut, StatutEmprunt.RENDU)
+        self.assertIsNotNone(self.emprunt.date_retour)
+        self.media.refresh_from_db()
+        self.assertTrue(self.media.disponible)
+
+    def test_fun_40_retour_depuis_membre_si_un_seul_emprunt(self):
+        # Simule un membre avec un seul emprunt actif
+        emprunts_actifs = self.membre.get_emprunts_actifs()
+        if emprunts_actifs.count() == 1:
+            url = reverse("bibliothecaire:membre_rendre", args=[self.membre.pk])
+            response = self.client.get(url)
+            self.assertRedirects(response, self.url_confirm)
+
+    def test_fun_41_retour_depuis_membre_avec_selection(self):
+        # Etape 1 sélection dans le formulaire
+        response = self.client.post(
+            self.url_rendre_from_membre,
+            data={"emprunt": self.emprunt.pk, "media": self.media.pk},
+            follow=True
+        )
+        self.assertRedirects(response, self.url_rendre_from_membre_confirm)
+        # Etape 2 confirmation du retour
+        response = self.post_confirmation(follow=True)
+        self.assertRedirects(response, self.url_from_membre)
+        self.assertContains(response, "Emprunt rendu")
+        # Etape 3 : évaluation des données en base
         self.emprunt.refresh_from_db()
         self.assertEqual(self.emprunt.statut, StatutEmprunt.RENDU)
         self.assertIsNotNone(self.emprunt.date_retour)

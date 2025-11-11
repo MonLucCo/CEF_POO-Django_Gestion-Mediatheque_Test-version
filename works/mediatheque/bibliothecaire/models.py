@@ -418,6 +418,8 @@ class Membre(Utilisateur):
       - peut_etre_supprime()            : Retourne True si le membre peut être supprimé logiquement
       - activer_emprunteur()            : Active le statut emprunteur si le membre est standard
       - supprimer_membre_emprunteur()   : Supprime logiquement le membre (statut = ARCHIVE)
+      - get_emprunts_actifs()           : Retourne les emprunts actifs (EN_COURS ou RETARD) associés à ce membre. Si aucun emprunt, retourne `None`.
+
 
     Remarques :
       - Les propriétés d’état permettent une lecture métier directe dans les vues et les templates.
@@ -532,6 +534,13 @@ class Membre(Utilisateur):
             self.save()
             return self.is_supprime
         return False
+
+    def get_emprunts_actifs(self):
+        """
+        Retourne les emprunts actifs (EN_COURS ou RETARD) associés à ce membre.
+        Si aucun emprunt actif, retourne None.
+        """
+        return self.emprunts.filter(statut__in=[StatutEmprunt.EN_COURS, StatutEmprunt.RETARD])
 
 
 class Bibliothecaire(Utilisateur):

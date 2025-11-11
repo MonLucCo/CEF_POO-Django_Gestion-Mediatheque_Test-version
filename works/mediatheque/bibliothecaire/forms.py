@@ -139,3 +139,26 @@ class EmpruntRetourForm(forms.ModelForm):
     class Meta:
         model = Emprunt
         fields = []  # Aucun champ modifiable
+
+
+class EmpruntRendreFromMembreForm(forms.Form):
+    emprunteur = forms.CharField(
+        disabled=True,
+        required=False,
+        label="Membre")
+    media = forms.ModelChoiceField(
+        queryset=Media.objects.none(),
+        label="Média à rendre")
+    emprunt = forms.ModelChoiceField(
+        queryset=Emprunt.objects.none(),
+        label="Emprunt à rendre")
+
+    def __init__(self, *args, **kwargs):
+        membre = kwargs.pop("membre")
+        medias = kwargs.pop("medias", [])
+        emprunts = kwargs.pop("emprunts", [])
+        super().__init__(*args, **kwargs)
+
+        self.fields["emprunteur"].initial = f"{membre.name} ({membre.compte})"
+        self.fields["media"].queryset = Media.objects.filter(pk__in=[m.pk for m in medias])
+        self.fields["emprunt"].queryset = Emprunt.objects.filter(pk__in=[e.pk for e in emprunts])

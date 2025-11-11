@@ -856,6 +856,7 @@ métier.
 - `peut_etre_supprime()` → Retourne True si le membre peut être supprimé logiquement.
 - `activer_emprunteur()` → Active le statut emprunteur si le membre est standard.
 - `supprimer_membre_emprunteur()` → Supprime logiquement le membre (statut = `ARCHIVE`).
+- `get_emprunts_actifs()` → Retourne les emprunts actifs (EN_COURS ou RETARD) associés à ce membre. Si aucun emprunt, retourne `None`.
 
 ---
 
