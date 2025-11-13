@@ -1,6 +1,6 @@
 # 📘 Analyse des fonctionnalités – Bibliothécaire
 
-📁 `/docs/developpement/issue3/task6/Analyse_Fonctionnalites.md`  
+📁 `/docs/developpement/dev-docs/devAFBib.md`  
 📌 Version : index H-11 (issue #3 – Bloc 3 - étape 6)
 
 ---
@@ -53,10 +53,18 @@
 Ce document formalise les cas d’usage fonctionnels liés au profil bibliothécaire, en cohérence avec les exigences du 
 sujet et les choix techniques validés dans les documents :
 
-- [`Modelisation_correction-erreurs-suite-tests-unitaires.md`](../task5/Modelisation_correction-erreurs-suite-tests-unitaires.md)  
-- [`tests-plan.md`](tests-plan.md)  
-- [`Analyse_Fonctionnalites.md`](../../../fonctionnel/Analyse_Fonctionnalites.md)  
-- [`README-fonct.md`](../../../fonctionnel/README-fonct.md)
+- Analyse :
+  - des fonctionnalités : [`Analyse_Fonctionnalités.md`](../../fonctionnel/Analyse_Fonctionnalites.md)
+    - de Bibliothécaire : [devAFBib.md](devAFBib.md)
+  - de modélisation : 
+    - Correction des erreurs : [`Modelisation_correction-erreurs-suite-tests-unitaires.md`](assets/technique/Modelisation_correction-erreurs-suite-tests-unitaires.md)
+    - Cycle de vie (Life Cycle) :
+      - Entités de Bibliothecaire : [devALCBib.md](devALCBib.md)
+        - Medias   : [devALCBibMedias.md](assets/technique/devALCBibMedias.md)
+        - Membres  : [devALCBibMembres.md](assets/technique/devALCBibMembres.md)
+        - Emprunts : [devALCBibEmprunts.md](assets/technique/devALCBibEmprunts.md)
+- Plan de tests : [`devTests.md`](devTests.md)  
+- Organisation : [`README-fonct.md`](../../fonctionnel/README-fonct.md)
 
 Il permet de :
 - Définir les fonctionnalités minimales et souhaitables
@@ -68,23 +76,27 @@ Il permet de :
 
 ## 2. Synthèse des fonctions demandées
 
-| Entité  | UC                   | Description métier                   | Statut         | Avancement technique |
-|---------|----------------------|--------------------------------------|----------------|----------------------|
-| Media   | MEDIA-UC-LIST        | Affichage filtré des médias          | ✅ Demandée     | 🟢 Implémenté        |
-| Media   | MEDIA-UC-CREATE      | Création d’un média typé ou non typé | ✅ Demandée     | 🟢 Implémenté        |
-| Media   | MEDIA-UC-UPDATE      | Modification d’un média              | 🔸 Souhaitable | 🟢 Implémenté        |
-| Media   | MEDIA-UC-TYPAGE      | Transformation en sous-type          | 🔸 Souhaitable | 🟢 Implémenté        |
-| Media   | MEDIA-UC-ROLLBACK    | Rollback d'un typage en cours        | 🔸 Souhaitable | 🟢 Implémenté        |
-| Media   | MEDIA-UC-DELETE      | Suppression logique d'un média       | 🔸 Souhaitable | ⚪ À définir          |
-| Membre  | MEMBRE-UC-LIST       | Affichage de la liste des membres    | ✅ Demandée     | 🟢 Implémenté        |
-| Membre  | MEMBRE-UC-CREATE     | Création d’un membre                 | ✅ Demandée     | 🟢 Implémenté        |
-| Membre  | MEMBRE-UC-UPDATE     | Mise à jour d’un membre              | ✅ Demandée     | 🟢 Implémenté        |
-| Membre  | MEMBRE-UC-DELETE     | Suppression logique d’un membre      | ✅ Demandée     | 🟢 Implémenté        |
-| Membre  | MEMBRE-UC-HISTORIQUE | Consultation des emprunts passés     | 🔸 Souhaitable | ⚪ À définir          |
-| Emprunt | EMPRUNT-UC-CREATE    | Création d’un emprunt                | ✅ Demandée     | 🟢 Implémenté        |
-| Emprunt | EMPRUNT-UC-RETOUR    | Enregistrement du retour             | ✅ Demandée     | 🟡 Implémenté        |
-| Emprunt | EMPRUNT-UC-RETARD    | Détection et marquage du retard      | ✅ Demandée     | 🟢 Implémenté        |
-| Emprunt | EMPRUNT-UC-ARCHIVE   | Archivage d’un emprunt               | 🔸 Souhaitable | ⚪ À définir          |
+| Entité       | UC                   | Description métier                         | Statut         | Avancement technique   |
+|--------------|----------------------|--------------------------------------------|----------------|------------------------|
+| Media        | MEDIA-UC-LIST        | Affichage filtré des médias                | ✅ Demandée     | 🟢 Implémenté          |
+| Media        | MEDIA-UC-CREATE      | Création d’un média typé ou non typé       | ✅ Demandée     | 🟢 Implémenté          |
+| Media        | MEDIA-UC-UPDATE      | Modification d’un média                    | 🔸 Souhaitable | 🟢 Implémenté          |
+| Media        | MEDIA-UC-TYPAGE      | Transformation en sous-type                | 🔸 Souhaitable | 🟢 Implémenté          |
+| Media        | MEDIA-UC-ROLLBACK    | Rollback d'un typage en cours              | 🔸 Souhaitable | 🟢 Implémenté          |
+| Media        | MEDIA-UC-DELETE      | Suppression logique d'un média             | 🔸 Souhaitable | ⚪ À définir            |
+| Membre       | MEMBRE-UC-LIST       | Affichage de la liste des membres          | ✅ Demandée     | 🟢 Implémenté          |
+| Membre       | MEMBRE-UC-CREATE     | Création d’un membre                       | ✅ Demandée     | 🟢 Implémenté          |
+| Membre       | MEMBRE-UC-UPDATE     | Mise à jour d’un membre                    | ✅ Demandée     | 🟢 Implémenté          |
+| Membre       | MEMBRE-UC-DELETE     | Suppression logique d’un membre            | ✅ Demandée     | 🟢 Implémenté          |
+| Membre       | MEMBRE-UC-HISTORIQUE | Consultation des emprunts passés           | 🔸 Souhaitable | ⚪ À définir            |
+| Emprunt      | EMPRUNT-UC-CREATE    | Création d’un emprunt                      | ✅ Demandée     | 🟢 Implémenté          |
+| Emprunt      | EMPRUNT-UC-RETOUR    | Enregistrement du retour                   | ✅ Demandée     | 🟡 Implémenté          |
+| Emprunt      | EMPRUNT-UC-RETARD    | Détection et marquage du retard            | ✅ Demandée     | 🟢 Implémenté          |
+| Emprunt      | EMPRUNT-UC-ARCHIVE   | Archivage d’un emprunt                     | 🔸 Souhaitable | ⚪ À définir            |
+| JeuDePlateau | JEU-UC-CREATE        | Création d'un jeu de plateau               | ✅ Demandée     | ⚪ À définir (issue #4) |
+| JeuDePlateau | JEU-UC-UPDATE        | Modification d'un jeu de plateau           | 🔸 Souhaitable | ⚪ À définir (issue #4) |
+| JeuDePlateau | JEU-UC-LIST          | Affichage des jeux de plateau              | 🔸 Souhaitable | ⚪ À définir (issue #4) |
+| Support      | SUPPORT-UC-CONSULTE  | Consultation des supports (Jeux et Medias) | ✅ Demandée     | ⚪ À définir (issue #4) |
 
 > 🔹 L’interface doit rester **basique**, sans mise en forme avancée : un designer Web prendra le relai.  
 > 🔹 Les vues doivent être **fonctionnelles, testables et extensibles**.
@@ -118,14 +130,16 @@ Permettre au bibliothécaire de consulter les médias du catalogue selon des cri
 | UC-LIST-04   | Afficher les médias non typés (`NON_DEFINI`)  | `Media.objects.filter(media_type='NON_DEFINI')`           | ✅ Implémenté |                                               |                                                           |              |
 
 > 🔹 La structuration des routes associées à ces cas d’usage a soulevé une difficulté métier importante, documentée dans la 
-> [Difficulté 10 – Organisation du routage lié aux médias](_Frontend-main-courante.md#910-difficulté-10--organisation-et-clarté-du-routage-lié-aux-médias).  
+> [Difficulté 10 – Organisation du routage lié aux médias](devMC.md#910-difficulté-10--organisation-et-clarté-du-routage-lié-aux-médias).  
 > 🔹 Chaque UC dispose d’une route dédiée, d’une vue spécifique et d’un bloc de test fonctionnel (`T-FUN-*`).
 
 ###### 🧠 Analyse technique associée
 
 - La mise en œuvre des UC-LIST-01 à UC-LIST-03 a nécessité de traiter deux difficultés majeures :
-  - [Difficulté 9](_Frontend-main-courante.md#99-difficulté-9--interactions-entre-les-tests-unitaires-techniques-et-fonctionnels-métier) : distinction entre tests techniques et fonctionnels
-  - [Difficulté 10](_Frontend-main-courante.md#910-difficulté-10--organisation-et-clarté-du-routage-lié-aux-médias) : clarification du routage des vues liées à `Media`
+  - [Difficulté 9](devMC.md#99-difficulté-9--interactions-entre-les-tests-unitaires-techniques-et-fonctionnels-métier) : 
+  distinction entre tests techniques et fonctionnels.
+  - [Difficulté 10](devMC.md#910-difficulté-10--organisation-et-clarté-du-routage-lié-aux-médias) : clarification du 
+  routage des vues liées à `Media`.
 
 - La création d’un média non typé (`UC-CREATE-01`) implique la possibilité de le consulter.  
   Une nouvelle UC a donc été ajoutée pour le profil **Bibliothécaire uniquement** :
@@ -185,8 +199,8 @@ Permettre au bibliothécaire d’ajouter un nouveau média au catalogue, avec ou
 > 🔹 Cette logique permet de distinguer les médias en attente (non typés) des médias prêts à être empruntés ou consultés.
 
 - La mise en œuvre des UC-CREATE a nécessité de traiter une difficulté majeure liée au formulaire :
-  - [Difficulté 11](_Frontend-main-courante.md#911-difficulté-11--visualisation-des-contraintes-du-formulaire) : 
-    visualisation des contraintes dans le formulaire (fonctionnalités vs Design UX/UI).
+  - [Difficulté 11](devMC.md#911-difficulté-11--visualisation-des-contraintes-du-formulaire) : visualisation des 
+  contraintes dans le formulaire (fonctionnalités vs Design UX/UI).
 
 ###### 🔧 Impacts techniques
 
@@ -249,8 +263,8 @@ La logique métier impose une distinction entre mise à jour classique, typage d
 Cette fonctionnalité sera développée ultérieurement, car elle nécessite de prendre en considération la situation 
 d'emprunt pour effectuer la modification du média.
 
-Cette UC sera intégrée dans une future étape, en cohérence avec les transitions métier définies dans 
-[Analyse_LifeCycle_Medias.md](Analyse_LifeCycle_Medias.md).
+Cette UC sera intégrée dans une future étape, en cohérence avec les transitions métier définies dans l'analyse du cycle 
+de vie de l'entité `Media` [devALCBibMedias.md](assets/technique/devALCBibMedias.md).
 
 ---
 
@@ -519,15 +533,15 @@ La méthode `Emprunt.marquer_retard()` retourne un dictionnaire structuré, dire
 >>>   données du scenario **scenar_01**.
 >> 
 >>> - Etape 1 : s'assurer que la date du dernier marquage est la veille (action de debug - préparation du rejeu)
->>>   - ![img-exemple1-etape1](img_UX_changer_date_dernier_marquage.png)
+>>>   - ![img-exemple1-etape1](assets/images/img_UX_changer_date_dernier_marquage.png)
 >>> - Etape 2 : recharger les données du scenario **scenar_01** et liste de situation des emprunts
->>>   - ![img-exemple1-etape2](img_UX_liste_situation_emprunts_scenar_01.png)
+>>>   - ![img-exemple1-etape2](assets/images/img_UX_liste_situation_emprunts_scenar_01.png)
 >>> - Etape 3 : aller à l'accueil de l'application du Bibliothécaire et constater le marquage quotidien des retards
->>>   - ![img-exemple1-etape3](img_UX_accueil_marquage_automatique_quotidien.png)
+>>>   - ![img-exemple1-etape3](assets/images/img_UX_accueil_marquage_automatique_quotidien.png)
 >>> - Etape 4 : visualiser dans la page d'accueil la liste des derniers emprunts constatés en retard
->>>   - ![img-exemple1-etape4](img_UX_accueil_marquage_quotidien_affichage.png)
+>>>   - ![img-exemple1-etape4](assets/images/img_UX_accueil_marquage_quotidien_affichage.png)
 >>> - Etape 5 : lister la situation des emprunts
->>>   - ![img-exemple1-etape5](img_UX_liste_situation_emprunt_actualisee.png)
+>>>   - ![img-exemple1-etape5](assets/images/img_UX_liste_situation_emprunt_actualisee.png)
 >
 
 ###### 📷 Marquage Manuel - Exemple d'UX obtenus avec le scenario **scenar_01**
@@ -538,11 +552,11 @@ La méthode `Emprunt.marquer_retard()` retourne un dictionnaire structuré, dire
 >>>   **scenar_01**.
 >> 
 >>> - Etape 1 : recharger les données du scenario **scenar_01** et liste de situation des emprunts
->>>   - ![img-exemple2-etape1](img_UX_liste_situation_emprunts_scenar_01.png)
+>>>   - ![img-exemple2-etape1](assets/images/img_UX_liste_situation_emprunts_scenar_01.png)
 >>> - Etape 2 : activer le marquage manuel des emprunts en retard
->>>   - ![img-exemple2-etape2](img_UX_liste_marquage_manuel_emprunts_scenar_01.png)
+>>>   - ![img-exemple2-etape2](assets/images/img_UX_liste_marquage_manuel_emprunts_scenar_01.png)
 >>> - Etape 3 : lister la situation des emprunts
->>>   - ![img-exemple2-etape3](img_UX_liste_situation_emprunt_actualisee.png)
+>>>   - ![img-exemple2-etape3](assets/images/img_UX_liste_situation_emprunt_actualisee.png)
 >
 
 ---
@@ -727,7 +741,7 @@ Cette structuration garantit :
 - une extensibilité pour les futurs UC (suppression, archivage, etc.).
 - une cohérence UX sans URL visible (`?origine=...`).
 
-> 🔹 Voir [Difficulté 25](_Frontend-main-courante.md#925-difficulté-25--choix-du-modèle-de-vue-pour-une-confirmation-métier-liée-à-un-objet) 
+> 🔹 Voir [Difficulté 25](devMC.md#925-difficulté-25--choix-du-modèle-de-vue-pour-une-confirmation-métier-liée-à-un-objet) 
 > dans la main-courante pour le raisonnement complet.
 
 ###### 🔧 Impacts techniques
@@ -773,10 +787,10 @@ métier.
 > 🔹 Elles garantissent la cohérence métier et facilitent la traçabilité des actions dans l’application.
 > 
 > 🔹 Les méthodes métier sont non modifiantes sur les UC existantes (antérieur à l'index de développement H-9), 
-> conformément à la décision [D-03](_Frontend-main-courante.md#103-décision-3-d-03--gel-de-la-première-version-avant-_refactorisation_-métier)
+> conformément à la décision [D-03](devMC.md#103-décision-3-d-03--gel-de-la-première-version-avant-_refactorisation_-métier)
 >
-> 🔹 Elles sont documentées dans les UC correspondantes et dans la [main-courante](_Frontend-main-courante.md#921-difficulté-21--formalisation-des-méthodes-métier-et-transitions-détat) 
-> (index H-9 - section 9.21).
+> 🔹 Elles sont documentées dans les UC correspondantes et dans la [main-courante](devMC.md#921-difficulté-21--formalisation-des-méthodes-métier-et-transitions-détat) 
+> (section 9.21).
 
 ---
 
@@ -980,8 +994,9 @@ Cette section sera complétée lors du développement applicatif prévu dans l'`
 
 ## 5. Liens documentaires
 
-- [`Analyse_LifeCycle_Bibliothecaire.md`](Analyse_LifeCycle_Bibliothecaire.md)
-- [`Analyse_LifeCycle_Membres.md`](Analyse_LifeCycle_Membres.md)
-- [`Analyse_LifeCycle_Emprunts.md`](Analyse_LifeCycle_Emprunts.md)
-- [`Analyse_LifeCycle_Medias.md`](Analyse_LifeCycle_Medias.md)
-- [`tests-plan.md`](tests-plan.md)
+- analyse du cycle de vie 
+  - des entités de Bibliothécaire : [`devALCBib.md`](devALCBib.md)
+  - de l'entité `Media` : [`devALCBibMedias.md`](assets/technique/devALCBibMedias.md)
+  - de l'entité `Membre` : [`devALCBibMembres.md`](assets/technique/devALCBibMembres.md)
+  - de l'entité `Emprunt` : [`devALCBibEmprunts.md`](assets/technique/devALCBibEmprunts.md)
+- plan de tests du projet : [`devTests.md`](devTests.md)

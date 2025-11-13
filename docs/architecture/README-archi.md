@@ -14,13 +14,13 @@ Ce fichier fait partie du dossier `/docs/architecture/` et sert de référence p
 
 ## 🧭 Sommaire
 
-1. [Architecture initiale](#1-architecture-initiale)
-2. [Architecture révisée (4 pôles)](#2-architecture-révisée-4-pôles)
-3. [Composants principaux](#3-composants-principaux)
-4. [Diagramme UML (à insérer)](#4-diagramme-uml-à-insérer)
-5. [Flux de données](#5-flux-de-données)
-6. [Modèle MVC dans Django](#6-modèle-mvc-dans-django)
-7. [Liens vers la documentation](#7-liens-vers-la-documentation)
+1. [Architecture initiale](#-1-architecture-initiale)
+2. [Architecture révisée (4 pôles)](#-2-architecture-révisée-4-pôles)
+3. [Composants principaux](#-3-composants-principaux)
+4. [Diagramme UML (à insérer)](#-4-diagramme-uml-à-insérer)
+5. [Flux de données](#-5-flux-de-données)
+6. [Modèle MVC dans Django](#-6-modèle-mvc-dans-django)
+7. [Liens vers la documentation](#-7-liens-vers-la-documentation)
 
 ---
 
@@ -64,7 +64,7 @@ Médiathèque Django (v2)
 │   ├── models.py          # Livre, Emprunt, Retour…
 │   ├── views.py           # CRUD membres et médias
 │   └── urls.py            # Routage spécifique des bibliothécaires
-├── membre/                # Consultation seule des supports consultables (par les membres)
+├── consultation/                # Consultation seule des supports consultables (par les membres)
 │   ├── views.py           # Liste des supports consultables
 │   └── urls.py            # Routage spécifique de la consultation
 ├── db.sqlite3             # Base de données du projet
@@ -96,7 +96,8 @@ Avantages :
 - **Views** : traitement des requêtes et logique métier  
 - **Templates** : rendu HTML côté client  
 - **URLs** : routage par application  
-- **Admin** : interface d’administration Django  
+- **Admin** : interface d’administration Django
+- **Mixin** : mixins des vues
 
 ---
 
@@ -104,6 +105,8 @@ Avantages :
 
 > Un diagramme UML des entités métier sera intégré dans le dossier `/docs/architecture/` une fois stabilisé.  
 > Il représentera les relations entre `Support`, `Media`, `Livre`, `Emprunt`, `Membre`, etc.
+> 
+> Ce diagramme synthétise l'[analyse des fonctionnalités](../fonctionnel/Analyse_Fonctionnalites.md) du projet.
 
 ---
 

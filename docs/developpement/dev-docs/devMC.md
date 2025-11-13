@@ -17,11 +17,11 @@ issues de la documentation officielle.
 
 ---
 
-📁 `/docs/developpement/issue3/task6/_Frontend-main-courante.md`  
+📁 `/docs/developpement/dev-docs/devMC.md`  
 
 > 📌 Ce document poursuit la main courante des étapes de l’issue #3, en ouvrant le **Bloc 3** du développement fonctionnel.
 
-Il fait suite à la version figée à l’index G-10 ([`_Frontend-main-courante_indexG-10.md` (`/task5`)](../task5/_Frontend-main-courante_indexG-10.md) 
+Il fait suite à la version figée à l’index H-11 ([`_Frontend-main-courante.md` (`/issue3/task6`)](../issue3/task6/_Frontend-main-courante.md) 
 et couvre :
 - Les entités `Membre`, `Emprunt`, `Retour`
 - Les vues CRUD, les transitions métier, les historiques
@@ -33,10 +33,10 @@ et couvre :
 
 > 🔗 Liens utiles
 >
->> - [Issue #3 – Développement de l’application fonctionnelle bibliothécaire](https://github.com/MonLucCo/CEF_POO-Django_Gestion-Mediatheque_Test-version/issues/3)  
->> - [README-tech.md](../../../technique/README-tech.md)  
->> - [Analyse_Fonctionnalites.md](../../../fonctionnel/Analyse_Fonctionnalites.md)  
->> - [tests-plan.md](tests-plan.md)
+>> - Description de l'issue #3 : [Issue #3 – Développement de l’application fonctionnelle bibliothécaire](https://github.com/MonLucCo/CEF_POO-Django_Gestion-Mediatheque_Test-version/issues/3)  
+>> - Organisation du développement technique : [README-tech.md](../../technique/README-tech.md)  
+>> - Analyse des fonctionnalités du projet : [Analyse_Fonctionnalites.md](../../fonctionnel/Analyse_Fonctionnalites.md)  
+>> - Plan de tests du projet : [devTests.md](devTests.md)
 
 ---
 
@@ -76,6 +76,7 @@ et couvre :
    - [9.23 Difficulté 23 : Formalisation des scenarii métier](#923-difficulté-23--formalisation-des-scenarii-métier)
    - [9.24 Difficulté 24 : Traçabilité UX des actions métier et synchronisation du contexte d’affichage](#924-difficulté-24--traçabilité-ux-des-actions-métier-et-synchronisation-du-contexte-daffichage)
    - [9.25 Difficulté 25 : Choix du modèle de vue pour une confirmation métier liée à un objet](#925-difficulté-25--choix-du-modèle-de-vue-pour-une-confirmation-métier-liée-à-un-objet)
+   - [9.26 Difficulté 26 : Réorganisation du plan de développement et de la documentation transverse](#926-difficulté-26--réorganisation-du-plan-de-développement-et-de-la-documentation-transverse)
 10. [📌 Décisions structurantes du projet](#10--décisions-structurantes-du-projet)
     - [10.1 Décision 1 (D-01) – Structuration progressive du développement par blocs fonctionnels](#101-décision-1-d-01--structuration-progressive-du-développement-par-blocs-fonctionnels)
     - [10.2 Décision 2 (D-02) – Centralisation des vues sur l’entité Media avec typage différé](#102-décision-2-d-02--centralisation-des-vues-sur-lentité-media-avec-typage-différé)
@@ -83,6 +84,7 @@ et couvre :
     - [10.4 Décision 4 (D-04) – Clarification du champ `Support.consultable` selon le sous-type](#104-décision-4-d-04--clarification-du-champ-supportconsultable-selon-le-sous-type)
     - [10.5 Décision 5 (D-05) – Stratégie de gestion des messages et des logs](#105-décision-5-d-05--stratégie-de-gestion-des-messages-et-des-logs)
     - [10.6 Décision 6 (D-06) – Structuration des scenarii métier](#106-décision-6-d-06--structuration-des-scenarii-métier)
+    - [10.7 Décision 7 (D-07) - Reorganisation des documents techniques et du plan de développement (version 3)](#107-décision-7-d-07---reorganisation-des-documents-techniques-et-du-plan-de-développement-version-3)
 11. [📚 Références techniques et documentaires](#11--références-techniques-et-documentaires)
     - [11.1 Documentation officielle (Django et Python)](#111-documentation-officielle-django-et-python)
     - [11.2 Structuration des modèles et logique métier](#112-structuration-des-modèles-et-logique-métier)
@@ -263,8 +265,8 @@ Mais, pour une première réalisation avec Django cela se traduit par plusieurs 
 - relation backend-frontend
 - mise en place des tests fonctionnels
 
-À partir du site de référence [`Django - Documentation`](https://docs.djangoproject.com/fr/5.2/intro/), j'ai pu synthétiser une ligne directrice pour réaliser le 
-développement fonctionnel initial de l'application Bibliothécaire.
+À partir du site de référence [`Django - Documentation`](https://docs.djangoproject.com/fr/5.2/intro/), j'ai pu synthétiser 
+une ligne directrice pour réaliser le développement fonctionnel initial de l'application Bibliothécaire.
 
 ### 9.2 Difficulté 2 : comprendre les mécanismes liés au moteur de template Django
 
@@ -277,17 +279,20 @@ Par exemple, la mise en commentaire d'une ligne de code HTML n'était pas pris e
 
 Après lecture du [tutorial (partie 3) de la documentation de Django] (https://docs.djangoproject.com/fr/5.2/intro/tutorial03/), 
 j'ai compris qu'il me fallait comprendre les mécanismes de Django pour interpréter les templates.
-De ces lectures, j'ai créé un [_memento_](../../../technique/Memento_Django-Balises-Filtres.md) pour une réexploitation dans mon développement.
+De ces lectures, j'ai créé un [_memento_](../../technique/Memento_Django-Balises-Filtres.md) pour une exploitation dans 
+mon développement.
 
 > Ce mémento est appelé à évoluer au fil du développement, notamment avec les _filtres personnalisés_ et les _tests de rendu_.
 
 ### 9.3 Difficulté 3 : choix de la meilleure architecture de Vue
 
 Cette difficulté s'est avérée la plus complexe à expliciter, car elle apparaît anodine dans sa formulation tout en étant 
-liée à de nombreux sujets impactés par la résolution choisie. Par conséquent, elle est développée pour parcourir les différentes facettes.
+liée à de nombreux sujets impactés par la résolution choisie. Par conséquent, elle est développée pour parcourir les 
+différentes facettes.
 
 Sa résolution m'a permis de :
-- prendre du recul sur les différentes solutions possibles entre le backend (le modèle de données) et le frontend (les templates)
+- prendre du recul sur les différentes solutions possibles entre le backend (le modèle de données) et le frontend 
+(les templates)
 - consolider le modèle et d'orienter précisément la suite des développements et la structure du code.
 
 #### a) Contexte de la difficulté
@@ -361,7 +366,8 @@ modélisation, j’ai orienté mes recherches vers les forums et les retours d�
 d’identifier une **bonne pratique émergente**.
 
 La résolution s’est faite en deux temps :
-- Une **surcharge de la méthode `get_object()` dans la vue** pour accéder dynamiquement à l’objet typé, sans modifier le modèle.
+- Une **surcharge de la méthode `get_object()` dans la vue** pour accéder dynamiquement à l’objet typé, sans modifier le 
+modèle.
 - Une **éventuelle centralisation dans le modèle** via une méthode utilitaire (`get_real_instance()`), pour simplifier 
 - et uniformiser le comportement dans toutes les vues concernées.
 
@@ -376,9 +382,10 @@ Le modèle de la médiathèque repose sur une classe mère `Media`, dont hérite
 Chaque sous-type possède des champs spécifiques (ex. : `auteur` pour `Livre`, `realisateur` pour `Dvd`, etc.), mais les 
 vues sont centralisées sur `Media`.
 
-Lors de l’affichage du détail d’un média, il est nécessaire d’accéder à la fois aux champs communs et aux champs spécifiques 
-du type réel. Sinon, seules les données des champs communs sont affichés car accessibles.
-Cette situation soulève une difficulté technique liée au **polymorphisme effectif** dans le cadre de l’**héritage multi-table Django**.
+Lors de l’affichage du détail d’un média, il est nécessaire d’accéder à la fois aux champs communs et aux champs 
+spécifiques du type réel. Sinon, seules les données des champs communs sont affichés car accessibles.
+Cette situation soulève une difficulté technique liée au **polymorphisme effectif** dans le cadre de l’**héritage 
+multi-table Django**.
 
 #### b) Problème rencontré
 
@@ -389,7 +396,8 @@ champs spécifiques du sous-type.
 
 #### c) Solution technique mise en œuvre
 
-La méthode `get_object()` de la vue `MediaDetailView` a été **surchargée** pour retourner dynamiquement l’instance réelle du sous-type :
+La méthode `get_object()` de la vue `MediaDetailView` a été **surchargée** pour retourner dynamiquement l’instance 
+réelle du sous-type :
 
 ```python
 def get_object(self):
@@ -409,7 +417,8 @@ Le template reçoit alors une instance typée, exposant à la fois les champs h�
 #### d) Enseignements et bonnes pratiques
 
 - Cette difficulté est **technique**, non stratégique : elle découle du fonctionnement interne de l’ORM Django.
-- Elle illustre le besoin de **maîtriser les mécanismes de l’héritage multi-table** pour accéder aux données de manière polymorphe.
+- Elle illustre le besoin de **maîtriser les mécanismes de l’héritage multi-table** pour accéder aux données de manière 
+polymorphe.
 - Il est recommandé de centraliser cette logique dans une méthode utilitaire (`get_real_instance()`) pour éviter la 
 duplication et faciliter la maintenance.
 
@@ -431,9 +440,9 @@ objets sont instanciés et transmis aux vues/templates**.
 
 ### 9.5 Difficulté 5 : définir et structurer les tests unitaires
 
-Cette difficulté a émergé non pas dans l’écriture des tests eux-mêmes, mais dans leur **organisation progressive** au sein du projet. 
-Elle est directement liée à la montée en complexité du code, à la volonté de maintenir une traçabilité claire, et à 
-l’exigence d’autonomie entre les modules anciens et les développements récents.
+Cette difficulté a émergé non pas dans l’écriture des tests eux-mêmes, mais dans leur **organisation progressive** au 
+sein du projet. Elle est directement liée à la montée en complexité du code, à la volonté de maintenir une traçabilité 
+claire, et à l’exigence d’autonomie entre les modules anciens et les développements récents.
 
 Elle prolonge les réflexions amorcées dans les sections 9.3 et 9.4 : après avoir clarifié l’architecture des vues et le 
 typage des objets, il s’agissait ici de structurer les tests unitaires de manière à accompagner le développement de façon 
@@ -464,7 +473,8 @@ organisation modulaire :
   - Des commentaires orientant vers le dossier `tests_blocs/` et le fichier `tests-plan.md`
 
 #### c) Compréhension à l’issue
-- La **décomposition en structure** permet une lisibilité et une autonomie très forte entre les tests anciens et les ajouts récents.
+- La **décomposition en structure** permet une lisibilité et une autonomie très forte entre les tests anciens et les 
+ajouts récents.
 - Le fichier `tests.py` joue un rôle de **pivot technique et pédagogique**, utile pour la mise en œuvre et la relecture.
 - La rédaction d’un fichier `tests-plan.md` est une **bonne pratique essentielle** pour formaliser les objectifs, les 
 cas de test, et la couverture attendue.
@@ -521,7 +531,8 @@ les formulaires des méthodes de validation métier de la donnée.
 
 La résolution de cette difficulté a démontré :
 - l'importance d'une responsabilité claire en évitant la duplication des contrôles dans plusieurs entités héritées.
-- l'intérêt de centraliser la logique métier dans les formulaires ou service, et de garder le modèle structurellement simple.
+- l'intérêt de centraliser la logique métier dans les formulaires ou service, et de garder le modèle structurellement 
+simple.
 - la cohérence à conserver entre :
   - les bornes **stables** qui peuvent être définies dans le modèle via **Validators**.
   - les bornes **dynamiques** (ie. année courante) qui doivent être définies dans un formulaire ou une méthode `clean()`.
@@ -533,15 +544,16 @@ Lors de la création de dossiers dans la structure du projet, il est essentiel d
 le fichier `.gitignore`.
 Le dossier `media/` est un exemple typique : il est ignoré par défaut, car utilisé pour les fichiers uploadés.
 
-La solution appliquée est d'utiliser le **nom des entités au pluriel pour les dossiers de templates** (medias/, livres/, membres/, etc.).
+La solution appliquée est d'utiliser le **nom des entités au pluriel pour les dossiers de templates** (medias/, livres/, 
+membres/, etc.).
 
 Cette correction a permis d’explorer l’interface de _refactorisation_ de PyCharm, notamment la _preview_ des impacts et 
 l’exclusion sélective de fichiers sensibles (`.gitignore`, `migrations`).
 
 ### 9.9 Difficulté 9 : interactions entre les tests unitaires techniques et fonctionnels métier
 
-Lors de la reprise des développements fonctionnels, après la correction du modèle (Bloc 1), il a été difficile de caractériser 
-un test unitaire fonctionnel (métier) dans une catégorie technique (`NAV`, `ENT` ou `VUE`).
+Lors de la reprise des développements fonctionnels, après la correction du modèle (Bloc 1), il a été difficile de 
+caractériser un test unitaire fonctionnel (métier) dans une catégorie technique (`NAV`, `ENT` ou `VUE`).
 Une analyse fonctionnelle basée sur les cas d'usage du rôle de Bibliothécaire a permis d'identifier les différentes 
 fonctionnalités à réaliser et à tester.
 
@@ -559,7 +571,8 @@ aussi pour des validations fonctionnelles, dans un cadre commun des tests de cas
 
 #### a) Contexte de la difficulté
 
-Lors de la mise en œuvre des vues liées à l’entité `Media`, une complexité est apparue concernant la **structuration des routes**. 
+Lors de la mise en œuvre des vues liées à l’entité `Media`, une complexité est apparue concernant la **structuration des 
+routes**. 
 Le sujet impose plusieurs cas d’usage distincts :
 - Affichage de la **liste complète** des médias
 - Affichage des **médias disponibles** pour l’emprunt
@@ -568,8 +581,8 @@ Le sujet impose plusieurs cas d’usage distincts :
 Ces cas d'usage induisent des fonctions complémentaires :
 - Affichage des **médias par type** (`LIVRE`, `DVD`, `CD`)
 
-Cette diversité fonctionnelle soulève une question centrale : **comment organiser les routes de manière claire, cohérente et 
-extensible**, sans créer d’ambiguïté entre les vues ni de duplication technique.
+Cette diversité fonctionnelle soulève une question centrale : **comment organiser les routes de manière claire, cohérente 
+et extensible**, sans créer d’ambiguïté entre les vues ni de duplication technique.
 
 #### b) Problème rencontré
 
@@ -583,7 +596,8 @@ Cette situation rend difficile la lecture du code, la documentation des cas d’
 
 #### c) Résolution retenue
 
-Pour garantir une **clarté fonctionnelle et une traçabilité technique**, les routes ont été **scindées en trois chemins indépendants** :
+Pour garantir une **clarté fonctionnelle et une traçabilité technique**, les routes ont été **scindées en trois chemins 
+indépendants** :
 
 | Route                       | Cas d’usage associé | Vue Django                 | Filtrage appliqué                     |
 |-----------------------------|---------------------|----------------------------|---------------------------------------|
@@ -667,8 +681,8 @@ une ambiguïté sur la définition de l'état (et surtout initial) d'un média.
 Elle a révélé un besoin métier fondamental : **stabiliser les états initiaux des objets `Media`** typés, afin de 
 garantir une cohérence entre les données créées, les transitions métier, et les vues exposées.
 
-Le cycle de vie métier, modélisé dans le document [Analyse_LifeCycle_Medias.md](Analyse_LifeCycle_Medias.md), a permis 
-d’identifier un **état initial explicite** :  
+Le cycle de vie métier, modélisé dans le document d'analyse du cycle de vie d'un média ([devALCBibMedias.md](assets/technique/devALCBibMedias.md)), 
+a permis d’identifier un **état initial explicite** :  
 > **État 0** (début) → `consultable=False`, `disponible=False`
 
 Ce point de départ est essentiel pour permettre au bibliothécaire de déclencher les transitions métier vers des états 
@@ -699,12 +713,12 @@ La résolution s’est articulée autour de trois axes :
    - Clarification des transitions vers l’état 1 ou 3 selon les cas d’usage.
 
 3. **Documentation** :  
-   - Rédaction du document [Analyse_LifeCycle_Medias.md](Analyse_LifeCycle_Medias.md) pour formaliser les états, 
+   - Rédaction du document [devALCBibMedias.md](assets/technique/devALCBibMedias.md) pour formaliser les états, 
      transitions, et impacts techniques.
-   - Intégration dans le [Plan de tests](tests-plan.md) (`T-FUN-xx` à `T-FUN-yy`) pour valider les transitions métier.
+   - Intégration dans le [Plan de tests](devTests.md) (`T-FUN-xx` à `T-FUN-yy`) pour valider les transitions métier.
 
-   > Le document [Analyse_LifeCycle_Medias.md](Analyse_LifeCycle_Medias.md) défini les principes retenus pour le 
-   > développement et les tests dans l'ensemble du projet, alors que le [Plan de tests](tests-plan.md) décrits les tests 
+   > Le document [devALCBibMedias.md](assets/technique/devALCBibMedias.md) défini les principes retenus pour le 
+   > développement et les tests dans l'ensemble du projet, alors que le [Plan de tests](devTests.md) décrits les tests 
    > mis en œuvre.  
 
 #### d) Enjeux et bénéfices
@@ -809,7 +823,7 @@ La résolution de cette difficulté a permis de :
 
 #### a) Contexte de la difficulté
 
-Après la validation du cycle de vie des entités `Media` dans [`Analyse_LifeCycle_Medias.md`](Analyse_LifeCycle_Medias.md), 
+Après la validation du cycle de vie des entités `Media` dans [`devALCBibMedias.md`](assets/technique/devALCBibMedias.md), 
 il est apparu nécessaire de formaliser **les interactions métier entre les entités `Media`, `Membre`, et `Emprunt`** avant 
 de poursuivre le développement des fonctionnalités associées aux UC-MEMBRE et UC-EMPRUNT.
 
@@ -817,7 +831,7 @@ de poursuivre le développement des fonctionnalités associées aux UC-MEMBRE et
 
 Cette difficulté a conduit à la rédaction d’un document transversal :
 
-➡️ [`Analyse_LifeCycle_Bibliothecaire.md`](Analyse_LifeCycle_Bibliothecaire.md)
+➡️ Analyse du cycle de vie des entités de Bibliothécaire : [`devALCBib.md`](devALCBib.md)
 
 Ce document :
 - Définit les **vecteurs de contexte** de chaque entité
@@ -833,7 +847,7 @@ Il constitue une **base métier stable** pour la validation des UC et la rédact
 
 La résolution de cette difficulté a permis de poser une **architecture métier claire et cohérente** avant toute 
 implémentation technique.  
-En définissant les vecteurs de contexte, les transitions typées et les règles DDM, le document `Analyse_LifeCycle_Bibliothecaire.md` 
+En définissant les vecteurs de contexte, les transitions typées et les règles DDM, le document `devALCBib.md` 
 offre :
 
 - Une **vision unifiée** du fonctionnement des entités `Media`, `Membre`, et `Emprunt`
@@ -875,7 +889,7 @@ Ce choix diffère de l’organisation adoptée pour les UC liées à `Media`, o�
 📌 Décision :
 Le regroupement est conservé pour les UC `Membre` et `Emprunt`, afin de favoriser la lisibilité métier et la validation 
 incrémentale par commit. Chaque test portera dans sa dénomination l'identifiant (catégorie et index) définie dans 
-le [plan de tests](tests-plan.md).  
+le [plan de tests](devTests.md).  
 Une harmonisation documentaire pourra être envisagée avec les tests des UC `Media`pourra être envisagée ultérieurement. 
 Toutefois, la nature indépendante de chaque test permet une poursuite du projet sans _refactorisation_ de ces tests.
 
@@ -1287,8 +1301,8 @@ via des méthodes métier (`peut_emprunter()`, `est_empruntable()`, `est_en_reta
 
 - Sans formalisation préalable, la logique métier risque d’être dispersée dans les vues, les formulaires ou les templates.
 - Les transitions d’état (ex. : retour d’un emprunt) impliquent plusieurs entités, et doivent être synchronisées.
-- La documentation fonctionnelle ([AFBib](Analyse_Fonctionnalites_Bibliothecaire.md)) ne prévoyait initialement pas de 
-section dédiée aux méthodes métier.
+- La documentation fonctionnelle de Bibliothecaire ([devAFBib](devAFBib.md)) ne prévoyait initialement pas de section 
+dédiée aux méthodes métier.
 
 #### c) Solution mise en œuvre
 
@@ -1298,9 +1312,9 @@ section dédiée aux méthodes métier.
   - `Emprunt.rendre()`, `Emprunt.est_en_retard()`, `Emprunt.date_retour_prévu`.
 - Centralisation des transitions dans des méthodes d’action :
   - `Emprunt.rendre()` encapsule la mise à jour du statut et du média.
-- Révision de l’analyse fonctionnelle ([AFBib](Analyse_Fonctionnalites_Bibliothecaire.md)) pour intégrer ces méthodes dans 
+- Révision de l’analyse fonctionnelle Bibliothécaire ([devAFBib](devAFBib.md)) pour intégrer ces méthodes dans 
 les UC, sans détailler leur logique interne.
-- Alignement avec les DDM et vecteurs d’état définis dans le cycle de vie des entités ([ALCBib](Analyse_LifeCycle_Bibliothecaire.md)).
+- Alignement avec les DDM et vecteurs d’état définis dans le cycle de vie des entités ([devALCBib](devALCBib.md)).
 
 #### d) Enseignements et bonnes pratiques
 
@@ -1310,8 +1324,8 @@ les UC, sans détailler leur logique interne.
   - une documentation plus claire et modulaire.
 - Cette approche s’inscrit dans une démarche de **modélisation orientée métier**, proche du Domain-Driven Design (DDD).
 - Les transitions métier doivent être **encapsulées dans les modèles**, et non dispersées dans les vues.
-- L'analyse fonctionnelle ([AFBib](Analyse_Fonctionnalites_Bibliothecaire.md)) doit prévoir une annexe “Méthodes métier 
-par entité” ou les intégrer directement dans les UC.
+- L'analyse fonctionnelle Bibliothécaire ([devAFBib](devAFBib.md)) doit prévoir une annexe “Méthodes métier par entité” 
+ou les intégrer directement dans les UC.
 
 #### e) Illustration schématique
 
@@ -1487,8 +1501,8 @@ complète dans `/docs/fonctionnel/scenarii/scenar_X.md`.
 #### d) Extension du périmètre
 
 Ce besoin, non explicitement formulé dans le sujet, devient transversal à toutes les applications du projet. Il constitue 
-les prémisses de l’issue #6, qui vise à compléter les tests fonctionnels développés selon l’[AFBib](Analyse_Fonctionnalites_Bibliothecaire.md) 
-et le [plan de tests](tests-plan.md).
+les prémisses de l’issue #6, qui vise à compléter les tests fonctionnels développés selon l’[devAFBib](devAFBib.md) et 
+le [plan de tests](devTests.md).
 
 #### e) Justification de la formalisation
 
@@ -1570,9 +1584,9 @@ d’affichage conditionnel**, tous dépendants d’un contexte partagé entre se
 
 #### e) Illustration UX
 
-L'analyse fonctionnelle (AFBib) illustre le cas d'usage avec les UX associés :
-- Exemple 1 : [marquage automatique à la première connexion (message et tableau affichés)](Analyse_Fonctionnalites_Bibliothecaire.md#-marquage-automatique---exemple-dux-obtenus-avec-le-scenario-scenar_01)
-- Exemple 2 : [marquage manuel via commande dédiée (message injecté, tableau affiché)](Analyse_Fonctionnalites_Bibliothecaire.md#-marquage-manuel---exemple-dux-obtenus-avec-le-scenario-scenar_01)
+L'analyse fonctionnelle (devAFBib) illustre le cas d'usage avec les UX associés :
+- Exemple 1 : [marquage automatique à la première connexion (message et tableau affichés)](devAFBib.md#-marquage-automatique---exemple-dux-obtenus-avec-le-scenario-scenar_01)
+- Exemple 2 : [marquage manuel via commande dédiée (message injecté, tableau affiché)](devAFBib.md#-marquage-manuel---exemple-dux-obtenus-avec-le-scenario-scenar_01)
 
 #### f) Conclusion
 
@@ -1702,6 +1716,52 @@ Cette difficulté m’a permis :
 
 Elle constitue un **point d’inflexion dans le raisonnement architectural** du projet, et mérite d’être documentée comme 
 un fait marquant du développement.
+
+---
+
+### 9.26 Difficulté 26 : Réorganisation du plan de développement et de la documentation transverse
+
+Cette difficulté est apparue à la fin du développement des entités principales de l’application Bibliothécaire (`Media`, 
+`Membre`, `Emprunt`).  
+La question s’est posée de savoir si les entités `JeuDePlateau` et `Support` relevaient de l’issue #3 (Bibliothécaire) 
+ou de l’issue #4 (Consultation).
+
+Cette interrogation a révélé un besoin plus profond : **réorganiser le contenu fonctionnel de chaque issue** pour 
+clarifier leur périmètre et leur articulation.  
+Elle a conduit à la définition d’une **version 3 du plan de développement**, fondée sur les principes suivants :
+
+- Les issues **#3 et #4** sont dédiées au développement des **fonctions métier**, sans viser une intégration finale dans 
+les applications.
+- L’issue **#5** est consacrée à l’**intégration des fonctions dans les applications** (`Bibliothecaire`, `Consultation`) 
+et à la mise en place des **accès et de la sécurité**.
+- L’issue **#6** regroupe les travaux de finition UX, les filtrages, les messages cohérents et les validations 
+fonctionnelles.
+
+Cette réorganisation fonctionnelle a mis en évidence une difficulté sous-jacente :  
+> Comment structurer la documentation technique pour qu’elle accompagne durablement toutes les issues du projet ?
+
+La réponse a été la mise en place d’une **documentation transverse**, regroupée dans le dossier 
+`/docs/developpement/dev-docs/`, avec des fichiers renommés selon leur fonction :
+
+| Fonction              | Ancien nom (initial)                        | Nouveau nom (final) |
+|-----------------------|---------------------------------------------|---------------------|
+| Main-courante         | `_Frontend-main-courante.md`                | `devMC.md`          |
+| Analyse fonctionnelle | `Analyse_Fonctionnalites_Bibliothecaire.md` | `devAFBib.md`       |
+| Cycle de vie métier   | `Analyse_LifeCycle_Bibliothecaire.md`       | `devALCBib.md`      |
+| Plan de tests         | `tests-plan.md`                             | `devTests.md`       |
+| Rapport de tests      | `test_report_indexH-11.txt`                 | `devReport.md`      |
+
+Cette documentation est mise à jour dans les branches `update-technical` de chaque issue, et poursuivie dans les 
+branches `update-documentation` pour la rédaction du rapport final.
+
+> Cette difficulté a permis de stabiliser une organisation documentaire durable, modulaire et extensible, garantissant 
+> la traçabilité des choix techniques et la continuité du projet.
+> 
+> D'autre part, l'issue #3 doit contenir les deux rédactions (initiale et finale) pour assurer la continuité du 
+> développement.
+
+Cette réorganisation documentaire s’accompagne d’une refonte du plan de développement (version 3), qui segmente les 
+issues par application (`bibliothecaire`, `consultation`, `mediatheque`) et par rôle métier.
 
 ---
 
@@ -1872,6 +1932,55 @@ Cette structuration permet :
 
 Elle est volontairement minimaliste pour être exploitée dans la suite du développement sans avoir à reprendre les sujets 
 antérieurs.
+
+---
+
+### 10.7 Décision 7 (D-07) - Reorganisation des documents techniques et du plan de développement (version 3)
+
+À la suite de la Difficulté 26, une décision structurante a été prise pour garantir la continuité documentaire et la 
+lisibilité du projet sur l’ensemble des issues à venir.
+
+Deux axes ont été retenus :
+- structuration de la documentation technique.
+- organisation du plan de développement.
+
+#### 🔹 1. Renommage des documents techniques de développement
+
+Les documents produits dans l’issue #3 ont été renommés selon leur fonction transverse, et non plus selon leur index de 
+version.  
+Ils sont désormais regroupés dans le dossier `/docs/developpement/dev-docs/` :
+
+| Nouveau nom    | Ancien nom                                  | Fonction                       |
+|----------------|---------------------------------------------|--------------------------------|
+| `devMC.md`     | `_Frontend-main-courante.md`                | Main-courante du développement |
+| `devAFBib.md`  | `Analyse_Fonctionnalites_Bibliothecaire.md` | Analyse des fonctionnalités    |
+| `devALCBib.md` | `Analyse_LifeCycle_Bibliothecaire.md`       | Analyse du cycle de vie métier |
+| `devTests.md`  | `tests-plan.md`                             | Plan de tests                  |
+| `devReport.md` | `test_report_indexH-11.txt`                 | Rapport de tests               |
+
+Cette organisation permet :
+- une réutilisation directe dans les issues suivantes.
+- une maintenance facilitée.
+- une séparation claire entre développement (`update-technical`) et rapport final (`update-documentation`).
+
+#### 🔹 2. Structuration du plan de développement – Version 3
+
+Le plan de développement a été redéfini pour clarifier le rôle de chaque issue :
+
+- **Issue #3** : développement des fonctions métier de l’application `bibliothecaire` (sans finalisation UX).
+- **Issue #4** : développement des fonctions métier de l’application `consultation` (sans finalisation UX).
+- **Issue #5** : intégration des fonctions dans les applications (`bibliothecaire`, `consultation`) avec gestion des 
+accès et de la sécurité.
+- **Issue #6** : finition UX, filtrages, messages, validation fonctionnelle.
+- **Issue #7** : rédaction du rapport final et livraison.
+
+Cette structuration permet de :
+- valider les traitements métier de manière robuste avant toute intégration UX.
+- isoler les responsabilités techniques (métier, sécurité, UX).
+- garantir une progression modulaire et traçable du projet.
+
+> Cette décision marque la clôture technique de l’issue #3 et prépare la continuité documentaire et fonctionnelle du 
+> projet dans les issues suivantes.
 
 ---
 

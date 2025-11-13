@@ -94,7 +94,7 @@ L’application doit permettre :
 ## 6. Liens vers les documents associés
 
 - [`_Admin-main-courante.md`](../developpement/issue3/task4/_Admin-main-courante.md)
-- [`_Frontend-main-courante.md`](../developpement/issue3/task5/_Frontend-main-courante.md)
+- [`_Frontend-main-courante.md`](../developpement/issue3/task6/_Frontend-main-courante.md)
 - [`models.py_indexH.txt`](../developpement/issue3/task1/models.py_indexH.txt)
 - [`Analyse-initial_data.md`](../developpement/issue3/task2/Analyse-initial_data.md)
 - [`Analyse_Fonctionnalites.md`](Analyse_Fonctionnalites.md)
@@ -105,7 +105,7 @@ Certains documents fonctionnels détaillent les cas d’usage selon les profils 
 
 | Rôle           | Document associé                                                                                                       | Positionnement actuel                          |
 |----------------|------------------------------------------------------------------------------------------------------------------------|------------------------------------------------|
-| Bibliothécaire | [`Analyse_Fonctionnalites_Bibliothecaire.md`](../developpement/issue3/task5/Analyse_Fonctionnalites_Bibliothecaire_indexG-10.md) | lié à l’implémentation de l’issue #3 – étape 5 |
+| Bibliothécaire | [`Analyse_Fonctionnalites_Bibliothecaire.md`](../developpement/issue3/task6/Analyse_Fonctionnalites_Bibliothecaire.md) | lié à l’implémentation de l’issue #3 – étape 6 |
 | Membre         | *(à créer)*                                                                                                            | lié à l'implémentation de l'issue #4           |
 
 > Ces _documents associés_ pourront être déplacés vers `/docs/fonctionnel/` une fois les cas d’usage stabilisés et validés.
