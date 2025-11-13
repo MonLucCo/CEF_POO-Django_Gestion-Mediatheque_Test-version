@@ -1,9 +1,9 @@
 # ✅ Plan de test – Bibliothécaire
 
-📁 `/docs/developpement/issue3/task5/tests-plan.md`  
+📁 `/docs/developpement/dev-docs/devTests.md`  
 
 📌 Version : index H-11 (issue #3 – étape 6 - Bloc 3)
-- Rapport de tests associé : [`test_report_indexH-11.txt`](test_report_indexH-11.txt)
+- Rapport de tests associé : [`devReport.txt`](devReport.txt)
 
 ___
 
@@ -51,16 +51,16 @@ Chaque index de ce plan possède un rapport de tests nommé `tests_report_index[
 
 ---
 
-📁 `/docs/developpement/issue3/task6/tests-plan.md`  
-- Rapport de tests associé : [`test_report_indexH-11.txt`](test_report_indexH-11.txt)
+📁 `/docs/developpement/dev-docs/devTests.md`  
+- Rapport de tests associé : [`devReport.txt`](devReport.txt)
 
-➡️ Ce document poursuit le plan de test figé à l’index G-10 ([`tests-plan_indexG-10.md` (`/task5`)](../task5/tests-plan_indexG-10.md))  
+➡️ Ce document poursuit le plan de test figé à l’index H-11 ([`tests-plan.md` (`issue3/task6`)](../issue3/task6/tests-plan.md))  
 ➡️ Il accompagne le développement des entités `Membre`, `Emprunt`, `Retour` dans le cadre du profil Bibliothécaire.
 
 ---
 
 Ce plan de test couvre les fonctionnalités du **Bloc 3** de l’issue #3, en lien avec la main-courante 
-[`_Frontend-main-courante.md`](_Frontend-main-courante.md).
+[`devMC.md`](devMC.md).
 
 Il est conçu pour :
 - Structurer les tests unitaires et fonctionnels liés aux entités `Membre` et `Emprunt`
@@ -79,9 +79,9 @@ Il est conçu pour :
 - Tests de cohérence entre `Media` et `Emprunt` (statut, disponibilité)
 
 📌 Documents associés :
-- [`_Frontend-main-courante.md`](_Frontend-main-courante.md)
-- [`Analyse_Fonctionnalites_Bibliothecaire.md`](Analyse_Fonctionnalites_Bibliothecaire.md)
-- [`Analyse_LifeCycle_Emprunts.md`](Analyse_LifeCycle_Emprunts.md) *(à créer)*
+- main-courante : [`devMC.md`](devMC.md)
+- analyse des fonctionnalités de Bibliothécaire : [`devAFBib.md`](devAFBib.md)
+- analyse du cycle de vie des entités de Bibliothécaire : [`devALCBib.md`](devALCBib.md)
 
 ---
 
@@ -173,7 +173,7 @@ Chaque catégorie de tests est regroupée dans une sous-section spécifique avec
 
 > ❌ Le test T-NAV-03 a révélé une contrainte sur le champ `annee_edition` du modèle `Media`. ✅ Il a été repris 
 > après correction du modèle de données.  
-> 🔧 La correction a été intégrée et documentée dans [`Modelisation_correction-erreurs-suite-tests-unitaires.md`](../task5/Modelisation_correction-erreurs-suite-tests-unitaires.md).  
+> 🔧 La correction a été intégrée et documentée dans [`Modelisation_correction-erreurs-suite-tests-unitaires.md`](assets/technique/Modelisation_correction-erreurs-suite-tests-unitaires.md).  
 > 📌 Aucun point technique à noter dans la main-courante pour la série du **Bloc 1**.
 
 ---
@@ -205,7 +205,7 @@ Chaque catégorie de tests est regroupée dans une sous-section spécifique avec
 
 > ✅ Les tests T-ENT-xx sont validés.  
 > ✅ Les assertions couvrent la structure multi-table, les attributs hérités et typés, et la cohérence des enregistrements.  
-> 🔧 Les corrections de modélisation ont été intégrées et documentées dans [`Modelisation_correction-erreurs-suite-tests-unitaires.md`](../task5/Modelisation_correction-erreurs-suite-tests-unitaires.md).  
+> 🔧 Les corrections de modélisation ont été intégrées et documentées dans [`Modelisation_correction-erreurs-suite-tests-unitaires.md`](assets/technique/Modelisation_correction-erreurs-suite-tests-unitaires.md).  
 > 📌 Aucun point technique à noter dans la main-courante pour la série du **Bloc 1**.
 
 ---
@@ -275,7 +275,7 @@ Chaque catégorie de tests est regroupée dans une sous-section spécifique avec
 > indépendamment de la logique métier.  
 > 🔹 Ils sont complémentaires aux tests fonctionnels (`T-FUN-*`) qui valident le cycle complet de création.  
 > 🔹 Le test `T-FORM-03` confirme que les contraintes sont bien définies dans le modèle et respectées dans le 
-> formulaire, sans dépendre du design visuel (cf. [Difficulté 11](_Frontend-main-courante.md#911-difficulté-11--visualisation-des-contraintes-du-formulaire)).
+> formulaire, sans dépendre du design visuel (cf. [Difficulté 11](devMC#911-difficulté-11--visualisation-des-contraintes-du-formulaire)).
 
 ---
 
@@ -432,7 +432,7 @@ Chaque catégorie de tests est regroupée dans une sous-section spécifique avec
 | `test_uc_retour_emprunt.py` | Cas d'usage de retour des emprunts (sans ou avec sélection d'un membre ou d'un média)   | Technique et Fonctionnel |
 
 > Les fichiers de tests **technique et fonctionnel** correspondent au regroupement des catégories par classe de tests 
-> (cf. [Difficulté 15](_Frontend-main-courante.md#915-difficulté-15--regroupement-des-tests-techniques-et-fonctionnels-dans-un-même-groupe-de-tests)).
+> (cf. [Difficulté 15](devMC.md#915-difficulté-15--regroupement-des-tests-techniques-et-fonctionnels-dans-un-même-groupe-de-tests)).
 
 ---
 
@@ -447,13 +447,13 @@ Ce plan est conçu pour être enrichi au fil du développement :
 - Ajout de tests pour les vues `MediaTypage<Type>View` et `MediaCancelTypingView`
 - Ajout de tests de rollback et de redirection conditionnelle
 - Préparation des tests pour UC-DELETE (masquage) et UC-ADMIN (suppression définitive)
-- Organisation des fichiers de tests (à partir du Bloc3) regroupant les tests techniques et fonctionnels (cf. [Difficulté 15](_Frontend-main-courante.md#915-difficulté-15--regroupement-des-tests-techniques-et-fonctionnels-dans-un-même-groupe-de-tests)).
+- Organisation des fichiers de tests (à partir du Bloc3) regroupant les tests techniques et fonctionnels (cf. [Difficulté 15](devMC.md#915-difficulté-15--regroupement-des-tests-techniques-et-fonctionnels-dans-un-même-groupe-de-tests)).
 
 ---
 
 ## 🔹 8. Références
 
-- [Main courante du développement](_Frontend-main-courante.md)
+- [Main courante du développement](devMC.md)
 - [Issue #3 – Développement de l’application bibliothécaire](https://github.com/MonLucCo/CEF_POO-Django_Gestion-Mediatheque_Test-version/issues/3)
 - [Django Testing Best Practices – CodezUp](https://codezup.com/django-testing-best-practices-unit-tests-integration-tests/)
 - [Writing Scalable Unit Tests in Django – Dev.to](https://dev.to/shreyash_jhon_doe/writing-scalable-maintainable-unit-tests-in-django-a-practical-guide-with-real-examples-47a4)

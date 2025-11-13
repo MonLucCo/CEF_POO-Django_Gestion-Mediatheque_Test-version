@@ -1,6 +1,6 @@
 # 🔄 Analyse du cycle de vie métier – Profil Bibliothécaire
 
-📁 `/docs/fonctionnel/Analyse_LifeCycle_Bibliothecaire.md`  
+📁 `/docs/developpement/dev-docs/devALCBib.md`  
 📌 Version : index H-3  
 🧩 Sujet : synthèse des états métier et des interactions entre les entités `Media`, `Membre`, et `Emprunt` dans le 
 cadre du profil Bibliothécaire.
@@ -27,9 +27,9 @@ cadre du profil Bibliothécaire.
 Ce document formalise les **états métier**, **vecteurs de contexte**, et **transitions** des principales entités 
 manipulées par le profil Bibliothécaire.  
 Il constitue une synthèse transversale des documents spécialisés :
-- [`Analyse_LifeCycle_Medias.md`](Analyse_LifeCycle_Medias.md)
-- [`Analyse_LifeCycle_Membres.md`](Analyse_LifeCycle_Membres.md)
-- [`Analyse_LifeCycle_Emprunts.md`](Analyse_LifeCycle_Emprunts.md)
+- [devALCBibMedias.md](assets/technique/devALCBibMedias.md)
+- [devALCBibMembres.md](assets/technique/devALCBibMembres.md)
+- [devALCBibEmprunts.md](assets/technique/devALCBibEmprunts.md)
 
 ---
 
@@ -49,7 +49,7 @@ pour approfondir les recherches.
 
 La figure suivante constitue le socle visuel du cycle de vie du profil Bibliothécaire.
 
-![img.png](img_LifeCycle_Bibliothecaire.png)
+![img.png](assets/images/img_LifeCycle_Bibliothecaire.png)
 
 Elles présentent :
 - Les états stables et initiaux des entités
@@ -72,15 +72,15 @@ simplifiée dans un tableau spécifique à chaque entité avec sa situation amon
 
 **Pour l'entité Media :**
 
-![img.png](img_LifeCycle_TableauMedia.png)
+![img.png](assets/images/img_LifeCycle_TableauMedia.png)
 
 **Pour l'entité Membre :**
 
-![img.png](img_LifeCycle_tableauMembre.png)
+![img.png](assets/images/img_LifeCycle_tableauMembre.png)
 
 **Pour l'entité Emprunt :**
 
-![img.png](img_LifeCycle_TableauEmprunt.png)
+![img.png](assets/images/img_LifeCycle_TableauEmprunt.png)
 
 ---
 
@@ -201,11 +201,11 @@ par le système. Chaque règle modifie une ou plusieurs composantes du vecteur d
 
 ## 7. Références croisées
 
-- [`Analyse_LifeCycle_Medias.md`](Analyse_LifeCycle_Medias.md)
-- [`Analyse_LifeCycle_Membres.md`](Analyse_LifeCycle_Membres.md)
-- [`Analyse_LifeCycle_Emprunts.md`](Analyse_LifeCycle_Emprunts.md)
-- [`Analyse_Fonctionnalites_Bibliothecaire.md`](Analyse_Fonctionnalites_Bibliothecaire.md)
-- [`tests-plan.md`](tests-plan.md)
+- Analyse Cycle de vie de l'entité `Media` : [`devALCBibMedias.md`](assets/technique/devALCBibMedias.md)
+- Analyse Cycle de vie de l'entité `Membre` : [`devALCBibMembres.md`](assets/technique/devALCBibMembres.md)
+- Analyse Cycle de vie de l'entité `Emprunt` : [`devALCBibEmprunts.md`](assets/technique/devALCBibEmprunts.md)
+- Analyse des fonctionnalités de Bibliothécaire : [`devAFBib.md`](devAFBib.md)
+- Plan de tests : [`devTests.md`](devTests.md)
 
 ---
 
