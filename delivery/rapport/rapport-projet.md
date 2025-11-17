@@ -1,55 +1,263 @@
 # Rapport de projet – Application Médiathèque Django
 
-| Élément           | Détail                                                                 |
-|-------------------|------------------------------------------------------------------------|
-| **Nom du projet** | Gestion de médiathèque avec Django                                     |
-| **Date**          | Septembre 2025                                                         |
-| **Rédacteur**     | `Luc PERARD` / micro-entreprise `PerLucCo`                             |
-| **Formation**     | CEF – Développement Web et Web Mobile – Module POO                     |
-| **Avancement**    | ✔️ Done : #1, #12, #2 • 🚧 En cours : #3, #4 • ⏳ À venir : #5, #6, #7  |
+| Élément           | Détail                                                                |
+|-------------------|-----------------------------------------------------------------------|
+| **Nom du projet** | Gestion de médiathèque avec Django                                    |
+| **Date**          | Septembre 2025                                                        |
+| **Rédacteur**     | `Luc PERARD` / micro-entreprise `PerLucCo`                            |
+| **Formation**     | CEF – Développement Web et Web Mobile – Module POO                    |
+| **Avancement**    | ✔️ Done : #1, #12, #2, #3 • 🚧 En cours : #4 • ⏳ À venir : #5, #6, #7 |
 
-> Cette rédaction du rapport est incrémentale et les paragraphes absents seront intégrés lors de la réalisation du développement.
+> Cette rédaction du rapport est incrémentale et les paragraphes absents seront intégrés lors de la réalisation du 
+> développement.
 > 
-> Dans le dépôt GitHub du projet, chaque issue du plan de développement prévoit les sections concernées par la mise à jour du présent document.
+> Dans le dépôt GitHub du projet, chaque issue du plan de développement prévoit les sections concernées par la mise à 
+> jour du présent document.
 
 ---
 
 ## Sommaire
 
 - [1. Introduction](#1-introduction)
-- [3. Architecture du projet et mise en place](#3-architecture-du-projet-et-mise-en-place)
-  - [3.1 Organisation des dossiers](#31-organisation-des-dossiers)
-  - [3.2 Plan de développement et réorganisation des issues](#32-plan-de-développement-et-réorganisation-des-issues)
-  - [3.4 Couche centrale du projet Django](#34-couche-centrale-du-projet-django)
-- [6. Base de données et données de test](#6-base-de-données-et-données-de-test)
-  - [6.1 Configuration de la base de données](#61-configuration-de-la-base-de-données)
-- [7. Mode d’installation et d’exécution](#7-mode-dinstallation-et-dexécution)
-  - [7.1 Prérequis](#71-prérequis)
-  - [7.2 Commandes pas à pas](#72-commandes-pas-à-pas)
-  - [7.3 URL d'accès et description des interfaces](#73-url-daccès-et-description-des-interfaces)
-- [8. Démarche de travail et traçabilité](#8-démarche-de-travail-et-traçabilité)
-  - [8.1 Workflow GitHub](#81-workflow-github)
+
+- [2. Reprise et refactoring du code existant](#2-reprise-et-refactoring-du-code-existant)  
+  - [2.1 Analyse du code fourni](#21-analyse-du-code-fourni)  
+  - [2.2 Erreurs identifiées et correctifs appliqués](#22-erreurs-identifiées-et-correctifs-appliqués)  
+  - [2.3 Refactoring POO](#23-refactoring-poo)  
+    - [2.3.1 Hiérarchie des entités du modèle](#231-hiérarchie-des-entités-du-modèle)  
+    - [2.3.2 Structure des fichiers d’application](#232-structure-des-fichiers-dapplication)  
+    - [2.3.3 Routage fonctionnel par cas d’usage (UC)](#233-routage-fonctionnel-par-cas-dusage-uc)  
+  - [2.4 Justification des choix de conception](#24-justification-des-choix-de-conception)
+
+- [3. Architecture du projet et mise en place](#3-architecture-du-projet-et-mise-en-place)  
+  - [3.1 Organisation des dossiers](#31-organisation-des-dossiers)  
+  - [3.2 Plan de développement et réorganisation des issues](#32-plan-de-développement-et-réorganisation-des-issues)  
+    - [3.2.1 Version initiale](#321-version-initiale)  
+    - [3.2.2 Version révisée](#322-version-révisée)  
+    - [3.2.3 Version finale](#323-version-finale)  
+  - [3.3 Environnement de développement (venv, dépendances…)](#33-environnement-de-développement-venv-dépendances)  
+    - [3.3.1 Structure technique](#331-structure-technique)  
+    - [3.3.2 Installation des dépendances](#332-installation-des-dépendances)  
+    - [3.3.3 Exécution des tests](#333-exécution-des-tests)  
+  - [3.4 Couche centrale du projet Django](#34-couche-centrale-du-projet-django)  
+    - [3.4.1 Fonctionnalités et arborescence des fichiers](#341-fonctionnalités-et-arborescence-des-fichiers)  
+    - [3.4.2 Codage de la couche centrale](#342-codage-de-la-couche-centrale)
+
+- [4. Implémentation des fonctionnalités](#4-implémentation-des-fonctionnalités)  
+  - [4.1 Application bibliothécaire](#41-application-bibliothécaire)  
+    - [4.1.1 Gestion des membres (CRUD)](#411-gestion-des-membres-crud)  
+      - [4.1.1.1 Modélisation – Codes partiels (structure, Méthodes et Propriétés)](#4111-modélisation---code-partiel-de-la-structure-et-des-méthodes-et-propriétés-du-modèle)
+      - [4.1.1.2 Codage d'une fonctionnalité métier](#4112-codage-dune-fonctionnalité-métier)
+      - [4.1.1.3 Navigation fonctionnelle pour les membres](#4113-navigation-fonctionnelle-pour-les-membres)
+    - [4.1.2 Gestion des médias (CRU[D])](#412-gestion-des-médias-crud)  
+      - [4.1.2.1 Modélisation – typage différé et cycle de vie](#4121-modélisation--typage-différé-et-cycle-de-vie)  
+      - [4.1.2.2 Vues et formulaires - Héritage de vue pour les médias typés](#4122-vues-et-formulaires---héritage-de-vue-pour-les-médias-typés)
+      - [4.1.2.3 Navigation fonctionnelle pour les médias](#4123-navigation-fonctionnelle-pour-les-médias)
+    - [4.1.3 Gestion des emprunts et retours](#413-gestion-des-emprunts-et-retours)  
+      - [4.1.3.1 Modélisation de l'emprunt – contraintes métier](#4131-modélisation-de-lemprunt--contraintes-métier)  
+      - [4.1.3.2 Vue des emprunts – vérification des règles métier et parcours UX multiples](#4132-vues-des-emprunts--vérification-des-règles-métier-et-parcours-ux-multiples)  
+      - [4.1.3.3 Vues des retours](#4133-vues-des-retours)
+      - [4.1.3.4 Marquage des retards](#4134-marquage-des-retards)
+      - [4.1.3.5 Navigation fonctionnelle pour les emprunts](#4135-navigation-fonctionnelle-pour-les-emprunts)
+  - [4.3 Contraintes métiers respectées](#43-contraintes-métiers-respectées)
+    - [4.3.1 Contrainte 1 – Limite de 3 emprunts simultanés par membre](#431-contrainte-1--limite-de-3-emprunts-simultanés-par-membre)
+    - [4.3.2 Contrainte 2 – Durée maximale d’un emprunt : 7 jours](#432-contrainte-2--durée-maximale-dun-emprunt--7-jours)
+    - [4.3.3 Contrainte 3 – Blocage des membres en retard](#433-contrainte-3--blocage-des-membres-en-retard)
+    - [4.3.4 Contrainte 4 – Jeux de plateau non empruntables](#434-contrainte-4--jeux-de-plateau-non-empruntables)
+
+- [6. Base de données et données de test](#6-base-de-données-et-données-de-test)  
+  - [6.1 Schéma des modèles et migration](#61-schéma-des-modèles-et-migration)
+  - [6.2 Jeu de données via fixtures ou script](#62-jeu-de-données-via-fixtures-ou-script)
+  - [6.3 Exemple d’insertion et requêtes de vérification](#63-exemple-dinsertion-et-requêtes-de-vérification)
+
+- [7. Mode d’installation et d’exécution](#7-mode-dinstallation-et-dexécution)  
+  - [7.1 Prérequis](#71-prérequis)  
+  - [7.2 Commandes pas à pas](#72-commandes-pas-à-pas)  
+    - [7.2.1 Étapes communes](#721--étapes-communes)  
+    - [7.2.2 Étapes spécifiques à un système d'exploitation](#722--étapes-spécifiques-à-un-système-dexploitation)  
+    - [7.2.3 Étapes spécifiques à la configuration de l'environnement de développement (EDI)](#723--étapes-spécifiques-à-la-configuration-de-lenvironnement-de-développement-edi)  
+   - [7.3 URL d’accès et description des interfaces](#73-url-daccès-et-description-des-interfaces)  
+    - [7.3.1 Interface minimale après initialisation](#731-interface-minimale-après-initialisation)
+    - [7.3.2 Interface enrichie (à venir)](#732-interface-enrichie-à-venir)
+    - [7.3.3 Interface métier (prévision)](#733-interface-métier-prévision)
+    - 
+
+- [8. Démarche de travail et traçabilité](#8-démarche-de-travail-et-traçabilité)  
+  - [8.1 Traçabilité du développement : GitHub et main-courante technique](#81-traçabilité-du-développement--github-et-main-courante-technique)
+    - [8.1.1 Workflow GitHub](#811-workflow-github)
+    - [8.1.2 Principe de la main-courante technique](#812-principe-de-la-main-courante-technique)
+  - [8.2 Table de traçabilité – Issues, fichiers, tests et livrables](#82-table-de-traçabilité--issues-fichiers-tests-et-livrables)
   - [8.3 Difficultés rencontrées et leçons apprises](#83-difficultés-rencontrées-et-leçons-apprises)
+    - [8.3.1 Difficulté d'un bon plan de développement](#831-difficulté-dun-bon-plan-de-développement)
+    - [8.3.2 Difficulté d'une bonne configuration de l'EDI](#832-difficulté-dune-bonne-configuration-de-ledi)
+    - [8.3.3 Difficulté d'une bonne identification des templates](#833-difficulté-dune-bonne-identification-des-templates)
+
 - [Annexes](#annexes)
-  - [Annexe C – Arborescence du projet](#annexe-c--arborescence-du-projet)
-  - [Annexe D - Installation Projet et configuration de l'EDI](#annexe-d---installation-projet-et-configuration-de-ledi)
+  - [Annexe A – Extraits de code clés](rapport-projet_annexe-a.md)
+  - [Annexe D – Arborescence du projet](rapport-projet_annexe-d.md)  
+  - [Annexe E – Installation projet et configuration de l’EDI](rapport-projet_annexe-e.md)
 
 ---
 
 ## 1. Introduction
 
-Ce projet s’inscrit dans le cadre du devoir du module Programmation Orientée Objet (POO) avec Python. Il vise à mettre en œuvre une application Django simulant la gestion d’une médiathèque, en respectant des contraintes métier précises.
+Ce projet s’inscrit dans le cadre du devoir du module Programmation Orientée Objet (POO) avec Python. Il vise à mettre 
+en œuvre une application Django simulant la gestion d’une médiathèque, en respectant des contraintes métier précises.
 
 Les objectifs pédagogiques sont :
-- Appliquer les principes de la POO dans un projet concret
-- Structurer une application Django avec plusieurs composants
-- Implémenter des fonctionnalités métier réalistes
-- Mettre en place une stratégie de tests
-- Documenter la démarche et livrer un projet complet
+- Appliquer les principes de la POO dans un projet concret.
+- Structurer une application Django avec plusieurs composants.
+- Implémenter des fonctionnalités métier réalistes.
+- Mettre en place une stratégie de tests.
+- Documenter la démarche et livrer un projet complet.
 
 Le livrable final comprend :
-- Un dépôt GitHub structuré et développé à partir de huit (8) issues
-- Un rapport de projet rédigé en Markdown et exporté en PDF
+- Un dépôt GitHub structuré et développé à partir de huit (8) issues.
+- Un rapport de projet rédigé en Markdown et exporté en PDF.
+
+---
+
+## 2. Reprise et refactoring du code existant
+
+### 2.1 Analyse du code fourni
+
+Le code initial du projet, fourni en début de devoir, présentait une structure Django minimale sans séparation claire 
+des responsabilités métier (modèle, routes, vues, templates).  
+Les modèles étaient partiellement définis, les vues absentes, et les templates non organisés.
+
+Cette base a servi de point de départ pour :
+- identifier les entités métier pertinentes (`Media`, `Livre`, `Membre`, etc.).
+- structurer les fichiers selon les principales conventions Django (`models.py`, `urls.py`, `views.py`, `forms.py`, 
+`/templates/`, etc.)
+- initier une démarche orientée objet de _refactoring_, avec :
+  - le choix de reprendre le plus possible de termes identifiés.
+  - éviter les répétitions en exploitant l'héritage.
+  - structurer le code avec les principales conventions de nommage des fichiers `.py`.
+
+### 2.2 Erreurs identifiées et correctifs appliqués
+
+Plusieurs erreurs ont été relevées dans le code initial :
+- Modèles non typés ou mal (pas) hérités (`Livre`, `Dvd`, `Cd` sans lien avec `Media`).
+- Champs manquants ou mal nommés (`annee_edition`, `statut`).
+- Absence de logique métier (aucune méthode pour gérer les emprunts ou les retours).
+
+Les correctifs ont été appliqués dans les premières étapes de l’issue #3 :
+- refonte des modèles avec héritage multi-table.
+- ajout de méthodes métier (`peut_emprunter`, `marquer_retards`) centralisées dans le modèle d'entité.
+- structuration :
+  - des routes pour chaque vue.
+  - des vues et des formulaires.
+  - des templates et des conditions liées aux contextes.
+  - des tests unitaires (didiés à la navigation, aux entités, aux vues, aux fonctions) et des jeux de données (fixtures).
+
+### 2.3 Refactoring POO
+
+Le refactoring a permis de mettre en œuvre une modélisation orientée objet complète, structurée autour de trois axes :
+
+---
+
+#### 2.3.1 Hiérarchie des entités du modèle
+
+La modélisation repose sur une hiérarchie multi-niveaux cohérente, centrée sur deux racines abstraites : `Support` et 
+`Utilisateur`.
+
+```text
+Support
+├── Media
+│   ├── Livre
+│   ├── Dvd
+│   └── Cd
+└── JeuDePlateau
+
+Utilisateur
+├── Membre
+└── Bibliothecaire
+```
+
+- `Support` regroupe tous les objets consultables. Seuls les `Media` sont empruntables.
+- `Media` peut être typé (`Livre`, `Dvd`, `Cd`) ou non typé (`media_type = NON_DEFINI`).
+- `JeuDePlateau` hérite directement de `Support`. Un jeu n’est jamais empruntable.
+- `Utilisateur` permet d’unifier les rôles. `Membre` et `Bibliothecaire` ont des vues et des permissions distinctes.
+- `Emprunt` relie un `Membre` à un `Media`, avec un cycle de vie métier (`EN_COURS`, `RETARD`, `RETOURNE`).
+
+---
+
+#### 2.3.2 Structure des fichiers d’application
+
+Chaque application suit la convention Django, avec une séparation stricte des responsabilités :
+
+| Fichier              | Rôle                                                                 |
+|----------------------|----------------------------------------------------------------------|
+| `models.py`          | Définition des entités métier, propriétés et méthodes métier         |
+| `views.py`           | Vues génériques ou spécialisées, logique de contexte                 |
+| `forms.py`           | Formulaires personnalisés avec validations métier                    |
+| `urls.py`            | Routage fonctionnel par UC (Use Case)                                |
+| `templates/`         | Templates HTML organisés par entité et par type de vue               |
+| `tests_blocs/`       | Dossier de tests segmenté par thème (`test_entites_media.py`, etc.)  |
+| `fixtures/`          | Jeux de données `.json` pour tests et développement                  |
+
+> 📌 Cette organisation permet une lisibilité immédiate, une maintenance facilitée et une extensibilité maîtrisée.
+
+> 🔗 Cette organisation est illustrée dans la section 
+> [3.4.1 – Arborescence des fichiers](#341-fonctionnalités-et-arborescence-des-fichiers), qui présente la structure 
+> réelle du projet `mediatheque/`.
+
+---
+
+#### 2.3.3 Routage fonctionnel par cas d'usage (UC)
+
+Chaque fonctionnalité métier est associée à une URL unique, définie dans `urls.py`.  
+Le routage est structuré par entité (`media`, `membre`, `emprunt`) et par action (`ajouter`, `modifier`, `rendre`, etc.).
+
+Exemple de synthèse pour l’entité `Emprunt` :
+
+| Vue métier              | URL associée                          | Vue Django                    |
+|-------------------------|---------------------------------------|-------------------------------|
+| Liste des emprunts      | `/bibliothecaire/emprunts/`           | `EmpruntListView`             |
+| Création d’un emprunt   | `/bibliothecaire/emprunts/ajouter/`   | `EmpruntCreateView`           |
+| Retour depuis un membre | `/membres/<pk>/rendre/`               | `EmpruntRendreFromMembreView` |
+| Confirmation du retour  | `/emprunts/<pk>/retour/confirmation/` | `EmpruntRetourConfirmView`    |
+| Marquage des retards    | `/bibliothecaire/emprunts/retard/`    | `EmpruntRetardView`           |
+
+> 📌 Cette granularité permet de tester chaque UC indépendamment, de tracer les erreurs, et de documenter les 
+> transitions métier.
+
+> 🔗 La mise en œuvre technique du routage est détaillée dans la section 
+> [3.4.2 – Codage de la couche centrale](#342-codage-de-la-couche-centrale), avec les extraits de `urls.py` et 
+> `views.py`.
+
+---
+
+### 2.4. Justification des choix de conception
+
+Les choix de conception ont été guidés par les objectifs suivants :
+
+- **Extensibilité** : 
+  - l’héritage multi-niveaux permet d’ajouter facilement de nouveaux types de supports, de médias ou d’utilisateurs.
+  - l'utilisation rigoureuse des fichiers structurels (`models.py`, `urls.py`, `views.py`, `tests.py`, etc.) de 
+  l'application `Python`.
+  - la définition de structures spécifiques pour :
+    - les **templates** : dossier (ie. `/templates/bibliothecaire/medias/` distinguant deux niveaux (applicatif, sujet) 
+    pour définir le fichier HTML.
+    - les **fixtures** : dossier (ie `/fixtures/`) distinguant des jeux de données (fichiers JSON) et des scenarii.
+    - les **tests** : dossier `Python` (ie. `/tests_blocs/`) contenant les fichiers de tests spécifiques à chaque thème 
+    testé (ie. `test_admin.py`, `test_entites_medias.py`, `test_uc_create_emprunt.py`).
+- **Clarté métier** : 
+  - la séparation entre `Media` et `JeuDePlateau` héritant de `Support` reflète les règles d’emprunt d'un **média** et 
+  de consultation d'un **support de la médiathèque**. 
+  - chaque vue associée à une URL fonctionnelle unique pour cas d'usage (UC - Use Case), gère son **contexte métier**.
+  - les **règles métier** sont validées dans le **formulaire** de la vue.
+  - l'accès à une **information métier** (ie. `is_consultable`, `est_empruntable`, `est_en_retard`) d'une entité 
+  (`Media`, `Membre`, `Emprunt`) est centralisé dans les `propriétés` du modèle de l'entité.
+  - l'application d'une `action métier` (ie. `marquer_retard()`, `enregistrer_retour()`, `activer_emprunteur()`, 
+  `rendre_disponible()`) sur une entité (`Media`, `Membre`, `Emprunt`) est centralisée dans les **méthodes** du modèle 
+  de l'entité.
+- **Typage différé** : 
+  - un `Media` peut être créé sans type, puis typé ultérieurement (`Livre`, `Dvd`, `Cd`).
+- **Cycle de vie explicite** : 
+  - chaque entité possède des statuts et des transitions métier documentées dans `devALCBib.md`.
+- **Testabilité** : 
+  - chaque entité et chaque UC est testée de manière unitaire et fonctionnelle.
 
 ---
 
@@ -69,36 +277,46 @@ Cette séparation garantit une clarté immédiate entre le code, la documentatio
 
 ### 3.2 Plan de développement et réorganisation des issues
 
+Le plan de développement du projet a été défini dès l’amorce du projet, puis révisé à plusieurs étapes clés pour 
+s’adapter aux besoins métier et techniques.  
+Il est structuré autour des outils GitHub (`issues`, `branches`, `Pull Requests`) et documenté dans le dépôt public du 
+projet.  
+Trois versions successives ont été formalisées :
+- une version initiale linéaire.
+- une version révisée par application métier.
+- une version finale optimisée pour la livraison.
+
 #### 3.2.1 Version initiale
 
 La première mouture du projet s’appuyait sur sept issues linéaires, imaginées pour une unique application Django.
 
-| Issue | Branche associée | Titre de l’issue                                   | Objectif            |
-|-------|------------------|----------------------------------------------------|---------------------|
-| #1    | MonLucCo/issue1  | Préparation de l’environnement                     | Projet              |
-| #2    | MonLucCo/issue2  | Initialisation du projet et configuration centrale | Django, Application |
-| #3    | À définir        | Modélisation des entités                           | Application         |
-| #4    | À définir        | Développement des vues et logique métier           | Application         |
-| #5    | À définir        | Interfaces utilisateur et templates                | Application         |
-| #6    | À définir        | Tests et validation                                | Application         |
-| #7    | À définir        | Rapport final et livraison                         | Projet              |
+|  Issue  |  Branche associée  | Titre de l’issue                                   | Objectif            |
+|:-------:|:------------------:|----------------------------------------------------|---------------------|
+|   #1    |  MonLucCo/issue1   | Préparation de l’environnement                     | Projet              |
+|   #2    |  MonLucCo/issue2   | Initialisation du projet et configuration centrale | Django, Application |
+|   #3    |     À définir      | Modélisation des entités                           | Application         |
+|   #4    |     À définir      | Développement des vues et logique métier           | Application         |
+|   #5    |     À définir      | Interfaces utilisateur et templates                | Application         |
+|   #6    |     À définir      | Tests et validation                                | Application         |
+|   #7    |     À définir      | Rapport final et livraison                         | Projet              |
 
 Cette organisation a rapidement montré ses limites face au besoin de deux applications métier distinctes.
 
 #### 3.2.2 Version révisée
 
-Sous l’égide de l’issue #12 (Actualisation de la documentation et réorganisation des issues), le plan a été repensé en trois pôles :
+Sous l’égide de l’issue #12 (Actualisation de la documentation et réorganisation des issues), le plan a été repensé en 
+trois pôles :
 
-| Issue | Parent) | Branche associée | Titre de l’issue                                               | Objectif              |
-|-------|---------|------------------|----------------------------------------------------------------|-----------------------|
-| #1    |         | MonLucCo/issue1  | Préparation de l’environnement                                 | Projet                |
-| #2    |         | MonLucCo/issue2  | Initialisation du projet et configuration centrale             | Django, `mediatheque` |
-| #3    |         | MonLucCo/issue3  | Développement de l’application fonctionnelle bibliothécaire    | Métier `bibliotheque` |
-| #4    |         | MonLucCo/issue4  | Développement de l’application fonctionnelle membre            | Métier `membre`       |
-| #5    |         | MonLucCo/issue5  | Authentification, autorisation et sécurité                     | Couche `mediatheque`  |
-| #6    |         | MonLucCo/issue6  | Tests et validation                                            | Application           |
-| #7    |         | MonLucCo/issue7  | Rapport final et livraison                                     | Projet                |
-| #12   | #1      | MonLucCo/issue12 | Actualisation de la documentation et réorganisation des issues | Projet                |
+|  Issue  |  Parent  | Branche associée | Titre de l’issue                                               | Objectif              |
+|:-------:|:--------:|------------------|----------------------------------------------------------------|-----------------------|
+|   #1    |          | MonLucCo/issue1  | Préparation de l’environnement                                 | Projet                |
+|   #2    |          | MonLucCo/issue2  | Initialisation du projet et configuration centrale             | Django, `mediatheque` |
+|   #3    |          | MonLucCo/issue3  | Développement de l’application fonctionnelle bibliothécaire    | Métier `bibliotheque` |
+|   #4    |          | MonLucCo/issue4  | Développement de l’application fonctionnelle membre            | Métier `membre`       |
+|   #5    |          | MonLucCo/issue5  | Authentification, autorisation et sécurité                     | Couche `mediatheque`  |
+|   #6    |          | MonLucCo/issue6  | Tests et validation                                            | Application           |
+|   #7    |          | MonLucCo/issue7  | Rapport final et livraison                                     | Projet                |
+|   #12   |    #1    | MonLucCo/issue12 | Actualisation de la documentation et réorganisation des issues | Projet                |
 
 Ce découpage, effectué avant tout développement, a clarifié les responsabilités de chaque composant :  
 - **mediatheque** (application : couche centrale)  
@@ -107,11 +325,95 @@ Ce découpage, effectué avant tout développement, a clarifié les responsabili
 
 Il a aussi permis de planifier chaque étape technique avec précision et d’assurer une traçabilité optimale via GitHub.
 
+#### 3.2.3 Version finale
+
+Lors de la conclusion de l'issue #3 (Développement fonctionnel Bibliothécaire), le plan a été optimisé en association 
+avec la documentation technique liée aux développements.
+
+|  Issue  |  Parent  | Branche associée | Titre de l’issue                                               | Objectif                      |
+|:-------:|:--------:|------------------|----------------------------------------------------------------|-------------------------------|
+|   #1    |          | MonLucCo/issue1  | Préparation de l’environnement                                 | Projet                        |
+|   #2    |          | MonLucCo/issue2  | Initialisation du projet et configuration centrale             | Django, `mediatheque`         |
+|   #3    |          | MonLucCo/issue3  | Développement de l’application fonctionnelle bibliothécaire    | Métier `bibliotheque`         |
+|   #4    |          | MonLucCo/issue4  | Développement de l’application fonctionnelle de consultation   | Métier `consultation`         |
+|   #5    |          | MonLucCo/issue5  | Applications, Authentification, autorisation et sécurité       | Applications et sécurité      |
+|   #6    |          | MonLucCo/issue6  | Finition applications (UX, affichages), Tests et validation    | Applications UX et validation |
+|   #7    |          | MonLucCo/issue7  | Rapport final et livraison                                     | Projet                        |
+|   #12   |    #1    | MonLucCo/issue12 | Actualisation de la documentation et réorganisation des issues | Projet                        |
+
+Cette version finale du plan de développement reflète la segmentation fonctionnelle du projet :
+- les issues #3 et #4 développent les fonctionnalités métier de chaque application (`bibliothecaire`, `consultation`).
+- l’issue #5 intègre les fonctions dans les applications avec gestion des rôles et sécurité.
+- l’issue #6 finalise l’UX, les validations et les tests.
+- l’issue #7 prépare la livraison et le rapport final.
+
+Les documents techniques (`devMC.md`, `devTests.md`, etc.) de développement sont désormais nommés selon leur fonction 
+transverse et maintenus dans `/docs/developpement/dev-docs/`.
+
+### 3.3 Environnement de développement (venv, dépendances…)
+
+L’environnement de développement repose sur Python 3.13.7 et Django 5.2.6, avec un environnement virtuel (`venv`) activé 
+localement.
+
+#### 3.3.1 Structure technique
+
+- Le dossier `works/` contient :
+  - le projet Django `mediatheque/` avec ses applications (`accounts`, `bibliothecaire`, etc.)
+  - l’environnement virtuel `venv/` avec les dépendances installées via `pip`
+- Le fichier `requirements.txt`, situé à la racine du dépôt, permet de restaurer les dépendances si nécessaire.
+
+> Le fichier `requirements-rapport.txt` situé dans le dossier du rapport est une copie pour archivage et livraison de la 
+> configuration de l'environnement. Ce fichier n'a que l'utilité d'indiquer la configuration de réinstallation.
+
+#### 3.3.2 Installation des dépendances
+
+Les dépendances ont été installées manuellement via :
+
+```bash
+pip install django
+```
+
+Aucune bibliothèque externe (ex : `Faker`, `Coverage`) n’a été utilisée dans ce projet.
+
+Le fichier `requirements.txt` de réinstallation est installé manuellement via :
+
+```bash
+pip freeze > requirements.txt
+```
+
+La réinstallation pour recréer l'environnement via :
+
+```bash
+pip install -r requirements.txt
+```
+
+> 🔗 L'arborescence du projet est détaillée dans la section 
+> [Annexe D – Arborescence du projet](#annexe-d--arborescence-du-projet), pour le positionnement du fichier 
+> `requirements.txt` avec la recopie pour archive de livraison.
+
+
+#### 3.3.3 Exécution des tests
+
+Les tests unitaires et fonctionnels ont été exécutés avec la commande suivante :
+
+```bash
+python manage.py test >devReport.txt 2>&1 -v 2
+```
+
+- Le fichier `devReport.txt` (ou `devReport.md`) regroupe les résultats complets des tests.
+- Le niveau de verbosité `-v 2` permet d’afficher les noms des tests exécutés.
+- Les erreurs éventuelles sont redirigées dans le même fichier (`2>&1`).
+
+> 📌 Cette configuration garantit la reproductibilité du projet et facilite la validation des fonctionnalités métier.
+
 ### 3.4 Couche centrale du projet Django
 
-La couche centrale du projet (mediatheque) est responsable de la configuration globale, du routage, de la vue d’accueil et de la gestion des rôles. Elle agit comme point d’entrée unique, redirigeant les utilisateurs vers l’application correspondant à leur profil.
+La couche centrale du projet (mediatheque) est responsable de la configuration globale, du routage, de la vue d’accueil 
+et de la gestion des rôles. Elle agit comme point d’entrée unique, redirigeant les utilisateurs vers l’application 
+correspondant à leur profil.
 
-Définie lors de la réorganisation des issues (cf. issue #12), la couche `mediatheque` sert de point d’entrée unique et assure :
+Définie lors de la réorganisation des issues (cf. issue #12), la couche `mediatheque` sert de point d’entrée unique et 
+assure :
 
 - Configuration globale (`settings.py`) : base de données, langue, timezone  
 - Vue d’accueil protégée et redirection selon le rôle utilisateur  
@@ -122,7 +424,8 @@ Définie lors de la réorganisation des issues (cf. issue #12), la couche `media
 
 La couche centrale du projet repose sur l’application `accounts`, qui gère la vue d’accueil du site. 
 
-L’arborescence des fichiers a été organisée selon les conventions Django. Le schéma suivant de cette arborescence présente les dossiers et fichiers principaux utiles pour la mise en place de cette couche centrale du projet. :
+L’arborescence des fichiers a été organisée selon les conventions Django. Le schéma suivant de cette arborescence 
+présente les dossiers et fichiers principaux utiles pour la mise en place de cette couche centrale du projet. :
 
 ```text
 works/
@@ -141,17 +444,22 @@ works/
     
 ```
 
-Cette organisation permet à Django de résoudre automatiquement les templates grâce à la directive `APP_DIRS=True` dans `settings.py`, sans configuration supplémentaire.
-Ainsi, cette structure permet une résolution fiable des templates et une séparation claire entre les composants fonctionnels.
+Cette organisation permet à Django de résoudre automatiquement les templates grâce à la directive `APP_DIRS=True` dans 
+`settings.py`, sans configuration supplémentaire.
+Ainsi, cette structure permet une résolution fiable des templates et une séparation claire entre les composants 
+fonctionnels.
 
+---
 
 #### 3.4.2 Codage de la couche centrale
 
 La vue `accueil` est définie dans `accounts/views.py` et rend le template `accounts/accueil.html`. 
 
-Le routage est assuré par `accounts/urls.py`, inclus dans `mediatheque/urls.py`. Le template est accessible via l’URL racine `/` et `/accueil`.
+Le routage est assuré par `accounts/urls.py`, inclus dans `mediatheque/urls.py`. Le template est accessible via l’URL 
+racine `/` et `/accueil`.
 
-Le fichier `mediatheque/urls.py` utilise la fonction `include()` pour déléguer la gestion des routes à l’application `accounts`, ce qui permet une meilleure modularité du projet.
+Le fichier `mediatheque/urls.py` utilise la fonction `include()` pour déléguer la gestion des routes à l’application 
+`accounts`, ce qui permet une meilleure modularité du projet.
 
 ```python
 # Eléments de code illustratifs du projet
@@ -172,19 +480,1713 @@ def accueil(request):
     return render(request, 'accounts/accueil.html')
 ```
 
-> ℹ️ **Remarque** : l'utilisation pour le template du nom `accounts/accueil.html` permet à Django d'éviter la collision avec d'autres applications qui auraient un template du même nom (`accueil.html`) en résolvant sans ambiguïté le nom du template. En effet, Django parcourt les applications dans l'ordre défini dans `INSTALLED_APPS`de `settings.py`.
+> ℹ️ **Remarque** : l'utilisation pour le template du nom `accounts/accueil.html` permet à Django d'éviter la collision 
+> avec d'autres applications qui auraient un template du même nom (`accueil.html`) en résolvant sans ambiguïté le nom du 
+> template. En effet, Django parcourt les applications dans l'ordre défini dans `INSTALLED_APPS`de `settings.py`.
+
+---
+
+## 4. Implémentation des fonctionnalités
+
+Cette section présente les fonctionnalités métier développées dans les applications `bibliothecaire` et `consultation`.  
+Chaque fonctionnalité est associée à un cas d’usage (UC), une vue dédiée, un formulaire métier et des tests validés.  
+Les principes métier sont décrits ici, avec des extraits de code illustratifs. Les détails techniques complets sont 
+disponibles dans les documents `devAFBib.md`, `devMC.md`, `devTests.md`.
+
+---
+
+### 4.1 Application bibliothécaire
+
+L’application `bibliothecaire` regroupe les fonctionnalités de gestion des membres, des supports empruntables (`Media`) 
+et des emprunts.  
+Elle repose sur une modélisation orientée objet, un typage différé des médias, et un cycle de vie métier explicite.
+
+---
+
+#### 4.1.1 Gestion des membres (CRUD)
+
+Les membres sont modélisés par la classe `Membre`, héritant de `Utilisateur`.  
+Ils peuvent être créés, modifiés, consultés et supprimés via des vues Django.
+
+---
+
+##### 4.1.1.1 Modélisation - code partiel de la structure et des méthodes et propriétés du modèle
+
+Pour définir un membre, l'entité `Membre` hérite de l'entité abstraite `Utilisateur` qui définit un nom (champ `name`) 
+et une méthode de classe `count_total()` qui permet de compter tous les **utilisateurs** enregistrés.
+
+```python
+class Utilisateur(models.Model):
+    name = models.CharField(max_length=100)
+
+    class Meta:
+        abstract = True
+
+    @classmethod
+    def count_total(cls):
+        return cls.objects.count()
+```
+
+Par héritage, un membre se définit avec un nom (champ `name`) et une méthode de classe `count_total()` qui lui permet de 
+compter tous les **Membres** enregistrés.
+
+Pour gérer chaque membre, il est nécessaire de connaître et faire évoluer son **statut** qui est défini par plusieurs 
+états modélisés par les valeurs possibles d'une variable d'état **StatutMembre**. Trois états sont ainsi définis pour 
+préciser le cycle de vie d'un membre de la médiathèque.
+
+```python
+class StatutMembre(models.IntegerChoices):
+    MEMBRE     = 0, 'Non abonné'
+    EMPRUNTEUR = 1, 'Abonné'
+    ARCHIVE    = 2, 'Supprimé'
+
+```
+
+La gestion de chaque membre s'effectue avec son nom et son statut, ainsi que les informations de situations (d'états) 
+associées permettant de connaître complètement ses caractéristiques :
+- est-il un membre (cf. `is_membre`) ou un membre-emprunteur (cf. `is_emprunteur`) ?
+- nombre d'emprunts en attente de restitution ?
+- peut-il emprunter (cf. `peut_emprunter`) ?
+- peut-on supprimer ce membre (cf. `peut_etre_supprime`) ?
+
+Pour maîtriser la situation, il est nécessaire de pouvoir modifier les états de chaque membre. Il s'agit alors 
+d'utiliser des méthodes spécifiques pour réaliser les modifications en respectant les règles métier.
+Le code réduit du modèle membre présente les actions :
+- permettre au membre d'emprunter (activer, mettre le **statut** à l'état **emprunteur**) : cf. `activer_emprunteur()`.
+- supprimer le membre de la gestion (mettre le **statut** à l'état **supprimé**) : cf. `supprimer_membre_emprunteur()`.
+
+```python
+class Membre(Utilisateur):
+    statut = models.IntegerField(
+        choices=StatutMembre.choices,
+        default=StatutMembre.MEMBRE
+    )
+    ...
+    @property
+    def is_membre(self):
+        return self.statut == StatutMembre.MEMBRE
+
+    @property
+    def is_emprunteur(self):
+        return self.statut == StatutMembre.EMPRUNTEUR
+    ...
+    def peut_emprunter(self):
+        return (
+                self.is_emprunteur
+                and not ( self.is_max_emprunt or self.is_retard )
+                )
+    
+    def peut_etre_supprime(self):
+        return self.is_min_emprunt and not self.is_supprime
+    ...
+    def activer_emprunteur(self):
+        if self.is_membre:
+            self.statut = StatutMembre.EMPRUNTEUR
+            self.save()
+            return self.is_emprunteur
+        return False
+
+    def supprimer_membre_emprunteur(self):
+       if self.peut_etre_supprime():
+            self.statut = StatutMembre.ARCHIVE
+            self.save()
+            return self.is_supprime
+        return False
+```
+
+Ainsi la modélisation encapsule la situation d'état et réalise les modifications de situation en assurant l'application 
+des règles métier en agissant indirectement sur les champs d'information du membre.
+
+La description ci-après fournie la liste exhaustive de la modélisation de la gestion d'état d'un membre. Elle est issue 
+de la documentation technique de l'analyse des fonctionnalités du développement de l'application Bibliothécaire 
+(`devAFBib.md`).
+
+```MD
+**Entité**
+- Hérite de `Utilisateur(models.Model)`.
+
+**Propriétés**
+- `is_membre` → True si le membre est standard (`MEMBRE`).
+- `is_emprunteur` → True si le membre est abonné (`EMPRUNTEUR`).
+- `is_supprime` → True si le membre est supprimé (`ARCHIVE`)
+- `is_retard` → True si le nombre de retards dépasse `MAX_RETARDS`.
+- `is_max_emprunt` → True si le nombre d’emprunts en cours atteint `MAX_EMPRUNTS`.
+- `is_min_emprunt` → True si aucun emprunt en cours.
+- `nb_emprunts_en_cours` → Nombre d’emprunts actifs (`EN_COURS` ou `RETARD`).
+- `nb_retards` → Nombre d’emprunts en retard
+
+**Méthodes**
+- `count_total()` → **Méthode de classe**, Retourne le nombre total d'enregistrements.
+- `count_emprunteur()` → **Méthode de classe**, Retourne le nombre total de membres-emprunteurs.
+- `generer_compte(nom_utilisateur)` → **Méthode de classe**, génère un identifiant unique basé sur le nom et l’année.
+- `peut_emprunter()` → Retourne True si le membre est autorisé à emprunter selon les règles métier.
+- `peut_etre_supprime()` → Retourne True si le membre peut être supprimé logiquement.
+- `activer_emprunteur()` → Active le statut emprunteur si le membre est standard.
+- `supprimer_membre_emprunteur()` → Supprime logiquement le membre (statut = `ARCHIVE`).
+- `get_emprunts_actifs()` → Retourne les emprunts actifs (EN_COURS ou RETARD) associés à ce membre. Si aucun emprunt, retourne `None`.
+```
+
+---
+
+##### 4.1.1.2 Codage d'une fonctionnalité métier
+
+La fonctionnalité métier est définie à partir d'une vue, héritière d'une classe`models.View`. Il existe des classes 
+génériques pour réaliser les différentes fonctionnalités (CRUD) de base à partir de la modélisation de Django 
+(`models`). Il s'agit notamment de :
+- Create : `models.CreateView`.
+- Read : `models.DetailView`.
+- Update : `models.UpdateView`.
+- Delete : `models.DeleteView`.
+
+Pour illustrer le codage d'une fonction métier, la vue `MembreCreateView` définie dans le fichier structurel Python 
+`views.py` permet d’ajouter un membre. Cette vue appelle un **modèle**, un **formulaire** et un **template** pour 
+assurer le rendu de la fonction :
+
+```python
+class MembreCreateView(CreateView):
+    model = Membre
+    form_class = MembreForm
+    template_name = "bibliothecaire/membres/membre_form.html"
+
+    def get_context_data(self, **kwargs):
+        context = super(MembreCreateView, self).get_context_data(**kwargs)
+        ... définition des données de contexte de la vue
+        return context
+
+    def form_valid(self, form):
+        form.instance.statut = StatutMembre.MEMBRE
+        ... définition des conditions métier de validation du formulaire
+        return super(MembreCreateView, self).form_valid(form)
+
+    def get_success_url(self):
+        return reverse('bibliothecaire:membre_detail', kwargs={'pk': self.object.pk})
+
+```
+
+La vue gère avec ses méthodes les actions suivantes :
+- `get_context_data()` : acquisition des données de contexte pour l'affichage du template.
+- `form_valid()` : validation (ou invalidation) du formulaire soumis (ici, formulaire de saisie du nom du nouveau 
+membre).
+- `get_success_url()` : redirection de navigation en cas de succès (validation). Ici, l'UX prévoit la redirection vers 
+la fiche de détail du membre créé.  
+
+> L'ensemble des fonctions métiers fait l'objet :
+> - d'une définition technique dans le document d'analyse des fonctionnalités de l'application Bibliothécaire.
+> - d'un plan de tests fonctionnels (T-FUN) de chaque cas d'usage fonctionnel.
+>> 📄 Voir `devAFBib.md` §3.2.1 et `devTests.md` T-FUN-11 à T-FUN-20.
+>
+> Associé à ce document, l'ensemble des états (cycle de vie - noté LC pour LifeCycle) est décrit pour chaque entité.
+>> 📄 Voir `devALCBib.md` §1 à §6 pour la description d'ensemble **`Membre`, `Media`, `Emprunt`** et cf. §7 pour les 
+>> aspects spécifiques à chaque entité. 
+>
+
+---
+
+##### 4.1.1.3 Navigation fonctionnelle pour les membres
+
+Pour implémenter la fonctionnalité relative à un **membre**, chaque fonction métier (UC) modélisée par une **Vue**, est 
+associée à une **URL** spécifique et unique définie dans le fichier structurel Python `urls.py`.
+
+La définition ci-après présente la liste exhaustive des navigations fonctionnelles autorisées pour les membres dans 
+l'application Bibliothécaire.
+
+```Python
+app_name = 'bibliothecaire'
+
+urlpatterns = [
+    ... URLs des autres entités
+    # Membres
+    path('membres/', views.MembreListView.as_view(), name='membre_list'),
+    path('membres/liste', views.MembreEnGestionView.as_view(), name='membre_list_gestion'),
+    path('membres/liste/emprunteurs', views.MembreEmprunteursView.as_view(), name='membre_list_emprunteurs'),
+    path('membres/liste/supprimes', views.MembreArchivesView.as_view(), name='membre_list_archives'),
+    path('membres/ajouter/', views.MembreCreateView.as_view(), name='membre_create'),
+    path('membres/ajouter/emprunteur', views.MembreCreateEmprunteurView.as_view(), name='membre_create_emprunteur'),
+    path('membres/<int:pk>/', views.MembreDetailView.as_view(), name='membre_detail'),
+    path('membres/<int:pk>/modifier/', views.MembreUpdateView.as_view(), name='membre_update'),
+    path('membres/<int:pk>/activer/emprunteur', views.MembreActivateEmprunteurView.as_view(), name='membre_activate_emprunteur'),
+    path('membres/<int:pk>/supprimer/', views.MembreDeleteView.as_view(), name='membre_delete'),
+    path("membres/<int:pk>/emprunter", EmpruntCreateFromMembreView.as_view(), name="membre_emprunter"),
+    path("membres/<int:pk>/rendre/", EmpruntRendreFromMembreView.as_view(), name="membre_rendre"),
+]
+```
+
+L'ensemble des liens des templates exploite les noms (`name`) de chaque route (`path`) pour activer la vue à la 
+fonctionnalité métier recherché. Constituant ainsi l'UX de l'application Bibliothécaire pour le Membre de la 
+médiathèque.
+
+---
+
+#### 4.1.2 Gestion des médias (CRU[D])
+
+La gestion des supports empruntables repose sur une modélisation à trois niveaux :  
+- `Support` : niveau de base pour la consultation.  
+- `Media` : niveau intermédiaire pour l’emprunt.  
+- `Livre`, `Dvd`, `Cd` : niveaux spécifiques typés.
+
+Ce choix peut sembler complexe à première lecture, notamment en raison de l’introduction du niveau intermédiaire `Media` 
+avec typage différé.  
+Mais il répond à une exigence métier forte : **éviter les répétitions** et **centraliser les règles d’emprunt** dans une 
+seule entité.
+
+Une modélisation à deux niveaux (`Support` → `Livre/Dvd/Cd`) aurait conduit à dupliquer les propriétés et les méthodes 
+métier dans chaque sous-type.  
+En introduisant `Media` comme vecteur d’état, on distingue clairement :
+- les supports consultables (`Support`).
+- les supports empruntables (`Media`).
+- les spécificités typées (`Livre`, `Dvd`, `Cd`).
+
+Cette architecture permet :
+- une factorisation des règles métier (`est_empruntable`, `rendre_disponible`, etc.).
+- une extension facile vers d’autres types (`JeuDePlateau`, `Magazine`, etc.).
+- une compatibilité avec le typage différé, utile pour les cas d’usage progressifs.
+
+> 📌 Cette complexité apparente est maîtrisée par la structuration du modèle et les fonctionnalités métier associées.  
+> Elle est documentée dans `devAFBib.md` §3.3.1.2 et validée par les tests fonctionnels (`devTests.md`, UC-MEDIA).
+
+---
+
+##### 4.1.2.1 Modélisation – typage différé et cycle de vie
+
+Le champ `media_type` permet de distinguer les types de média :
+
+```python
+    TYPE_CHOICES = [
+        ('NON_DEFINI', 'Non défini'),
+        ('LIVRE', 'Livre'),
+        ('DVD',   'DVD'),
+        ('CD',    'CD'),
+    ]
+```
+
+> Cette modélisation correspond à la première version développée et validée dans le projet.  
+> Elle aurait pu être optimisée en utilisant une classe `models.IntegerChoices`, à l’image de `StatutMembre`, pour 
+> simplifier la gestion des types.  
+> Cependant, par souci de traçabilité et de cohérence avec les étapes précédentes, j’ai choisi de ne pas refactorer ce 
+> code validé.  
+> Ce choix me permet de mesurer l’évolution progressive de ma compréhension de Django et des principes de la POO tout au 
+> long du développement.
+
+La classe `Media` encapsule les règles métier :
+
+```python
+class Media(Support):
+    disponible   = models.BooleanField(default=False)
+    theme        = models.CharField(max_length=200)
+    media_type   = models.CharField(
+        max_length=12,
+        choices=TYPE_CHOICES,
+        default='NON_DEFINI',
+        help_text="Type de média. 'NON_DEFINI' si aucun sous-type n'est instancié."
+    )
+    
+    @property
+    def est_empruntable(self):
+        return self.is_typed() and self.is_consultable and self.is_disponible
+
+    def rendre_disponible(self):
+        ... évaluation des conditions métier retournant False en situation invalide
+        self.disponible = True
+        self.save()
+        return True
+```
+Ainsi la modélisation encapsule la situation d'état et réalise les modifications de situation en assurant l'application 
+des règles métier en agissant indirectement sur les champs d'information du média.
+
+La description ci-après fournie la liste exhaustive de la modélisation de la gestion d'état d'un média. Elle est issue 
+de la documentation technique de l'analyse des fonctionnalités du développement de l'application Bibliothécaire 
+(`devAFBib.md`).
+
+###### Pour l'objet générique `Média` :
+
+```MD
+**Entité `Media`**
+- Hérite de `Support(models.Model)`.
+
+**Propriétés**
+- `is_disponible` → True si le média est disponible.
+- `is_consultable` → True si le média est consultable.
+- `est_empruntable` → True si le média est empruntable (éligible à un emprunt).
+- `est_archivable` → True si le média est archivable (peut être supprimé de la gestion).
+- `est_emprunte` → True si le média est emprunté.
+- `est_archive` → True si le média est retiré de la gestion (archive).
+
+**Méthodes**
+- `count_total()` → **Méthode de classe**, Retourne le nombre total d'enregistrements.
+- `count_empruntes()` → **Méthode de classe**, Retourne le nombre d'emprunts actifs (_en cours_ et _en retard_).
+- `count_retards()` → **Méthode de classe**, Retourne le nombre d'emprunts actifs en retard.
+- `is_typed()` → True si un sous-type réel est instancié (`Livre`, `Dvd`, `Cd`).
+- `is_typage_incomplete()` → True si `media_type` est défini mais aucun sous-type instancié.
+- `get_real_instance()` → Retourne l’instance réelle du sous-type si elle existe, sinon l’objet `Media` lui-même.
+- `mutate_to_typed()` → Crée dynamiquement le sous-type à partir du champ `media_type`.
+- `get_update_url_name()` → Retourne le nom de route Django pour la mise à jour selon le type.
+- `get_typage_url_name()` → Retourne le nom de route Django pour le typage selon le type.
+- `get_emprunt_actif()` → Retourne l'emprunt actif (EN_COURS ou RETARD) associé à ce média. Si aucun emprunt, retourne `None`.
+- `rendre_disponible(force=False)` → Rend le média disponible s’il est typé. Si déjà disponible, ne fait rien sauf si 
+`force=True`.
+```
+
+###### Pour les objets spécifiques : `Livre`, `Dvd`, `Cd`.
+
+```MD
+**Entité**
+- Hérite de `Media`.
+
+**Propriétés**
+- `is_disponible` → True si le média est disponible.
+- `is_consultable` → True si le média est consultable.
+- `is_empruntable` → True si le média est empruntable (éligible à un emprunt).
+- `is_archivable` → True si le média est archivable (peut être supprimé de la gestion).
+- `is_emprunte` → True si le média est emprunté.
+- `is_archive` → True si le média est retiré de la gestion (archive).
+
+**Méthodes**
+- `count_total()` → **Méthode de classe**, Retourne le nombre total d'enregistrements.
+- `count_empruntes()` → **Méthode de classe**, Retourne le nombre d'emprunts actifs.
+- `count_retards()` → **Méthode de classe**, Retourne le nombre d'emprunts actifs en retard.
+- `get_specific_fields()` → Retourne la liste des champs spécifiques à chaque sous-type :
+  - `Livre` → `['auteur', 'nb_page', 'resume']`.
+  - `Dvd` → `['realisateur', 'duree', 'histoire']`.
+  - `Cd` → `['artiste', 'nb_piste', 'duree_ecoute']`.
+```
+
+---
+
+##### 4.1.2.2 Vues et formulaires - Héritage de vue pour les médias typés
+
+###### Exemple pour la création d'un média non typé
+
+La création d’un média (non typé) est assurée par une vue générique `CreateView` :
+
+```python
+class MediaCreateView(CreateView):
+    model = Media                                               # <-- entité du modèle
+    form_class = MediaForm                                      # <-- formulaire concerné
+    template_name = 'bibliothecaire/medias/media_form.html'     # <-- template associé à la vue
+    success_url = reverse_lazy('bibliothecaire:media_list')     # <-- URL de navigation en cas de validation
+
+    def get_context_data(self, **kwargs):...                    # <-- contexte de la vue (spécifique au média non typé)
+
+    def form_valid(self, form):...                              # <-- validation métier (à la soumission du formulaire)
+```
+
+Le formulaire `MediaForm` permet de préciser les champs concernés pour les vues de création (CreateMediaView) et de 
+modification (UpdateMediaView) d'un média non typé. Il s'agit d'exposer le champ `media_type` lors de la modification et 
+de le masquer lors de la création. 
+
+```python
+    class Meta:
+        model = Media
+        fields = [
+            'name', 'annee_edition', 'theme', 
+            'media_type',    # media_type est exposé selon 'is_update'
+            # consultable et disponible sont fixés dans la vue
+        ]
+        labels = {
+            'name':'Titre du média',
+            'annee_edition':"Année d'édition",
+            'theme':'Thématique',
+            'media_type' : 'Type de média',
+        }
+
+    def __init__(self, *args, **kwargs):
+        is_update = kwargs.pop('is_update', False)          # <-- initialise la variable avec le dictionnaire du contexte
+        super(MediaForm, self).__init__(*args, **kwargs)
+
+        if is_update != True:
+            self.fields.pop('media_type', None)             # <-- retire le champ (contexte de création)
+```
+
+###### Exemple pour la création d'un média typé
+
+La création d'un média (typé : `Livre`, `Dvd`, `Cd`) est assurée par une vue héritée de **MediaCreateView**.
+
+Le nom de la classe de la vue porte l'intitulé du type du _média typé_, car il s'agit du niveau spécifique du modèle. 
+L'exemple est donné pour le type `Livre`.
+
+```python
+class MediaCreateLivreView(MediaCreateView):        # <-- Vue héritée de la vue du média non typé
+    form_class = LivreForm                          # <-- formulaire concerné (spécifique au média typé)
+
+    def get_context_data(self, **kwargs):...        # <-- contexte de la vue (spécifique)
+
+    def form_valid(self, form):...                  # <-- validation métier (à la soumission du formulaire)
+```
+
+Le formulaire `LivreForm` permet de préciser les champs hérités et spécifiques du média typé.
+
+```python
+class LivreForm(forms.ModelForm):
+    class Meta:
+        model = Livre
+        fields = [
+            'name', 'annee_edition', 'theme', 'consultable',
+            'auteur', 'nb_page', 'resume', 
+            # disponible est fixé dans la vue
+            # media_type est fixé dans la vue
+        ]
+```
+
+###### Documentation technique associée aux médias
+
+> L'ensemble des fonctions métiers des entités `Media`, `Livre`, `Dvd` et `Cd` fait l'objet :
+> - d'une définition technique dans le document d'analyse des fonctionnalités de l'application Bibliothécaire.
+> - d'un plan de tests fonctionnels (T-FUN) de chaque cas d'usage fonctionnel.
+>> 📄 Voir `devAFBib.md` §3.1.1 et `devTests.md` T-FUN-01 à T-FUN-10.
+>
+> Associé à ce document, l'ensemble des états (cycle de vie - noté LC pour LifeCycle) est décrit pour chaque entité.
+>> 📄 Voir `devALCBib.md` §1 à §6 pour la description d'ensemble **`Membre`, `Media`, `Emprunt`** et cf. §7 pour les 
+>> aspects spécifiques à chaque entité. 
+>
+
+---
+
+##### 4.1.2.3 Navigation fonctionnelle pour les médias
+
+Pour implémenter la fonctionnalité relative à un **média**, chaque fonction métier (UC) modélisée par une **Vue**, est 
+associée à une **URL** spécifique et unique définie dans le fichier structurel Python `urls.py`.
+
+La définition ci-après présente la liste exhaustive des navigations fonctionnelles autorisées pour les médias dans 
+l'application Bibliothécaire.
+
+```Python
+app_name = 'bibliothecaire'
+
+urlpatterns = [
+    ... URLs des autres entités
+    # Media (Livre, Dvd, Cd)
+    # Listes
+    path('medias/', views.MediaListView.as_view(), name='media_list'),
+    path('medias/consultables/', views.MediaListConsultableView.as_view(), name='media_list_consultables'),
+    path('medias/disponibles/', views.MediaListDisponibleView.as_view(), name='media_list_disponibles'),
+    path('medias/types/', views.MediaListByTypeView.as_view(), name='media_list_by_type'),
+    path('medias/non-types/', views.MediaNonTypeListView.as_view(), name='media_list_non_types'),
+    # Détails
+    path('medias/<int:pk>/', views.MediaDetailView.as_view(), name='media_detail'),
+    # Création
+    path('medias/ajouter/', views.MediaCreateView.as_view(), name='media_create'),
+    path('medias/ajouter/livre', views.MediaLivreCreateView.as_view(), name='media_create_livre'),
+    path('medias/ajouter/dvd', views.MediaDvdCreateView.as_view(), name='media_create_dvd'),
+    path('medias/ajouter/cd', views.MediaCdCreateView.as_view(), name='media_create_cd'),
+    # Mise à jour - Typage
+    path('medias/<int:pk>/modifier/', views.MediaUpdateView.as_view(), name='media_update'),
+    path('medias/<int:pk>/modifier/livre/', views.MediaTypageLivreView.as_view(), name='media_typage_livre'),
+    path('medias/<int:pk>/modifier/dvd/', views.MediaTypageDvdView.as_view(), name='media_typage_dvd'),
+    path('medias/<int:pk>/modifier/cd/', views.MediaTypageCdView.as_view(), name='media_typage_cd'),
+    # Mise à jour - Média typé
+    path('medias/<int:pk>/livre/modifier/', views.LivreUpdateView.as_view(), name='media_update_livre'),
+    path('medias/<int:pk>/dvd/modifier/', views.DvdUpdateView.as_view(), name='media_update_dvd'),
+    path('medias/<int:pk>/cd/modifier/', views.CdUpdateView.as_view(), name='media_update_cd'),
+    # Transverse - Transaction Emprunt
+    path("medias/<int:pk>/emprunter", EmpruntCreateFromMediaView.as_view(), name="media_emprunter"),
+    path("medias/<int:pk>/rendre/", EmpruntRendreFromMediaView.as_view(), name="media_rendre"),
+    # Transverse - Transaction Annulation - Rollback
+    path('medias/<int:pk>/annuler_typage/', views.MediaCancelTypingView.as_view(), name='media_cancel_typing'),
+]
+```
+
+L'ensemble des liens des templates exploite les noms (`name`) de chaque route (`path`) pour activer la vue à la 
+fonctionnalité métier recherché. Constituant ainsi l'UX de l'application Bibliothécaire pour le Membre de la 
+médiathèque.
+
+---
+
+#### 4.1.3 Gestion des emprunts et retours
+
+Les emprunts (et les retours) sont modélisés par la classe `Emprunt` qui relie un `Membre` (champ `emprunteur`) à un 
+`Media` (champ `media`).  
+Le cycle de vie est modélisé par des statuts (`EN_COURS`, `RETARD`, `RENDU`) du champ `statut` et des dates (champs : 
+`date_emprunt`, `date_retour`).
+
+Un emprunt est soit créé, soit rendu.
+L'ensemble des emprunts fait l'objet d'une évaluation de situation : le **marquage d'une situation de retard**.
+Le rendu d'un emprunt génère une modification en base pour le média concerné et une évolution de situation pour le 
+membre impliqué.
+
+---
+
+##### 4.1.3.1 Modélisation de l'emprunt – contraintes métier
+
+La modélisation de l'entité `Emprunt` se caractérise par trois contraintes :
+- la gestion individualisée des dates, l'emprunt et le rendu, qui sont automatiquement enregistrée lors de la demande du 
+Bibliothécaire.
+- la gestion individualisée  des relations externes avec les médias et les membres-emprunteurs, qui est définie par le 
+Bibliothécaire.
+- la gestion globalisée du statut des emprunts qui est réalisée automatiquement par l'application ou manuellement par le
+Bibliothécaire.
+
+L'extrait ci-après du code de la modélisation explicite les principes des déclarations des gestions individualisées.
+
+```python
+class StatutEmprunt(models.IntegerChoices):     # <-- valeur des états du statut d'un emprunt
+    RETARD   = 0, 'En retard'
+    EN_COURS = 1, 'En cours'
+    RENDU    = 2, 'Rendu'
+
+class Emprunt(models.Model):
+    DELAI_EMPRUNT = 7 #jours                    # <-- variable interne au modèle (contrainte métier)
+    media = models.ForeignKey(
+        Media, on_delete=models.CASCADE,        # <-- liaison avec le Media       
+        related_name='emprunts'                 # <-- nom de la relation Emprunt-Media
+    )
+    emprunteur = models.ForeignKey(
+        Membre, on_delete=models.CASCADE,       # <-- liaison avec le Membre
+        related_name='emprunts'                 # <-- nom de la liaison Emprunt-Membre
+    )
+    date_emprunt = models.DateField(auto_now_add=True)
+    date_retour  = models.DateField(null=True, blank=True)
+    statut       = models.IntegerField(
+        choices=StatutEmprunt.choices,
+        default=StatutEmprunt.EN_COURS
+    )
+    ...
+    @property
+    def date_retour_prevu(self):                # <-- estimation de la date de retour (calcul dynamique)
+        return self.date_emprunt + timedelta(days=self.DELAI_EMPRUNT)
+
+    @property
+    def est_en_retard(self):                    # <-- évaluation dynamique de la situation de retard
+        return self.statut == StatutEmprunt.EN_COURS and self.date_retour_prevu < date.today()
+    ...
+    def enregistrer_retour(self):
+        if not self.media.rendre_disponible():      # <-- actualisation évaluée du Media
+            # ... messages d'information de cette situation
+            return False
+        self.date_retour = date.today()         # <-- actualisation de la date de Emprunt
+        self.statut = StatutEmprunt.RENDU       # <-- actualisation du statut de Emprunt
+        self.save()                             # <-- finalisation de la transaction par enregistrement
+        return True
+```
+
+Pour la gestion globalisée de `Emprunt`, le modèle définit les méthodes de classe pour :
+- le **bilan de gestion** (les comptages avec le nombre d'emprunts enregistrés, en cours et en retard).
+- le **marquage des emprunts en retard** (action et résultat structuré du marquage).
+
+```python
+class Emprunt(models.Model):
+    # ...
+    @classmethod
+    def count_total(cls):
+        return cls.objects.count()
+
+    @classmethod
+    def count_en_cours(cls):
+        return cls.objects.filter(statut=StatutEmprunt.EN_COURS).count()
+
+    @classmethod
+    def count_en_retard(cls):
+        return cls.objects.filter(statut=StatutEmprunt.RETARD).count()
+
+    @classmethod
+    def marquer_retard(cls):            # <-- l'action de marquage retourne un résultat structuré des traitements 
+        aujourd_hui = date.today()
+        date_seuil_retard = aujourd_hui - timedelta(days=cls.DELAI_EMPRUNT)
+
+        emprunts_en_cours = list(cls.objects.filter(statut=StatutEmprunt.EN_COURS)) # <-- recherche globale des "en cours"
+        emprunts_marques = []
+
+        for emprunt in emprunts_en_cours:
+            if emprunt.est_en_retard:                   # <-- identification individualisée de l'emprunt en retard
+                emprunt.statut = StatutEmprunt.RETARD   # <-- marquage individualisé de l'emprunt identifié
+                emprunt.save()                          # <-- enregistrement de la transaction de marquage
+                emprunts_marques.append(emprunt)        # <-- mémorisation de l'emprunt marqué
+
+        nb = len(emprunts_marques)
+        if nb > 0:
+            date_premier_retard = emprunts_marques[0].date_retour_prevu     # <-- première date marquée
+            date_dernier_retard = emprunts_marques[-1].date_retour_prevu    # <-- dernière date marquée
+        else:
+            date_premier_retard = None
+            date_dernier_retard = None
+
+        message = {                                     # <-- message d'information pour l'UX
+            "tag": "success" if nb > 0 else "warning",
+            "text": (f"{nb} emprunt{'s' if nb != 1 else ''} marqué{'s' if nb != 1 else ''} comme en retard."
+                     if nb > 0 else "Aucun emprunt marqué comme en retard")
+        }
+
+        return {                                # <-- résultat structuré des actions de marquage des emprunts en retard
+            "date_du_jour": aujourd_hui,                    # <-- date de l'action
+            "date_seuil_retard": date_seuil_retard,         # <-- date du seuil de marquage du retard
+            "date_premier_retard": date_premier_retard,     # <-- date du premier emprunt marqué en retard 
+            "date_dernier_retard": date_dernier_retard,     # <-- date du dernier emprunt marqué en retard
+            "emprunts_en_cours": emprunts_en_cours,         # <-- ensemble des emprunts en cours avant le marquage
+            "emprunts_marques": emprunts_marques,           # <-- ensemble des emprunts marqué en retard
+            "message": message                              # <-- message d'information pour l'UX
+        }
+```
+
+Ainsi la modélisation de `Emprunt` encapsule la situation d'état et réalise les modifications de situation en assurant 
+l'application des **règles métier pour la création, le retard et le rendu** :
+- La création et le rendu agissent **directement sur la disponibilité du média** associé.
+- La création, le rendu et le retard agissent **indirectement sur la situation du membre** associé en modifiant le 
+statut de l'emprunt. 
+
+La description ci-après fournie la liste exhaustive de la modélisation de la gestion d'état d'un emprunt. Elle est issue 
+de la documentation technique de l'analyse des fonctionnalités du développement de l'application Bibliothécaire 
+(`devAFBib.md`).
+
+```MD
+**Entité**
+- Hérite de `models.Model`.
+
+**Propriétés**
+- `date_retour_prevu` → Date prévue du retour (calculée dynamiquement avec `DELAI_EMPRUNT`).
+- `est_en_retard` → True si l’emprunt est en retard par rapport à `date_retour_prevu`.
+- `est_a_rendre` → True si l’emprunt est à rendre.
+
+**Méthodes**
+- `count_total()` → **Méthode de classe**, Retourne le nombre total d'enregistrements.
+- `count_en_cours()` → **Méthode de classe**, Retourne le nombre total d'emprunts non-rendus et dans les délais (en cours).
+- `count_en_retard()` → **Méthode de classe**, Retourne le nombre total d'emprunts non-rendus et hors délais (en retard).
+- `enregistrer_retour()` → Retourne True si : média rendu disponible vérifié, puis met à jour la date, le statut, et la 
+disponibilité.
+- `marquer_retard()` → **Méthode de classe**, parcourt les emprunts en cours et marque ceux en retard.
+```
+
+---
+
+##### 4.1.3.2 Vues des emprunts – vérification des règles métier et parcours UX multiples
+
+Les emprunts présentent la particularité d'être _créés_ ou _rendus_ selon différents parcours métier. Cette particularité 
+qui est présentée pour la création, est réalisée de la même façon pour le rendu en proposant les parcours d'UX 
+suivants :
+- agir (créer ou rendre) sur l'emprunt **en sélectionnant le membre et le média**.
+- **à partir de la fiche d'un membre**, sélectionner le média pour agir sur l'emprunt.
+- **à partir de la fiche d'un média**, sélectionner le membre pour agir sur l'emprunt.
+
+---
+
+###### Exemple pour la création d'un emprunt - sélection du membre et du média
+
+La création d'un Emprunt est réalisé à partir de la vue `EmpruntCreateView` qui permet avec le formulaire `EmpruntForm` 
+d'associer un membre et un média.
+
+```python
+class EmpruntCreateView(CreateView):    # <-- hérite du modèle générique de création
+    model = Emprunt
+    form_class = EmpruntForm
+    template_name = "bibliothecaire/emprunts/emprunt_form.html"
+
+    def form_valid(self, form):...              # <-- vérification des règles métier et redirection selon la validité
+
+class EmpruntForm(forms.ModelForm):
+    class Meta:
+        model = Emprunt
+        fields = ["emprunteur", "media"]
+        labels = {
+            "emprunteur": "Membre emprunteur",
+            "media": "Média à emprunter",
+        }
+
+    def __init__(self, *args, **kwargs):        # <-- initialisation du contenu des champs du formulaire
+        super().__init__(*args, **kwargs)
+
+        # Tri des membres : nom puis compte
+        self.fields["emprunteur"].queryset = Membre.objects.order_by("name", "compte")  # <-- sélection du membre
+
+        # Tri métier des médias : nom puis type (CD > DVD > LIVRE > NON_DEFINI)
+        media_queryset = Media.objects.annotate(type_priority=Case(...)).order_by("name", "-type_priority")
+
+        self.fields["media"].queryset = media_queryset              # <-- sélection du média
+``` 
+
+Cette association **membre-media** avec la date du jour engage la vérification pour l'enregistrement d'un emprunt en 
+cours.
+
+Pour que cette association soit valide, le formulaire rend à la vue les données du membre et du média sélectionnés. 
+
+La méthode `form_valid()` de la vue vérifie les règles métier de l'emprunt :
+- que le membre est abonné (`statut == EMPRUNTEUR`).
+- qu’il n’a pas atteint la limite maximale des emprunts autorisés.
+- qu’il n’est pas en retard pour un des emprunts non-rendus.
+- que le média est empruntable.
+
+```python
+class EmpruntCreateView(CreateView):
+    model = Emprunt
+    form_class = EmpruntForm
+    template_name = "bibliothecaire/emprunts/emprunt_form.html"
+
+    def form_valid(self, form):
+        emprunt = form.save(commit=False)          # <-- report de la sauvegarde de l'enregistrement de l'emprunt
+        membre = emprunt.emprunteur
+        media = emprunt.media
+
+        erreurs = []
+
+        if not membre.peut_emprunter():...          # <-- messages d'erreur pour l'UX : membre ne peut pas emprunter
+
+        if not media.est_empruntable:...            # <-- messages d'erreur pour l'UX : média n'est pas empruntable
+
+        if erreurs:                                 # <-- messages d'erreur identifié 
+            for msg in erreurs:
+                messages.error(self.request, msg)
+            return self.form_invalid(form)          # <-- sélection invalide. retour au formulaire
+
+        emprunt.save()   # <-- enregistrement par défaut (date_emprunt et statut) de l'emprunt avec les valeurs sélectionnées
+        media.disponible = False                    # <-- modification du média pour le rendre indisponible
+        media.save()                                # <-- enregistrement du média
+        messages.success(self.request, f"Emprunt enregistré : {membre.name} → {media.name} ({media.media_type})")
+        return redirect("bibliothecaire:emprunt_list")          # <-- redirection vers la vue lors de la validation
+```
+
+Pour illustrer l'UX du Bibliothécaire, voici l'affichage du template `emprunt_form.html` avec les données sélectionnées 
+du formulaire `EmpruntForm` pour l'emprunt du livre **Django Unleashed** par le _membre-emprunteur_ **Martin** qui a 
+déjà **2 emprunts non-rendus**.
+
+![img.png](assets/img_UX_EmpruntCreation_Selection.png)
+
+> L'affichage des informations du membre et du média (`Membre.__str__()` et `Media.__str__()`) sont exprimées avec une 
+> description technique et métier pour faciliter la compréhension de la situation. Ces informations sont calculées 
+> dynamiquement et reflètent l'état de la base.
+
+La validation de l'emprunt, déclenchée par le clic du bouton **Valider l'emprunt** (soumission du formulaire), conduit à 
+la création de l'emprunt (liste ordonnée par date d'emprunt). Cette création réalisée, l'application affiche la liste
+des emprunts. L'interface affiche le message de succès en rappelant le nouvel emprunt créé pour l'UX du Bibliothécaire.
+
+![img.png](assets/img_UX_EmpruntCreation_Final.png)
+
+> Un choix invalide (ie. : membre bloqué, média indisponible, etc. aurait déclenché un retour au formulaire avec le 
+> message d'erreur adapté pour l'UX du Bibliothécaire.). Le tableau suivant illustre des cas invalides.
+> > |                    Membre bloqué (quota)                    |                     Média indisponible                      | Membre bloqué (retard)                                       |
+> > |:-----------------------------------------------------------:|:-----------------------------------------------------------:|--------------------------------------------------------------|
+> > | ![img.png](assets/img_UX_EmpruntCreation_InvalideQuota.png) | ![img.png](assets/img_UX_EmpruntCreation_InvalideDispo.png) | ![img.png](assets/img_UX_EmpruntCreation_InvalideRetard.png) |
+> 
+> La validation prévoit les cas d'invalidité cumulative en indiquant l'ensemble des messages d'erreur pour l'UX du 
+> Bibliothécaire.
+> > |                  Accumulation d'invalidité                  |                  Forumlaire incomplet                   |
+> > |:-----------------------------------------------------------:|:-------------------------------------------------------:|
+> > | ![img.png](assets/img_UX_EmpruntCreation_InvalideCumul.png) | ![img.png](assets/img_UX_EmpruntCreation_Incomplet.png) |
+> 
+
+---
+
+###### Exemple de création d'un emprunt à partir d'un membre emprunteur
+
+La vue de création d'un **emprunt à partir d'un membre** `EmpruntCreateFromMembreView` hérite de la vue de création d'un 
+emprunt `EmpruntCreateView`. Cet héritage permet de bénéficier des mêmes règles métier de validation, formulaire et 
+template.
+
+Le code de la vue doit ajouter des méthodes pour réaliser la gestion des différents éléments du contexte, afin :
+- d'initialiser les données connues (Membre) : la méthode `get_initial()`.
+- de réattribuer les données connues aux champs du formulaire : la méthode `dispatch()`.
+- d'organiser le formulaire (état des champs, apparence...) : la méthode `get_form()`.
+- d'organiser les données du _contexte de la vue_ pour le contrôle du template : la méthode `get_context_data()`.
+
+L'exemple de code est basé sur un contexte métier précis : **le membre est connu et il peut emprunter**.
+
+```Python
+class EmpruntCreateFromMembreView(EmpruntCreateView):
+    def dispatch(self, request, *args, **kwargs):
+        self.membre = get_object_or_404(Membre, pk=kwargs["pk"])  # <-- Données réattribuées
+        return super().dispatch(request, *args, **kwargs)
+
+    def get_initial(self):
+        return {"emprunteur": self.membre}                  # <-- Donnée initiale
+
+    def get_form(self, form_class=None):
+        form = super().get_form(form_class)
+        form.fields["emprunteur"].initial = self.membre     # <-- Chargement du champ de sélection
+        form.fields["emprunteur"].disabled = True           # <-- champ inactivé pour figer le contenu
+        return form
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["membre"] = self.membre                     # <-- Apparence des textes du template
+        context["is_from_membre"] = True                    # <-- Apparence des messages du template
+        return context
+```
+
+Le formulaire `EmpruntForm` est initialisé avec le champ `Emprunteur` du membre sélectionné. L'apparence du template 
+`emprunt_form.html` est adaptée pour signaler le contexte.
+
+![img.png](assets/img_UX_EmpruntCreation_Membre.png)
+
+---
+
+###### Exemple de création d'un emprunt à partir d'un média disponible
+
+La vue de création d'un **emprunt à partir d'un média** `EmpruntCreateFromMediaView` hérite de la vue de création d'un 
+emprunt `EmpruntCreateView`. Cet héritage permet de bénéficier des mêmes règles métier de validation, formulaire et 
+template.
+
+Le code de la vue doit ajouter des méthodes pour réaliser la gestion des différents éléments du contexte, afin :
+- d'initialiser les données connues (Media **typé**) : la méthode `get_initial()`.
+- de réattribuer les données connues aux champs du formulaire : la méthode `dispatch()`.
+- d'organiser le formulaire (état des champs, apparence...) : la méthode `get_form()`.
+- d'organiser les données du _contexte de la vue_ pour le contrôle du template : la méthode `get_context_data()`.
+
+L'exemple de code est basé sur un contexte métier précis : **le média est connu et il est disponible**.
+
+```Python
+class EmpruntCreateFromMediaView(EmpruntCreateView):
+    def dispatch(self, request, *args, **kwargs):
+        self.media = get_object_or_404(Media, pk=kwargs["pk"]).get_real_instance()  # <-- Données réattribuées
+        return super().dispatch(request, *args, **kwargs)
+
+    def get_initial(self):
+        return {"media": self.media}                    # <-- Donnée initiale
+
+    def get_form(self, form_class=None):
+        form = super().get_form(form_class)
+        form.fields["media"].initial = self.media       # <-- Chargement du champ de sélection
+        form.fields["media"].disabled = True            # <-- champ inactivé pour figer le contenu
+        return form
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["media"] = self.media                   # <-- Apparence des textes du template
+        context["is_from_media"] = True                 # <-- Apparence des messages du template
+        return context
+```
+
+Le formulaire `EmpruntForm` est initialisé avec le champ `Emprunteur` du membre sélectionné. L'apparence du template 
+`emprunt_form.html` est adaptée pour signaler le contexte.
+
+![img.png](assets/img_UX_EmpruntCreation_Membre.png)
+
+---
+
+###### Documentation technique associée aux emprunts
+
+> L'ensemble des fonctions métiers l'entité `Emprunt` fait l'objet :
+> - d'une définition technique dans le document d'analyse des fonctionnalités de l'application Bibliothécaire.
+> - d'un plan de tests fonctionnels (T-FUN) de chaque cas d'usage fonctionnel.
+>> 📄 Voir `devAFBib.md` §3.3.1 et `devTests.md` T-FUN-21 à T-FUN-41.
+>
+> Associé à ce document, l'ensemble des états (cycle de vie - noté LC pour LifeCycle) est décrit pour chaque entité.
+>> 📄 Voir `devALCBib.md` §1 à §6 pour la description d'ensemble **`Membre`, `Media`, `Emprunt`** et cf. §7 pour les 
+>> aspects spécifiques à chaque entité. 
+>
+
+---
+
+##### 4.1.3.3 Vues des Retours
+
+Les retours peuvent être initiés (origine du parcours) depuis :
+- la liste des emprunts.
+- la fiche du membre.
+- la fiche du média.
+
+La vue de **rendu d'un emprunt** diffère selon le parcours :
+- sélection de l'emprunt à rendre : `EmpruntRendreView`.
+- pour un _membre-emprunteur_, sélection de l'emprunt ou du média : `EmpruntRendreFromMembreView`.
+- pour un _média emprunté_, rendre l'emprunt : `EmpruntRendreFromMembreView`.
+
+Chacune de ces trois vues conduit, après validation de la configuration sélectionnée (Emprunt-Membre-Media), à la vue de 
+confirmation du rendu de l'emprunt `EmpruntRetourConfirmView`. La confirmation du Bibliothécaire déclenche 
+l'enregistrement du retour d'emprunt.
+
+---
+
+###### Vue de la confirmation - Etape finale de la transaction de rendu
+
+La vue de confirmation permet à l'utilisateur de s'assurer que les informations sélectionnées sont correctes avant 
+d'engager les actions définitives d'enregistrement du retour de l'emprunt et de rendre disponible le média emprunté.
+
+Le contexte de cette vue est une définition complète de l'emprunt (identification univoque).
+
+Cette vue présente donc la caractéristique d'avoir un affichage établi et figé à partir des données du contexte, 
+**l'emprunt sélectionné**, en considérant que :
+- la validation est une confirmation pour engager l'enregistrement (la validation des règles métier est déjà réalisée). 
+- l'annulation de cette confirmation doit rediriger vers la vue à l'origine du parcours UX.
+
+Le code de la vue doit ajouter des méthodes pour réaliser la gestion de ces différents éléments du contexte, afin :
+- d'initialiser les données connues (Membre) : la méthode `get()` et `get_form_kwargs()`.
+- de gérer le traitement de validation du formulaire : la méthode `form_valid()`.
+- de gérer la redirection après validation : la méthode `get_success_url`.
+- d'organiser l'URL d'annulation dans le template : la méthode `get_context_data()`.
+
+```Python
+class EmpruntRetourConfirmView(SingleObjectMixin, FormView):    # <-- Mixin pour ajouter la methode get() à la classe FormView
+    model = Emprunt
+    form_class = EmpruntRetourForm
+    template_name = "bibliothecaire/emprunts/emprunt_retour_confirm.html"
+
+    def get(self, request, *args, **kwargs):                # <-- permet d'accéder à l'objet Emprunt
+        self.object = self.get_object()
+        return super().get(request, *args, **kwargs)
+
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs["instance"] = self.get_object()
+        return kwargs
+
+    def get_success_url(self):      # <-- redirection selon le parcours UX
+        origine_key = self.request.session.pop("origine_retour", "rendre")  # <-- Contexte de vue à partir du contexte de session
+        if origine_key == "media":
+            return reverse("bibliothecaire:media_detail", kwargs={"pk": self.get_object().media.pk})    # <-- redirection pour média
+        elif origine_key == "membre":
+            return reverse("bibliothecaire:membre_detail", kwargs={"pk": self.get_object().emprunteur.pk})  #<-- redirection pour membre
+        return reverse("bibliothecaire:emprunt_list")       # redirection pour aucune origine particulière
+
+    def get_context_data(self, **kwargs):   # <-- contexte des données d'affichage : gestion du code du lien d'annulation
+        context = super().get_context_data(**kwargs)
+        # Calcul explicite de l’URL de retour pour le template
+        origine_key = self.request.session.get("origine_retour", "rendre")
+        if origine_key == "media":
+            context["url_retour"] = reverse("bibliothecaire:media_detail", kwargs={"pk": self.get_object().media.pk})
+        elif origine_key == "membre":
+            context["url_retour"] = reverse("bibliothecaire:membre_detail", kwargs={"pk": self.get_object().emprunteur.pk})
+        else:
+            context["url_retour"] = reverse("bibliothecaire:emprunt_rendre")
+        return context                               # <-- le contexte contient dans son dictionnaire l'URL d'annulation (url_retour)
+
+    def form_valid(self, form):
+        emprunt = self.get_object()
+        if emprunt.enregistrer_retour():    # <-- enregistrement en base du retour de l'emprunt
+            media = emprunt.media
+            membre = emprunt.emprunteur
+            messages.success(self.request, f"Emprunt rendu : {membre.name} → {media.name} ({media.media_type})")
+        else:
+            messages.warning(self.request, "Cet emprunt ne peut pas être rendu.")
+        return redirect(self.get_success_url())     # <-- redirection systématique vers l'URL de fin de transaction avec un message d'UX
+```
+
+> Le mixin `SingleObjectMixin` est indispensable pour toute **vue de confirmation métier liée à un objet**, lorsqu’on 
+utilise `FormView`. Cette particularité d'architecture a fait l'objet d'une description détaillée dans la main-courante 
+(`devMC.md` §9.25) lors du développement.
+> 
+> Il permet de respecter la séparation des responsabilités :
+> - le formulaire reste statique.
+> - la logique métier reste dans la vue.
+> - l’accès aux données reste encapsulé.
+
+---
+
+###### Exemple du rendu d'un emprunt - Formulaire adapté à la sélection d'un emprunt
+
+La vue de rendu d'un **emprunt** `EmpruntRendreView` hérite de la vue générique `FormView`. Cet héritage permet de 
+générer un formulaire de sélection avec son template.
+
+Le code de la vue doit ajouter des méthodes pour réaliser la gestion des différents éléments du contexte, afin :
+- d'organiser les données du _contexte de la vue_ pour le contrôle du template : la méthode `get_context_data()`.
+- d'organiser la validation du formulaire (la redirection vers la confirmation) : la méthode `get_form()`.
+
+L'exemple de code est basé sur un contexte métier précis : **les emprunts listés sont à rendre**.
+
+```Python
+class EmpruntRendreView(FormView):
+    form_class = EmpruntRendreForm                                  # <-- formulaire de sélecton d'emprunt à rendre
+    template_name = "bibliothecaire/emprunts/emprunt_form.html"     # <-- template pour la sélection de l'emprunt à rendre
+
+    def get_context_data(self, **kwargs):                           # <-- contexte des données d'affichage du template
+        context = super().get_context_data(**kwargs)
+        context["is_rendre"] = True                                 # <-- contexte explicite du rendu (se distingue de la création)
+        return context
+
+    def form_valid(self, form):
+        emprunt = form.cleaned_data["emprunt"]                      # <-- récupération de l'instance d'emprunt
+        return redirect("bibliothecaire:emprunt_retour_confirm", pk=emprunt.pk)     # <-- redirection vers la confirmation de l'emprunt choisi
+```
+
+Le formulaire `EmpruntRendreForm` est initialisé pour les champs de sélection `Emprunt`, `Emprunteur` et `Media`. Cette 
+initialisation filtre pour chaque champ la liste des instances potentiellement concernées par un rendu :
+- les emprunts non rendus. Ce champ est actif à la sélection d'un choix.
+- les membres ayant aux moins un emprunt. Ce champ est un champ d'information.
+- les médias (en gestion) indisponibles. Ce champ est un champ d'information.
+
+```Python
+class EmpruntRendreForm(forms.Form):
+    emprunt = forms.ModelChoiceField(
+        queryset=Emprunt.objects.exclude(statut=StatutEmprunt.RENDU),       # <-- filtre les emprunts non-rendus
+        label="Emprunt à rendre"
+    )
+
+    media = forms.ModelChoiceField(
+        queryset=Media.objects.filter(disponible=False),                    # <-- filtre les médias indisponibles
+        label="Média emprunté",
+        required=False,                                                     # <-- exclu de la validation du formulaire
+        disabled=True                                                       # <-- champ non actif
+    )
+
+    emprunteur = forms.ModelChoiceField(
+        queryset=Membre.objects.filter(
+            emprunts__statut__in=[StatutEmprunt.EN_COURS, StatutEmprunt.RETARD]
+        ).distinct(),                                                       # <-- filtre les membres avec un emprunt
+        label="Membre emprunteur",
+        required=False,                                                     # <-- exclu de la validation du formulaire
+        disabled=True                                                       # <-- champ non actif
+    )
+```
+
+L'apparence du template `emprunt_form.html` **commun pour la création et le rendu** est adaptée pour signaler le 
+contexte de rendu.
+
+![img.png](assets/img_UX_EmpruntRendu_InitialEmprunt.png)
+
+L'affichage du template et son comportement sont gérés par les données du contexte de la vue (`is_rendre`, 
+`is_from_membre`, `is_from_media`, `is_rendre_membre`) :
+
+```html
+{% extends "bibliothecaire/_base.html" %}                   <-- Menu de la page
+{% block content %}                                         <-- Début du contenu de la page
+  {% if is_rendre %}
+    <h2>Rendre un emprunt</h2>                              <-- Titre de la page de rendu
+  {% else %}
+    <h2>Créer un emprunt</h2>                               <-- Titre de la page de création
+  {% endif %}
+
+  {% if is_from_membre %}
+    <div id="emprunt_membre_info" class="info"> ... </div>          <-- message contexte UX : création à partir d'un membre
+  {% endif %}
+  {% if is_from_media %}
+    <div id="emprunt_media_info" class="info"> ... </div>           <-- message contexte UX : création à partir d'un média
+  {% endif %} 
+  {% if is_rendre_membre %}
+    <div id="emprunt_rendre_membre_info" class="info"> ... </div>   <-- message contexte UX : rendu à partir d'un membre
+  {% endif %}
+
+  <form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}                                                 <-- champs du Formulaire
+
+    {% if messages %} ... {% endif %}                               <-- message d'information UX
+
+    <div>
+       <button type="submit">Valider {% if is_rendre %}le retour{% else %}l'emprunt{% endif %} </button>
+       {% if is_rendre_membre %}
+            <a href="{{ url_retour }}">Retour à la fiche du membre</a>
+       {% else %}
+            <a href="{% url 'bibliothecaire:emprunt_list' %}">Retour à la liste des emprunts</a>
+       {% endif %}
+       <a href="{% url 'bibliothecaire:accueil' %}">Retour à l'accueil</a>
+    </div>
+
+    {% if is_rendre %}
+        <script> ... </script>                                      <-- cohérence dynamique des champs du formulaire
+    {% endif %}
+  </form>
+{% endblock %}                                              <-- Début du contenu de la page
+```
+
+
+La liste de sélection ne contient que des emprunts à rendre.
+
+![img.png](assets/img_UX_EmpruntRendr_SelectEmprunt.png)
+
+Pour améliorer la fluidité de l'UX des rendus, le template `emprunt_form.html` prévoit un script JavaScript (côté 
+navigateur) pour synchroniser dynamiquement les champs `emprunt`, `membre` et `media`.
+
+```html
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+          const empruntSelect = document.getElementById("id_emprunt");
+          const mediaSelect = document.getElementById("id_media");
+          const emprunteurSelect = document.getElementById("id_emprunteur");
+
+          const empruntData = {
+            {% for emprunt in form.fields.emprunt.queryset %}
+              "{{ emprunt.id }}": {
+                "media": "{{ emprunt.media.id }}",
+                "emprunteur": "{{ emprunt.emprunteur.id }}"
+              },
+            {% endfor %}
+          };
+
+          const mediaData = {
+            {% for media in form.fields.media.queryset %}
+              {% with emprunt=media.get_emprunt_actif %}
+                {% if emprunt %}
+                  "{{ media.id }}": "{{ emprunt.id }}",
+                {% endif %}
+              {% endwith %}
+            {% endfor %}
+          };
+
+          {% if is_rendre %}
+            {% if is_rendre_membre %}
+              // Cas UC-RETOUR-03 : sélection croisée
+              mediaSelect.addEventListener("change", function () {
+                const selectedMedia = mediaSelect.value;
+                if (mediaData[selectedMedia]) {
+                  empruntSelect.value = mediaData[selectedMedia];
+                }
+              });
+
+              empruntSelect.addEventListener("change", function () {
+                const selectedEmprunt = empruntSelect.value;
+                if (empruntData[selectedEmprunt]) {
+                  mediaSelect.value = empruntData[selectedEmprunt].media;
+                }
+              });
+            {% else %}
+              // Cas UC-RETOUR-01 : sélection d’un emprunt
+              empruntSelect.addEventListener("change", function () {
+                const selected = empruntSelect.value;
+                if (empruntData[selected]) {
+                  mediaSelect.value = empruntData[selected].media;
+                  emprunteurSelect.value = empruntData[selected].emprunteur;
+                }
+              });
+            {% endif %}
+          {% endif %}
+        });
+    </script>
+```
+
+---
+
+###### Exemple du rendu d'un emprunt - Formulaire adapté à la sélection d'un membre
+
+La vue de création d'un **emprunt à partir d'un membre** `EmpruntRendreFromMembreView` hérite de la vue de création d'un 
+emprunt `EmpruntCreateView`. Cet héritage permet de bénéficier des mêmes règles métier de validation, formulaire et 
+template.
+
+Le code de la vue doit ajouter des méthodes pour réaliser la gestion des différents éléments du contexte, afin :
+- d'initialiser les données connues (Membre) : la méthode `get_initial()`.
+- de réattribuer les données connues aux champs du formulaire : la méthode `dispatch()`.
+- d'organiser le formulaire (état des champs, apparence...) : la méthode `get_form()`.
+- d'organiser les données du _contexte de la vue_ pour le contrôle du template : la méthode `get_context_data()`.
+
+L'exemple de code est basé sur un contexte métier précis : **le membre est connu et il peut emprunter**.
+
+```Python
+class EmpruntRendreFromMembreView(FormView):
+    form_class = EmpruntRendreFromMembreForm
+    template_name = "bibliothecaire/emprunts/emprunt_form.html"
+
+    def dispatch(self, request, *args, **kwargs):
+        self.membre = get_object_or_404(Membre, pk=kwargs["pk"])        # <-- initialisation de l'instance du Membre
+        self.emprunts_actifs = self.membre.get_emprunts_actifs()        # <-- initialisation de l'instance des Médias
+
+        if not self.emprunts_actifs.exists():                           # <-- situation d'erreur technique (cas d'un accès direct par URL)                       
+            messages.warning(request, "Ce membre n’a aucun emprunt actif à rendre.")
+            return redirect("bibliothecaire:membre_detail", pk=self.membre.pk)
+
+        request.session["origine_retour"] = "membre"                # <-- configuration du contexte de session (URLs sans argument)
+
+        if self.emprunts_actifs.count() == 1:                       # < court-circuit , si le membre n'a qu'un seul emprunt
+            emprunt = self.emprunts_actifs.first()
+            return redirect("bibliothecaire:emprunt_retour_confirm", pk=emprunt.pk)     # redirection vers la confirmation
+
+        return super().dispatch(request, *args, **kwargs)
+
+    def get_form_kwargs(self):                                      # <-- lie le formulaire avec les données
+        kwargs = super().get_form_kwargs()
+        kwargs["membre"] = self.membre
+        kwargs["emprunts"] = self.emprunts_actifs
+        kwargs["medias"] = [e.media for e in self.emprunts_actifs]
+        return kwargs
+
+    def get_context_data(self, **kwargs):                           # <-- actualise le contexte de contrôle de l'affichage
+        context = super().get_context_data(**kwargs)
+        context["membre"] = self.membre
+        context["emprunts"] = self.emprunts_actifs
+        context["is_rendre"] = True
+        context["is_rendre_membre"] = True
+
+        origine = self.request.session.get("origine_retour")
+        if origine == "membre":                           # <-- actualise le lien du template pour le retour à la fiche du membre
+            context["url_retour"] = reverse("bibliothecaire:membre_detail", kwargs={"pk": self.membre.pk})
+        else:
+            context["url_retour"] = reverse("bibliothecaire:emprunt_list")
+
+        return context
+
+    def form_valid(self, form):
+        emprunt = form.cleaned_data["emprunt"]
+        if emprunt.enregistrer_retour():                    # <-- enregistrement en base du retour de l'emprunt
+            ...
+        else:
+            ...
+        return redirect(self.get_success_url())             # <-- redirection à la validation
+
+    def get_success_url(self):                              # <-- définition de l'URL de redirection à la validation
+        origine = self.request.session.pop("origine_retour", None)
+        if origine == "membre":
+            return reverse("bibliothecaire:membre_detail", kwargs={"pk": self.membre.pk})
+        return reverse("bibliothecaire:emprunt_list")
+```
+
+---
+
+###### Exemple du rendu d'un emprunt - Formulaire adapté à la sélection d'un média
+
+La vue de création d'un **emprunt à partir d'un média** `EmpruntRendreFromMediaView` hérite de la vue générique 
+élémentaire `View`. Cet héritage permet d'exploiter les mécanismes de gestion d'une vue pour rediriger vers la vue de 
+confirmation d'un emprunt.
+
+Le contexte est initialisé en utilisant la méthode `get_emprunt_actif()` qui vérifie les règles métier tout en 
+fournissant l'instance de l'emprunt associé au média sélectionné.
+
+Cette vue agit comme un point d’entrée UX vers la transaction de retour.  
+Elle vérifie qu’un emprunt actif existe pour le média sélectionné, initialise le contexte de session, et redirige vers 
+la vue de confirmation.  
+En cas d’absence d’emprunt, elle affiche un message UX et retourne à la fiche du média.
+
+```Python
+class EmpruntRendreFromMediaView(View):
+    def get(self, request, pk):
+        media = get_object_or_404(Media, pk=pk)
+        emprunt = media.get_emprunt_actif()                     # <-- récupère l’emprunt actif associé au média, si existant
+
+        if emprunt:                                             # <-- validation de l'emprunt concerné par le rendu
+            request.session["origine_retour"] = "media"         # <-- utilisé pour déterminer la redirection après confirmation
+            return redirect("bibliothecaire:emprunt_retour_confirm", pk=emprunt.pk)     # <-- redirection pour la confirmation
+
+        messages.warning(request, f"Aucun emprunt actif trouvé pour ce média)")     # <-- message UX si aucun emprunt actif n’est trouvé
+        return redirect("bibliothecaire:media_detail", pk=media.pk)     # <-- retour à la fiche média en cas d’échec de la recherche d’emprunt
+```
+
+---
+
+##### 4.1.3.4 Marquage des retards
+
+Les retards sont marqués automatiquement à la connexion (page d'accueil) ou via une vue dédiée :
+- `AccueilBibliothecaireView` : action quotidienne unique et mémorisée.
+- `EmpruntRetardView` : action forcée manuelle.
+
+---
+
+###### Marquage manuel des retards - Vue dédiée
+
+La vue de **marquage de retard** `EmpruntRetardView` hérite de la vue de générique `TemplateView`. Cet héritage permet 
+d'afficher le template des résultats de l'opération de marquage des emprunts constaté en retard.
+
+Cette vue n'utilise pas de formulaire et exploite directement la méthode de classe de `marquer_emprunt()` de l'entité 
+`Emprunt` (cf. [modélisation Emprunt](#4131-modélisation-de-lemprunt--contraintes-métier)) qui rend un résultat 
+structuré (dictionnaire) permettant de mettre à jour les données du template.
+
+```python
+class EmpruntRetardView(TemplateView):
+   template_name = 'bibliothecaire/emprunts/emprunt_retard_result.html'
+
+    def get_context_data(self, **kwargs):             # <-- récupération des données du contexte pour l'affichage
+        context = super().get_context_data(**kwargs)
+        resultat = Emprunt.marquer_retard()               # <-- marquage des enregistrements d'emprunt en retard
+
+        context.update(resultat)                          # <-- injecte toutes les clés du dictionnaire dans le contexte
+        tag = resultat["message"]["tag"]                  # <-- exploitation du dictionnaire de résultat pour les tags de message
+        text = resultat["message"]["text"]                # <-- exploitation du dictionnaire de résultat pour les textes de message
+
+        if tag == "success":
+            messages.success(self.request, text)          # <-- messages métier de succès du marquage d'au moins un emprunt
+        elif tag == "warning":
+            messages.warning(self.request, text)          # <-- message métier d'avertissement d'aucun retard constaté
+        else:
+            messages.info(self.request, text)             # <-- fallback : exploitation d'autres tags de message
+        return context
+```
+
+Le template `emprunt_retard_result.html` inclut un template spécifique `emprunt_retard_marque_table.html` pour afficher 
+la table listant les emprunts marqués. Cette inclusion permettra de réutiliser ce dernier template pour le traitement de 
+[marquage automatisé](#marquage-automatique-des-retards---action-quotidienne-unique-et-mémorisée).
+
+Le code du template de la vue exploite les résultats disponibles dans le contexte de la vue.
+
+```html
+{% extends "bibliothecaire/_base.html" %}
+{% block content %}
+  <h2>Marquage des emprunts en retard</h2>
+
+  <p><strong>Date du jour :</strong> {{ date_du_jour }}</p>
+  <p><strong>Date seuil de retard :</strong> {{ date_seuil_retard }}</p>
+  <p><strong>Nombre d’analyse (emprunts en cours) :</strong> {{ emprunts_en_cours|length }} </p>
+
+  {% if messages %}
+  <ul class="messages">
+    {% for message in messages %}
+      <li class="{{ message.tags }}">{{ message }}</li>
+    {% endfor %}
+  </ul>
+  {% endif %}
+
+  {% if emprunts_marques %}
+    {% include "bibliothecaire/emprunts/emprunt_retard_marque_table.html" %}
+
+    {% if date_premier_retard == date_dernier_retard %}
+        <p>Le retard est marqué pour le {{ date_premier_retard }}.</p>
+    {% else %}
+        <p>Les retards sont marqués entre le {{ date_premier_retard }} et le {{ date_dernier_retard }}.</p>
+    {% endif %}
+  {% endif %}
+
+  <p><a href="{% url 'bibliothecaire:emprunt_list' %}">Retour à la liste des emprunts</a></p>
+{% endblock %}
+```
+
+Le tableau suivant présente l'affichage obtenu dans les deux situations de marquage.
+
+| Marquage manuel avec résultat | Marquage manuel avec aucun retard |
+|:---:|:---:|
+|![img.png](assets/img_UX_EmpruntRetard_ManuelMarque.png)|![img.png](assets/img_UX_EmpruntRetard_ManuelAucun.png)|
+
+---
+
+###### Marquage automatique des retards - Action quotidienne unique et mémorisée
+
+La vue de **marquage des retards** est la vue d'accueil `AccueilBibliothecaireView` de l'application Bibliothécaire. 
+Cette vue permet d'afficher la situation de gestion de la médiathèque et de marquage quotidien des retards.
+
+La vue `AccueilBibliothecaireView` hérite de la vue générique `TemplateView` pour l'affichage template statique de 
+situation. Elle gère le contexte :
+- de navigation de la session grâce à l'héritage de la classe spécifique au projet (cf. Difficulté 17 et Difficulté 24 
+du développement du projet), `OrigineSessionMixin`.
+- des données stockées :
+  - dans le **contexte de session** pour les résultats du **marquage quotidien des retards**.
+  - dans le **contexte de vue** pour la gestion de l'affichage des **indicateurs de gestion**.
+
+
+```Python
+class AccueilBibliothecaireView(OrigineSessionMixin, TemplateView):
+    template_name = 'bibliothecaire/accueil.html'
+
+    origine_key = 'accueil'
+
+    def post(self, request, *args, **kwargs):...            # <-- Traitement du commutateur d'affichage des emprunts marqués
+
+    def get_context_data(self, **kwargs):                   # <-- gestion des contextes de session et de vue
+        context = super().get_context_data(**kwargs)
+
+        # Déclenchement automatique du marquage des retards
+        today = date.today()
+        last_check = self.request.session.get("retard_last_check_date")     # <-- injection de la dernière date de marquage
+        if last_check != str(today):                                        # <-- vérification de l'action quotidienne
+            # Actualisation du contexte de session (action quotidienne unique)
+            self.request.session.pop("retard_message", None)                # <-- contexte de session, réinitialisation du message
+            self.request.session.pop("emprunts_marques_ids", None)          # <-- contexte de session, réinitialisation des index des marques
+            
+            resultat = Emprunt.marquer_retard()                             # <-- action de marquage des retards
+            
+            self.request.session["retard_last_check_date"] = str(today)     # historisation pour une action quotidienne unique
+            self.request.session["retard_message"] = resultat["message"]["text"]    # historisation du message
+            self.request.session["emprunts_marques_ids"] = [e.id for e in resultat["emprunts_marques"]]     # historisation des index
+
+        # Actualisation du contexte de la vue à partir du contexte de session
+        context["retard_message"] = self.request.session.get("retard_message")
+        ids = self.request.session.get("emprunts_marques_ids", [])                          # <-- index historisés
+        context["emprunts_marques"] = Emprunt.objects.filter(id__in=ids) if ids else []     # <-- reconstitution  avec les index
+
+        # Affichage conditionnel
+        context["affiche_table"] = self.request.session.get("affiche_table", False)         # <-- gestion de l'affichage des emprunts marqués
+
+        # Indicateurs de gestion 
+        context["nb_medias_total"] = Media.count_total()            # <-- exploitation des méthodes de classe des entités
+        ...
+        return context
+```
+Le template `accueil.html` gère l'affichage :
+- des messages et le bouton de commutation.
+- des résultats selon l'état du bouton commutateur.
+- des indicateurs de gestion.
+
+```html
+{% extends 'bibliothecaire/_base.html' %}
+
+{% block content %}
+  <h2>Bienvenue dans l’espace Bibliothécaire</h2>
+  <p>Utilisez le menu ci-dessus pour accéder aux fonctionnalités.</p>
+
+  {% if retard_message %}                   
+    <ul class="messages">
+      <li class="success">
+          {{ retard_message }}              <-- affiche du message d'UX
+          {% if emprunts_marques %}
+            <form method="post">            <-- formulaire POST pour la commutation d'affichage
+                {% csrf_token %}
+                {% if affiche_table %}
+                    ...                     <-- gestion du bouton "commutateur" d'affichage de la table des résultats
+                {% endif %}
+            </form>
+          {% endif %}
+      </li>
+    </ul>
+  {% endif %}
+
+  {% if affiche_table and emprunts_marques %}
+    <div style="margin-top:20px;">
+        <h3>📌 Emprunts marqués comme en retard</h3>
+        {% include "bibliothecaire/emprunts/emprunt_retard_marque_table.html" %}        <-- template de résultat des marquages
+    </div>
+  {% endif %}
+
+  <h3>📊 Situation de la médiathèque</h3>
+  <table id="situation-mediatheque"> ... </table>                 <-- affichage des indicateurs de gestion
+{% endblock %}
+
+```
+
+Chaque clic sur le bouton commutateur déclenche un rafraîchissement de la vue avec la méthode post() de la vue.
+
+|                       commutateur On                        |                      commutateur Off                       |
+|:-----------------------------------------------------------:|:----------------------------------------------------------:|
+| ![img.png](assets/img_UX_EmpruntRetard_AccueilTableOff.png) | ![img.png](assets/img_UX_EmpruntRetard_AccueilTableOn.png) |
+
+---
+
+##### 4.1.3.5 Navigation fonctionnelle pour les emprunts
+
+Pour implémenter la fonctionnalité relative à un **emprunt**, chaque fonction métier (UC) modélisée par une **Vue**, est 
+associée à une **URL** spécifique et unique définie dans le fichier structurel Python `urls.py`.
+
+La définition ci-après présente la liste exhaustive des navigations fonctionnelles autorisées pour les emprunts dans 
+l'application Bibliothécaire. Les navigations liées aux transactions à partir d'un membre ou d'un média sont rappelées 
+pour la complétude des routes nécessaires pour exploiter toutes les fonctionnalités liées à une emprunt 
+
+```Python
+app_name = 'bibliothecaire'
+
+urlpatterns = [
+    ... URLs des autres entités
+    # Emprunts
+    path('emprunts/', views.EmpruntListView.as_view(), name='emprunt_list'),
+    path('emprunts/retards/', views.EmpruntRetardView.as_view(), name='emprunt_retard'),
+    path('emprunts/ajouter/', views.EmpruntCreateView.as_view(), name='emprunt_create'),
+    path("emprunts/rendre/", EmpruntRendreView.as_view(), name="emprunt_rendre"),
+    path("emprunts/<int:pk>/retour/confirmation/", EmpruntRetourConfirmView.as_view(), name="emprunt_retour_confirm"),
+
+    # Transverse - Transaction Emprunt
+    path("medias/<int:pk>/emprunter", EmpruntCreateFromMediaView.as_view(), name="media_emprunter"),
+    path("medias/<int:pk>/rendre/", EmpruntRendreFromMediaView.as_view(), name="media_rendre"),
+    path("membres/<int:pk>/emprunter", EmpruntCreateFromMembreView.as_view(), name="membre_emprunter"),
+    path("membres/<int:pk>/rendre/", EmpruntRendreFromMembreView.as_view(), name="membre_rendre"),
+
+]
+```
+
+> 📌 Chaque fonctionnalité est associée à une URL unique (cf. section [2.3.3](#233-routage-fonctionnel-par-cas-dusage-uc)) 
+> et validée par des tests documentés dans `devReport.md`.
+
+L'ensemble des liens des templates exploite les noms (`name`) de chaque route (`path`) pour activer la vue à la 
+fonctionnalité métier recherché. Constituant ainsi l'UX de l'application Bibliothécaire pour les emprunts de la 
+médiathèque.
+
+---
+
+### 4.3 Contraintes métiers respectées
+
+Le développement de l’application `bibliothecaire` a été guidé par les contraintes métier énoncées dans le cahier des 
+charges.
+
+![img.png](assets/img_CdC_ContraintesMetiers.png)
+
+> ✅ Toutes les contraintes métier ont été **modélisées explicitement**, **centralisées dans les entités métier**, 
+> et **testées** dans les cas d’usage correspondants.  
+> Cette approche garantit la robustesse du système et la conformité aux règles de gestion de la médiathèque.
+
+---
+
+##### 4.3.1 Contrainte 1 – Limite de 3 emprunts simultanés par membre
+
+Un membre ne peut pas avoir plus de trois emprunts actifs (statuts `EN_COURS` ou `RETARD`).  
+Cette règle est implémentée dans la propriété `is_max_emprunt` du modèle `Membre`, et vérifiée dans la méthode 
+`peut_emprunter()` :
+
+```python
+MAX_EMPRUNTS = 3
+
+@property
+def nb_emprunts_en_cours(self) -> int:
+    return self.emprunts.filter(statut__in=[StatutEmprunt.EN_COURS, StatutEmprunt.RETARD]).count()
+
+@property
+def is_max_emprunt(self):
+    return self.nb_emprunts_en_cours >= MAX_EMPRUNTS
+
+def peut_emprunter(self):
+    return self.is_emprunteur and not (self.is_max_emprunt or self.is_retard)
+```
+
+---
+
+##### 4.3.2 Contrainte 2 – Durée maximale d’un emprunt : 7 jours
+
+La date de retour prévue est automatiquement fixée à 7 jours après la date d’emprunt.  
+La propriété `est_en_retard` du modèle `Emprunt` permet de détecter les retards :
+
+```python
+DELAI_EMPRUNT = 7 #jours
+
+@property
+def date_retour_prevu(self):
+    return self.date_emprunt + timedelta(days=self.DELAI_EMPRUNT)
+
+@property
+def est_en_retard(self):
+    return self.statut == StatutEmprunt.EN_COURS and self.date_retour_prevu < date.today()
+```
+
+---
+
+##### 4.3.3 Contrainte 3 – Blocage des membres en retard
+
+Un membre ayant au moins un emprunt en retard est bloqué pour tout nouvel emprunt.  
+Cette règle est intégrée dans la propriété `is_retard` du modèle `Membre`, utilisée dans `peut_emprunter()` :
+
+```python
+MAX_RETARDS = 0
+
+def nb_retards(self):
+    return self.emprunts.filter(statut=StatutEmprunt.RETARD).count()
+
+@property
+def is_retard(self):
+    return self.nb_retards > self.MAX_RETARDS
+
+def peut_emprunter(self):
+    return self.is_emprunteur and not (self.is_max_emprunt or self.is_retard)
+```
+
+Le [marquage des retards](#4134-marquage-des-retards) est effectué automatiquement à la connexion ou via une vue dédiée.
+
+---
+
+##### 4.3.4 Contrainte 4 – Jeux de plateau non empruntables
+
+Les jeux de plateau (`JeuDePlateau`) héritent directement de `Support` et ne sont pas considérés comme des `Media`.
+Seuls les `Media` peuvent constituer un emprunt. Ainsi la définition de `Emprunt` empêche l'emprunt d'un jeu de 
+plateau :
+
+```python
+class JeuDePlateau(Support):...
+    
+class Media(Support):...
+
+class Emprunt(models.Model):
+    media      = models.ForeignKey(
+        Media,                                      # <-- exclusion structurelle des jeux de plateau
+        on_delete=models.CASCADE,
+        related_name='emprunts'
+    )
+    emprunteur = models.ForeignKey(
+        Membre,
+        on_delete=models.CASCADE,
+        related_name='emprunts'
+    )
+    ...
+```
+
+---
 
 ## 6. Base de données et données de test
 
-### 6.1 Configuration de la base de données
+Cette section présente la configuration de la base de données, les migrations effectuées à partir des modèles Django, 
+les jeux de données utilisés pour les tests, ainsi que des exemples d’insertion et de requêtes de vérification.
 
-La base de données SQLite est configurée dans `settings.py` via le bloc `DATABASES`. Aucune modification spécifique n’a été apportée à ce stade, car aucun modèle métier n’a encore été défini.
+---
 
-Lors de la _préparation de l'environnement_ (`issue #1`), la commande `python manage.py migrate` a permis d’appliquer les migrations par défaut de Django (`auth`, `admin`, etc.).
+### 6.1 Schéma des modèles et migration
 
-Lors de l'_initialisation du projet et configuration centrale_ (`issue #2`), l’app `accounts` est enregistrée, mais n’a généré aucune migration (commande `makemigrations accounts`). Ce qui est conforme à l’état actuel du projet.
+La base de données utilisée est une base SQLite, configurée dans le fichier `settings.py` du projet Django.  
+Les modèles sont définis dans les fichiers `models.py` des applications `bibliothecaire` et `consultation`.
 
-> Cette section sera complétée lors des issues #3 et #4, qui introduiront les premiers modèles métier.
+Les migrations ont été générées et appliquées via les commandes suivantes :
+
+```bash
+python manage.py makemigrations
+python manage.py migrate
+```
+
+Le schéma relationnel repose sur une hiérarchie orientée objet, avec héritage multi-table :
+
+```text
+Support
+├── Media
+│   ├── Livre
+│   ├── Dvd
+│   └── Cd
+└── JeuDePlateau
+
+Utilisateur
+├── Membre
+└── Bibliothecaire
+
+Emprunt
+```
+
+Chaque entité possède ses propres champs, propriétés et méthodes métier.  
+Les relations sont gérées par des clés étrangères (`ForeignKey`) et des héritages Django (`models.Model`, 
+`models.AbstractBaseUser`, etc.).
+
+---
+
+### 6.2 Jeu de données via fixtures ou script
+
+Des jeux de données ont été préparés pour les tests fonctionnels et les démonstrations.  
+Ils sont stockés dans le dossier `/fixtures/` et organisés par thème :
+
+| Fichier fixture          | Contenu chargé                               |
+|--------------------------|----------------------------------------------|
+| `membres.json`           | Membres de test (statuts variés)             |
+| `medias.json`            | Livres, DVDs, CDs, jeux de plateau           |
+| `emprunts.json`          | Emprunts en cours, retours, retards          |
+| `users.json`             | Comptes utilisateurs pour l’authentification |
+| `scenarios_retards.json` | Cas de membres bloqués pour retards          |
+
+Les fixtures sont chargées avec la commande :
+
+```bash
+python manage.py loaddata membres.json medias.json emprunts.json
+```
+
+> 📌 Ces données permettent de valider les cas d’usage métier, de simuler des scénarios réalistes, et de garantir la 
+> reproductibilité des tests.
+>
+> 📌 Ces fixtures sont regroupés pour créer des scénarios dans le dossier `/fixtures/scenarii/`. Le scénario `scenar_01` 
+> permet de définir une **situation initiale à partir d'une base vide** en créant un utilisateur (`superuser`) des données 
+> _membres-médias_ et des _emprunts_.
+>
+> > ![img.png](assets/img_Project_Fixtures_Scenarii.png)
+> > 
+> > Les fixtures du scénario sont chargés avec la commande :
+> >
+> > ```bash
+> > python manage.py loaddata scenarii/scenar_01/medias_membres_fixture.json scenarii/scenar_01/emprunts_fixture.json
+> > ```
+>
+
+---
+
+### 6.3 Exemple d’insertion et requêtes de vérification
+
+Voici un exemple d’insertion manuelle d’un membre et d’un média via le shell Django :
+
+```python
+from bibliothecaire.models import Membre, Livre, StatutMembre
+
+membre = Membre.objects.create(name="Alice", statut=StatutMembre.EMPRUNTEUR)
+print(membre)
+livre = Livre.objects.create(name="Merlin", theme="Conte", disponible=True, consultable=True, media_type="LIVRE", auteur="Légende", resume="Enchanteur")
+print(livre)
+media=livre.media_ptr
+print(media)
+```
+
+Création d’un emprunt :
+
+```python
+from bibliothecaire.models import Emprunt
+
+print("Création de l'emprunt :")
+emprunt = Emprunt.objects.create(emprunteur=membre, media=media)
+media.disponible = False
+print("Etats après la création de l'emprunt :")
+print(emprunt)
+print(membre)
+print(media)
+Print("Rendu de l'emprunt :")
+emprunt.enregistrer_retour()
+print("Etats après le rendu de l'emprunt")
+print(emprunt)
+print(membre)
+print(media)
+
+```
+
+Requête de vérification :
+
+```python
+# Vérifier si le membre peut emprunter
+membre.peut_emprunter()  # → True ou False selon les règles métier
+
+# Vérifier si le média est empruntable
+media.est_empruntable   # → True ou False
+
+# Vérifier si l'emprunt est en retard
+emprunt.est_en_retard   # → True ou False
+```
 
 ---
 
@@ -201,7 +2203,8 @@ Ces versions précises garantissent la reproductibilité et la compatibilité du
 
 ### 7.2 Commandes pas à pas
 
-Cette procédure est destinée à toute personne souhaitant tester le projet localement à partir du dépôt GitHub. L'annexe D présente une vue complète des commandes à mener pour l'installation.
+Cette procédure est destinée à toute personne souhaitant tester le projet localement à partir du dépôt GitHub. L'annexe 
+D présente une vue complète des commandes à mener pour l'installation.
 
 Elle permet de :
 
@@ -217,7 +2220,8 @@ Elle permet de :
 > └── `mediatheque/` : dossier du projet Django (avec `manage.py`, `db.sqlite3`, etc.)  
 > └── `venv/` : environnement virtuel Python contenant Django et les dépendances
 
-> ⚠️ **Port utilisé** : le serveur Django est lancé sur le port `8900`, car le port `8000` est occupé par Apache sur le poste de développement.
+> ⚠️ **Port utilisé** : le serveur Django est lancé sur le port `8900`, car le port `8000` est occupé par Apache sur le 
+> poste de développement.
 
 #### 7.2.1 📦 Étapes communes
 
@@ -256,7 +2260,7 @@ Elle permet de :
 
     ```bash
     # Activer l’environnement virtuel
-    source venv/bin/activate
+    rapport venv/bin/activate
     
     # Vérifier que Django est bien installé
     python3 -m django --version
@@ -270,14 +2274,16 @@ Elle permet de :
 
 > ✅ Une fois le serveur lancé, l’application est accessible à l’adresse : [http://127.0.0.1:8000](http://127.0.0.1:8000)
 
-> ℹ️ **Note** : Si le port 8000 est déjà utilisé (par exemple par Apache), vous pouvez spécifier un autre port lors du lancement :  
+> ℹ️ **Note** : Si le port 8000 est déjà utilisé (par exemple par Apache), vous pouvez spécifier un autre port lors du 
+> lancement :  
 > `python manage.py runserver 127.0.0.1:8900`  
 > L’application sera alors accessible via [http://127.0.0.1:8900](http://127.0.0.1:8900)
 
 
 #### 7.2.3 📦 Étapes spécifiques à la configuration de l'environnement de développement (EDI)
 
-Il est nécessaire de configurer l'EDI lors de l'utilisation d'un environnement virtuel pour que l'interpréteur Python fonctionne correctement.
+Il est nécessaire de configurer l'EDI lors de l'utilisation d'un environnement virtuel pour que l'interpréteur Python 
+fonctionne correctement.
 Cette configuration ne concerne que l'interpréteur de l'EDI et permet notamment :
 - l'exécution directe des scripts Django (`manage.py`)
 - l'autocomplétion des modules installés
@@ -293,7 +2299,8 @@ Une fois le serveur lancé, l’URL d’accès est :
 La page d’accueil affiche le contenu du template `accueil.html`, situé dans `accounts/templates/accounts/`. 
 
 
-Ce fichier doit être personnalisé pour refléter l’identité visuelle du projet ou proposer des liens vers les applications _métier_.
+Ce fichier doit être personnalisé pour refléter l’identité visuelle du projet ou proposer des liens vers les 
+applications _métier_.
 
 #### 7.3.1 Interface minimale après initialisation
 
@@ -303,7 +2310,7 @@ La première version de l’interface est volontairement épurée. Elle permet d
 - La résolution correcte du template
 - L’affichage du contenu HTML statique
 
-|             ![Interface d’accueil minimale](./assets/Issue2-Technical-Groupe3_Serveur_URL-Accueil.jpg)             |
+|             ![Interface d’accueil minimale](assets/Issue2-Technical-Groupe3_Serveur_URL-Accueil.jpg)             |
 |:------------------------------------------------------------------------------------------------------------------:|
 | *Figure 1 – Affichage (version initiale - Issue #2) du template `accueil.html` après lancement du serveur Django.* |
 
@@ -329,9 +2336,28 @@ L’interface finale proposera :
 
 ## 8. Démarche de travail et traçabilité
 
-### 8.1 Workflow GitHub
+### 8.1 Traçabilité du développement : GitHub et main-courante technique
 
-Le projet utilise GitHub pour assurer la traçabilité du développement et la séparation entre les tâches techniques et la rédaction du rapport.
+La traçabilité du projet repose sur un double dispositif :
+
+- **GitHub** : utilisé pour la gestion des issues (#1 à #7, #12), des branches de développement (`update-technical`, 
+- `update-report`, etc.), des commits et des Pull Requests.  
+  Chaque étape du projet est associée à une issue dédiée, assurant une traçabilité fine des tâches réalisées.
+
+- **Main-courante technique (`devMC.md`)** : document interne structurant les travaux de développement.  
+  Elle a été initialement rédigée en index (bloc H-11), puis enrichie au fil du développement pour suivre les décisions 
+techniques, les difficultés rencontrées et les arbitrages méthodologiques.  
+  Elle complète GitHub en apportant une vision métier, pédagogique et réflexive du développement fonctionnel.
+
+> 📌 Cette approche combinée permet de documenter à la fois les actions techniques (via GitHub) et les choix 
+> structurants (via la main-courante), tout en assurant une cohérence entre le code, les tests et la documentation.
+
+---
+
+#### 8.1.1 Workflow GitHub
+
+Le projet utilise GitHub pour assurer la traçabilité du développement et la séparation entre les tâches techniques et la 
+rédaction du rapport.
 
 Le workflow adopté repose sur les principes suivants :
 - Une branche principale : `main`
@@ -343,172 +2369,131 @@ Le workflow adopté repose sur les principes suivants :
 - Les branches sont fusionnées via des `Pull Requests` (PR), puis supprimées une fois validées
 
 > ℹ️ **Note** : Ce workflow n’a pas été appliqué dès le début du projet.  
-> Lors du traitement de l’issue #1, l’organisation des branches a évolué progressivement, en parallèle de la prise en main de l’interface de l’EDI PyCharm.  
-> Certaines premières branches ne respectent pas entièrement la convention de nommage, ce qui reflète une phase d’apprentissage et d’ajustement.
+> Lors du traitement de l’issue #1, l’organisation des branches a évolué progressivement, en parallèle de la prise en 
+> main de l’interface de l’EDI PyCharm.  
+> Certaines premières branches ne respectent pas entièrement la convention de nommage, ce qui reflète une phase 
+> d’apprentissage et d’ajustement.
 
-Ce processus garantit une traçabilité claire entre les tâches, les commits, les issues et les livrables, tout en facilitant les revues de code et la rédaction du rapport.
+Ce processus garantit une traçabilité claire entre les tâches, les commits, les issues et les livrables, tout en 
+facilitant les revues de code et la rédaction du rapport.
 
-> ⚠️ **Remarque** : Une branche dédiée à la mise à jour documentaire a été créée pour l’issue #12 : `MonLucCo/issue12/update-documentation`. Cette branche regroupe les modifications du README `/docs/developpement`, du plan du rapport et des titres d’issues. Elle illustre l’importance d’un travail préparatoire structuré avant le développement technique.
+> ⚠️ **Remarque** : Une branche dédiée à la mise à jour documentaire a été créée pour l’issue #12 : 
+> `MonLucCo/issue12/update-documentation`. Cette branche regroupe les modifications du README 
+> `/docs/developpement`, du plan du rapport et des titres d’issues. Elle illustre l’importance d’un travail préparatoire 
+> structuré avant le développement technique.
+
+---
+
+#### 8.1.2 Principe de la main-courante technique
+
+La main-courante technique (`devMC.md`) constitue un document structurant du projet, conçu pour assurer la traçabilité 
+fine des développements réalisés dans le cadre des issues #1 à #3. Elle devient un document transverse et commun à 
+tout le projet pour les issues restantes (Issues #4 à issue #7).
+
+Elle a été initialement rédigée sous forme **indexée**, avec des blocs numérotés (`H-01` à `H-11`) correspondant aux 
+étapes clés du développement fonctionnel de l’application `bibliothecaire`.  
+Chaque bloc indexé documente une action technique, une décision structurante ou une difficulté rencontrée, en lien 
+direct avec les fichiers du projet et les tests associés.
+
+À partir de l’issue #3, la main-courante a évolué pour devenir un **document de suivi technique généralisé**, couvrant :
+
+- les entités métier (`Membre`, `Media`, `Emprunt`, `Retour`)
+- les vues et formulaires associés
+- les transitions métier et les règles d’usage
+- les tests unitaires et fonctionnels
+- les fixtures et scenarii de validation
+- les difficultés techniques et les arbitrages méthodologiques
+
+> 📌 Ce document est maintenu dans le dossier `/docs/developpement/dev-docs/` et mis à jour à chaque étape du 
+> développement.  
+> Il complète les commits GitHub en apportant une vision métier, pédagogique et réflexive du projet.
+
+La main-courante permet ainsi :
+- de **formaliser les choix techniques** au fil du développement
+- de **documenter les écarts et les ajustements** par rapport au sujet initial
+- de **préparer la rédaction du rapport** en structurant les sections techniques
+- de **faciliter la relecture et l’évaluation** du projet par un tiers
+
+Elle constitue un outil central de traçabilité, complémentaire au workflow GitHub, et sera poursuivie jusqu’à la clôture 
+de l’issue #7.
+
+---
+
+### 8.2 Table de traçabilité – Issues, fichiers, tests et livrables
+
+Cette table synthétise la correspondance entre les **issues GitHub**, les **fichiers développés**, les **tests 
+réalisés** et les **documents livrés**.  
+Elle permet de visualiser rapidement l’état d’avancement, la couverture fonctionnelle et la cohérence entre les 
+artefacts du projet.
+
+| Issue GitHub | Objectif fonctionnel                     | Fichiers principaux développés                      | Tests associés                         | Livrables documentés                                       |
+|--------------|------------------------------------------|-----------------------------------------------------|----------------------------------------|------------------------------------------------------------|
+| #1           | Préparation de l’environnement           | `venv/`, `requirements.txt`, `README-tech.md`       | —                                      | `rapport-projet.md`, `README-tech.md`                      |
+| #2           | Initialisation du projet Django          | `manage.py`, `settings.py`, `urls.py`, `accounts/`  | Test de lancement projet               | `devMC.md`, `rapport-projet.md`                            |
+| #3           | Application fonctionnelle bibliothécaire | `models.py`, `views.py`, `forms.py`, `templates/`   | `tests_blocs/`, shell Django, fixtures | `devMC.md`, `devTests.md`, `Analyse_Fonctionnalites.md`    |
+| #4           | Application fonctionnelle consultation   | `views.py`, `templates/consultation/`               | À venir                                | `README-fonct.md` (prévision)                              |
+| #5           | Authentification et sécurité             | `accounts/models.py`, `login.html`, `middleware.py` | À venir                                | `README-auth.md` (prévision)                               |
+| #6           | Tests et validation                      | `tests_blocs/`, `fixtures/*.json`, `devReport.txt`  | `python manage.py test`                | `devTests.md`, `devFixtures.md`                            |
+| #7           | Rapport final et livraison               | `rapport-projet.md`, `rapport-projet.pdf`           | —                                      | `rapport-projet.md`, `rapport-projet.pdf`                  |
+| #12          | Réorganisation documentaire              | `README-tech.md`, `devMC.md`, `plan-rapport.md`     | —                                      | `devMC.md`, `README-tech.md`, `Analyse_Fonctionnalites.md` |
+
+> 📌 Chaque ligne correspond à une unité de travail traçable dans GitHub, associée à des fichiers techniques, des tests 
+> et des documents de synthèse.  
+> Cette table permet de vérifier la cohérence entre les développements, les validations et la documentation livrée.
+
+---
 
 ### 8.3 Difficultés rencontrées et leçons apprises
 
+**À compléter à la fin de tous les développements**
+
+
 #### 8.3.1 Difficulté d'un bon plan de développement
 
-L'origine de ce problème est l'apparition d'une incohérence d'organisation et d'architecture à l'engagement de la réalisation de l'issue #2 selon la version initiale du plan de développement.
+L'origine de ce problème est l'apparition d'une incohérence d'organisation et d'architecture à l'engagement de la 
+réalisation de l'issue #2 selon la version initiale du plan de développement.
 
-La mise à jour des issues a représenté une difficulté notable, notamment pour comprendre la logique de découpage fonctionnel qui distingue :
+La mise à jour des issues a représenté une difficulté notable, notamment pour comprendre la logique de découpage 
+fonctionnel qui distingue :
 - une couche centrale d'authentification (médiathèque)
 - deux applications métier (bibliothécaire et membre).
 
-Cette étape à la fois d'architecture, d'organisation, de technique a permis de mieux anticiper les tâches techniques à réaliser, en distinguant clairement les rôles métier et les responsabilités de chaque application. Elle a également facilité la rédaction du rapport et la cohérence du projet dans son ensemble.
+Cette étape à la fois d'architecture, d'organisation, de technique a permis de mieux anticiper les tâches techniques à 
+réaliser, en distinguant clairement les rôles métier et les responsabilités de chaque application. Elle a également 
+facilité la rédaction du rapport et la cohérence du projet dans son ensemble.
 
 #### 8.3.2 Difficulté d'une bonne configuration de l'EDI
 
-L'origine de ce problème est l'apparition de modules de Django non reconnus lors du codage de l'app `accounts` de l'issue #2. Il y avait une incohérence entre l'affichage du code (modules non reconnus soulignés dans l'éditeur PyCharm).
+L'origine de ce problème est l'apparition de modules de Django non reconnus lors du codage de l'app `accounts` de 
+l'issue #2. Il y avait une incohérence entre l'affichage du code (modules non reconnus soulignés dans l'éditeur PyCharm).
 
-La compréhension de ce problème a nécessité de bien comprendre la nécessité d'adapter la configuration de l'éditeur pour qu'il trouve les scripts adaptés à Python et Django qui exploite un environnement virtuel.
+La compréhension de ce problème a nécessité de bien comprendre la nécessité d'adapter la configuration de l'éditeur pour 
+qu'il trouve les scripts adaptés à Python et Django qui exploite un environnement virtuel.
 
-Une fois les champs de configuration de l'EDI bien définis, l'interpréteur de l'EDI est en mesure de fonctionner en retrouvant la bonne information et d'apporter son assistance (autocomplétion, reconnaissance modules, navigation dans les templates, suggestions de code).
+Une fois les champs de configuration de l'EDI bien définis, l'interpréteur de l'EDI est en mesure de fonctionner en 
+retrouvant la bonne information et d'apporter son assistance (autocomplétion, reconnaissance modules, navigation dans 
+les templates, suggestions de code).
 
-Cette difficulté m'a permis de mieux comprendre la différence entre les lignes de commande du terminal et le fonctionnement intégré de l'EDI (dans mon cas, c'était PyCharm).
+Cette difficulté m'a permis de mieux comprendre la différence entre les lignes de commande du terminal et le 
+fonctionnement intégré de l'EDI (dans mon cas, c'était PyCharm).
 
 #### 8.3.3 Difficulté d'une bonne identification des templates
 
-L'origine de ce problème est une **erreur 404** rencontrée lors du rendu du template `accueil.html`. Cette erreur était due à une mauvaise structure du dossier `templates`.
+L'origine de ce problème est une **erreur 404** rencontrée lors du rendu du template `accueil.html`. Cette erreur était 
+due à une mauvaise structure du dossier `templates`.
 
-En adoptant la convention `app/templates/app/template.html`, la résolution du template a été assurée sans ambiguïté, conformément aux bonnes pratiques Django.
+En adoptant la convention `app/templates/app/template.html`, la résolution du template a été assurée sans ambiguïté, 
+conformément aux bonnes pratiques Django.
 
-Cette difficulté m'a permis de mieux comprendre la logique de résolution des templates dans Django et d'adopter une convention robuste pour la suite du projet.
+Cette difficulté m'a permis de mieux comprendre la logique de résolution des templates dans Django et d'adopter une 
+convention robuste pour la suite du projet.
 
 ---
 
 ## Annexes
 
-### Annexe C – Arborescence du projet
-
-```text
-CEF_POO-Django_Gestion-Mediatheque_Test-version/
-├── works/
-│   ├── mediatheque/
-│   │   ├── db.sqlite3
-│   │   ├── manage.py
-│   │   └── ...
-│   └── venv/
-│       ├── Include/
-│       ├── Lib/
-│       ├── Scripts/
-│       └── pyvenv.cfg
-├── docs/
-│   ├── architecture/
-│   ├── fonctionnel/
-│   ├── technique/
-│   └── README-dev.md
-├── delivery/
-│   └── rapport/
-│       ├── rapport-projet.md
-│       └── rapport-projet.pdf
-├── .gitignore
-├── LICENSE
-├── README.md
-└── requirements.txt
-```
----
-
-### Annexe D - Installation Projet et configuration de l'EDI
-
-Voici l'ensemble des commandes à réaliser pour installer un projet, puis à configurer l'interpréteur de l'EDI en vue de coder le projet avec plus de facilité.
-
-#### 📦 Partie 1 : Installation du projet Django (from scratch)
-
-##### 🔹 Objectifs :
-- Initialiser un projet Django localement
-- Préparer l’environnement virtuel
-- Installer les dépendances nécessaires
-
-##### 🔹 Étapes :
-
-1. **Cloner le dépôt du projet**
-   ```bash
-   git clone https://github.com/[utilisateur]/CEF_POO-Django_Gestion-Mediatheque_Test-version.git
-   ```
-
-2. **Créer un environnement virtuel**
-   ```bash
-   python -m venv venv
-   ```
-
-3. **Activer l’environnement virtuel**
-
-   - Sous Windows :
-     ```bash
-     venv\Scripts\activate
-     ```
-   - Sous macOS/Linux :
-     ```bash
-     source venv/bin/activate
-     ```
-
-4. **Installer Django**
-   ```bash
-   pip install django
-   ```
-
-5. **Vérifier l’installation**
-   ```bash
-   python -m django --version
-   ```
-
-6. **Lancer le serveur Django**
-   ```bash
-   python manage.py runserver 8900
-   ```
-
-> Le port 8900 est utilisé pour éviter les conflits avec Apache (par défaut sur 8000).
-
----
-
-#### 🖥️ Partie 2 : Configuration locale de l’EDI PyCharm
-
-##### 🔹 Objectifs :
-- Synchroniser PyCharm avec l’environnement virtuel
-- Activer les fonctionnalités Django (si version Pro)
-- Préparer l’environnement de développement
-
-> ℹ️ **Note** : Les étapes sont détaillées pour l'EDI PyCharm qui est utilisé pour le développement du projet. Pour l'EDI VSC, cette configuration est aussi nécessaire et se trouve développée succinctement dans la section suivante.
-
-##### 🔹 Étapes :
-
-1. **Sélectionner l’interpréteur Python**
-   - `File > Settings > Project: [nom du projet] > Python Interpreter`
-   - ⚙️ > `Add...` > `Add Local Interpreter...`
-   - Choisir `Existing environment`
-   - Sélectionner : `works/venv/Scripts/python.exe`
-
-2. **Marquer le dossier source**
-   - Clic droit sur `/works/mediatheque`
-   - `Mark Directory as > Sources Root`
-
-3. **Activer le support Django** *(PyCharm Pro uniquement)*
-   - `File > Settings > Languages & Frameworks > Django`
-   - Cocher `Enable Django Support`
-   - Renseigner :
-     - Django project root : `works/mediatheque`
-     - Settings : `mediatheque/settings.py`
-     - Manage.py : `works/mediatheque/manage.py`
-   - Laisser décoché : `Do not use Django test runner`
-   - Laisser vide : `Environment variables` (sauf besoin spécifique)
-   - Laisser vide ou définir : `Folder pattern to track files` (ex. `*.py:templates/*:static/*`)
-
----
-
-#### 🧠 Remarque sur Visual Studio Code (VSC)
-
-Si l’EDI utilisé est **VSC au lieu de PyCharm**, la configuration reste nécessaire :
-
-- Sélection de l’interpréteur Python via `Python: Select Interpreter`
-- Installation des extensions :
-  - **Python** (obligatoire)
-  - **Django** (optionnelle mais utile)
-- Configuration du dossier racine dans `.vscode/settings.json` si besoin
-
----
+- [Annexe A – Extraits de code clés](rapport-projet_annexe-a.md)
+- [Annexe B - Logs d’exécution et de tests](rapport-projet_annexe-b.md)
+- [Annexe C - Diagrammes (UML, séquence)](rapport-projet_annexe-c.md)
+- [Annexe D – Arborescence du projet](rapport-projet_annexe-d.md)
+- [Annexe E - Installation Projet et configuration de l'EDI](rapport-projet_annexe-e.md)
