@@ -1,0 +1,14 @@
+{% extends 'bibliothecaire/_base.html' %}
+
+{% block content %}
+  <h2>{% if object %}Modifier{% else %}Créer{% endif %} un jeu de plateau</h2>
+  <form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <div>
+      <button type="submit">Enregistrer</button>
+        |
+      <a href="{% url 'bibliothecaire:jeu_list' %}">← Retour à la liste</a>
+    </div>
+  </form>
+{% endblock %}

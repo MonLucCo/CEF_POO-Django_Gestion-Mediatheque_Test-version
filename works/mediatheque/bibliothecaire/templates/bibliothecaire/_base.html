@@ -19,23 +19,20 @@
       .success { background-color: #e6ffe6; color: #2d662d; }
       .error   { background-color: #ffe6e6; color: #992d2d; }
       .warning { background-color: #fff8e6; color: #996600; }
-
-      .info { background-color: #e6f0ff; color: #2d4d99;
-}
-
+      .info    { background-color: #e6f0ff; color: #2d4d99; }
     </style>
 </head>
 <body>
     <header>
         <h1>Médiathèque – Bibliothécaire</h1>
         <nav>
-          <table style="width:100%; text-align:left;">
+          <table id="menu-bibliothecaire" style="width:100%; text-align:left;">
             <thead>
               <tr>
                 <th>Applications</th>
                 <th>Médias</th>
                 <th>Membres</th>
-                <th>Emprunts</th>
+                <th>Autres</th>
               </tr>
             </thead>
             <tbody>
@@ -47,7 +44,7 @@
                       <ul>
                         <li><a href="#">Médiathèque</a></li>
                         <li><a href="{% url 'bibliothecaire:accueil' %}">Bibliothécaire</a></li>
-                        <li><a href="#">Consultation</a></li>
+                        <li><a href="{% url 'consultation:accueil' %}">Consultation</a></li>
                       </ul>
                     </li>
                     <li>
@@ -116,9 +113,21 @@
                 </td>
                 <td style="vertical-align: top;">
                   <ul>
-                    <li><a href="{% url 'bibliothecaire:emprunt_list' %}">Lister</a></li>
-                    <li><a href="{% url 'bibliothecaire:emprunt_create' %}">Créer</a></li>
-                    <li><a href="{% url 'bibliothecaire:emprunt_rendre' %}">Rendre</a></li>
+                    <li>
+                      <strong>Emprunts</strong>
+                      <ul>
+                        <li><a href="{% url 'bibliothecaire:emprunt_list' %}">Lister</a></li>
+                        <li><a href="{% url 'bibliothecaire:emprunt_create' %}">Créer</a></li>
+                        <li><a href="{% url 'bibliothecaire:emprunt_rendre' %}">Rendre</a></li>
+                      </ul>
+                    </li>
+                    <li>
+                      <strong>Jeux</strong>
+                      <ul>
+                        <li><a href="{% url 'bibliothecaire:jeu_list' %}">Lister</a></li>
+                        <li><a href="{% url 'bibliothecaire:jeu_create' %}">Créer</a></li>
+                      </ul>
+                    </li>
                   </ul>
                 </td>
               </tr>
@@ -135,7 +144,7 @@
     </main>
 
     <footer>
-        <p>&copy; Médiathèque – Projet Django</p>
+        <p>&copy; Bibliothécaire - Médiathèque – Projet Django</p>
     </footer>
 </body>
 </html>

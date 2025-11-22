@@ -1,7 +1,7 @@
 from django import forms
 from django.db.models import Case, When, IntegerField
 
-from bibliothecaire.models import Media, Livre, Dvd, Cd, Membre, Emprunt, StatutEmprunt
+from bibliothecaire.models import Media, Livre, Dvd, Cd, Membre, Emprunt, StatutEmprunt, JeuDePlateau
 
 
 class MediaForm(forms.ModelForm):
@@ -162,3 +162,13 @@ class EmpruntRendreFromMembreForm(forms.Form):
         self.fields["emprunteur"].initial = f"{membre.name} ({membre.compte})"
         self.fields["media"].queryset = Media.objects.filter(pk__in=[m.pk for m in medias])
         self.fields["emprunt"].queryset = Emprunt.objects.filter(pk__in=[e.pk for e in emprunts])
+
+
+class JeuDePlateauForm(forms.ModelForm):
+    class Meta:
+        model = JeuDePlateau
+        fields = [
+            'name', 'annee_edition', 'consultable',
+            'createur', 'categorie', 'duree_partie',
+            'age_min', 'nb_joueur_min', 'nb_joueur_max',
+        ]

@@ -40,8 +40,6 @@ urlpatterns = [
 
     path('medias/<int:pk>/annuler_typage/', views.MediaCancelTypingView.as_view(), name='media_cancel_typing'),
 
-    #    path('medias/<int:pk>/supprimer/', views.MediaDeleteView.as_view(), name='media_delete'),
-
     # Emprunts
     path('emprunts/', views.EmpruntListView.as_view(), name='emprunt_list'),
     path('emprunts/retards/', views.EmpruntRetardView.as_view(), name='emprunt_retard'),
@@ -64,15 +62,13 @@ urlpatterns = [
     path("membres/<int:pk>/rendre/", EmpruntRendreFromMembreView.as_view(), name="membre_rendre"),
 
     # Fonctionnalités souhaitables (optionnelles)
- #   path('medias/type/<str:type>/', views.MediaFilteredListView.as_view(), name='media_filtered'),
- #   path('emprunts/statut/<int:statut>/', views.EmpruntFilteredListView.as_view(), name='emprunt_filtered'),
- #   path('membres/<int:pk>/historique/', views.MembreHistoriqueView.as_view(), name='membre_historique'),
- #    path('jeux/', views.JeuListView.as_view(), name='jeu_list'),
- #   path('jeux/ajouter/', views.JeuCreateView.as_view(), name='jeu_create'),
- #   path('jeux/<int:pk>/', views.JeuDetailView.as_view(), name='jeu_detail'),
- #   path('jeux/<int:pk>/modifier/', views.JeuUpdateView.as_view(), name='jeu_update'),
+#    path('medias/<int:pk>/supprimer/', views.MediaDeleteView.as_view(), name='media_delete'),
+#    path('membres/<int:pk>/historique/', views.MembreHistoriqueView.as_view(), name='membre_historique'),
+    path('jeux/', views.JeuListView.as_view(), name='jeu_list'),
+    path('jeux/ajouter/', views.JeuCreateView.as_view(), name='jeu_create'),
+    path('jeux/<int:pk>/', views.JeuDetailView.as_view(), name='jeu_detail'),
+    path('jeux/<int:pk>/modifier/', views.JeuUpdateView.as_view(), name='jeu_update'),
 
     # Fonctionnalités de DEBUG pour rejeu UX
     path("rejeu-ux/retard/reset-session/", ResetRetardSessionView.as_view(), name="rejeu_reset_retard_session"),
-
 ]

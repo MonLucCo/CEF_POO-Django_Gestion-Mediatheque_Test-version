@@ -1,0 +1,37 @@
+{% extends "consultation/_base.html" %}
+{% block content %}
+  <h2>Liste des consultables</h2>
+
+  <form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Filtrer</button>
+  </form>
+
+  {% if supports %}
+      <table id="supports-liste" style="margin-top: 20px;">
+          <thead>
+              <tr>
+                  <th>Nom</th>
+                  <th>Disponible</th>
+                  <th>Type</th>
+                  <th>Thème</th>
+              </tr>
+          </thead>
+          {% for support in supports %}
+              <tbody>
+                <tr>
+                    <td>{{ support.name }}</td>
+                    <td>{{ support.disponible|yesno:"✅,❌" }}</td>
+                    <td>{% if support.media_type %}{{ support.media_type }}{% else %}Jeu{% endif %}</td>
+                    <td>{{ support.theme }}</td>
+                </tr>
+              </tbody>
+          {% endfor %}
+      </table>
+  {% else %}
+      <div class="warning" style="margin-top: 20px;">
+          Aucun support de consultable !
+      </div>
+  {% endif %}
+{% endblock %}

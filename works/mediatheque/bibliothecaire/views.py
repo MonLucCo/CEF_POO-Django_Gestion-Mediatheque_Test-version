@@ -8,9 +8,9 @@ from django.views.generic import TemplateView, ListView, DetailView, CreateView,
 from django.views.generic.detail import SingleObjectMixin
 
 from bibliothecaire.mixins import OrigineSessionMixin, MembreSuppressionContextMixin
-from bibliothecaire.models import Media, Livre, Dvd, Cd, Membre, StatutMembre, Emprunt
+from bibliothecaire.models import Media, Livre, Dvd, Cd, Membre, StatutMembre, Emprunt, JeuDePlateau
 from bibliothecaire.forms import MediaForm, LivreForm, DvdForm, CdForm, MembreForm, EmpruntForm, EmpruntRendreForm, \
-    EmpruntRetourForm, EmpruntRendreFromMembreForm
+    EmpruntRetourForm, EmpruntRendreFromMembreForm, JeuDePlateauForm
 from django.db import transaction
 
 
@@ -65,6 +65,8 @@ class AccueilBibliothecaireView(OrigineSessionMixin, TemplateView):
         context["nb_membres_total"] = Membre.count_total()
         context["nb_membres_emprunteurs"] = Membre.count_emprunteurs()
         context["nb_membres_supprimes"] = Membre.count_supprimes()
+        context["nb_jeux_total"] = JeuDePlateau.count_total()
+        context["nb_jeux_consultables"] = JeuDePlateau.count_consultable()
 
         return context
 
@@ -515,6 +517,7 @@ class MediaTypageCdView(FormView):
         return reverse('bibliothecaire:media_list')
 
 
+# Membre
 class MembreListView(OrigineSessionMixin, ListView):
     model = Membre
     context_object_name = 'membres'
@@ -664,6 +667,7 @@ class MembreDeleteView(View):
         return redirect("bibliothecaire:membre_detail", pk=pk)
 
 
+# Emprunt
 class EmpruntRetardView(TemplateView):
     """
     Vue métier pour déclencher manuellement le marquage des emprunts en retard.
@@ -935,3 +939,30 @@ class EmpruntRendreFromMembreView(FormView):
         if origine == "membre":
             return reverse("bibliothecaire:membre_detail", kwargs={"pk": self.membre.pk})
         return reverse("bibliothecaire:emprunt_list")
+
+
+# Jeu de plateau
+class JeuListView(ListView):
+    model = JeuDePlateau
+    template_name = 'bibliothecaire/jeux/jeu_list.html'
+    context_object_name = 'jeux'
+
+
+class JeuCreateView(CreateView):
+    model = JeuDePlateau
+    form_class = JeuDePlateauForm
+    template_name = 'bibliothecaire/jeux/jeu_form.html'
+    success_url = reverse_lazy('bibliothecaire:jeu_list')
+
+
+class JeuDetailView(DetailView):
+    model = JeuDePlateau
+    template_name = 'bibliothecaire/jeux/jeu_detail.html'
+    context_object_name = 'jeu'
+
+
+class JeuUpdateView(UpdateView):
+    model = JeuDePlateau
+    form_class = JeuDePlateauForm
+    template_name = 'bibliothecaire/jeux/jeu_form.html'
+    success_url = reverse_lazy('bibliothecaire:jeu_list')

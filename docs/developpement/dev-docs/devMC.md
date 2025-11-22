@@ -27,7 +27,7 @@ et couvre :
 - Les vues CRUD, les transitions métier, les historiques
 - La préparation des tests fonctionnels et des fixtures
 
-📌 Version : index H-11 (issue #3 – étape 6 - Bloc 3)
+📌 Version : index J-1 (issue #4 – étape 1 - Bloc 4)
 
 ---
 
@@ -42,7 +42,7 @@ et couvre :
 
 ## 📑 Sommaire
 
-1. [🎯 Objectifs de l’étape](#1--objectifs-de-létape)
+1. [🎯 Objectifs du document](#1--objectifs-du-document)
 2. [📌 Fonctionnalités par entité – Profil Bibliothécaire](#2--fonctionnalités-par-entité--profil-bibliothécaire)
 3. [🔐 Accès par profil utilisateur](#3--accès-par-profil-utilisateur)
 4. [️🗂️ Fichiers concernés](#4--fichiers-concernés)
@@ -94,12 +94,15 @@ et couvre :
 
 ---
 
-## 1. 🎯 Objectifs de l’étape
+## 1. 🎯 Objectifs du document
 
-- Implémenter les vues et les templates HTML pour les fonctionnalités accessibles au profil bibliothécaire
-- Couvrir les opérations CRUD sur les modèles : `Media`, `Emprunt`, `Retour`, `Membre`
-- Préparer les tests unitaires et fonctionnels pour chaque vue
-- Documenter les choix techniques, les difficultés rencontrées et les écarts par rapport au périmètre du sujet
+Dans une démarche itérative et progressive d'une main-courante technique du développement :
+- Implémenter les vues et les templates HTML pour les fonctionnalités accessibles aux applications de la médiathèque, 
+du bibliothécaire et de la consultation.
+- Couvrir les opérations CRUD sur les modèles : `Media`, `Emprunt`, `Retour`, `Membre`, `JeuDePlateau`.
+- Préparer les tests unitaires et fonctionnels pour chaque vue.
+- Organiser les accès et l'UX des applications.
+- Documenter les choix techniques, les difficultés rencontrées et les écarts par rapport au périmètre du sujet.
 
 ---
 
@@ -140,11 +143,11 @@ Cette section distingue les fonctionnalités explicitement demandées dans le su
 | Fonctionnalité        | Admin | Bibliothécaire | Membre |
 |-----------------------|:-----:|:--------------:|:------:|
 | CRUD Media            |   ✅   |       ✅        |   ❌    |
-| Consultation Media    |   ✅   |       ✅        |   ✅    |
 | CRUD JeuDePlateau     |   ✅   |       ✅        |   ❌    |
 | CRUD Membre           |   ✅   |       ✅        |   ❌    |
-| CRUD Bibliothecaire   |   ✅   |       ❌        |   ❌    |
 | CRUD Emprunt / Retour |   ✅   |       ✅        |   ❌    |
+| CRUD Bibliothecaire   |   ✅   |       ❌        |   ❌    |
+| Consultation Support  |   ✅   |       ✅        |   ✅    |
 
 > ℹ️ Seul le profil “Bibliothécaire” concerne les développements de cette étape.
 
@@ -152,16 +155,16 @@ Cette section distingue les fonctionnalités explicitement demandées dans le su
 
 ## 4. 🗂️ Fichiers concernés
 
-| Type              | Fichier / Dossier                                                            | Statut         |
-|-------------------|------------------------------------------------------------------------------|----------------|
-| Routage           | `bibliothecaire/urls.py`                                                     | 🆕 En cours    |
-| Vues              | `bibliothecaire/views.py`                                                    | 🔄 À compléter |
-| Templates         | `bibliothecaire/templates/bibliothecaire/`                                   | 🆕 En cours    |
-| Tests             | `bibliothecaire/tests.py`                                                    | 🔄 À compléter |
-| Fixtures          | `bibliothecaire/fixtures/*.json`                                             | ✅ En cours     |
-| Documentation     | `/docs/developpement/issue3/_Frontend-main-courante.md`                      | ✅ En cours     |
-| Plan de test      | `/docs/developpement/issue3/task5/tests-plan.md`                             | ✅ En cours     |
-| AF Bibliothécaire | `/docs/developpement/issue3/task5/Analyse_Fonctionnalites_Bibliothecaire.md` | ✅ En cours     |
+| Type              | Fichier / Dossier                           | Statut     |
+|-------------------|---------------------------------------------|------------|
+| Routage           | `/urls.py`                                  | ✅ En cours |
+| Vues              | `/views.py`                                 | ✅ En cours |
+| Templates         | `/templates/<application>/`                 | ✅ En cours |
+| Tests             | `/tests.py` et `/tests_blocs/`              | ✅ En cours |
+| Fixtures          | `/fixtures/*.json` et `/fixtures/scenarii/` | ✅ En cours |
+| Documentation     | `/docs/developpement/dev-docs/devMC.md`     | ✅ En cours |
+| Plan de test      | `/docs/developpement/dev-docs/devTests.md`  | ✅ En cours |
+| AF Bibliothécaire | `/docs/developpement/dev-docs/devAFBib.md`  | ✅ En cours |
 
 ---
 

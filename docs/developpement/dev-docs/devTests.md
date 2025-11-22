@@ -2,8 +2,10 @@
 
 📁 `/docs/developpement/dev-docs/devTests.md`  
 
-📌 Version : index H-11 (issue #3 – étape 6 - Bloc 3)
-- Rapport de tests associé : [`devReport.txt`](devReport.txt)
+📌 Version : index J-1 (issue #4 – étape 1 - Bloc 4)
+- Rapport de tests associé : [`devReport.txt`](devReport.md)
+  - Sous-ensemble ajouté : tests des [UC-GESTION-JEU](devReport_UC_gestion_jeu.md)
+  - sous-ensemble ajouté : tests des [UC-CONSULT-SUPPORT](devReport_UC_consult_support.md)
 
 ___
 
@@ -11,16 +13,21 @@ Ce document constitue le plan de test unitaire et fonctionnel de l’application
 Il accompagne le développement progressif des fonctionnalités définies dans l’issue #3, en particulier l’étape 5, 
 et sert de base extensible pour les étapes suivantes et les autres issues du projet.
 
-Les tests ont été regroupé en **Bloc de tests** qui correspondent à des phases de développement de l'issue #3 :
-- **Bloc 1** : Première correction majeure de la modélisation
-- **Bloc 2** : développement fonctionnel de l'application bibliothécaire (entité `Media`).
-- **Bloc 3** : développement fonctionnel des entités `Membre`, `Emprunt` et `JeuDePlateau` de l'application Bibliothecaire.
+Les tests ont été regroupé en **Bloc de tests** qui correspondent à des phases de développement de :
+- l'issue #3 :
+  - **Bloc 1** : Première correction majeure de la modélisation
+  - **Bloc 2** : développement fonctionnel de l'application bibliothécaire (entité `Media`).
+  - **Bloc 3** : développement fonctionnel des entités `Membre`, `Emprunt` et `JeuDePlateau` de l'application 
+  Bibliothecaire.
+- l'issue #4 :
+  - **Bloc 4** : développement fonctionnel de l'application consultation (entités `Support`, `media`, `JeuDePlateau`) et 
+  complément fonctionnel pour l'application bibliothécaire (entités `Support` et `JeuDePlateau`).
 
 Il est conçu pour :
-- Structurer les tests par catégorie (navigation, entités, fonctionnalités)
-- Garantir une couverture minimale par vue, extensible selon les besoins
-- Faciliter la lecture, la maintenance et l’enrichissement du projet
-- Documenter les cas de test, les méthodes de validation et les liens techniques
+- Structurer les tests par catégorie (navigation, entités, fonctionnalités).
+- Garantir une couverture minimale par vue, extensible selon les besoins.
+- Faciliter la lecture, la maintenance et l’enrichissement du projet.
+- Documenter les cas de test, les méthodes de validation et les liens techniques.
 
 📌 Version du document :  
 - **Indexage** : 
@@ -39,28 +46,32 @@ Il est conçu pour :
     - Index H-9, fonction de marquage du retard des emprunts avec une logique combinée `actions techniques` vs `UX`.
     - index H10, fonction de création d'un emprunt.
     - index H-11, fonction de rendu d'un emprunt.
-- **Périmètre couvert** : site administration, entité `Media` – vues `liste` et `détail`  
-- **Niveau de couverture** : tests de niveau _minimum_ à _intermédiaire_  
-- **Évolutivité prévue** :
-  - entité `Media` - vues `mise à jour` et `supprime` (masque pour le bibliothécaire)
-  - entités `Emprunt`, `Membre`, `JeuDePlateau` et vues CRUD
+  - index J-1 (entité JeuDePlateau et application Consultation) pour le **Bloc 4**.
+- **Périmètre couvert** : 
+  - site administration (application).
+  - site bibliothecaire (application).
+  - site consultation (application).
+  - site mediatheque (application accounts).
 
-📌 Ce plan de test est spécifique aux étapes de l’issue #3.
-Il pourra être déplacé ou indexé dans `/docs/tests/` (à créer) si une documentation globale est mise en place.
-Chaque index de ce plan possède un rapport de tests nommé `tests_report_index[version].md`.
+📌 Ce plan de test est spécifique aux étapes de l’issue #3 jusqu'à l'index H-11, puis devient général à tout le projet 
+à partir de l'index J-1 (issue #4).
+Chaque index de ce plan possède un rapport de tests nommé : 
+- `tests_report_index[version].md` : index antérieur et jusqu'à H-11.
+- `devReport.md` : à partir de l'index J-1.
 
 ---
 
 📁 `/docs/developpement/dev-docs/devTests.md`  
-- Rapport de tests associé : [`devReport.txt`](devReport.txt)
+- Rapport de tests associé : [`devReport.md`](devReport.md)
 
 ➡️ Ce document poursuit le plan de test figé à l’index H-11 ([`tests-plan.md` (`issue3/task6`)](../issue3/task6/tests-plan.md))  
-➡️ Il accompagne le développement des entités `Membre`, `Emprunt`, `Retour` dans le cadre du profil Bibliothécaire.
+➡️ Il accompagne le développement des entités des fonctionnalités associées dans le cadre du profil Bibliothécaire et de 
+la Consultation des membres.
 
 ---
 
-Ce plan de test couvre les fonctionnalités du **Bloc 3** de l’issue #3, en lien avec la main-courante 
-[`devMC.md`](devMC.md).
+Ce plan de test couvre les fonctionnalités du **Bloc 3** de l’issue #3 et du **Bloc 4** de l'issue #4, en lien avec la 
+main-courante [`devMC.md`](devMC.md).
 
 Il est conçu pour :
 - Structurer les tests unitaires et fonctionnels liés aux entités `Membre` et `Emprunt`
@@ -71,12 +82,11 @@ Il est conçu pour :
 📌 Indexage prévu :
 - **Index H+** : développement fonctionnel des vues et modèles `Membre`, `Emprunt`, `Retour`
 - **Bloc 3** : finalisation du cycle métier Bibliothécaire
+- **Bloc 4** : finalisation de la Consultation et de la gestion des Jeux de plateau
 
 📌 Évolutivité :
-- Intégration des tests UC-EMPRUNT-01 à UC-EMPRUNT-05
-- Intégration des tests UC-MEMBRE-01 à UC-MEMBRE-06
 - Préparation des tests de permissions et accès conditionnels
-- Tests de cohérence entre `Media` et `Emprunt` (statut, disponibilité)
+- Tests de cohérence des entités, des fonctionnalités et des UX.
 
 📌 Documents associés :
 - main-courante : [`devMC.md`](devMC.md)
@@ -170,11 +180,22 @@ Chaque catégorie de tests est regroupée dans une sous-section spécifique avec
 | Bloc 3 | T-NAV-25 | Accès à la vue de confirmation du retour d’un emprunt                  | `/bibliothecaire/emprunts/<pk>/retour/confirmation/` | Code 200 + template `emprunt_retour_confirm.html`   | ✅ Validé |
 | Bloc 3 | T-NAV-26 | Accès à la vue de retour depuis un média emprunté (`media_detail`)     | `/medias/<pk>/rendre/`                               | Code 200 + template                                 | ✅ Validé |
 | Bloc 3 | T-NAV-27 | Accès à la vue de retour depuis un membre emprunteur (`membre_detail`) | `/membres/<pk>/rendre/`                              | Code 200 ou 302 selon le nombre d’emprunts          | ✅ Validé |
+| Bloc 4 | T-NAV-28 | Accès à la liste des jeux                                              | `/bibliothecaire/jeux/`                              | Code 200 + template `jeu_list.html`                 | ✅ Validé |
+| Bloc 4 | T-NAV-29 | Accès au détail d’un jeu existant                                      | `/bibliothecaire/jeux/<pk>>/`                        | Code 200 + template `jeu_detail.html`               | ✅ Validé |
+| Bloc 4 | T-NAV-30 | Accès à la création d’un jeu                                           | `/bibliothecaire/jeux/ajouter/`                      | Code 200 + formulaire affiché                       | ✅ Validé |
+| Bloc 4 | T-NAV-31 | Accès à la modification d’un jeu existant                              | `/bibliothecaire/jeux/<pk>>/modifier/`               | Code 200 + formulaire prérempli                     | ✅ Validé |
+| Bloc 4 | T-NAV-32 | Accès à la page d’accueil Consultation                                 | `/consultation/`                                     | Code 200 + template `accueil.html`                  | ✅ Validé |
+| Bloc 4 | T-NAV-33 | Accès à la liste des supports (tous)                                   | `/consultation/supports/`                            | Code 200 + template `supports_list.html`            | ✅ Validé |
+| Bloc 4 | T-NAV-34 | Accès à la liste des médias consultables                               | `/consultation/supports/medias/`                     | Code 200 + template `supports_list.html`            | ✅ Validé |
+| Bloc 4 | T-NAV-35 | Accès à la liste des jeux consultables                                 | `/consultation/supports/jeux/`                       | Code 200 + template `supports_list.html`            | ✅ Validé |
+| Bloc 4 | T-NAV-36 | Accès à la liste des médias disponibles                                | `/consultation/supports/medias/disponibles`          | Code 200 + template `supports_list.html`            | ✅ Validé |
+| Bloc 4 | T-NAV-37 | Accès au cas de liste vide (test technique)                            | `/consultation/supports/vide`                        | Code 200 + message “Aucun support…”                 | ✅ Validé |
+
 
 > ❌ Le test T-NAV-03 a révélé une contrainte sur le champ `annee_edition` du modèle `Media`. ✅ Il a été repris 
 > après correction du modèle de données.  
 > 🔧 La correction a été intégrée et documentée dans [`Modelisation_correction-erreurs-suite-tests-unitaires.md`](assets/technique/Modelisation_correction-erreurs-suite-tests-unitaires.md).  
-> 📌 Aucun point technique à noter dans la main-courante pour la série du **Bloc 1**.
+> 📌 Aucun point technique à noter dans la main-courante pour la série du **Bloc 1** de l'issue #3.
 
 ---
 
@@ -338,6 +359,16 @@ Chaque catégorie de tests est regroupée dans une sous-section spécifique avec
 | Bloc 3 | T-FUN-39 | Confirmation du retour depuis un média : mise à jour de l’emprunt (EMPRUNT-UC-RETOUR-02)                           | Redirection vers `emprunt_retour_confirm` + `statut == RENDU` + message de succès                                           | ✅ Validé          |
 | Bloc 3 | T-FUN-40 | Retour depuis membre avec un seul emprunt actif (EMPRUNT-UC-RETOUR-03)                                             | Redirection immédiate vers la confirmation                                                                                  | ✅ Validé          |
 | Bloc 3 | T-FUN-41 | Retour depuis membre avec sélection → confirmation puis retour (EMPRUNT-UC-RETOUR-03)                              | Retour effectué après double validation                                                                                     | ✅ Validé          |
+| Bloc 4 | T-FUN-42 | Création d’un jeu valide (JEU-UC-CREATE)                                                                           | Jeu créé + redirection vers `bibliothecaire:accueil`                                                                        | ✅ Validé          |
+| Bloc 4 | T-FUN-43 | Modification d’un jeu existant (JEU-UC-UPDATE)                                                                     | Données mises à jour (nom/thème/année/etc.)                                                                                 | ✅ Validé          |
+| Bloc 4 | T-FUN-44 | Liste cliquable des jeux (JEU-UC-LIST)                                                                             | Chaque item ouvre `/jeux/<pk>/` sans erreur                                                                                 | ✅ Validé          |
+| Bloc 4 | T-FUN-45 | Indicateurs jeux à l’accueil Bibliothécaire                                                                        | `nb_jeux_total` et `nb_jeux_consultables` affichés                                                                          | ✅ Validé          |
+| Bloc 4 | T-FUN-46 | Filtrage “Médias consultables” (SUPPORT-UC-CONSULT-01)                                                             | Tableau uniquement médias consultables                                                                                      | ✅ Validé          |
+| Bloc 4 | T-FUN-47 | Filtrage “Jeux consultables” (SUPPORT-UC-CONSULT-02)                                                               | Tableau uniquement jeux consultables                                                                                        | ✅ Validé          |
+| Bloc 4 | T-FUN-48 | Filtrage “Médias disponibles” (SUPPORT-UC-CONSULT-03)                                                              | Tableau uniquement médias disponibles                                                                                       | ✅ Validé          |
+| Bloc 4 | T-FUN-49 | Cas de liste vide (test technique) (SUPPORT-UC-CONSULT-04)                                                         | Message “Aucun support n’est consultable” affiché                                                                           | ✅ Validé          |
+| Bloc 4 | T-FUN-50 | Persistance du filtre après redirection (SUPPORT-UC-CONSULT-05)                                                    | Formulaire prérempli avec la valeur choisie                                                                                 | ✅ Validé          |
+| Bloc 4 | T-FUN-51 | CTA accueil Consultation (SUPPORT-UC-CONSULT-06)                                                                   | Bouton “Voir les supports…” → `/consultation/supports/`                                                                     | ✅ Validé          |
 
 > 🔧 Les tests unitaires _fonctionnels_ sont définis pour être autonome. Ils peuvent se rapprocher de tests unitaires
 > _techniques_ qui sont indiqués dans le _résultat attendu_. 

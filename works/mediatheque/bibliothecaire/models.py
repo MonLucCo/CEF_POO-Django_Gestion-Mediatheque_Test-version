@@ -64,7 +64,10 @@ class Support(models.Model):
         null=True, blank=True,
         help_text="Année d'édition si connue. Sinon laisser vide."
     )
-    consultable   = models.BooleanField(default=False)
+    consultable   = models.BooleanField(
+        default=False,
+        help_text="Consultable si affichage à la consultation"
+    )
 
     class Meta:
         abstract = True
@@ -73,9 +76,14 @@ class Support(models.Model):
     def count_total(cls):
         return cls.objects.count()
 
+    @classmethod
+    def count_consultable(cls):
+        return cls.objects.filter(consultable=True).count()
+
     @property
     def is_consultable(self):
         return self.consultable
+
 
 class Media(Support):
     """
@@ -347,12 +355,34 @@ class JeuDePlateau(Support):
       - age_min            : integer, âge minimal recommandé
     """
     createur          = models.CharField(max_length=100)
-    regle_consultable = models.BooleanField(default=False)
-    categorie         = models.CharField(max_length=100, default="Non classé")
-    duree_partie      = models.PositiveIntegerField(default=30)
-    nb_joueur_min     = models.PositiveIntegerField(default=2)
-    nb_joueur_max     = models.PositiveIntegerField(default=4)
-    age_min           = models.PositiveIntegerField(default=8)
+    regle_consultable = models.BooleanField(
+        default=False,
+        help_text="Consultable si affichage à la consultation"
+    )
+    categorie         = models.CharField(
+        max_length=100, default="Non classé",
+        help_text="Laisser vide si aucun classement connu. Est 'non classé' par défaut."
+    )
+    duree_partie      = models.PositiveIntegerField(
+        default=30,
+        validators=[MinValueValidator(1)],
+        help_text="Durée en minute (au moins une), ou laisser vide. Durée par défaut de 30 mn."
+    )
+    nb_joueur_min     = models.PositiveIntegerField(
+        default=2,
+        validators=[MinValueValidator(1)],
+        help_text="Nombre minimal de joueur (au moins un), ou laisser vide. Nombre par défaut de 2 joueurs."
+    )
+    nb_joueur_max     = models.PositiveIntegerField(
+        default=4,
+        validators=[MinValueValidator(1)],
+        help_text="Nombre maximal de joueur (au moins un), ou laisser vide. Nombre par défaut de 4 joueurs."
+    )
+    age_min           = models.PositiveIntegerField(
+        default=8,
+        validators=[MinValueValidator(1)],
+        help_text="Âge minimal pour jouer (au moins un an), ou laisser vide. Nombre par défaut de 8 ans."
+    )
 
     def __str__(self):
         return f"{self.name} (Jeu créé par {self.createur}) - ({self.categorie}, {self.nb_joueur_min}-{self.nb_joueur_max} joueurs)"
@@ -694,5 +724,6 @@ class Emprunt(models.Model):
             "emprunts_marques": emprunts_marques,
             "message": message
         }
+
 
 # ──────────────────────────────────────────────────────────────────────────────
