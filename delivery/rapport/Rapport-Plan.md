@@ -17,16 +17,17 @@
 3.1. Organisation des dossiers (`works/`, `docs/`, `delivery/`)
 3.2. Initialisation du dépôt et gestion des branches/issues
 3.3. Environnement de développement (venv, dépendances…)
-3.4 Couche centrale du projet Django
+3.4. Couches de l’application Médiathèque
   – settings.py (DB, langue, timezone)
-  – vue d’accueil intelligente (mediatheque/views.py)
-  – routage global (mediatheque/urls.py)
+  – couches de l'application médiathèque (centrale, fonctionnelles, admin)
+  – routage global et résolution multi-couche (routage et templates)
 
 ## 4. Implémentation des fonctionnalités
 4.1. Application bibliothécaire
   - Création, lecture, mise à jour, suppression de membres
   - Gestion des médias (CRU[D])
   - Emprunts et retours (contrainte 3 emprunts max, délais, retards)
+  - Gestion des jeux
 4.2. Application consultation (consultation des supports)
 4.3. Contraintes métier respectées (exclusion jeux de plateau, blocage emprunteur en retard)
 4.4. Authentification et gestion des rôles
