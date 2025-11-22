@@ -1,0 +1,21 @@
+{% extends 'bibliothecaire/_base.html' %}
+{% block content %}
+  <h2>Liste des jeux de plateau</h2>
+  {% if jeux %}
+    <ul>
+      {% for jeu in jeux %}
+        <li>
+          <a href="{% url 'bibliothecaire:jeu_detail' jeu.pk %}">
+            {{ jeu.name }} ({{ jeu.createur }}, {{ jeu.annee_edition }}, {{ jeu.consultable|yesno:"✅,❌" }})
+          </a>
+        </li>
+      {% endfor %}
+    </ul>
+  {% else %}
+    <p>Aucun jeu enregistré.</p>
+  {% endif %}
+
+  <div>
+      <a href="{% url 'bibliothecaire:jeu_create' %}">Créer un jeu</a>
+  </div>
+{% endblock %}

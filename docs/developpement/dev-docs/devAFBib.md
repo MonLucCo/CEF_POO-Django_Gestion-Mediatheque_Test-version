@@ -1,7 +1,7 @@
 # 📘 Analyse des fonctionnalités – Bibliothécaire
 
 📁 `/docs/developpement/dev-docs/devAFBib.md`  
-📌 Version : index H-11 (issue #3 – Bloc 3 - étape 6)
+📌 Version : index J-1 (issue #4 – Bloc 4 - task 1)
 
 ---
 
@@ -35,6 +35,7 @@
     - [3.4.2 Entité : Livre / Dvd / Cd](#342-entité--livre--dvd--cd)
     - [3.4.3 Entité : Membre](#343-entité--membre)
     - [3.4.4 Entité : Emprunt](#344-entité--emprunt)
+    - [3.4.5 Entité : JeuDePlateau](#345-entité--jeudeplateau)
 - [4. Liaison technique](#4-liaison-technique)
   - [4.1 Application Bibliothecaire](#41-application-bibliothecaire)
     - [4.1.1 Medias](#411-medias)
@@ -43,7 +44,14 @@
     - [4.1.4 Jeux](#414-jeux)
   - [4.2 Application Consultation](#42-application-consultation)
   - [4.3 Application Mediatheque](#43-application-mediatheque)
+    - [4.3.1 Rôle principal](#431-rôle-principal)
+    - [4.3.2 Fonctionnalités prévues (issue #5)](#432-fonctionnalités-prévues-issue-5)
+    - [4.3.3 Impacts techniques](#433-impacts-techniques)
   - [4.4 Application Administration](#44-application-administration)
+    - [4.4.1 Rôle principal](#441-rôle-principal)
+    - [4.4.2 Fonctionnalités actuelles](#442-fonctionnalités-actuelles)
+    - [4.4.3 Fonctionnalités prévues (issues #5 et #6)](#443-fonctionnalités-prévues-issues-5-et-6)
+    - [4.4.4 Impacts techniques](#444-impacts-techniques)
 - [5. Liens documentaires](#5-liens-documentaires)
 
 ---
@@ -56,6 +64,7 @@ sujet et les choix techniques validés dans les documents :
 - Analyse :
   - des fonctionnalités : [`Analyse_Fonctionnalités.md`](../../fonctionnel/Analyse_Fonctionnalites.md)
     - de Bibliothécaire : [devAFBib.md](devAFBib.md)
+    - de Consultation
   - de modélisation : 
     - Correction des erreurs : [`Modelisation_correction-erreurs-suite-tests-unitaires.md`](assets/technique/Modelisation_correction-erreurs-suite-tests-unitaires.md)
     - Cycle de vie (Life Cycle) :
@@ -63,6 +72,8 @@ sujet et les choix techniques validés dans les documents :
         - Medias   : [devALCBibMedias.md](assets/technique/devALCBibMedias.md)
         - Membres  : [devALCBibMembres.md](assets/technique/devALCBibMembres.md)
         - Emprunts : [devALCBibEmprunts.md](assets/technique/devALCBibEmprunts.md)
+    - Entités de Consultation :
+      - Support et JeuDePlateau
 - Plan de tests : [`devTests.md`](devTests.md)  
 - Organisation : [`README-fonct.md`](../../fonctionnel/README-fonct.md)
 
@@ -76,27 +87,27 @@ Il permet de :
 
 ## 2. Synthèse des fonctions demandées
 
-| Entité       | UC                   | Description métier                         | Statut         | Avancement technique   |
-|--------------|----------------------|--------------------------------------------|----------------|------------------------|
-| Media        | MEDIA-UC-LIST        | Affichage filtré des médias                | ✅ Demandée     | 🟢 Implémenté          |
-| Media        | MEDIA-UC-CREATE      | Création d’un média typé ou non typé       | ✅ Demandée     | 🟢 Implémenté          |
-| Media        | MEDIA-UC-UPDATE      | Modification d’un média                    | 🔸 Souhaitable | 🟢 Implémenté          |
-| Media        | MEDIA-UC-TYPAGE      | Transformation en sous-type                | 🔸 Souhaitable | 🟢 Implémenté          |
-| Media        | MEDIA-UC-ROLLBACK    | Rollback d'un typage en cours              | 🔸 Souhaitable | 🟢 Implémenté          |
-| Media        | MEDIA-UC-DELETE      | Suppression logique d'un média             | 🔸 Souhaitable | ⚪ À définir            |
-| Membre       | MEMBRE-UC-LIST       | Affichage de la liste des membres          | ✅ Demandée     | 🟢 Implémenté          |
-| Membre       | MEMBRE-UC-CREATE     | Création d’un membre                       | ✅ Demandée     | 🟢 Implémenté          |
-| Membre       | MEMBRE-UC-UPDATE     | Mise à jour d’un membre                    | ✅ Demandée     | 🟢 Implémenté          |
-| Membre       | MEMBRE-UC-DELETE     | Suppression logique d’un membre            | ✅ Demandée     | 🟢 Implémenté          |
-| Membre       | MEMBRE-UC-HISTORIQUE | Consultation des emprunts passés           | 🔸 Souhaitable | ⚪ À définir            |
-| Emprunt      | EMPRUNT-UC-CREATE    | Création d’un emprunt                      | ✅ Demandée     | 🟢 Implémenté          |
-| Emprunt      | EMPRUNT-UC-RETOUR    | Enregistrement du retour                   | ✅ Demandée     | 🟡 Implémenté          |
-| Emprunt      | EMPRUNT-UC-RETARD    | Détection et marquage du retard            | ✅ Demandée     | 🟢 Implémenté          |
-| Emprunt      | EMPRUNT-UC-ARCHIVE   | Archivage d’un emprunt                     | 🔸 Souhaitable | ⚪ À définir            |
-| JeuDePlateau | JEU-UC-CREATE        | Création d'un jeu de plateau               | ✅ Demandée     | ⚪ À définir (issue #4) |
-| JeuDePlateau | JEU-UC-UPDATE        | Modification d'un jeu de plateau           | 🔸 Souhaitable | ⚪ À définir (issue #4) |
-| JeuDePlateau | JEU-UC-LIST          | Affichage des jeux de plateau              | 🔸 Souhaitable | ⚪ À définir (issue #4) |
-| Support      | SUPPORT-UC-CONSULTE  | Consultation des supports (Jeux et Medias) | ✅ Demandée     | ⚪ À définir (issue #4) |
+| Entité       | UC                   | Description métier                         | Statut         | Avancement technique |
+|--------------|----------------------|--------------------------------------------|----------------|----------------------|
+| Media        | MEDIA-UC-LIST        | Affichage filtré des médias                | ✅ Demandée     | 🟢 Implémenté        |
+| Media        | MEDIA-UC-CREATE      | Création d’un média typé ou non typé       | ✅ Demandée     | 🟢 Implémenté        |
+| Media        | MEDIA-UC-UPDATE      | Modification d’un média                    | 🔸 Souhaitable | 🟢 Implémenté        |
+| Media        | MEDIA-UC-TYPAGE      | Transformation en sous-type                | 🔸 Souhaitable | 🟢 Implémenté        |
+| Media        | MEDIA-UC-ROLLBACK    | Rollback d'un typage en cours              | 🔸 Souhaitable | 🟢 Implémenté        |
+| Media        | MEDIA-UC-DELETE      | Suppression logique d'un média             | 🔸 Souhaitable | ⚪ À définir          |
+| Membre       | MEMBRE-UC-LIST       | Affichage de la liste des membres          | ✅ Demandée     | 🟢 Implémenté        |
+| Membre       | MEMBRE-UC-CREATE     | Création d’un membre                       | ✅ Demandée     | 🟢 Implémenté        |
+| Membre       | MEMBRE-UC-UPDATE     | Mise à jour d’un membre                    | ✅ Demandée     | 🟢 Implémenté        |
+| Membre       | MEMBRE-UC-DELETE     | Suppression logique d’un membre            | ✅ Demandée     | 🟢 Implémenté        |
+| Membre       | MEMBRE-UC-HISTORIQUE | Consultation des emprunts passés           | 🔸 Souhaitable | ⚪ À définir          |
+| Emprunt      | EMPRUNT-UC-CREATE    | Création d’un emprunt                      | ✅ Demandée     | 🟢 Implémenté        |
+| Emprunt      | EMPRUNT-UC-RETOUR    | Enregistrement du retour                   | ✅ Demandée     | 🟡 Implémenté        |
+| Emprunt      | EMPRUNT-UC-RETARD    | Détection et marquage du retard            | ✅ Demandée     | 🟢 Implémenté        |
+| Emprunt      | EMPRUNT-UC-ARCHIVE   | Archivage d’un emprunt                     | 🔸 Souhaitable | ⚪ À définir          |
+| JeuDePlateau | JEU-UC-CREATE        | Création d'un jeu de plateau               | ✅ Demandée     | 🟢 Implémenté        |
+| JeuDePlateau | JEU-UC-UPDATE        | Modification d'un jeu de plateau           | 🔸 Souhaitable | 🟢 Implémenté        |
+| JeuDePlateau | JEU-UC-LIST          | Affichage des jeux de plateau              | 🔸 Souhaitable | 🟢 Implémenté        |
+| Support      | SUPPORT-UC-CONSULTE  | Consultation des supports (Jeux et Medias) | ✅ Demandée     | 🟢 Implémenté        |
 
 > 🔹 L’interface doit rester **basique**, sans mise en forme avancée : un designer Web prendra le relai.  
 > 🔹 Les vues doivent être **fonctionnelles, testables et extensibles**.
@@ -809,6 +820,7 @@ métier.
 
 **Méthodes**
 - `count_total()` → **Méthode de classe**, Retourne le nombre total d'enregistrements.
+- `count_consultables()` → **Méthode de classe**, Retourne le nombre total d'enregistrements `consultable=true`.
 - `count_empruntes()` → **Méthode de classe**, Retourne le nombre d'emprunts actifs (_en cours_ et _en retard_).
 - `count_retards()` → **Méthode de classe**, Retourne le nombre d'emprunts actifs en retard.
 - `is_typed()` → True si un sous-type réel est instancié (`Livre`, `Dvd`, `Cd`).
@@ -838,6 +850,7 @@ métier.
 
 **Méthodes**
 - `count_total()` → **Méthode de classe**, Retourne le nombre total d'enregistrements.
+- `count_consultables()` → **Méthode de classe**, Retourne le nombre total d'enregistrements `consultable=true`.
 - `count_empruntes()` → **Méthode de classe**, Retourne le nombre d'emprunts actifs.
 - `count_retards()` → **Méthode de classe**, Retourne le nombre d'emprunts actifs en retard.
 - `get_specific_fields()` → Retourne la liste des champs spécifiques à chaque sous-type :
@@ -894,6 +907,20 @@ disponibilité.
 
 ---
 
+#### 3.4.5 Entité : JeuDePlateau
+
+**Entité**
+- Hérite de `Support`.
+
+**Propriétés**
+- `is_consultable` → True si le jeu est consultable.
+
+**Méthodes**
+- `count_total()` → **Méthode de classe**, Retourne le nombre total d'enregistrements.
+- `count_consultables()` → **Méthode de classe**, Retourne le nombre total d'enregistrements `consultable=true`.
+
+---
+
 ## 4. Liaison technique
 
 ### 4.1 Application Bibliothecaire
@@ -923,6 +950,8 @@ disponibilité.
 > 🔹 Les vues sont conçues pour être testables, extensibles et compatibles avec les transitions métier définies dans
 > `Analyse_LifeCycle_Medias.md`.
 
+---
+
 #### 4.1.2 Membres
 
 | Élément    | Source technique                                                                                                                 | Caractéristique fonctionnelle                                                                   |
@@ -947,9 +976,9 @@ disponibilité.
 > 🔹 Les vues sont conçues pour être testables, extensibles et compatibles avec les transitions métier définies dans
 > `Analyse_LifeCycle_Medias.md`.
 
-#### 4.1.3 Emprunts
+---
 
-Cette section sera complétée lors du développement applicatif prévu dans l'`issue #3`.
+#### 4.1.3 Emprunts
 
 | Élément            | Source technique                                                                    | Caractéristique fonctionnelle                                                                                               |
 |--------------------|-------------------------------------------------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------|
@@ -973,22 +1002,159 @@ Cette section sera complétée lors du développement applicatif prévu dans l'`
 > 🔹 Les vues sont conçues pour être testables, extensibles et compatibles avec les transitions métier définies dans
 > `Analyse_LifeCycle_Emprunts.md`.
 
+---
 
 #### 4.1.4 Jeux
 
-Cette section sera complétée lors du développement applicatif prévu dans l'`issue #3`.
+Les fonctionnalités liées aux **Jeux de plateau** sont introduites dans l’issue #4 et concernent principalement la 
+gestion par le bibliothécaire.  
+Elles reprennent les cas d’usage définis dans la synthèse (section 2) :
+
+- **JEU-UC-CREATE** : Création d’un jeu de plateau via un formulaire dédié (`JeuDePlateauForm`).  
+  - Vue : `JeuCreateView`  
+  - Template : `jeu_form.html`  
+  - Route : `/bibliothecaire/jeux/nouveau/`  
+  - Résultat attendu : ajout d’un jeu avec ses attributs spécifiques (`categorie`, `duree_partie`, `nb_joueur_min`, 
+  `nb_joueur_max`, `age_min`, etc.).
+
+- **JEU-UC-UPDATE** : Modification d’un jeu existant.  
+  - Vue : `JeuUpdateView`  
+  - Template : `jeu_form.html` (prérempli)  
+  - Route : `/bibliothecaire/jeux/<pk>/modifier/`  
+  - Résultat attendu : mise à jour des informations du jeu.
+
+- **JEU-UC-LIST** : Affichage de la liste des jeux de plateau.  
+  - Vue : `JeuListView`  
+  - Template : `jeu_list.html`  
+  - Route : `/bibliothecaire/jeux/`  
+  - Résultat attendu : tableau des jeux avec un lien vers le détail.
+
+- **JEU-UC-DETAIL** : Consultation du détail d’un jeu.  
+  - Vue : `JeuDetailView`  
+  - Template : `jeu_detail.html`  
+  - Route : `/bibliothecaire/jeux/<pk>/`  
+  - Résultat attendu : fiche détaillée du jeu avec liens vers “Retour à la liste” et “Modifier”.
+
+> 🔹 Ces fonctionnalités sont considérées comme **souhaitables** dans le sujet, mais elles ont été intégrées pour 
+> compléter la gestion des supports.  
+> 🔹 Les tests associés sont définis dans `T-NAV-28` à `T-NAV-31` et `T-FUN-42` à `T-FUN-45`.
+
+---
 
 ### 4.2 Application Consultation
 
-Cette section sera complétée lors du développement applicatif prévu dans l'`issue #4`.
+L’application **Consultation** est destinée aux membres de la médiathèque.  
+Elle propose uniquement des fonctionnalités de lecture, sans création ni modification, conformément au sujet.
+
+- **AccueilConsultationView** :  
+  - Vue : `TemplateView`  
+  - Template : `accueil.html`  
+  - Route : `/consultation/`  
+  - Résultat attendu : page d’accueil avec un message explicatif et un bouton CTA “Voir les supports consultables”.
+
+- **SupportListView** :  
+  - Vue : `FormView` avec `SupportFilterForm`  
+  - Template : `supports_list.html`  
+  - Routes :  
+    - `/consultation/supports/` → tous les supports consultables  
+    - `/consultation/supports/medias/` → uniquement les médias consultables  
+    - `/consultation/supports/jeux/` → uniquement les jeux consultables  
+    - `/consultation/supports/medias/disponibles` → uniquement les médias disponibles  
+    - `/consultation/supports/vide` → cas technique de liste vide (test UX)  
+  - Résultat attendu : affichage du tableau filtré des supports, avec persistance du filtre dans le formulaire.
+
+> 🔹 Ces fonctionnalités couvrent le cas d’usage **SUPPORT-UC-CONSULTE**.  
+> 🔹 Les tests associés sont définis dans `T-NAV-32` à `T-NAV-37` et `T-FUN-46` à `T-FUN-51`.  
+> 🔹 La fonction de détail des supports n’est pas implémentée, car non demandée dans le sujet. Elle est mentionnée comme 
+> piste d’amélioration UX.
+
+---
 
 ### 4.3 Application Mediatheque
 
-Cette section sera complétée lors du développement applicatif prévu dans l'`issue #5`.
+> 🔹 Cette section est une **préparation** : elle sera finalisée dans l’issue #5 avec l’implémentation effective des 
+> vues, des templates et des tests associés.
+
+L’application **Médiathèque** constitue le point d’entrée global du projet.  
+Elle assure la cohérence entre les différentes sous‑applications (`accounts`, `bibliothecaire`, `consultation`) et 
+fournit les mécanismes transversaux nécessaires au bon fonctionnement.
+
+#### 4.3.1 Rôle principal
+- Centraliser la configuration des routes (`ROOT_URLCONF`) et l’inclusion des sous‑applications.
+- Gérer l’authentification et les comptes utilisateurs via l’application `accounts`.
+- Offrir une page d’accueil générale permettant de choisir entre les profils **Bibliothécaire** et **Consultation**.
+- Servir de socle pour les évolutions futures (issue #5) : gestion des permissions, navigation unifiée, intégration des 
+logs.
+
+#### 4.3.2 Fonctionnalités prévues (issue #5)
+- **Accueil global** : une vue `HomeView` avec un template `home.html` proposant les accès directs :
+  - `/bibliothecaire/` → application Bibliothécaire
+  - `/consultation/` → application Consultation
+- **Gestion des comptes** :
+  - Création et authentification des utilisateurs (via `accounts`).
+  - Attribution des rôles (bibliothécaire vs membre).
+- **Permissions et sécurité** :
+  - Vérification des droits d’accès aux sous‑applications.
+  - Redirection automatique selon le profil connecté.
+- **Logs et traçabilité** :
+  - Mise en place d’un système de journalisation des actions (connexion, création, modification).
+  - Stockage des événements dans une base dédiée ou via le middleware Django.
+
+#### 4.3.3 Impacts techniques
+- **URLs** : fichier `mediatheque/urls.py` incluant les sous‑applications avec namespace (`bibliothecaire`, 
+`consultation`).
+- **Templates** : ajout d’un `home.html` minimaliste, extensible par un designer web.
+- **Tests** :
+  - `T-NAV-*` pour vérifier l’accès aux sous‑applications depuis l’accueil.
+  - `T-FUN-*` pour valider la logique de permissions et de redirection.
+- **Évolutivité** :
+  - Issue #5 assurera la finalisation des fonctionnalités transversales.
+  - Les tests seront enrichis pour couvrir l’authentification et la sécurité.
+
+---
 
 ### 4.4 Application Administration
 
-Cette section sera complétée lors du développement applicatif prévu dans l'`issue #3`, l'`issue #4` et l'`issue #5`.
+> 🔹 Cette section est une **préparation** : elle sera enrichie et finalisée dans les issues #5 et #6, avec l’ajout des 
+> tests `T-ADM-*` et la documentation des personnalisations apportées.
+
+L’application **Administration** correspond au site d’administration Django intégré au projet.  
+Elle est utilisée principalement par les développeurs et les bibliothécaires pour gérer les données de manière 
+technique, en complément des vues fonctionnelles des applications `Bibliothecaire` et `Consultation`.
+
+#### 4.4.1 Rôle principal
+- Fournir une interface générique pour manipuler toutes les entités du projet (`Media`, `Livre`, `Dvd`, `Cd`, 
+`JeuDePlateau`, `Membre`, `Emprunt`, `Support`).
+- Permettre la création, la modification et la suppression des objets directement en base.
+- Servir de support technique pour les tests et validations rapides.
+- Garantir une visibilité complète sur les données persistées.
+
+#### 4.4.2 Fonctionnalités actuelles
+- Enregistrement des modèles dans `admin.py` pour chaque application.
+- Accès aux données via `/admin/`.
+- Gestion CRUD basique (Create, Read, Update, Delete) pour toutes les entités.
+- Utilisation des filtres et recherches standards de l’admin Django.
+
+#### 4.4.3 Fonctionnalités prévues (issues #5 et #6)
+- **Issue #5** :  
+  - Amélioration de l’administration des membres et des emprunts.  
+  - Ajout de filtres personnalisés (statut du membre, retard des emprunts).  
+  - Mise en place de champs en lecture seule pour garantir la cohérence métier (ex. : `compte` d’un membre, 
+  `date_emprunt` d’un emprunt).  
+  - Ajout de sections regroupées pour faciliter la navigation (ex. : “Supports”, “Membres”, “Emprunts”).
+
+- **Issue #6** :  
+  - Finalisation de l’UX côté administration.  
+  - Personnalisation des pages de liste et de détail (affichage conditionnel, colonnes supplémentaires).  
+  - Ajout de messages explicites pour les transitions métier (ex. : emprunt en retard, membre archivé).  
+  - Intégration de la logique de permissions pour restreindre certaines actions aux profils administrateurs.
+
+#### 4.4.4 Impacts techniques
+- **admin.py** : surcharge des classes `ModelAdmin` pour chaque entité.  
+- **Tests** : ajout de cas `T-ADM-*` pour vérifier la présence des modèles, la cohérence des filtres et la bonne 
+configuration des champs.  
+- **Évolutivité** : les issues #5 et #6 permettront de transformer l’administration Django en un outil métier plus 
+adapté, tout en conservant sa simplicité technique.
 
 ---
 

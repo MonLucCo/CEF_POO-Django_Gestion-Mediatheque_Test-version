@@ -1,0 +1,19 @@
+{% extends 'bibliothecaire/_base.html' %}
+{% block content %}
+  <h2>Détail du jeu : {{ jeu.name }}</h2>
+  <ul>
+    <li><strong>Créateur :</strong> {{ jeu.createur }}</li>
+    <li><strong>Année d’édition :</strong> {{ jeu.annee_edition }}</li>
+    <li><strong>Consultable :</strong> {{ jeu.consultable|yesno:"✅,❌" }}</li>
+    <li><strong>Durée de la partie :</strong> {{ jeu.duree_partie }} mn</li>
+    <li><strong>Âge min :</strong> {{ jeu.age_min }}</li>
+    <li><strong>Nombre minimal de joueur :</strong> {{ jeu.nb_joueur_min }}</li>
+    <li><strong>Nombre maximal de joueur :</strong> {{ jeu.nb_joueur_max }}</li>
+    <li><strong>Règle de jeu disponible :</strong> {{ jeu.regle_consultable|yesno:"✅,❌" }}</li>
+  </ul>
+  <div>
+      <a href="{% url 'bibliothecaire:jeu_list' %}">← Retour à la liste</a>
+       |
+      <a href="{% url 'bibliothecaire:jeu_update' jeu.pk %}">Modifier ce jeu</a>
+  </div>
+{% endblock %}

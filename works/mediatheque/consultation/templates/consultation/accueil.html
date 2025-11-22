@@ -1,0 +1,21 @@
+{% extends 'consultation/_base.html' %}
+
+{% block title %}Consultation-Accueil{% endblock %}
+
+{% block content %}
+  <h2>Bienvenue dans l’espace Consultation</h2>
+  <p>Utilisez le menu ci-dessus pour accéder aux fonctionnalités.</p>
+
+  <div id="accueil_message">
+      <p>
+          Cet espace est à l'attention des membres de la médiathèque.
+          Il permet de consulter la liste des différents supports (jeux et médias).
+      </p>
+      <p>Les jeux sont consultables et ne peuvent pas être empruntés.</p>
+      <p>Les médias (livres, DVDs ou CDs) peuvent être empruntés lorsqu'ils sont disponibles.</p>
+  </div>
+
+  <form action="{% url 'consultation:supports' %}" method="get">
+      <button type="submit">Voir les supports consultables</button>
+  </form>
+{% endblock %}
