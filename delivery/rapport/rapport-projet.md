@@ -39,9 +39,15 @@
     - [3.3.1 Structure technique](#331-structure-technique)  
     - [3.3.2 Installation des dépendances](#332-installation-des-dépendances)  
     - [3.3.3 Exécution des tests](#333-exécution-des-tests)  
-  - [3.4 Couche centrale du projet Django](#34-couche-centrale-du-projet-django)  
-    - [3.4.1 Fonctionnalités et arborescence des fichiers](#341-fonctionnalités-et-arborescence-des-fichiers)  
-    - [3.4.2 Codage de la couche centrale](#342-codage-de-la-couche-centrale)
+  - [3.4 Couches de l’application Médiathèque](#34-couches-de-lapplication-médiathèque)  
+    - [3.4.1 Application `accounts`](#341-application-accounts)  
+    - [3.4.2 Application `bibliothecaire`](#342-application-bibliothecaire)
+    - [3.4.3 Application `consultation`](#343-application-consultation)
+    - [3.4.4 Synthèse des couches](#344-synthèse-des-couches)
+    - [3.4.5 Configuration et routage](#345-configuration-et-routage)
+      - [3.4.5.1 Configuration centrale de l'application `mediatheque`](#3451-configuration-centrale-de-lapplication-mediatheque)
+      - [3.4.5.2 Fonctionnalités et arborescence des fichiers](#3452-fonctionnalités-et-arborescence-des-fichiers)
+      - [3.4.5.3 Résolution du routage et identification des templates](#3453-résolution-du-routage-et-identification-des-templates)
 
 - [4. Implémentation des fonctionnalités](#4-implémentation-des-fonctionnalités)  
   - [4.1 Application bibliothécaire](#41-application-bibliothécaire)  
@@ -59,6 +65,14 @@
       - [4.1.3.3 Vues des retours](#4133-vues-des-retours)
       - [4.1.3.4 Marquage des retards](#4134-marquage-des-retards)
       - [4.1.3.5 Navigation fonctionnelle pour les emprunts](#4135-navigation-fonctionnelle-pour-les-emprunts)
+    - [4.1.4 Gestion des Jeux de plateau](#414-gestion-des-jeux-de-plateau)
+  - [4.2 Application Consultation (consultation des supports)](#42-application-consultation-consultation-des-supports)
+    - [4.2.1 Rôle et objectifs](#421-rôle-et-objectifs)
+    - [4.2.2 Entités principales](#422-entités-principales)
+    - [4.2.3 Fonctionnalités implémentées](#423-fonctionnalités-implémentées)
+    - [4.2.4 Templates associés](#424-templates-associés)
+    - [4.2.5 Tests associés](#425-tests-associés)
+    - [4.2.6 Indicateurs et perspectives](#426-indicateurs-et-perspectives)
   - [4.3 Contraintes métiers respectées](#43-contraintes-métiers-respectées)
     - [4.3.1 Contrainte 1 – Limite de 3 emprunts simultanés par membre](#431-contrainte-1--limite-de-3-emprunts-simultanés-par-membre)
     - [4.3.2 Contrainte 2 – Durée maximale d’un emprunt : 7 jours](#432-contrainte-2--durée-maximale-dun-emprunt--7-jours)
@@ -358,7 +372,7 @@ localement.
 #### 3.3.1 Structure technique
 
 - Le dossier `works/` contient :
-  - le projet Django `mediatheque/` avec ses applications (`accounts`, `bibliothecaire`, etc.)
+  - le projet Django `mediatheque/` avec ses applications (`accounts`, `bibliothecaire`, `consultation`)
   - l’environnement virtuel `venv/` avec les dépendances installées via `pip`
 - Le fichier `requirements.txt`, situé à la racine du dépôt, permet de restaurer les dépendances si nécessaire.
 
@@ -391,7 +405,6 @@ pip install -r requirements.txt
 > [Annexe D – Arborescence du projet](#annexe-d--arborescence-du-projet), pour le positionnement du fichier 
 > `requirements.txt` avec la recopie pour archive de livraison.
 
-
 #### 3.3.3 Exécution des tests
 
 Les tests unitaires et fonctionnels ont été exécutés avec la commande suivante :
@@ -406,7 +419,93 @@ python manage.py test >devReport.txt 2>&1 -v 2
 
 > 📌 Cette configuration garantit la reproductibilité du projet et facilite la validation des fonctionnalités métier.
 
-### 3.4 Couche centrale du projet Django
+---
+
+### 3.4 Couches de l’application Médiathèque
+
+La médiathèque est structurée en plusieurs sous‑applications, chacune correspondant à une **couche fonctionnelle** 
+distincte.  
+Cette organisation permet de séparer les responsabilités, de clarifier les rôles métier et de faciliter la maintenance.
+
+---
+
+#### 3.4.1 Application `accounts`
+- **Rôle** : gérer les utilisateurs, l’authentification et l’attribution des rôles (bibliothécaire vs membre).  
+- **Entités principales** : `User`, `Profile`.  
+- **Fonctions** :
+  - Connexion / déconnexion
+  - Gestion des permissions et des profils
+- **Tests associés** : vérification des accès de base et des erreurs de navigation.
+
+---
+
+#### 3.4.2 Application `bibliothecaire`
+- **Rôle** : fournir au bibliothécaire les outils de gestion interne de la médiathèque.  
+- **Entités principales** :
+  - `Media` et ses sous‑types (`Livre`, `Dvd`, `Cd`)
+  - `Membre`
+  - `Emprunt`
+  - `JeuDePlateau`
+- **Fonctions** :
+  - CRUD complet sur les entités
+  - Transitions métier (retard, suppression logique, typage des médias)
+  - Indicateurs de gestion affichés sur l’accueil
+- **Tests associés** : T‑NAV‑05 à 31, T‑FUN‑20 à 45.
+
+---
+
+#### 3.4.3 Application `consultation`
+- **Rôle** : interface de consultation destinée aux membres de la médiathèque.  
+- **Entités principales** : `Support` (vue combinée des médias et jeux).  
+- **Fonctions** :
+  - Affichage filtré des supports consultables ou disponibles
+  - Page d’accueil avec CTA “Voir les supports consultables”
+  - Persistance du filtrage dans les formulaires
+- **Tests associés** : T‑NAV‑32 à 37, T‑FUN‑46 à 51.
+
+---
+
+#### 3.4.4 Synthèse des couches
+- **Accounts** : gestion des profils et rôles utilisateurs.  
+- **Bibliothécaire** : gestion métier interne (supports, membres, emprunts, jeux).  
+- **Consultation** : interface publique des membres pour consulter les supports.  
+- **Administration (Django Admin)** : support technique transversal, détaillé en section 4.4.
+
+> Cette structuration en couches applicatives garantit une séparation claire des responsabilités, une meilleure 
+> extensibilité et une cohérence documentaire entre les sections 4.1 à 4.4.
+
+---
+
+#### 3.4.5 Configuration et routage
+
+Le projet Médiathèque repose sur une configuration explicite des routes et des namespaces pour séparer les 
+responsabilités :
+
+- **Inclusion des sous‑applications** :  
+  Dans `mediatheque/urls.py`, chaque application est incluse avec un namespace dédié :  
+  - `accounts` → gestion des utilisateurs et profils  
+  - `bibliothecaire` → gestion interne de la médiathèque  
+  - `consultation` → interface publique des membres  
+
+- **Namespaces et reverse()** :  
+  Les vues sont appelées via des noms qualifiés (`bibliothecaire:jeu_detail`, `consultation:supports`) afin d’éviter les 
+collisions et de garantir la clarté documentaire.
+
+- **Organisation des routes** :  
+  - `/bibliothecaire/...` → CRUD complet et indicateurs de gestion  
+  - `/consultation/...` → affichage filtré des supports et accueil membre  
+  - `/accounts/...` → authentification et gestion des profils  
+
+- **ROOT_URLCONF** :  
+  Le fichier `mediatheque/urls.py` centralise la configuration et sert de point d’entrée unique pour l’ensemble du 
+projet.
+
+> Cette organisation garantit une séparation claire entre les couches applicatives et facilite la maintenance et les 
+> tests.
+
+---
+
+##### 3.4.5.1 Configuration centrale de l'application `mediatheque`
 
 La couche centrale du projet (mediatheque) est responsable de la configuration globale, du routage, de la vue d’accueil 
 et de la gestion des rôles. Elle agit comme point d’entrée unique, redirigeant les utilisateurs vers l’application 
@@ -420,25 +519,46 @@ assure :
 - Routage principal (`urls.py`) pour coordonner les deux sous-applications  
 - Gestion des sessions et des permissions pour sécuriser l’accès.
 
-#### 3.4.1 Fonctionnalités et arborescence des fichiers
+---
 
-La couche centrale du projet repose sur l’application `accounts`, qui gère la vue d’accueil du site. 
+##### 3.4.5.2 Fonctionnalités et arborescence des fichiers
+
+La couche centrale du projet repose sur l’application `accounts`, qui gère la vue d’accueil du site. Les couches 
+fonctionnelles reposent sur les applications `bibliothecaire` et `consultation` qui sont distinctes. 
 
 L’arborescence des fichiers a été organisée selon les conventions Django. Le schéma suivant de cette arborescence 
-présente les dossiers et fichiers principaux utiles pour la mise en place de cette couche centrale du projet. :
+présente les dossiers et fichiers principaux utiles pour la mise en place de cette couche centrale du projet et des 
+couches fonctionnelles.
 
 ```text
 works/
-└── mediatheque/ 
+└── mediatheque/
+    │ 
     ├── accounts/                   # Application de la couche centrale
     │   ├── views.py                # Vue de l'application
-    |   ├── urls.py                 # Routage de l'application
-    |   └── templates/              # Layouts de l'application
-    |       └── accounts/           # Discriminant du layout de l'application
-    |           └── accueil.html    # Layout de l'application
+    │   ├── urls.py                 # Routage de l'application
+    │   └── templates/              # Layouts de l'application
+    │       └── accounts/           # Discriminant du layout de l'application
+    │           └── accueil.html    # Layout de l'application
+    │
+    ├── bibliothecaire/             # Application de la couche bibliothecaire
+    │   ├── views.py                # Vue de l'application
+    │   ├── urls.py                 # Routage de l'application
+    │   └── templates/              # Layouts de l'application
+    │       └── bibliothecaire/     # Discriminant du layout de l'application
+    │           └── accueil.html    # Layout de l'application
+    │
+    ├── consultation/               # Application de la couche consultation
+    │   ├── views.py                # Vue de l'application
+    │   ├── urls.py                 # Routage de l'application
+    │   └── templates/              # Layouts de l'application
+    │       └── consultation/       # Discriminant du layout de l'application
+    │           └── accueil.html    # Layout de l'application
+    │
     ├── mediatheque/                # Couche centrale du projet
     │   ├── settings.py             # Configurations du projet 
-    |   ├── urls.py                 # Routage global du projet
+    |   └── urls.py                 # Routage global du projet
+    │
     ├── db.sqlite3                  # BD du projet
     └── manage.py                   # Gestion des commandes de Django
     
@@ -451,38 +571,53 @@ fonctionnels.
 
 ---
 
-#### 3.4.2 Codage de la couche centrale
+##### 3.4.5.3 Résolution du routage et identification des templates
 
-La vue `accueil` est définie dans `accounts/views.py` et rend le template `accounts/accueil.html`. 
+Le projet Médiathèque repose sur une configuration explicite des routes et des templates afin d’éviter toute collision 
+entre les différentes applications (`accounts`, `bibliothecaire`, `consultation`).  
+Django fournit deux mécanismes essentiels pour garantir cette séparation :
 
-Le routage est assuré par `accounts/urls.py`, inclus dans `mediatheque/urls.py`. Le template est accessible via l’URL 
-racine `/` et `/accueil`.
+- **Namespaces pour les routes**  
+  Chaque application est incluse dans `mediatheque/urls.py` avec un namespace (`accounts`, `bibliothecaire`, 
+`consultation`).  
+  Cela permet d’appeler les vues avec des noms qualifiés (`bibliothecaire:jeu_detail`, `consultation:supports`) et 
+d’éviter les conflits entre des vues portant le même nom dans des applications différentes.
 
-Le fichier `mediatheque/urls.py` utilise la fonction `include()` pour déléguer la gestion des routes à l’application 
-`accounts`, ce qui permet une meilleure modularité du projet.
+  Exemple :
+  ```python
+  # mediatheque/urls.py
+  urlpatterns = [
+      path('accounts/', include(('accounts.urls', 'accounts'), namespace='accounts')),
+      path('bibliothecaire/', include(('bibliothecaire.urls', 'bibliothecaire'), namespace='bibliothecaire')),
+      path('consultation/', include(('consultation.urls', 'consultation'), namespace='consultation')),
+  ]
+  ```
 
-```python
-# Eléments de code illustratifs du projet
+- **Identification des templates par répertoire discriminant**  
+  Les templates sont placés dans des sous‑répertoires portant le nom de l’application (`accounts/accueil.html`, 
+`bibliothecaire/accueil.html`, `consultation/accueil.html`).  
+  Grâce à l’option `APP_DIRS=True` dans `settings.py`, Django recherche automatiquement les templates dans chaque 
+application.  
+  Cette organisation garantit qu’un fichier `accueil.html` de `accounts` ne peut pas entrer en collision avec un fichier 
+`accueil.html` de `bibliothecaire`.  
 
-# mediatheque/urls.py
-urlpatterns = [
-    path('', include('accounts.urls')),
-]
+  Exemple :
+  ```python
+  # accounts/views.py
+  def accueil(request):
+      return render(request, 'accounts/accueil.html')
+  ```
 
-# accounts/urls.py
-urlpatterns = [
-    path('', accueil, name='accueil'),
-    path('accueil/', accueil, name='accueil'),
-]
+- **Résolution centralisée par ROOT_URLCONF**  
+  Le fichier `mediatheque/urls.py` agit comme point d’entrée unique et délègue la gestion des routes à chaque 
+application via `include()`.  
+  Cette approche assure une modularité maximale et une cohérence documentaire : chaque application gère ses propres 
+routes et templates, tout en étant intégrée dans un schéma global.
 
-# accounts/views.py
-def accueil(request):
-    return render(request, 'accounts/accueil.html')
-```
-
-> ℹ️ **Remarque** : l'utilisation pour le template du nom `accounts/accueil.html` permet à Django d'éviter la collision 
-> avec d'autres applications qui auraient un template du même nom (`accueil.html`) en résolvant sans ambiguïté le nom du 
-> template. En effet, Django parcourt les applications dans l'ordre défini dans `INSTALLED_APPS`de `settings.py`.
+> 🔹 En résumé : l’utilisation combinée des **namespaces** pour les routes et des **répertoires discriminants** pour les 
+> templates permet d’éviter toute collision entre les applications de la Médiathèque.  
+> Cette organisation garantit une résolution fiable des vues et des templates, tout en facilitant la maintenance et 
+> l’extensibilité du projet.
 
 ---
 
@@ -1955,6 +2090,135 @@ médiathèque.
 
 ---
 
+#### 4.1.4 Gestion des Jeux de plateau
+
+La gestion des **Jeux de plateau** constitue une extension des fonctionnalités offertes au profil Bibliothécaire.  
+Elle permet d’administrer un type de support supplémentaire, en cohérence avec les médias déjà présents (livres, DVD, 
+CD).
+
+---
+
+**Rôle et objectifs :**
+- Offrir un CRUD complet sur les jeux de plateau.
+- Permettre au bibliothécaire de créer, modifier, consulter et lister les jeux disponibles.
+- Intégrer les jeux dans les indicateurs de gestion affichés sur l’accueil.
+
+**Entités principales :**
+- `JeuDePlateau` : modèle dédié avec attributs spécifiques :
+  - `categorie` (ex. : famille, stratégie, coopération)
+  - `duree_partie` (en minutes)
+  - `nb_joueur_min` et `nb_joueur_max`
+  - `age_min`
+  - `consultable` et `disponible` (hérités de `Support`)
+
+**Fonctionnalités implémentées :**
+- **Création** : via `JeuCreateView` et le formulaire `JeuDePlateauForm`.
+- **Modification** : via `JeuUpdateView` avec pré-remplissage des champs.
+- **Liste** : via `JeuListView`, affichant tous les jeux enregistrés.
+- **Détail** : via `JeuDetailView`, présentant une fiche complète du jeu.
+
+**Templates associés :**
+- `jeu_form.html` : création et modification.
+- `jeu_list.html` : liste des jeux.
+- `jeu_detail.html` : fiche détaillée.
+
+**Tests associés :**
+- **Navigation** : T‑NAV‑28 à T‑NAV‑31 (accès liste, détail, création, modification).
+- **Fonctionnel** : T‑FUN‑42 à T‑FUN‑45 (création valide, modification, liste cliquable, indicateurs accueil).
+
+**Indicateurs de gestion :**
+- Nombre total de jeux enregistrés.
+- Nombre de jeux consultables.
+- Intégration dans la page d’accueil du Bibliothécaire pour une vision globale des supports.
+
+> 🔹 La gestion des jeux de plateau complète l’offre de la médiathèque en diversifiant les supports disponibles et en 
+> renforçant la cohérence documentaire et fonctionnelle du projet.
+
+---
+
+### 4.2 Application Consultation (consultation des supports)
+
+L’application **Consultation** est destinée aux membres de la médiathèque.  
+Elle leur permet d’accéder à une interface simple et claire pour consulter les supports disponibles (médias et jeux de 
+plateau), sans possibilité de modification ou de gestion interne.
+
+> 🔹 L’application Consultation complète le cycle métier de la médiathèque en offrant aux membres une interface claire 
+> et filtrée pour accéder aux supports disponibles, tout en respectant la séparation stricte des rôles entre gestion et 
+> consultation.
+
+---
+
+#### 4.2.1 Rôle et objectifs
+- Offrir une interface publique de lecture des supports.
+- Permettre aux membres de filtrer les supports selon leur type ou leur disponibilité.
+- Garantir une séparation stricte entre les fonctions de gestion (réservées au bibliothécaire) et les fonctions de 
+consultation.
+
+**Exemple (UX) de rendu de cette consultation** :
+
+- Accueil de l'application `Consultation` :  
+    ![img.png](assets/img_UX_Consultation_Accueil.png)
+- Liste des supports consultables :  
+    ![img.png](assets/img_UX_Consultation_Supports.png)
+- Liste des médias empruntables :  
+    ![img.png](assets/img_UX_Consultation_MediasEmpruntables.png)
+- Affichage si aucun support consultable :  
+    ![img.png](assets/img_UX_Consultation_Vide.png)
+
+---
+
+#### 4.2.2 Entités principales
+- **Support** : entité abstraite regroupant les médias (`Livre`, `Dvd`, `Cd`) et les jeux de plateau (`JeuDePlateau`).
+- Les attributs essentiels (`consultable`, `disponible`) permettent de filtrer les supports affichés.
+
+---
+
+#### 4.2.3 Fonctionnalités implémentées
+- **Accueil Consultation** :  
+  - Vue `AccueilConsultationView`  
+  - Template `accueil.html`  
+  - Route `/consultation/`  
+  - Affiche un message d’accueil et un bouton CTA “Voir les supports consultables”.
+
+- **Liste des supports** :  
+  - Vue `SupportListView` avec formulaire `SupportFilterForm`  
+  - Template `supports_list.html`  
+  - Routes :
+    - `/consultation/supports/` → tous les supports consultables
+    - `/consultation/supports/medias/` → uniquement les médias
+    - `/consultation/supports/jeux/` → uniquement les jeux de plateau
+    - `/consultation/supports/medias/disponibles` → uniquement les médias disponibles
+    - `/consultation/supports/vide` → cas technique de liste vide (test UX)
+
+- **Filtrage et persistance** :  
+  - Le formulaire conserve le filtre sélectionné lors du rechargement de la page.  
+  - Les résultats affichés sont cohérents avec les critères choisis.
+
+---
+
+#### 4.2.4 Templates associés
+- `accueil.html` : page d’accueil avec CTA.  
+- `supports_list.html` : affichage des supports filtrés.  
+- Organisation des templates dans le répertoire `consultation/`.
+
+---
+
+#### 4.2.5 Tests associés
+- **Navigation** : T‑NAV‑32 à T‑NAV‑37 (accès accueil, liste des supports, filtrage par type, cas liste vide).  
+- **Fonctionnel** : T‑FUN‑46 à T‑FUN‑51 (filtrage médias/jeux, supports disponibles, persistance du filtre, CTA accueil).
+
+---
+
+#### 4.2.6 Indicateurs et perspectives
+- L’application Consultation ne propose pas de détail individuel des supports (non demandé dans le sujet).  
+- Les fonctionnalités actuelles couvrent le besoin minimal de consultation.  
+- Une évolution future pourrait intégrer :
+  - Une fiche détaillée par support.
+  - Des options de recherche avancée.
+  - Une ergonomie enrichie pour les membres.
+
+---
+
 ### 4.3 Contraintes métiers respectées
 
 Le développement de l’application `bibliothecaire` a été guidé par les contraintes métier énoncées dans le cahier des 
@@ -2107,13 +2371,14 @@ Les relations sont gérées par des clés étrangères (`ForeignKey`) et des hé
 Des jeux de données ont été préparés pour les tests fonctionnels et les démonstrations.  
 Ils sont stockés dans le dossier `/fixtures/` et organisés par thème :
 
-| Fichier fixture          | Contenu chargé                               |
-|--------------------------|----------------------------------------------|
-| `membres.json`           | Membres de test (statuts variés)             |
-| `medias.json`            | Livres, DVDs, CDs, jeux de plateau           |
-| `emprunts.json`          | Emprunts en cours, retours, retards          |
-| `users.json`             | Comptes utilisateurs pour l’authentification |
-| `scenarios_retards.json` | Cas de membres bloqués pour retards          |
+| Fichier fixture        | Contenu chargé                                  |
+|------------------------|-------------------------------------------------|
+| `membres_test.json`    | Membres de test (statuts variés)                |
+| `medias_test.json`     | Livres, DVDs, CDs, jeux de plateau              |
+| `emprunts_test.json`   | Emprunts en cours, retours, retards             |
+| `jeux_test.json`       | Jeux de plateau                                 |
+| `/scenarii/scenar_01/` | Scénarios de fichiers json gestion des emprunts |
+| `users_test.json`      | Comptes utilisateurs pour l’authentification    |
 
 Les fixtures sont chargées avec la commande :
 

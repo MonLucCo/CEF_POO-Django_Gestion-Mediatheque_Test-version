@@ -4,8 +4,8 @@
 
 📌 Version : index J-1 (issue #4 – étape 1 - Bloc 4)
 - Rapport de tests associé : [`devReport.txt`](devReport.md)
-  - Sous-ensemble ajouté : tests des [UC-GESTION-JEU](devReport_UC_gestion_jeu.md)
-  - sous-ensemble ajouté : tests des [UC-CONSULT-SUPPORT](devReport_UC_consult_support.md)
+  - Sous-ensemble ajouté : tests des [UC-GESTION-JEU](../issue4/devReport_UC_gestion_jeu.md)
+  - sous-ensemble ajouté : tests des [UC-CONSULT-SUPPORT](../issue4/devReport_UC_consult_support.md)
 
 ___
 
