@@ -27,7 +27,7 @@ et couvre :
 - Les vues CRUD, les transitions métier, les historiques
 - La préparation des tests fonctionnels et des fixtures
 
-📌 Version : index J-1 (issue #4 – étape 1 - Bloc 4)
+📌 Version : index K-1 (issue #5 – étape 1 - Bloc 5)
 
 ---
 

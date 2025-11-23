@@ -2,10 +2,9 @@
 
 📁 `/docs/developpement/dev-docs/devTests.md`  
 
-📌 Version : index J-1 (issue #4 – étape 1 - Bloc 4)
-- Rapport de tests associé : [`devReport.txt`](devReport.md)
-  - Sous-ensemble ajouté : tests des [UC-GESTION-JEU](../issue4/devReport_UC_gestion_jeu.md)
-  - sous-ensemble ajouté : tests des [UC-CONSULT-SUPPORT](../issue4/devReport_UC_consult_support.md)
+📌 Version : index K-1 (issue #5 – étape 1 - Bloc 5)
+- Rapport de tests associé : [`devReport.md`](devReport.md)
+  - Sous-ensemble ajouté : tests des [UC-ACCOUNTS-COMPTE](../issue5/task1/devReport_UC_accounts_compte.md)
 
 ___
 
@@ -47,6 +46,7 @@ Il est conçu pour :
     - index H10, fonction de création d'un emprunt.
     - index H-11, fonction de rendu d'un emprunt.
   - index J-1 (entité JeuDePlateau et application Consultation) pour le **Bloc 4**.
+  - index K-1 (application médiathèque et connexion/déconnexion) pour le **Bloc 5**.
 - **Périmètre couvert** : 
   - site administration (application).
   - site bibliothecaire (application).
@@ -83,6 +83,7 @@ Il est conçu pour :
 - **Index H+** : développement fonctionnel des vues et modèles `Membre`, `Emprunt`, `Retour`
 - **Bloc 3** : finalisation du cycle métier Bibliothécaire
 - **Bloc 4** : finalisation de la Consultation et de la gestion des Jeux de plateau
+- **Bloc 5** : finalisation de l'organisation de l'application, de l'authentification et des accès.
 
 📌 Évolutivité :
 - Préparation des tests de permissions et accès conditionnels
@@ -190,7 +191,11 @@ Chaque catégorie de tests est regroupée dans une sous-section spécifique avec
 | Bloc 4 | T-NAV-35 | Accès à la liste des jeux consultables                                 | `/consultation/supports/jeux/`                       | Code 200 + template `supports_list.html`            | ✅ Validé |
 | Bloc 4 | T-NAV-36 | Accès à la liste des médias disponibles                                | `/consultation/supports/medias/disponibles`          | Code 200 + template `supports_list.html`            | ✅ Validé |
 | Bloc 4 | T-NAV-37 | Accès au cas de liste vide (test technique)                            | `/consultation/supports/vide`                        | Code 200 + message “Aucun support…”                 | ✅ Validé |
-
+| Bloc 5 | T-NAV-38 | Accès à la page d’accueil Médiathèque                                  | `/accounts/accueil/`                                 | Code 200 + template `accueil.html`                  | ✅ Validé |
+| Bloc 5 | T-NAV-39 | Lien vers l’espace Bibliothécaire (CTA accueil médiathèque)            | `/bibliothecaire/accueil/`                           | Redirection vers accueil Bibliothécaire             | ✅ Validé |
+| Bloc 5 | T-NAV-40 | Lien vers l’espace Consultation (CTA accueil médiathèque)              | `/consultation/accueil/`                             | Redirection vers accueil Consultation               | ✅ Validé |
+| Bloc 5 | T-NAV-41 | Lien Connexion affiché si non connecté                                 | `/accounts/login/`                                   | Présence du lien “Connexion” dans le menu           | ✅ Validé |
+| Bloc 5 | T-NAV-42 | Lien Déconnexion affiché si connecté                                   | `/accounts/logout/`                                  | Présence du bouton “Déconnexion (username)”         | ✅ Validé |
 
 > ❌ Le test T-NAV-03 a révélé une contrainte sur le champ `annee_edition` du modèle `Media`. ✅ Il a été repris 
 > après correction du modèle de données.  
@@ -369,6 +374,11 @@ Chaque catégorie de tests est regroupée dans une sous-section spécifique avec
 | Bloc 4 | T-FUN-49 | Cas de liste vide (test technique) (SUPPORT-UC-CONSULT-04)                                                         | Message “Aucun support n’est consultable” affiché                                                                           | ✅ Validé          |
 | Bloc 4 | T-FUN-50 | Persistance du filtre après redirection (SUPPORT-UC-CONSULT-05)                                                    | Formulaire prérempli avec la valeur choisie                                                                                 | ✅ Validé          |
 | Bloc 4 | T-FUN-51 | CTA accueil Consultation (SUPPORT-UC-CONSULT-06)                                                                   | Bouton “Voir les supports…” → `/consultation/supports/`                                                                     | ✅ Validé          |
+| Bloc 5 | T-FUN-52 | Connexion avec identifiants valides (`CustomLoginView`) (COMPTE-UC-GESTION-01)                                     | Redirection vers `accounts:accueil`                      | ✅ Validé |
+| Bloc 5 | T-FUN-53 | Connexion avec identifiants invalides (`CustomLoginView`) (COMPTE-UC-GESTION-02)                                   | Formulaire réaffiché + message d’erreur                  | ✅ Validé |
+| Bloc 5 | T-FUN-54 | Déconnexion via POST (`CustomLogoutView`) (COMPTE-UC-GESTION-03)                                                   | Session terminée + redirection vers `accounts:accueil`   | ✅ Validé |
+| Bloc 5 | T-FUN-55 | Affichage dynamique du menu (login/logout) (`_base.html`) (COMPTE-UC-GESTION-04)                                   | Menu affiche Connexion ou Déconnexion selon l’état       | ✅ Validé |
+| Bloc 5 | T-FUN-56 | Affichage du nom de l’utilisateur connecté (`_base.html`) (COMPTE-UC-GESTION-05)                                   | Bouton affiche “Déconnexion (username)”                  | ✅ Validé |
 
 > 🔧 Les tests unitaires _fonctionnels_ sont définis pour être autonome. Ils peuvent se rapprocher de tests unitaires
 > _techniques_ qui sont indiqués dans le _résultat attendu_. 

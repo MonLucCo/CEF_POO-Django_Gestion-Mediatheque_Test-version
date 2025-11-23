@@ -1,10 +1,30 @@
-<!DOCTYPE html>
-<html lang="fr">
-<head>
-    <meta charset="UTF-8">
-    <title>Accueil</title>
-</head>
-<body>
-    <h1>Bienvenue sur la médiathèque Django</h1>
-</body>
-</html>
+{% extends "accounts/_base.html" %}
+
+{% block content_title %}
+  <h2>Bienvenue dans la Médiathèque (Django)</h2>
+{% endblock %}
+
+{% block content %}
+<div class="info">
+    <p>La médiathèque est un espace permettant la gestion et la consultation de différents supports.</p>
+    <p>La gestion est réalisée par un <strong>Bibliothécaire</strong> dans un espace numérique dédié.</p>
+    <p>La consultation est accessible à tout membre de la médiathèque pour consulter la liste des supports
+        (jeux ou médias).</p>
+    <p>Bonne exploitation de cet espace qui vous est dédié.</p>
+</div>
+
+<div class="orientation" style="margin-top: 20px;">
+    <!-- Bouton Bibliothécaire -->
+    <a href="{% url 'bibliothecaire:accueil' %}">
+      <button>
+          Espace Bibliothécaire (connexion requise)
+      </button>
+    </a>
+    <!-- Bouton Consultation -->
+    <a href="{% url 'consultation:accueil' %}">
+      <button>
+          Espace Consultation (accès libre)
+      </button>
+    </a>
+</div>
+{% endblock %}
