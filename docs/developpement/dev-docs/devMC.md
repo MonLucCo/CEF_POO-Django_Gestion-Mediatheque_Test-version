@@ -27,7 +27,7 @@ et couvre :
 - Les vues CRUD, les transitions métier, les historiques
 - La préparation des tests fonctionnels et des fixtures
 
-📌 Version : index K-1 (issue #5 – étape 1 - Bloc 5)
+📌 Version : index K-2 (issue #5 – étape 2 - Bloc 5)
 
 ---
 
@@ -77,6 +77,7 @@ et couvre :
    - [9.24 Difficulté 24 : Traçabilité UX des actions métier et synchronisation du contexte d’affichage](#924-difficulté-24--traçabilité-ux-des-actions-métier-et-synchronisation-du-contexte-daffichage)
    - [9.25 Difficulté 25 : Choix du modèle de vue pour une confirmation métier liée à un objet](#925-difficulté-25--choix-du-modèle-de-vue-pour-une-confirmation-métier-liée-à-un-objet)
    - [9.26 Difficulté 26 : Réorganisation du plan de développement et de la documentation transverse](#926-difficulté-26--réorganisation-du-plan-de-développement-et-de-la-documentation-transverse)
+   - [9.27 – Difficulté 27 : Modélisation de Bibliothécaire et accès restreint à l’application](#927--difficulté-27--modélisation-de-bibliothécaire-et-accès-restreint-à-lapplication)
 10. [📌 Décisions structurantes du projet](#10--décisions-structurantes-du-projet)
     - [10.1 Décision 1 (D-01) – Structuration progressive du développement par blocs fonctionnels](#101-décision-1-d-01--structuration-progressive-du-développement-par-blocs-fonctionnels)
     - [10.2 Décision 2 (D-02) – Centralisation des vues sur l’entité Media avec typage différé](#102-décision-2-d-02--centralisation-des-vues-sur-lentité-media-avec-typage-différé)
@@ -1765,6 +1766,89 @@ branches `update-documentation` pour la rédaction du rapport final.
 
 Cette réorganisation documentaire s’accompagne d’une refonte du plan de développement (version 3), qui segmente les 
 issues par application (`bibliothecaire`, `consultation`, `mediatheque`) et par rôle métier.
+
+---
+
+### 9.27 – Difficulté 27 : Modélisation de Bibliothécaire et accès restreint à l’application
+
+Cette difficulté est apparue lors de l’intégration de l’authentification et de la restriction des accès à l’application 
+`bibliothecaire`.  
+
+L’enjeu était de reprendre les développements antérieurs sans modifier les fonctionnalités existantes (une fois 
+connecté), tout en garantissant la bonne exécution des tests unitaires associés. Les fonctionnalités de l’application 
+se répartissent entre :
+
+- primordiales, correspondant aux besoins de gestion courante des bibliothécaires ;
+- importantes, non demandées explicitement, mais nécessaires pour l’administration et le bon fonctionnement global.
+
+Cette dualité qui se retrouve dans les développements et les exigences fonctionnelles du projet, se traduit par une 
+interface double relative à plusieurs rôles de Bibliothécaire. Ces rôles métiers de bibliothécaire sont :
+- **BibAdmin**, le **bibliothécaire administrateur** qui accède à toutes les fonctions disponibles avec un affichage 
+technique complet.
+- **BibGestion**, le **bibliothécaire gestionnaire** qui n'accède qu'aux fonctions primordiales demandées pour le projet 
+avec un affichage opérationnel. 
+
+L'application Django prévoit l'utilisation d'un site d'administration accessible par un utilisateur `superuser` ou 
+`staff`. Cette capacité fonctionnelle et technique intégrée dans le framework Django doit être conservé sans intervenir 
+dans le fonctionnement de l'application. Cette indépendance doit être conservée. 
+
+#### a) Contexte fonctionnel et technique
+
+La mise en place de l’application `bibliothecaire` nécessite une gestion stricte des accès.  
+Seuls les utilisateurs authentifiés doivent pouvoir accéder aux vues, avec une distinction entre les rôles internes 
+(BibAdmin et BibGestion).  
+Les membres de la médiathèque ne sont pas concernés par cette authentification.
+
+Le développement des fonctions doit être revu pour ajouter les restrictions d'accès à chaque route fonctionnelle.
+
+Le développement des tests doit être repris pour ajouter la contrainte de connexion et pour s'assurer des redirections 
+prévues.
+
+#### b) Description
+
+La difficulté réside dans la modélisation de l’entité `Bibliothecaire` et son articulation avec `auth.User`.  
+Deux approches étaient envisageables (modèle étendu via `AbstractUser` ou modèle lié via `OneToOneField`).  
+Le choix retenu est de relier `Bibliothecaire` à `User` par un champ `OneToOneField`, avec un attribut `role` pour 
+distinguer `BibAdmin` et `BibGestion`.  
+
+Il est nécessaire de restreindre toutes les URLs de l’application `bibliothecaire` via `login_required` ou 
+`LoginRequiredMixin`.
+
+Il est nécessaire de compléter tous les tests de l'application bibliothecaire pour s'assurer de la connexion et de la 
+bonne gestion des redirections. 
+
+#### c) Impact
+
+- Les tests existants doivent être adaptés pour gérer la connexion préalable.  
+- Les rôles métier (BibAdmin/BibGestion) sont séparés des rôles techniques (`superuser`, `staff`).  
+- Les membres restent des entités métier sans compte `User`.
+- Les URLs associées à l'application Bibliothecaire sont à accès restreint.
+- Les tests doivent prévoir une connexion et la bonne gestion des redirections.
+
+#### d) Solution
+
+- Ajout du champ `Bibliothecaire.user = OneToOneField(User, ...)`.  
+- Ajout du champ `Bibliothecaire.role` avec valeurs `ADMIN` et `GESTION`.  
+- Restriction des URLs de `bibliothecaire` via `login_required`.  
+- Création d’une classe de test commune (`LoginRequiredTestCase`) pour factoriser la logique de connexion.  
+- Vérification des redirections vers `/accounts/login/` pour les utilisateurs non connectés.
+
+#### f) Conclusion
+
+Cette difficulté a marqué un tournant dans l’intégration architecturale du projet. La solution retenue, basée sur une 
+relation OneToOneField entre Bibliothecaire et User, s’est révélée explicite, non intrusive et facilement maintenable, 
+tout en respectant les développements déjà réalisés.  
+
+Elle a permis d’ajouter une fonctionnalité majeure (accès restreint) avec un minimum d’impact, d’exploiter pleinement le 
+modèle User de Django et de renforcer la cohérence des tests. Ce choix constitue un **point d’inflexion fonctionnel et 
+technique**, documenté comme un fait marquant du développement
+
+Ainsi, devant agir sur plusieurs axes en parallèle (le modèle, les routes, les UX et les tests), la résolution de cette 
+difficulté m’a permis :
+- d'ajouter une fonctionnalité majeure au projet tout en reprenant avec un minimum d'impact les codes déjà réalisés.
+- d'exploiter le modèle User de Django et de mieux comprendre les impacts des restrictions d'accès.
+- d'exploiter dans les fonctions et les tests les principes de la POO pour intégrer avec un minimum d'impact la 
+fonctionnalité d'accès restreint dans le projet.
 
 ---
 

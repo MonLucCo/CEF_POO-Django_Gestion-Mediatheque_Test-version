@@ -18,6 +18,7 @@ import warnings
 from datetime import timedelta, date
 
 from django.apps import apps
+from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
 from django.core.validators import MinValueValidator
 from django.db import models
@@ -40,6 +41,11 @@ class StatutMembre(models.IntegerChoices):
     MEMBRE     = 0, 'Non abonné'
     EMPRUNTEUR = 1, 'Abonné'
     ARCHIVE    = 2, 'Supprimé'
+
+
+class RoleBibliothecaire(models.IntegerChoices):
+    ADMIN = 1, "Administrateur"
+    GESTION = 2, "Gestionnaire"
 
 
 # ── 1. Objets ─────────────────────────────────────────────────────────────────
@@ -575,11 +581,51 @@ class Membre(Utilisateur):
 
 class Bibliothecaire(Utilisateur):
     """
-    Profil métier du bibliothécaire.
+    @class Bibliothecaire
 
-    **Placeholder** : Authentification et autorisations gérées via Django Auth (issue #5).
+    @brief : Représente un bibliothécaire de la médiathèque, lié à un compte User pour l'authentification.
+
+    @details :
+     - Chaque bibliothécaire est associé à un utilisateur Django (auth.User).
+     - Le champ `role` distingue deux profils métier :
+        - ADMIN : accès complet aux fonctions de l'application bibliothécaire.
+        - GESTION : accès limité aux fonctions primordiales de gestion courante.
+     - Les membres de la médiathèque ne sont pas liés à un compte User.
+
+    @attributes :
+     - user (OneToOneField[User]) : compte utilisateur associé pour l'authentification.
+     - role (IntegerField) : rôle métier du bibliothécaire (ADMIN ou GESTION).
+
+    @methods :
+     - is_admin() : retourne True si le bibliothécaire est ADMIN.
+     - is_gestion() : retourne True si le bibliothécaire est GESTION.
+     - get_role_display() : retourne le libellé lisible du rôle.
+     - __str__() : représentation textuelle du bibliothécaire.
     """
-    pass
+
+    user = models.OneToOneField(
+        User,
+        on_delete=models.CASCADE,
+        related_name="bibliothecaire",
+    )
+    role = models.IntegerField(
+        choices=RoleBibliothecaire.choices,
+        default=RoleBibliothecaire.GESTION
+    )
+
+    def is_admin(self) -> bool:
+        """@brief Vérifie si le bibliothécaire est ADMIN."""
+        return self.role == RoleBibliothecaire.ADMIN
+
+    def is_gestion(self) -> bool:
+        """@brief Vérifie si le bibliothécaire est GESTION."""
+        return self.role == RoleBibliothecaire.GESTION
+
+    def __str__(self) -> str:
+        """@brief Retourne une représentation lisible du bibliothécaire."""
+        if self.user:
+            return f"{self.user.username} ({self.get_role_display()})"
+        return f"{self.name} (sans compte User)"
 
 
 # ── 3. Services d'emprunt──────────────────────────────────────────────────────

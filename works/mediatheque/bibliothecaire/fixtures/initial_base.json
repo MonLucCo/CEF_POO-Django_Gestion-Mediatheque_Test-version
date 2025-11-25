@@ -1,0 +1,2326 @@
+[
+{
+    "model": "admin.logentry",
+    "pk": 1,
+    "fields": {
+        "action_time": "2025-10-23T17:45:25.604Z",
+        "user": 1,
+        "content_type": 10,
+        "object_id": "6",
+        "object_repr": "Grand (membre6) [Non abonn├®] ÔÇô Emprunts : 0/3 ÔÇô ├Ç jour",
+        "action_flag": 1,
+        "change_message": "[{\"added\": {}}]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 2,
+    "fields": {
+        "action_time": "2025-10-23T17:46:15.383Z",
+        "user": 1,
+        "content_type": 10,
+        "object_id": "6",
+        "object_repr": "Grand (membre6) [Supprim├®] ÔÇô Emprunts : 0/3 ÔÇô ├Ç jour",
+        "action_flag": 2,
+        "change_message": "[{\"changed\": {\"fields\": [\"Statut\"]}}]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 3,
+    "fields": {
+        "action_time": "2025-10-23T17:46:26.565Z",
+        "user": 1,
+        "content_type": 10,
+        "object_id": "6",
+        "object_repr": "Grand (membre6) [Abonn├®] ÔÇô Emprunts : 0/3 ÔÇô ├Ç jour",
+        "action_flag": 2,
+        "change_message": "[{\"changed\": {\"fields\": [\"Statut\"]}}]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 4,
+    "fields": {
+        "action_time": "2025-10-23T17:47:04.179Z",
+        "user": 1,
+        "content_type": 10,
+        "object_id": "6",
+        "object_repr": "Grand (membre6) [Abonn├®] ÔÇô Emprunts : 0/3 ÔÇô ├Ç jour",
+        "action_flag": 3,
+        "change_message": ""
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 5,
+    "fields": {
+        "action_time": "2025-11-02T17:38:14.615Z",
+        "user": 1,
+        "content_type": 14,
+        "object_id": "6",
+        "object_repr": "Petit (membre5) [Abonn├®] ÔÇô Emprunts : 1/3 ÔÇô ├Ç jour ÔåÆ Inception (DVD) [En gestion - Disponible] [1]",
+        "action_flag": 1,
+        "change_message": "[{\"added\": {}}]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 6,
+    "fields": {
+        "action_time": "2025-11-02T17:39:19.699Z",
+        "user": 1,
+        "content_type": 14,
+        "object_id": "6",
+        "object_repr": "Petit (membre5) [Abonn├®] ÔÇô Emprunts : 1/3 ÔÇô ├Ç jour ÔåÆ Inception (DVD) [En gestion - Disponible] [1]",
+        "action_flag": 2,
+        "change_message": "[]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 7,
+    "fields": {
+        "action_time": "2025-11-02T17:40:08.708Z",
+        "user": 1,
+        "content_type": 14,
+        "object_id": "7",
+        "object_repr": "test membre 2 (2025_test_membre_2_1) [Abonn├®] ÔÇô Emprunts : 1/3 ÔÇô ├Ç jour ÔåÆ Le Fabuleux Destin dÔÇÖAm├®lie Poulain (DVD) [En gestion - Disponible] [1]",
+        "action_flag": 1,
+        "change_message": "[{\"added\": {}}]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 8,
+    "fields": {
+        "action_time": "2025-11-02T17:40:33.880Z",
+        "user": 1,
+        "content_type": 14,
+        "object_id": "8",
+        "object_repr": "Dupont (membre1) [Abonn├®] ÔÇô Emprunts : 1/3 ÔÇô ├Ç jour ÔåÆ Python Cookbook (LIVRE) [En gestion - Disponible] [1]",
+        "action_flag": 1,
+        "change_message": "[{\"added\": {}}]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 9,
+    "fields": {
+        "action_time": "2025-11-03T08:38:58.824Z",
+        "user": 1,
+        "content_type": 14,
+        "object_id": "9",
+        "object_repr": "petit test final (2025_petit_test_final_1) [Non abonn├®] ÔÇô Emprunts : 1/3 ÔÇô ├Ç jour ÔåÆ Le Petit Prince (LIVRE) [En gestion - Disponible] [1]",
+        "action_flag": 1,
+        "change_message": "[{\"added\": {}}]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 10,
+    "fields": {
+        "action_time": "2025-11-03T08:41:10.105Z",
+        "user": 1,
+        "content_type": 14,
+        "object_id": "9",
+        "object_repr": "second membre *222 () [Abonn├®] ÔÇô Emprunts : 1/3 ÔÇô ├Ç jour ÔåÆ Le Petit Prince (LIVRE) [En gestion - Disponible] [1]",
+        "action_flag": 2,
+        "change_message": "[{\"changed\": {\"fields\": [\"Emprunteur\"]}}]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 11,
+    "fields": {
+        "action_time": "2025-11-06T12:05:17.878Z",
+        "user": 1,
+        "content_type": 8,
+        "object_id": "5",
+        "object_repr": "Les Mis├®rables (LIVRE) [Hors gestion - Disponible]",
+        "action_flag": 2,
+        "change_message": "[{\"changed\": {\"fields\": [\"Disponible\"]}}]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 12,
+    "fields": {
+        "action_time": "2025-11-06T12:07:04.234Z",
+        "user": 1,
+        "content_type": 14,
+        "object_id": "13",
+        "object_repr": "premier membre (2025_premier_membre_1) [Abonn├®] ÔÇô Emprunts : 2/3 ÔÇô ├Ç jour ÔåÆ Les Mis├®rables (LIVRE) [Hors gestion - Disponible] [1]",
+        "action_flag": 3,
+        "change_message": ""
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 13,
+    "fields": {
+        "action_time": "2025-11-16T09:01:14.762Z",
+        "user": 1,
+        "content_type": 14,
+        "object_id": "9",
+        "object_repr": "Dupont (membre1) [Abonn├®] ÔÇô Emprunts : 1/3 ÔÇô Retard ÔåÆ Le Petit Prince (LIVRE) [En gestion - Disponible] [2]",
+        "action_flag": 2,
+        "change_message": "[{\"changed\": {\"fields\": [\"Date retour\"]}}]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 14,
+    "fields": {
+        "action_time": "2025-11-16T09:01:40.077Z",
+        "user": 1,
+        "content_type": 14,
+        "object_id": "9",
+        "object_repr": "Dupont (membre1) [Abonn├®] ÔÇô Emprunts : 2/3 ÔÇô Retard ÔåÆ Le Petit Prince (LIVRE) [En gestion - Disponible] [1]",
+        "action_flag": 2,
+        "change_message": "[{\"changed\": {\"fields\": [\"Statut\"]}}]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 15,
+    "fields": {
+        "action_time": "2025-11-16T10:00:08.647Z",
+        "user": 1,
+        "content_type": 14,
+        "object_id": "8",
+        "object_repr": "Dupont (membre1) [Abonn├®] ÔÇô Emprunts : 2/3 ÔÇô Retard ÔåÆ Python Cookbook (LIVRE) [En gestion - Indisponible] [1]",
+        "action_flag": 2,
+        "change_message": "[{\"changed\": {\"fields\": [\"Statut\"]}}]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 16,
+    "fields": {
+        "action_time": "2025-11-16T18:49:25.098Z",
+        "user": 1,
+        "content_type": 8,
+        "object_id": "909",
+        "object_repr": "Merlin (LIVRE) [Hors gestion - Disponible]",
+        "action_flag": 3,
+        "change_message": ""
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 17,
+    "fields": {
+        "action_time": "2025-11-16T19:11:25.526Z",
+        "user": 1,
+        "content_type": 13,
+        "object_id": "912",
+        "object_repr": "Merlin (LIVRE) [En gestion - Disponible]",
+        "action_flag": 3,
+        "change_message": ""
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 18,
+    "fields": {
+        "action_time": "2025-11-16T19:14:57.574Z",
+        "user": 1,
+        "content_type": 8,
+        "object_id": "911",
+        "object_repr": "Merlin (NON_DEFINI) [En gestion - Disponible]",
+        "action_flag": 3,
+        "change_message": ""
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 19,
+    "fields": {
+        "action_time": "2025-11-16T19:15:11.131Z",
+        "user": 1,
+        "content_type": 8,
+        "object_id": "910",
+        "object_repr": "Merlin (LIVRE) [En gestion - Disponible]",
+        "action_flag": 3,
+        "change_message": ""
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 20,
+    "fields": {
+        "action_time": "2025-11-16T19:16:11.991Z",
+        "user": 1,
+        "content_type": 10,
+        "object_id": "20",
+        "object_repr": "Alice () [Abonn├®] ÔÇô Emprunts : 0/3 ÔÇô ├Ç jour",
+        "action_flag": 3,
+        "change_message": ""
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 21,
+    "fields": {
+        "action_time": "2025-11-16T19:42:44.699Z",
+        "user": 1,
+        "content_type": 13,
+        "object_id": "913",
+        "object_repr": " (NON_DEFINI) [Hors gestion - Indisponible]",
+        "action_flag": 3,
+        "change_message": ""
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 22,
+    "fields": {
+        "action_time": "2025-11-16T19:43:00.261Z",
+        "user": 1,
+        "content_type": 8,
+        "object_id": "914",
+        "object_repr": " (LIVRE) [En gestion - Disponible]",
+        "action_flag": 3,
+        "change_message": ""
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 23,
+    "fields": {
+        "action_time": "2025-11-16T19:45:09.224Z",
+        "user": 1,
+        "content_type": 13,
+        "object_id": "914",
+        "object_repr": "Merlin (LIVRE) [En gestion - Disponible]",
+        "action_flag": 3,
+        "change_message": ""
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 24,
+    "fields": {
+        "action_time": "2025-11-16T19:47:55.234Z",
+        "user": 1,
+        "content_type": 10,
+        "object_id": "21",
+        "object_repr": "Alice () [Abonn├®] ÔÇô Emprunts : 0/3 ÔÇô ├Ç jour",
+        "action_flag": 3,
+        "change_message": ""
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 25,
+    "fields": {
+        "action_time": "2025-11-17T14:46:23.898Z",
+        "user": 1,
+        "content_type": 14,
+        "object_id": "37",
+        "object_repr": "Alice () [Abonn├®] ÔÇô Emprunts : 1/3 ÔÇô ├Ç jour ÔåÆ Merlin (LIVRE) [En gestion - Disponible] [1]",
+        "action_flag": 3,
+        "change_message": ""
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 26,
+    "fields": {
+        "action_time": "2025-11-17T14:49:01.039Z",
+        "user": 1,
+        "content_type": 14,
+        "object_id": "38",
+        "object_repr": "Alice () [Abonn├®] ÔÇô Emprunts : 0/3 ÔÇô ├Ç jour ÔåÆ Merlin (LIVRE) [En gestion - Disponible] [2]",
+        "action_flag": 3,
+        "change_message": ""
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 27,
+    "fields": {
+        "action_time": "2025-11-17T14:50:39.923Z",
+        "user": 1,
+        "content_type": 14,
+        "object_id": "39",
+        "object_repr": "Alice () [Abonn├®] ÔÇô Emprunts : 0/3 ÔÇô ├Ç jour ÔåÆ Merlin (LIVRE) [En gestion - Disponible] [2]",
+        "action_flag": 3,
+        "change_message": ""
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 28,
+    "fields": {
+        "action_time": "2025-11-17T14:51:30.125Z",
+        "user": 1,
+        "content_type": 14,
+        "object_id": "40",
+        "object_repr": "Alice () [Abonn├®] ÔÇô Emprunts : 1/3 ÔÇô ├Ç jour ÔåÆ Merlin (LIVRE) [En gestion - Disponible] [1]",
+        "action_flag": 3,
+        "change_message": ""
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 29,
+    "fields": {
+        "action_time": "2025-11-24T19:04:26.385Z",
+        "user": 1,
+        "content_type": 4,
+        "object_id": "2",
+        "object_repr": "leclerc",
+        "action_flag": 1,
+        "change_message": "[{\"added\": {}}]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 30,
+    "fields": {
+        "action_time": "2025-11-24T19:05:10.742Z",
+        "user": 1,
+        "content_type": 4,
+        "object_id": "2",
+        "object_repr": "leclerc",
+        "action_flag": 2,
+        "change_message": "[]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 31,
+    "fields": {
+        "action_time": "2025-11-24T19:06:12.874Z",
+        "user": 1,
+        "content_type": 4,
+        "object_id": "2",
+        "object_repr": "leclerc",
+        "action_flag": 2,
+        "change_message": "[{\"changed\": {\"fields\": [\"Email address\"]}}]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 32,
+    "fields": {
+        "action_time": "2025-11-24T19:07:34.499Z",
+        "user": 1,
+        "content_type": 4,
+        "object_id": "3",
+        "object_repr": "moreau",
+        "action_flag": 1,
+        "change_message": "[{\"added\": {}}]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 33,
+    "fields": {
+        "action_time": "2025-11-24T19:07:37.797Z",
+        "user": 1,
+        "content_type": 7,
+        "object_id": "2",
+        "object_repr": "moreau (Gestionnaire)",
+        "action_flag": 2,
+        "change_message": "[{\"changed\": {\"fields\": [\"User\"]}}]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 34,
+    "fields": {
+        "action_time": "2025-11-24T19:07:50.862Z",
+        "user": 1,
+        "content_type": 7,
+        "object_id": "1",
+        "object_repr": "leclerc (Gestionnaire)",
+        "action_flag": 2,
+        "change_message": "[{\"changed\": {\"fields\": [\"User\"]}}]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 35,
+    "fields": {
+        "action_time": "2025-11-24T19:08:55.948Z",
+        "user": 1,
+        "content_type": 4,
+        "object_id": "3",
+        "object_repr": "moreau",
+        "action_flag": 2,
+        "change_message": "[{\"changed\": {\"fields\": [\"Email address\"]}}]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 36,
+    "fields": {
+        "action_time": "2025-11-24T19:08:58.950Z",
+        "user": 1,
+        "content_type": 7,
+        "object_id": "2",
+        "object_repr": "moreau (Gestionnaire)",
+        "action_flag": 2,
+        "change_message": "[]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 37,
+    "fields": {
+        "action_time": "2025-11-24T19:42:37.444Z",
+        "user": 1,
+        "content_type": 4,
+        "object_id": "2",
+        "object_repr": "leclerc",
+        "action_flag": 2,
+        "change_message": "[{\"changed\": {\"fields\": [\"password\"]}}]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 38,
+    "fields": {
+        "action_time": "2025-11-24T20:12:34.039Z",
+        "user": 1,
+        "content_type": 7,
+        "object_id": "2",
+        "object_repr": "moreau (Administrateur)",
+        "action_flag": 2,
+        "change_message": "[{\"changed\": {\"fields\": [\"Role\"]}}]"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 1,
+    "fields": {
+        "name": "Can add log entry",
+        "content_type": 1,
+        "codename": "add_logentry"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 2,
+    "fields": {
+        "name": "Can change log entry",
+        "content_type": 1,
+        "codename": "change_logentry"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 3,
+    "fields": {
+        "name": "Can delete log entry",
+        "content_type": 1,
+        "codename": "delete_logentry"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 4,
+    "fields": {
+        "name": "Can view log entry",
+        "content_type": 1,
+        "codename": "view_logentry"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 5,
+    "fields": {
+        "name": "Can add permission",
+        "content_type": 2,
+        "codename": "add_permission"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 6,
+    "fields": {
+        "name": "Can change permission",
+        "content_type": 2,
+        "codename": "change_permission"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 7,
+    "fields": {
+        "name": "Can delete permission",
+        "content_type": 2,
+        "codename": "delete_permission"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 8,
+    "fields": {
+        "name": "Can view permission",
+        "content_type": 2,
+        "codename": "view_permission"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 9,
+    "fields": {
+        "name": "Can add group",
+        "content_type": 3,
+        "codename": "add_group"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 10,
+    "fields": {
+        "name": "Can change group",
+        "content_type": 3,
+        "codename": "change_group"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 11,
+    "fields": {
+        "name": "Can delete group",
+        "content_type": 3,
+        "codename": "delete_group"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 12,
+    "fields": {
+        "name": "Can view group",
+        "content_type": 3,
+        "codename": "view_group"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 13,
+    "fields": {
+        "name": "Can add user",
+        "content_type": 4,
+        "codename": "add_user"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 14,
+    "fields": {
+        "name": "Can change user",
+        "content_type": 4,
+        "codename": "change_user"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 15,
+    "fields": {
+        "name": "Can delete user",
+        "content_type": 4,
+        "codename": "delete_user"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 16,
+    "fields": {
+        "name": "Can view user",
+        "content_type": 4,
+        "codename": "view_user"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 17,
+    "fields": {
+        "name": "Can add content type",
+        "content_type": 5,
+        "codename": "add_contenttype"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 18,
+    "fields": {
+        "name": "Can change content type",
+        "content_type": 5,
+        "codename": "change_contenttype"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 19,
+    "fields": {
+        "name": "Can delete content type",
+        "content_type": 5,
+        "codename": "delete_contenttype"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 20,
+    "fields": {
+        "name": "Can view content type",
+        "content_type": 5,
+        "codename": "view_contenttype"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 21,
+    "fields": {
+        "name": "Can add session",
+        "content_type": 6,
+        "codename": "add_session"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 22,
+    "fields": {
+        "name": "Can change session",
+        "content_type": 6,
+        "codename": "change_session"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 23,
+    "fields": {
+        "name": "Can delete session",
+        "content_type": 6,
+        "codename": "delete_session"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 24,
+    "fields": {
+        "name": "Can view session",
+        "content_type": 6,
+        "codename": "view_session"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 25,
+    "fields": {
+        "name": "Can add bibliothecaire",
+        "content_type": 7,
+        "codename": "add_bibliothecaire"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 26,
+    "fields": {
+        "name": "Can change bibliothecaire",
+        "content_type": 7,
+        "codename": "change_bibliothecaire"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 27,
+    "fields": {
+        "name": "Can delete bibliothecaire",
+        "content_type": 7,
+        "codename": "delete_bibliothecaire"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 28,
+    "fields": {
+        "name": "Can view bibliothecaire",
+        "content_type": 7,
+        "codename": "view_bibliothecaire"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 29,
+    "fields": {
+        "name": "Can add media",
+        "content_type": 8,
+        "codename": "add_media"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 30,
+    "fields": {
+        "name": "Can change media",
+        "content_type": 8,
+        "codename": "change_media"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 31,
+    "fields": {
+        "name": "Can delete media",
+        "content_type": 8,
+        "codename": "delete_media"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 32,
+    "fields": {
+        "name": "Can view media",
+        "content_type": 8,
+        "codename": "view_media"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 33,
+    "fields": {
+        "name": "Can add jeu de plateau",
+        "content_type": 9,
+        "codename": "add_jeudeplateau"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 34,
+    "fields": {
+        "name": "Can change jeu de plateau",
+        "content_type": 9,
+        "codename": "change_jeudeplateau"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 35,
+    "fields": {
+        "name": "Can delete jeu de plateau",
+        "content_type": 9,
+        "codename": "delete_jeudeplateau"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 36,
+    "fields": {
+        "name": "Can view jeu de plateau",
+        "content_type": 9,
+        "codename": "view_jeudeplateau"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 37,
+    "fields": {
+        "name": "Can add membre",
+        "content_type": 10,
+        "codename": "add_membre"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 38,
+    "fields": {
+        "name": "Can change membre",
+        "content_type": 10,
+        "codename": "change_membre"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 39,
+    "fields": {
+        "name": "Can delete membre",
+        "content_type": 10,
+        "codename": "delete_membre"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 40,
+    "fields": {
+        "name": "Can view membre",
+        "content_type": 10,
+        "codename": "view_membre"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 41,
+    "fields": {
+        "name": "Can add CD",
+        "content_type": 11,
+        "codename": "add_cd"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 42,
+    "fields": {
+        "name": "Can change CD",
+        "content_type": 11,
+        "codename": "change_cd"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 43,
+    "fields": {
+        "name": "Can delete CD",
+        "content_type": 11,
+        "codename": "delete_cd"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 44,
+    "fields": {
+        "name": "Can view CD",
+        "content_type": 11,
+        "codename": "view_cd"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 45,
+    "fields": {
+        "name": "Can add DVD",
+        "content_type": 12,
+        "codename": "add_dvd"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 46,
+    "fields": {
+        "name": "Can change DVD",
+        "content_type": 12,
+        "codename": "change_dvd"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 47,
+    "fields": {
+        "name": "Can delete DVD",
+        "content_type": 12,
+        "codename": "delete_dvd"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 48,
+    "fields": {
+        "name": "Can view DVD",
+        "content_type": 12,
+        "codename": "view_dvd"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 49,
+    "fields": {
+        "name": "Can add livre",
+        "content_type": 13,
+        "codename": "add_livre"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 50,
+    "fields": {
+        "name": "Can change livre",
+        "content_type": 13,
+        "codename": "change_livre"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 51,
+    "fields": {
+        "name": "Can delete livre",
+        "content_type": 13,
+        "codename": "delete_livre"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 52,
+    "fields": {
+        "name": "Can view livre",
+        "content_type": 13,
+        "codename": "view_livre"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 53,
+    "fields": {
+        "name": "Can add emprunt",
+        "content_type": 14,
+        "codename": "add_emprunt"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 54,
+    "fields": {
+        "name": "Can change emprunt",
+        "content_type": 14,
+        "codename": "change_emprunt"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 55,
+    "fields": {
+        "name": "Can delete emprunt",
+        "content_type": 14,
+        "codename": "delete_emprunt"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 56,
+    "fields": {
+        "name": "Can view emprunt",
+        "content_type": 14,
+        "codename": "view_emprunt"
+    }
+},
+{
+    "model": "auth.user",
+    "pk": 1,
+    "fields": {
+        "password": "pbkdf2_sha256$1000000$x8OnBgn3FFe1hoIonPAb3k$MpUdd93F9B8X6v9phyxYMy9RBCs5wa4X4kJODO/nAk0=",
+        "last_login": "2025-11-24T18:34:00.103Z",
+        "is_superuser": true,
+        "username": "admin",
+        "first_name": "",
+        "last_name": "",
+        "email": "admin.test@localhost",
+        "is_staff": true,
+        "is_active": true,
+        "date_joined": "2025-09-20T10:00:00Z",
+        "groups": [],
+        "user_permissions": []
+    }
+},
+{
+    "model": "auth.user",
+    "pk": 2,
+    "fields": {
+        "password": "pbkdf2_sha256$1000000$tfbDUcVJbex6OQGLXQhNlA$GPmr+NpuM3tCqEsILYpEjgLBwn3Y1ZYQe/qiEuLSQ7Y=",
+        "last_login": "2025-11-24T20:20:13.777Z",
+        "is_superuser": false,
+        "username": "leclerc",
+        "first_name": "",
+        "last_name": "",
+        "email": "test_1@gestionnaire.com",
+        "is_staff": false,
+        "is_active": true,
+        "date_joined": "2025-11-24T19:04:26Z",
+        "groups": [],
+        "user_permissions": []
+    }
+},
+{
+    "model": "auth.user",
+    "pk": 3,
+    "fields": {
+        "password": "pbkdf2_sha256$1000000$I6MCX30uB3hLaqdM8QpgF5$rD+NX+b0ZwX+5iGwB00tMiruwpQxV4VLwKH9Kkt51Xc=",
+        "last_login": "2025-11-24T20:21:02.673Z",
+        "is_superuser": false,
+        "username": "moreau",
+        "first_name": "",
+        "last_name": "",
+        "email": "test_2@gestionnaire.com",
+        "is_staff": false,
+        "is_active": true,
+        "date_joined": "2025-11-24T19:07:34Z",
+        "groups": [],
+        "user_permissions": []
+    }
+},
+{
+    "model": "contenttypes.contenttype",
+    "pk": 1,
+    "fields": {
+        "app_label": "admin",
+        "model": "logentry"
+    }
+},
+{
+    "model": "contenttypes.contenttype",
+    "pk": 2,
+    "fields": {
+        "app_label": "auth",
+        "model": "permission"
+    }
+},
+{
+    "model": "contenttypes.contenttype",
+    "pk": 3,
+    "fields": {
+        "app_label": "auth",
+        "model": "group"
+    }
+},
+{
+    "model": "contenttypes.contenttype",
+    "pk": 4,
+    "fields": {
+        "app_label": "auth",
+        "model": "user"
+    }
+},
+{
+    "model": "contenttypes.contenttype",
+    "pk": 5,
+    "fields": {
+        "app_label": "contenttypes",
+        "model": "contenttype"
+    }
+},
+{
+    "model": "contenttypes.contenttype",
+    "pk": 6,
+    "fields": {
+        "app_label": "sessions",
+        "model": "session"
+    }
+},
+{
+    "model": "contenttypes.contenttype",
+    "pk": 7,
+    "fields": {
+        "app_label": "bibliothecaire",
+        "model": "bibliothecaire"
+    }
+},
+{
+    "model": "contenttypes.contenttype",
+    "pk": 8,
+    "fields": {
+        "app_label": "bibliothecaire",
+        "model": "media"
+    }
+},
+{
+    "model": "contenttypes.contenttype",
+    "pk": 9,
+    "fields": {
+        "app_label": "bibliothecaire",
+        "model": "jeudeplateau"
+    }
+},
+{
+    "model": "contenttypes.contenttype",
+    "pk": 10,
+    "fields": {
+        "app_label": "bibliothecaire",
+        "model": "membre"
+    }
+},
+{
+    "model": "contenttypes.contenttype",
+    "pk": 11,
+    "fields": {
+        "app_label": "bibliothecaire",
+        "model": "cd"
+    }
+},
+{
+    "model": "contenttypes.contenttype",
+    "pk": 12,
+    "fields": {
+        "app_label": "bibliothecaire",
+        "model": "dvd"
+    }
+},
+{
+    "model": "contenttypes.contenttype",
+    "pk": 13,
+    "fields": {
+        "app_label": "bibliothecaire",
+        "model": "livre"
+    }
+},
+{
+    "model": "contenttypes.contenttype",
+    "pk": 14,
+    "fields": {
+        "app_label": "bibliothecaire",
+        "model": "emprunt"
+    }
+},
+{
+    "model": "bibliothecaire.media",
+    "pk": 1,
+    "fields": {
+        "name": "Le Petit Prince",
+        "annee_edition": 1943,
+        "consultable": true,
+        "disponible": true,
+        "theme": "Roman",
+        "media_type": "LIVRE"
+    }
+},
+{
+    "model": "bibliothecaire.media",
+    "pk": 2,
+    "fields": {
+        "name": "1984",
+        "annee_edition": 1949,
+        "consultable": true,
+        "disponible": false,
+        "theme": "Science-fiction",
+        "media_type": "LIVRE"
+    }
+},
+{
+    "model": "bibliothecaire.media",
+    "pk": 3,
+    "fields": {
+        "name": "Django Unleashed",
+        "annee_edition": 2021,
+        "consultable": true,
+        "disponible": false,
+        "theme": "Informatique",
+        "media_type": "LIVRE"
+    }
+},
+{
+    "model": "bibliothecaire.media",
+    "pk": 4,
+    "fields": {
+        "name": "Python Cookbook",
+        "annee_edition": 2019,
+        "consultable": true,
+        "disponible": false,
+        "theme": "Informatique",
+        "media_type": "LIVRE"
+    }
+},
+{
+    "model": "bibliothecaire.media",
+    "pk": 5,
+    "fields": {
+        "name": "Les Mis├®rables",
+        "annee_edition": 1862,
+        "consultable": false,
+        "disponible": true,
+        "theme": "Roman",
+        "media_type": "LIVRE"
+    }
+},
+{
+    "model": "bibliothecaire.media",
+    "pk": 6,
+    "fields": {
+        "name": "Inception",
+        "annee_edition": 2010,
+        "consultable": true,
+        "disponible": true,
+        "theme": "Thriller",
+        "media_type": "DVD"
+    }
+},
+{
+    "model": "bibliothecaire.media",
+    "pk": 7,
+    "fields": {
+        "name": "Matrix",
+        "annee_edition": 1999,
+        "consultable": true,
+        "disponible": true,
+        "theme": "Action",
+        "media_type": "DVD"
+    }
+},
+{
+    "model": "bibliothecaire.media",
+    "pk": 8,
+    "fields": {
+        "name": "Le Fabuleux Destin d'Am├®lie Poulain",
+        "annee_edition": 2001,
+        "consultable": true,
+        "disponible": true,
+        "theme": "Com├Üdie",
+        "media_type": "DVD"
+    }
+},
+{
+    "model": "bibliothecaire.media",
+    "pk": 9,
+    "fields": {
+        "name": "Interstellar",
+        "annee_edition": 2014,
+        "consultable": true,
+        "disponible": false,
+        "theme": "Science-fiction",
+        "media_type": "DVD"
+    }
+},
+{
+    "model": "bibliothecaire.media",
+    "pk": 10,
+    "fields": {
+        "name": "Le Seigneur des Anneaux",
+        "annee_edition": 2001,
+        "consultable": false,
+        "disponible": false,
+        "theme": "Fantasy",
+        "media_type": "DVD"
+    }
+},
+{
+    "model": "bibliothecaire.media",
+    "pk": 11,
+    "fields": {
+        "name": "Thriller",
+        "annee_edition": 1982,
+        "consultable": true,
+        "disponible": true,
+        "theme": "Pop",
+        "media_type": "CD"
+    }
+},
+{
+    "model": "bibliothecaire.media",
+    "pk": 12,
+    "fields": {
+        "name": "Back in Black",
+        "annee_edition": 1980,
+        "consultable": false,
+        "disponible": false,
+        "theme": "Rock",
+        "media_type": "CD"
+    }
+},
+{
+    "model": "bibliothecaire.media",
+    "pk": 13,
+    "fields": {
+        "name": "The Dark Side of the Moon",
+        "annee_edition": 1973,
+        "consultable": true,
+        "disponible": true,
+        "theme": "Progressive",
+        "media_type": "CD"
+    }
+},
+{
+    "model": "bibliothecaire.media",
+    "pk": 14,
+    "fields": {
+        "name": "Abbey Road",
+        "annee_edition": 1969,
+        "consultable": true,
+        "disponible": false,
+        "theme": "Rock",
+        "media_type": "CD"
+    }
+},
+{
+    "model": "bibliothecaire.media",
+    "pk": 15,
+    "fields": {
+        "name": "Kind of Blue",
+        "annee_edition": 1959,
+        "consultable": false,
+        "disponible": false,
+        "theme": "Jazz",
+        "media_type": "CD"
+    }
+},
+{
+    "model": "bibliothecaire.media",
+    "pk": 901,
+    "fields": {
+        "name": "M├®dia minimal -sans type-disponible-sans date",
+        "annee_edition": null,
+        "consultable": false,
+        "disponible": false,
+        "theme": "",
+        "media_type": "NON_DEFINI"
+    }
+},
+{
+    "model": "bibliothecaire.media",
+    "pk": 902,
+    "fields": {
+        "name": "M├®dia minimal -sans type-indisponible-sans date",
+        "annee_edition": null,
+        "consultable": false,
+        "disponible": false,
+        "theme": "",
+        "media_type": "NON_DEFINI"
+    }
+},
+{
+    "model": "bibliothecaire.media",
+    "pk": 903,
+    "fields": {
+        "name": "M├®dia minimal -sans type-indisponible-date",
+        "annee_edition": 1980,
+        "consultable": false,
+        "disponible": false,
+        "theme": "",
+        "media_type": "NON_DEFINI"
+    }
+},
+{
+    "model": "bibliothecaire.media",
+    "pk": 904,
+    "fields": {
+        "name": "M├®dia minimal & insertion automatique",
+        "annee_edition": null,
+        "consultable": false,
+        "disponible": false,
+        "theme": "",
+        "media_type": "NON_DEFINI"
+    }
+},
+{
+    "model": "bibliothecaire.media",
+    "pk": 905,
+    "fields": {
+        "name": "Livre test",
+        "annee_edition": null,
+        "consultable": true,
+        "disponible": true,
+        "theme": "TTM1",
+        "media_type": "LIVRE"
+    }
+},
+{
+    "model": "bibliothecaire.media",
+    "pk": 906,
+    "fields": {
+        "name": "DVD Test",
+        "annee_edition": null,
+        "consultable": true,
+        "disponible": false,
+        "theme": "TTM2",
+        "media_type": "DVD"
+    }
+},
+{
+    "model": "bibliothecaire.media",
+    "pk": 907,
+    "fields": {
+        "name": "Livre test",
+        "annee_edition": null,
+        "consultable": true,
+        "disponible": true,
+        "theme": "TTM1",
+        "media_type": "DVD"
+    }
+},
+{
+    "model": "bibliothecaire.media",
+    "pk": 908,
+    "fields": {
+        "name": "Livre test",
+        "annee_edition": null,
+        "consultable": true,
+        "disponible": false,
+        "theme": "TTM3",
+        "media_type": "CD"
+    }
+},
+{
+    "model": "bibliothecaire.media",
+    "pk": 915,
+    "fields": {
+        "name": "Merlin",
+        "annee_edition": null,
+        "consultable": true,
+        "disponible": true,
+        "theme": "Conte",
+        "media_type": "LIVRE"
+    }
+},
+{
+    "model": "bibliothecaire.livre",
+    "pk": 1,
+    "fields": {
+        "auteur": "Antoine de Saint-Exup├®ry",
+        "nb_page": 96,
+        "resume": "Conte po├®tique et philosophique"
+    }
+},
+{
+    "model": "bibliothecaire.livre",
+    "pk": 2,
+    "fields": {
+        "auteur": "George Orwell",
+        "nb_page": 328,
+        "resume": "Roman dystopique"
+    }
+},
+{
+    "model": "bibliothecaire.livre",
+    "pk": 3,
+    "fields": {
+        "auteur": "Adam Freeman",
+        "nb_page": 800,
+        "resume": "Guide complet de Django"
+    }
+},
+{
+    "model": "bibliothecaire.livre",
+    "pk": 4,
+    "fields": {
+        "auteur": "David Beazley",
+        "nb_page": 700,
+        "resume": "Recettes Python avanc├®es"
+    }
+},
+{
+    "model": "bibliothecaire.livre",
+    "pk": 5,
+    "fields": {
+        "auteur": "Victor Hugo",
+        "nb_page": 1232,
+        "resume": "├ëpop├®e historique"
+    }
+},
+{
+    "model": "bibliothecaire.livre",
+    "pk": 905,
+    "fields": {
+        "auteur": "ATTM1",
+        "nb_page": null,
+        "resume": "RTTM1"
+    }
+},
+{
+    "model": "bibliothecaire.livre",
+    "pk": 915,
+    "fields": {
+        "auteur": "L├®gende",
+        "nb_page": null,
+        "resume": "Enchanteur"
+    }
+},
+{
+    "model": "bibliothecaire.dvd",
+    "pk": 6,
+    "fields": {
+        "realisateur": "Christopher Nolan",
+        "duree": 148,
+        "histoire": "R├¬ves imbriqu├®s"
+    }
+},
+{
+    "model": "bibliothecaire.dvd",
+    "pk": 7,
+    "fields": {
+        "realisateur": "Lana Wachowski",
+        "duree": 136,
+        "histoire": "R├®alit├® simul├®e"
+    }
+},
+{
+    "model": "bibliothecaire.dvd",
+    "pk": 8,
+    "fields": {
+        "realisateur": "Jean-Pierre Jeunet",
+        "duree": 122,
+        "histoire": "Le quotidien enchante╠ü dÔÇÖAm├®lie"
+    }
+},
+{
+    "model": "bibliothecaire.dvd",
+    "pk": 9,
+    "fields": {
+        "realisateur": "Christopher Nolan",
+        "duree": 169,
+        "histoire": "Exploration spatiale"
+    }
+},
+{
+    "model": "bibliothecaire.dvd",
+    "pk": 10,
+    "fields": {
+        "realisateur": "Peter Jackson",
+        "duree": 558,
+        "histoire": "Qu├¬te ├®pique en Terre du Milieu"
+    }
+},
+{
+    "model": "bibliothecaire.dvd",
+    "pk": 906,
+    "fields": {
+        "realisateur": "RTTM2",
+        "duree": 1,
+        "histoire": "HTTM2"
+    }
+},
+{
+    "model": "bibliothecaire.dvd",
+    "pk": 907,
+    "fields": {
+        "realisateur": "RTTM2",
+        "duree": 1,
+        "histoire": "HTTM2"
+    }
+},
+{
+    "model": "bibliothecaire.cd",
+    "pk": 11,
+    "fields": {
+        "artiste": "Michael Jackson",
+        "nb_piste": 9,
+        "duree_ecoute": 42
+    }
+},
+{
+    "model": "bibliothecaire.cd",
+    "pk": 12,
+    "fields": {
+        "artiste": "AC/DC",
+        "nb_piste": 10,
+        "duree_ecoute": 41
+    }
+},
+{
+    "model": "bibliothecaire.cd",
+    "pk": 13,
+    "fields": {
+        "artiste": "Pink Floyd",
+        "nb_piste": 10,
+        "duree_ecoute": 43
+    }
+},
+{
+    "model": "bibliothecaire.cd",
+    "pk": 14,
+    "fields": {
+        "artiste": "The Beatles",
+        "nb_piste": 17,
+        "duree_ecoute": 47
+    }
+},
+{
+    "model": "bibliothecaire.cd",
+    "pk": 15,
+    "fields": {
+        "artiste": "Miles Davis",
+        "nb_piste": 5,
+        "duree_ecoute": 46
+    }
+},
+{
+    "model": "bibliothecaire.cd",
+    "pk": 908,
+    "fields": {
+        "artiste": "ATTM3",
+        "nb_piste": 1,
+        "duree_ecoute": 3
+    }
+},
+{
+    "model": "bibliothecaire.jeudeplateau",
+    "pk": 16,
+    "fields": {
+        "name": "Monopoly",
+        "annee_edition": 1935,
+        "consultable": true,
+        "createur": "Parker Brothers",
+        "regle_consultable": true,
+        "categorie": "├ëconomie",
+        "duree_partie": 90,
+        "nb_joueur_min": 2,
+        "nb_joueur_max": 6,
+        "age_min": 8
+    }
+},
+{
+    "model": "bibliothecaire.jeudeplateau",
+    "pk": 17,
+    "fields": {
+        "name": "Risk",
+        "annee_edition": 1959,
+        "consultable": true,
+        "createur": "Parker Brothers",
+        "regle_consultable": true,
+        "categorie": "Strat├®gie",
+        "duree_partie": 120,
+        "nb_joueur_min": 2,
+        "nb_joueur_max": 6,
+        "age_min": 10
+    }
+},
+{
+    "model": "bibliothecaire.jeudeplateau",
+    "pk": 18,
+    "fields": {
+        "name": "Catan",
+        "annee_edition": 1995,
+        "consultable": false,
+        "createur": "Klaus Teuber",
+        "regle_consultable": true,
+        "categorie": "Strat├®gie",
+        "duree_partie": 75,
+        "nb_joueur_min": 3,
+        "nb_joueur_max": 4,
+        "age_min": 10
+    }
+},
+{
+    "model": "bibliothecaire.jeudeplateau",
+    "pk": 19,
+    "fields": {
+        "name": "Carcassonne",
+        "annee_edition": 2000,
+        "consultable": true,
+        "createur": "Klaus-J├╝rgen Wrede",
+        "regle_consultable": true,
+        "categorie": "Placement de tuiles",
+        "duree_partie": 45,
+        "nb_joueur_min": 2,
+        "nb_joueur_max": 5,
+        "age_min": 8
+    }
+},
+{
+    "model": "bibliothecaire.jeudeplateau",
+    "pk": 20,
+    "fields": {
+        "name": "Dixit",
+        "annee_edition": 2008,
+        "consultable": false,
+        "createur": "Jean-Louis Roubira",
+        "regle_consultable": false,
+        "categorie": "Imagination",
+        "duree_partie": 30,
+        "nb_joueur_min": 3,
+        "nb_joueur_max": 6,
+        "age_min": 8
+    }
+},
+{
+    "model": "bibliothecaire.jeudeplateau",
+    "pk": 21,
+    "fields": {
+        "name": "test jeu",
+        "annee_edition": null,
+        "consultable": true,
+        "createur": "MonCr├®ateur",
+        "regle_consultable": false,
+        "categorie": "Non class├®",
+        "duree_partie": 30,
+        "nb_joueur_min": 2,
+        "nb_joueur_max": 4,
+        "age_min": 8
+    }
+},
+{
+    "model": "bibliothecaire.membre",
+    "pk": 1,
+    "fields": {
+        "name": "Dupont",
+        "compte": "membre1",
+        "statut": 1
+    }
+},
+{
+    "model": "bibliothecaire.membre",
+    "pk": 2,
+    "fields": {
+        "name": "Martin",
+        "compte": "membre2",
+        "statut": 1
+    }
+},
+{
+    "model": "bibliothecaire.membre",
+    "pk": 3,
+    "fields": {
+        "name": "Bernard",
+        "compte": "membre3",
+        "statut": 1
+    }
+},
+{
+    "model": "bibliothecaire.membre",
+    "pk": 4,
+    "fields": {
+        "name": "Thomas",
+        "compte": "membre4",
+        "statut": 1
+    }
+},
+{
+    "model": "bibliothecaire.membre",
+    "pk": 5,
+    "fields": {
+        "name": "Petit",
+        "compte": "membre5",
+        "statut": 1
+    }
+},
+{
+    "model": "bibliothecaire.membre",
+    "pk": 7,
+    "fields": {
+        "name": "premier membre",
+        "compte": "2025_premier_membre_1",
+        "statut": 1
+    }
+},
+{
+    "model": "bibliothecaire.membre",
+    "pk": 8,
+    "fields": {
+        "name": "second membre *222",
+        "compte": "2025_second_membre_!_1",
+        "statut": 1
+    }
+},
+{
+    "model": "bibliothecaire.membre",
+    "pk": 9,
+    "fields": {
+        "name": "troisi├¿me membre",
+        "compte": "2025_troisi├¿me_membre_1",
+        "statut": 1
+    }
+},
+{
+    "model": "bibliothecaire.membre",
+    "pk": 10,
+    "fields": {
+        "name": "second membre",
+        "compte": "2025_second_membre_!_2",
+        "statut": 1
+    }
+},
+{
+    "model": "bibliothecaire.membre",
+    "pk": 11,
+    "fields": {
+        "name": "second membre**",
+        "compte": "2025_second_membre_1",
+        "statut": 1
+    }
+},
+{
+    "model": "bibliothecaire.membre",
+    "pk": 12,
+    "fields": {
+        "name": "test membre",
+        "compte": "2025_test_membre_1",
+        "statut": 1
+    }
+},
+{
+    "model": "bibliothecaire.membre",
+    "pk": 13,
+    "fields": {
+        "name": "test membre 2",
+        "compte": "2025_test_membre_2_1",
+        "statut": 1
+    }
+},
+{
+    "model": "bibliothecaire.membre",
+    "pk": 14,
+    "fields": {
+        "name": "test membre rigolo",
+        "compte": "2025_test_membre_rigolo_1",
+        "statut": 1
+    }
+},
+{
+    "model": "bibliothecaire.membre",
+    "pk": 15,
+    "fields": {
+        "name": "petit test final",
+        "compte": "2025_petit_test_final_1",
+        "statut": 0
+    }
+},
+{
+    "model": "bibliothecaire.membre",
+    "pk": 16,
+    "fields": {
+        "name": "membre seul",
+        "compte": "2025_membre_seul_1",
+        "statut": 2
+    }
+},
+{
+    "model": "bibliothecaire.membre",
+    "pk": 17,
+    "fields": {
+        "name": "membre de test**",
+        "compte": "2025_membre_de_test_1",
+        "statut": 2
+    }
+},
+{
+    "model": "bibliothecaire.membre",
+    "pk": 18,
+    "fields": {
+        "name": "test membre avec historique",
+        "compte": "2025_test_membre_avec_historique_1",
+        "statut": 0
+    }
+},
+{
+    "model": "bibliothecaire.membre",
+    "pk": 19,
+    "fields": {
+        "name": "truc",
+        "compte": "2025_truc_1",
+        "statut": 0
+    }
+},
+{
+    "model": "bibliothecaire.membre",
+    "pk": 22,
+    "fields": {
+        "name": "Alice",
+        "compte": "",
+        "statut": 1
+    }
+},
+{
+    "model": "bibliothecaire.bibliothecaire",
+    "pk": 1,
+    "fields": {
+        "name": "Leclerc",
+        "user": 2,
+        "role": 2
+    }
+},
+{
+    "model": "bibliothecaire.bibliothecaire",
+    "pk": 2,
+    "fields": {
+        "name": "Moreau",
+        "user": 3,
+        "role": 1
+    }
+},
+{
+    "model": "bibliothecaire.emprunt",
+    "pk": 1,
+    "fields": {
+        "media": 1,
+        "emprunteur": 1,
+        "date_emprunt": "2025-09-01",
+        "date_retour": "2025-09-10",
+        "statut": 2
+    }
+},
+{
+    "model": "bibliothecaire.emprunt",
+    "pk": 2,
+    "fields": {
+        "media": 2,
+        "emprunteur": 2,
+        "date_emprunt": "2025-10-05",
+        "date_retour": "2025-11-07",
+        "statut": 2
+    }
+},
+{
+    "model": "bibliothecaire.emprunt",
+    "pk": 3,
+    "fields": {
+        "media": 3,
+        "emprunteur": 3,
+        "date_emprunt": "2025-08-20",
+        "date_retour": "2025-11-09",
+        "statut": 2
+    }
+},
+{
+    "model": "bibliothecaire.emprunt",
+    "pk": 4,
+    "fields": {
+        "media": 7,
+        "emprunteur": 4,
+        "date_emprunt": "2025-10-20",
+        "date_retour": "2025-11-07",
+        "statut": 2
+    }
+},
+{
+    "model": "bibliothecaire.emprunt",
+    "pk": 5,
+    "fields": {
+        "media": 12,
+        "emprunteur": 5,
+        "date_emprunt": "2025-07-01",
+        "date_retour": "2025-07-15",
+        "statut": 2
+    }
+},
+{
+    "model": "bibliothecaire.emprunt",
+    "pk": 6,
+    "fields": {
+        "media": 6,
+        "emprunteur": 5,
+        "date_emprunt": "2025-10-26",
+        "date_retour": "2025-11-09",
+        "statut": 2
+    }
+},
+{
+    "model": "bibliothecaire.emprunt",
+    "pk": 7,
+    "fields": {
+        "media": 8,
+        "emprunteur": 2,
+        "date_emprunt": "2025-10-27",
+        "date_retour": "2025-11-09",
+        "statut": 2
+    }
+},
+{
+    "model": "bibliothecaire.emprunt",
+    "pk": 8,
+    "fields": {
+        "media": 4,
+        "emprunteur": 1,
+        "date_emprunt": "2025-10-28",
+        "date_retour": null,
+        "statut": 0
+    }
+},
+{
+    "model": "bibliothecaire.emprunt",
+    "pk": 9,
+    "fields": {
+        "media": 1,
+        "emprunteur": 1,
+        "date_emprunt": "2025-11-03",
+        "date_retour": null,
+        "statut": 0
+    }
+},
+{
+    "model": "bibliothecaire.emprunt",
+    "pk": 10,
+    "fields": {
+        "media": 9,
+        "emprunteur": 7,
+        "date_emprunt": "2025-11-06",
+        "date_retour": "2025-11-09",
+        "statut": 2
+    }
+},
+{
+    "model": "bibliothecaire.emprunt",
+    "pk": 11,
+    "fields": {
+        "media": 11,
+        "emprunteur": 12,
+        "date_emprunt": "2025-11-06",
+        "date_retour": "2025-11-09",
+        "statut": 2
+    }
+},
+{
+    "model": "bibliothecaire.emprunt",
+    "pk": 12,
+    "fields": {
+        "media": 13,
+        "emprunteur": 8,
+        "date_emprunt": "2025-11-06",
+        "date_retour": "2025-11-09",
+        "statut": 2
+    }
+},
+{
+    "model": "bibliothecaire.emprunt",
+    "pk": 14,
+    "fields": {
+        "media": 14,
+        "emprunteur": 7,
+        "date_emprunt": "2025-11-06",
+        "date_retour": "2025-11-10",
+        "statut": 2
+    }
+},
+{
+    "model": "bibliothecaire.emprunt",
+    "pk": 15,
+    "fields": {
+        "media": 905,
+        "emprunteur": 7,
+        "date_emprunt": "2025-11-06",
+        "date_retour": "2025-11-09",
+        "statut": 2
+    }
+},
+{
+    "model": "bibliothecaire.emprunt",
+    "pk": 16,
+    "fields": {
+        "media": 906,
+        "emprunteur": 8,
+        "date_emprunt": "2025-11-06",
+        "date_retour": "2025-11-10",
+        "statut": 2
+    }
+},
+{
+    "model": "bibliothecaire.emprunt",
+    "pk": 17,
+    "fields": {
+        "media": 907,
+        "emprunteur": 8,
+        "date_emprunt": "2025-11-07",
+        "date_retour": "2025-11-11",
+        "statut": 2
+    }
+},
+{
+    "model": "bibliothecaire.emprunt",
+    "pk": 18,
+    "fields": {
+        "media": 908,
+        "emprunteur": 10,
+        "date_emprunt": "2025-11-07",
+        "date_retour": "2025-11-11",
+        "statut": 2
+    }
+},
+{
+    "model": "bibliothecaire.emprunt",
+    "pk": 19,
+    "fields": {
+        "media": 9,
+        "emprunteur": 3,
+        "date_emprunt": "2025-11-09",
+        "date_retour": "2025-11-09",
+        "statut": 2
+    }
+},
+{
+    "model": "bibliothecaire.emprunt",
+    "pk": 20,
+    "fields": {
+        "media": 8,
+        "emprunteur": 3,
+        "date_emprunt": "2025-11-10",
+        "date_retour": "2025-11-10",
+        "statut": 2
+    }
+},
+{
+    "model": "bibliothecaire.emprunt",
+    "pk": 21,
+    "fields": {
+        "media": 2,
+        "emprunteur": 2,
+        "date_emprunt": "2025-11-11",
+        "date_retour": "2025-11-11",
+        "statut": 2
+    }
+},
+{
+    "model": "bibliothecaire.emprunt",
+    "pk": 22,
+    "fields": {
+        "media": 14,
+        "emprunteur": 2,
+        "date_emprunt": "2025-11-11",
+        "date_retour": "2025-11-11",
+        "statut": 2
+    }
+},
+{
+    "model": "bibliothecaire.emprunt",
+    "pk": 23,
+    "fields": {
+        "media": 9,
+        "emprunteur": 8,
+        "date_emprunt": "2025-11-11",
+        "date_retour": "2025-11-11",
+        "statut": 2
+    }
+},
+{
+    "model": "bibliothecaire.emprunt",
+    "pk": 24,
+    "fields": {
+        "media": 907,
+        "emprunteur": 10,
+        "date_emprunt": "2025-11-11",
+        "date_retour": "2025-11-11",
+        "statut": 2
+    }
+},
+{
+    "model": "bibliothecaire.emprunt",
+    "pk": 25,
+    "fields": {
+        "media": 1,
+        "emprunteur": 8,
+        "date_emprunt": "2025-11-11",
+        "date_retour": "2025-11-11",
+        "statut": 2
+    }
+},
+{
+    "model": "bibliothecaire.emprunt",
+    "pk": 26,
+    "fields": {
+        "media": 7,
+        "emprunteur": 8,
+        "date_emprunt": "2025-11-11",
+        "date_retour": "2025-11-11",
+        "statut": 2
+    }
+},
+{
+    "model": "bibliothecaire.emprunt",
+    "pk": 27,
+    "fields": {
+        "media": 8,
+        "emprunteur": 8,
+        "date_emprunt": "2025-11-11",
+        "date_retour": "2025-11-11",
+        "statut": 2
+    }
+},
+{
+    "model": "bibliothecaire.emprunt",
+    "pk": 28,
+    "fields": {
+        "media": 908,
+        "emprunteur": 4,
+        "date_emprunt": "2025-11-11",
+        "date_retour": null,
+        "statut": 0
+    }
+},
+{
+    "model": "bibliothecaire.emprunt",
+    "pk": 29,
+    "fields": {
+        "media": 1,
+        "emprunteur": 8,
+        "date_emprunt": "2025-11-11",
+        "date_retour": "2025-11-11",
+        "statut": 2
+    }
+},
+{
+    "model": "bibliothecaire.emprunt",
+    "pk": 30,
+    "fields": {
+        "media": 2,
+        "emprunteur": 3,
+        "date_emprunt": "2025-11-11",
+        "date_retour": null,
+        "statut": 0
+    }
+},
+{
+    "model": "bibliothecaire.emprunt",
+    "pk": 31,
+    "fields": {
+        "media": 14,
+        "emprunteur": 2,
+        "date_emprunt": "2025-11-11",
+        "date_retour": null,
+        "statut": 0
+    }
+},
+{
+    "model": "bibliothecaire.emprunt",
+    "pk": 32,
+    "fields": {
+        "media": 9,
+        "emprunteur": 10,
+        "date_emprunt": "2025-11-11",
+        "date_retour": null,
+        "statut": 0
+    }
+},
+{
+    "model": "bibliothecaire.emprunt",
+    "pk": 33,
+    "fields": {
+        "media": 906,
+        "emprunteur": 4,
+        "date_emprunt": "2025-11-11",
+        "date_retour": "2025-11-11",
+        "statut": 2
+    }
+},
+{
+    "model": "bibliothecaire.emprunt",
+    "pk": 34,
+    "fields": {
+        "media": 906,
+        "emprunteur": 2,
+        "date_emprunt": "2025-11-15",
+        "date_retour": null,
+        "statut": 0
+    }
+},
+{
+    "model": "bibliothecaire.emprunt",
+    "pk": 35,
+    "fields": {
+        "media": 3,
+        "emprunteur": 2,
+        "date_emprunt": "2025-11-15",
+        "date_retour": null,
+        "statut": 0
+    }
+},
+{
+    "model": "bibliothecaire.emprunt",
+    "pk": 41,
+    "fields": {
+        "media": 915,
+        "emprunteur": 22,
+        "date_emprunt": "2025-11-17",
+        "date_retour": "2025-11-17",
+        "statut": 2
+    }
+},
+{
+    "model": "bibliothecaire.emprunt",
+    "pk": 42,
+    "fields": {
+        "media": 915,
+        "emprunteur": 22,
+        "date_emprunt": "2025-11-17",
+        "date_retour": "2025-11-17",
+        "statut": 2
+    }
+},
+{
+    "model": "bibliothecaire.emprunt",
+    "pk": 43,
+    "fields": {
+        "media": 915,
+        "emprunteur": 22,
+        "date_emprunt": "2025-11-17",
+        "date_retour": "2025-11-17",
+        "statut": 2
+    }
+}
+]
