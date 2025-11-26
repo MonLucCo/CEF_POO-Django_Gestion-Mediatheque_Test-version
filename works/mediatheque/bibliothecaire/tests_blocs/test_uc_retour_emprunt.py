@@ -4,11 +4,14 @@ from django.core.management import call_command
 from django.utils.formats import date_format
 
 from bibliothecaire.models import Emprunt, Membre, Media, StatutEmprunt
+from bibliothecaire.tests import LoginRequiredTestCase
 
 
-class BaseEmpruntRetourTestCase(TestCase):
+class BaseEmpruntRetourTestCase(LoginRequiredTestCase):
     @classmethod
     def setUpTestData(cls):
+        super().setUpTestData()  # IMPORTANT: crée user+bibliothecaire
+
         call_command('loaddata', 'membres_test.json', verbosity=0)
         call_command('loaddata', 'medias_test.json', verbosity=0)
         call_command('loaddata', 'emprunts_test.json', verbosity=0)

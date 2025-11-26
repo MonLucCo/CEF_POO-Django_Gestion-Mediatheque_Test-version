@@ -1852,6 +1852,73 @@ fonctionnalité d'accès restreint dans le projet.
 
 ---
 
+### 9.28 – Difficulté 28 : Gestion des accès restreints et du template 403
+
+Cette difficulté est apparue lors de la mise en place du décorateur `bibliothecaire_required` et de la gestion des accès 
+restreints à l’application `bibliothecaire`.  
+L’enjeu était de distinguer clairement les situations d’accès non autorisé (utilisateur non connecté ou connecté sans 
+rôle Bibliothécaire) tout en garantissant une cohérence des URLs et une expérience utilisateur explicite.
+
+#### a) Contexte fonctionnel et technique
+
+La logique d’accès devait répondre à deux cas distincts :  
+- **Utilisateur non connecté** : accès refusé, invitation à se connecter.  
+- **Utilisateur connecté sans rôle Bibliothécaire** : accès refusé, retour vers l’accueil.  
+- **Utilisateur connecté avec rôle Bibliothécaire** : accès autorisé.  
+
+Le décorateur devait gérer ces situations sans dépendre de `login_required`, afin de conserver des URLs propres et 
+éviter l’ajout automatique de paramètres `?next`.  
+La difficulté s’est également posée sur le positionnement du template `403.html`, qui devait idéalement être placé dans 
+`/accounts/templates/accounts/` pour rester cohérent avec les autres templates liés à l’authentification.
+
+#### b) Description
+
+La difficulté réside dans l’articulation entre :  
+- La logique Django standard (`login_required`) qui redirige vers `/login?next=...` pour les utilisateurs non connectés.  
+- La logique projet, qui privilégie une approche simple et cohérente : lever `PermissionDenied` et afficher une page 403 
+avec des liens explicites.  
+
+Deux problèmes ont été rencontrés :  
+1. L’utilisation de `login_required` empêchait l’affichage du template 403 pour les utilisateurs non connectés.  
+2. Le template `403.html` n’était reconnu que s’il était placé dans `mediatheque/templates/`, alors que la cohérence 
+fonctionnelle demandait son placement dans `accounts/templates/accounts/`.
+
+#### c) Impact
+
+- Les utilisateurs non connectés étaient redirigés directement vers `/login`, ce qui contredisait l’esprit du 403 dans 
+le projet.  
+- Les URLs comportaient des paramètres `?next`, jugés peu élégants et non nécessaires dans ce contexte.  
+- Le template 403 devait être déplacé dans `mediatheque/templates`, ce qui brouillait la séparation entre erreurs 
+globales et erreurs liées aux accès utilisateurs.  
+- La documentation devait clarifier cette divergence entre logique Django standard et logique projet.
+
+#### d) Solution
+
+- Suppression de l’appel à `login_required` dans le décorateur.  
+- Mise en place d’un décorateur personnalisé qui lève `PermissionDenied` pour les cas non connectés et non autorisés.  
+- Création d’un template `403.html` avec messages différenciés selon l’état de l’utilisateur (non connecté ou connecté 
+sans rôle).  
+- Définition d’un `handler403` dans `urls.py` racine pour permettre l’utilisation d’un template placé dans 
+`/accounts/templates/accounts/403.html`.  
+
+#### f) Conclusion
+
+Cette difficulté a permis de clarifier la distinction entre logique technique (FBV avec `login_required`) et logique 
+métier (CBV avec `RedirectURLMixin`).  
+Le choix retenu – un décorateur personnalisé sans `login_required` – garantit des URLs propres, une expérience 
+utilisateur explicite et une cohérence avec les règles du projet.  
+
+Ce choix est **non standard Django**, mais il est adapté au cadre du projet :  
+- Il respecte la consigne fonctionnelle (accès réservé aux utilisateurs connectés).  
+- Il simplifie la logique en évitant les redirections automatiques et les paramètres `?next`.  
+- Il documente clairement la divergence avec la pratique Django standard, afin que les futurs contributeurs puissent 
+comprendre et éventuellement réintroduire `login_required` dans des projets ultérieurs.  
+
+Cette résolution constitue un **point d’inflexion architectural** : elle illustre la capacité à adapter les conventions 
+Django aux besoins spécifiques du projet, tout en maintenant une documentation claire et transmissible.
+
+---
+
 ## 10. 📌 Décisions structurantes du projet
 
 Cette section regroupe les décisions techniques et méthodologiques prises au cours du développement, en complément des 

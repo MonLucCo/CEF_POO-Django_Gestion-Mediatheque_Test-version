@@ -2,11 +2,14 @@ from django.core.management import call_command
 from django.test import TestCase
 from django.urls import reverse
 from bibliothecaire.models import Membre, Media, Emprunt, StatutEmprunt
+from bibliothecaire.tests import LoginRequiredTestCase
 
 
-class BaseEmpruntCreateTestCase(TestCase):
+class BaseEmpruntCreateTestCase(LoginRequiredTestCase):
     @classmethod
     def setUpTestData(cls):
+        super().setUpTestData()  # IMPORTANT: crée user+bibliothecaire
+
         call_command('loaddata', 'membres_test.json', verbosity=0)
         call_command('loaddata', 'medias_test.json', verbosity=0)
 

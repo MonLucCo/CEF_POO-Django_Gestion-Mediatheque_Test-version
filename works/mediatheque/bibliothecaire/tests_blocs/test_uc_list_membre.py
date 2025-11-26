@@ -1,18 +1,21 @@
 from django.test import TestCase
 from django.urls import reverse
 from bibliothecaire.models import Membre, StatutMembre
+from bibliothecaire.tests import LoginRequiredTestCase
 
 
-class BaseMembreTestCaseData(TestCase):
+class BaseMembreTestCaseData(LoginRequiredTestCase):
     @classmethod
     def setUpTestData(cls):
+        super().setUpTestData()  # IMPORTANT: crée user+bibliothecaire
+
         Membre.objects.create(name="Alice", compte="alice01", statut=StatutMembre.EMPRUNTEUR)
         Membre.objects.create(name="Bob", compte="bob02", statut=StatutMembre.MEMBRE)
         Membre.objects.create(name="Charlie", compte="charlie03", statut=StatutMembre.ARCHIVE)
 
 
 # 🧪 Navigation
-class TestNavigationMembreUcList(TestCase):
+class TestNavigationMembreUcList(LoginRequiredTestCase):
     def test_nav_10_acces_vue_tous_les_membres(self):
         response = self.client.get(reverse("bibliothecaire:membre_list"))
         self.assertEqual(response.status_code, 200)

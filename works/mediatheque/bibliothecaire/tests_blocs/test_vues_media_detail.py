@@ -1,11 +1,14 @@
 from django.test import TestCase
 from django.urls import reverse
 from bibliothecaire.models import Media, Livre, Dvd, Cd
+from bibliothecaire.tests import LoginRequiredTestCase
 
 
-class MediaDetailViewTests(TestCase):
+class MediaDetailViewTests(LoginRequiredTestCase):
     @classmethod
     def setUpTestData(cls):
+        super().setUpTestData()  # IMPORTANT: crée user+bibliothecaire
+
         cls.media = Media(name="Test du Media", theme="Test Thème du Media")
         cls.media.full_clean()
         cls.media.save()

@@ -1,10 +1,14 @@
 from django.contrib.auth.models import User
-from django.test import TestCase
 from django.urls import reverse
 
-class BaseAccountsTestCase(TestCase):
+from bibliothecaire.tests import LoginRequiredTestCase
+
+
+class BaseAccountsTestCase(LoginRequiredTestCase):
     @classmethod
     def setUpTestData(cls):
+        super().setUpTestData()  # IMPORTANT: crée user+bibliothecaire
+
         # Création des données pour les tests
         cls.admin = User.objects.create_superuser(
             username="admin",
@@ -20,16 +24,6 @@ class BaseAccountsTestCase(TestCase):
         cls.template_accueil = "accounts/accueil.html"
         cls.template_login = "accounts/login.html"
         cls.template_logout = "accounts/logout.html"
-
-    def login_admin(self):
-        return self.client.post(
-            self.url_login,
-            {"username": "admin", "password": "admin-MdP"},  # mot de passe de l'admin créé pour le test
-            follow=True
-        )
-
-    def logout_admin(self):
-        return self.client.post(self.url_logout, follow=True)
 
 
 # 🧭 Navigation – ACCUEIL-UC-NAVIGATION
@@ -48,22 +42,24 @@ class TestNavigationAccueil(BaseAccountsTestCase):
         self.assertEqual(response.status_code, 200)
 
     def test_nav_41_lien_connexion_affiche_si_non_connecte(self):
+        self.logout()
         response = self.client.get(self.url_login)
         self.assertContains(response, "Connexion")
 
     def test_nav_42_lien_deconnexion_affiche_si_connecte(self):
-        self.login_admin()
+        self.login_as(self.RoleTest.SUPERADMIN)
         response = self.client.get(self.url_accueil)
-        self.assertContains(response, "Déconnexion (admin)")
+        self.assertContains(response, f"Déconnexion ({ self.current_user() })")
 
 
 # 🧪 Fonctionnel – COMPTE-UC-GESTION
 class TestFonctionnelAccounts(BaseAccountsTestCase):
     def test_fun_52_connexion_valide_redirige_accueil(self):
-        response = self.login_admin()
+        response = self.client.get(self.url_login)
         self.assertRedirects(response, self.url_accueil)
 
     def test_fun_53_connexion_invalide_affiche_erreur(self):
+        self.logout()
         response = self.client.post(
             self.url_login,
             {"username": "admin", "password": "mauvais"},
@@ -72,20 +68,21 @@ class TestFonctionnelAccounts(BaseAccountsTestCase):
         self.assertContains(response, "Saisissez un nom d’utilisateur et un mot de passe valides")
 
     def test_fun_54_deconnexion_redirige_accueil_bibliothecaire(self):
-        self.login_admin()
-        response = self.logout_admin()
+        response = self.client.post(self.url_logout, follow=True)
         self.assertRedirects(response, self.url_accueil)
 
     def test_fun_55_menu_affiche_connexion_ou_deconnexion_selon_etat(self):
+        self.logout()
         # Non connecté
         response = self.client.get(self.url_accueil)
         self.assertContains(response, "Connexion")
         # Connecté
-        self.login_admin()
+        self.login_as(self.RoleTest.GESTION)
         response = self.client.get(self.url_accueil)
-        self.assertContains(response, "Déconnexion (admin)")
+        self.assertContains(response, f"Déconnexion ({ self.current_user() })")
 
     def test_fun_56_affichage_nom_utilisateur_connecte(self):
-        self.login_admin()
+        self.logout()
+        self.login_as(self.RoleTest.ADMIN)
         response = self.client.get(self.url_accueil)
-        self.assertContains(response, "Déconnexion (admin)")
+        self.assertContains(response, f"Déconnexion ({ self.current_user() })")

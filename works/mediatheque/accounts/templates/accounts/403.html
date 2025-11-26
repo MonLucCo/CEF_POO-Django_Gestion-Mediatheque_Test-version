@@ -1,0 +1,23 @@
+{% extends "accounts/_base.html" %}
+
+{% block title %}Accès interdit{% endblock %}
+
+{% block content_title %}
+    <h2>🚫 Accès interdit (403)</h2>
+{% endblock %}
+
+{% block content %}
+<div class="error-page">
+    <p>Désolé, vous n’avez pas les droits nécessaires pour accéder à cette page.</p>
+
+    {% if user.is_authenticated %}
+        <p>Vous êtes connecté en tant que <strong>{{ user.username }}</strong>,
+        mais ce rôle n’autorise pas l’accès à cette ressource.</p>
+    {% else %}
+        <p>Vous devez être connecté pour accéder à cette ressource.</p>
+        <a href="{% url 'accounts:login' %}">Se connecter</a>
+    {% endif %}
+
+    <p><a href="{% url 'accounts:accueil' %}">Retour à l’accueil</a></p>
+</div>
+{% endblock %}

@@ -1,12 +1,15 @@
 from django.test import TestCase
 from django.urls import reverse
 from bibliothecaire.models import Media
+from bibliothecaire.tests import LoginRequiredTestCase
 
-class MediaCreateTests(TestCase):
+
+class MediaCreateTests(LoginRequiredTestCase):
     fixtures = []
 
     @classmethod
     def setUpTestData(cls):
+        super().setUpTestData()  # IMPORTANT: crée user+bibliothecaire
         cls.url = reverse('bibliothecaire:media_create')
 
     def test_nav_08_access_create_view(self):

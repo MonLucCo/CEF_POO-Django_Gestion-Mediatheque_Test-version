@@ -1,11 +1,15 @@
 from django.test import TestCase
 from django.urls import reverse
 from bibliothecaire.models import Media, Livre, Dvd, Cd
+from bibliothecaire.tests import LoginRequiredTestCase
 
 
-class TypageMediaTest(TestCase):
-    def setUp(self):
-        self.media = Media.objects.create(
+class TypageMediaTest(LoginRequiredTestCase):
+    @classmethod
+    def setUpTestData(cls):
+        super().setUpTestData()  # IMPORTANT: crée user+bibliothecaire
+
+        cls.media = Media.objects.create(
             name="À typer",
             theme="Roman",
             media_type="NON_DEFINI"
@@ -31,17 +35,20 @@ class TypageMediaTest(TestCase):
         self.assertEqual(Media.objects.get(pk=self.media.pk).media_type, 'LIVRE')
 
 
-class RollbackTypageTest(TestCase):
-    def setUp(self):
-        self.media = Media.objects.create(
+class RollbackTypageTest(LoginRequiredTestCase):
+    @classmethod
+    def setUpTestData(cls):
+        super().setUpTestData()  # IMPORTANT: crée user+bibliothecaire
+
+        cls.media = Media.objects.create(
             name="À annuler",
             theme="Essai",
             media_type="DVD"
         )
         # Mutation typée via méthode métier
-        self.media = self.media.mutate_to_typed()
+        cls.media = cls.media.mutate_to_typed()
         # Mise à jour des champs spécifiques
-        Dvd.objects.filter(pk=self.media.pk).update(
+        Dvd.objects.filter(pk=cls.media.pk).update(
             realisateur="Réalisateur",
             duree=90,
             histoire="Histoire"
@@ -60,9 +67,12 @@ class RollbackTypageTest(TestCase):
         self.assertEqual(Media.objects.get(pk=self.media.pk).media_type, 'NON_DEFINI')
 
 
-class RedirectionTypageDepuisUpdateTest(TestCase):
-    def setUp(self):
-        self.media = Media.objects.create(
+class RedirectionTypageDepuisUpdateTest(LoginRequiredTestCase):
+    @classmethod
+    def setUpTestData(cls):
+        super().setUpTestData()  # IMPORTANT: crée user+bibliothecaire
+
+        cls.media = Media.objects.create(
             name="À rediriger",
             theme="Science",
             media_type="NON_DEFINI"
