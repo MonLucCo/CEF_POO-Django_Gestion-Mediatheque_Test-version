@@ -21,19 +21,21 @@ class LoginRequiredTestCase(TestCase):
 
     @class LoginRequiredTestCase
     @description
-     - Crée trois comptes de test : BibGestion, BibAdmin, Superadmin.
+    @description
+     - Crée et expose tous les comptes utilisables en login: Superuser, Staff, BibAdmin, BibGestion.
      - Connecte par défaut BibGestion avant chaque test.
-     - Fournit des helpers pour login/logout et inspection de l’utilisateur courant.
+     - Fournit des helpers centralisés (login/logout/current_user).
 
     @methods
-     - login_as(role): Connecte selon le rôle demandé (RoleTest.GESTION, ADMIN, SUPERADMIN).
+     - login_as(role): Connecte selon le rôle demandé (RoleTest.GESTION, ADMIN, SUPERADMIN, STAFF).
      - logout(): Déconnecte l'utilisateur connecté.
      - current_user(): Retourne le nom de l’utilisateur connecté ou None.
     """
     class RoleTest(models.IntegerChoices):
-        SUPERADMIN = 0, "Superadmin"
         ADMIN = 1, "Admin"
         GESTION = 2, "Gestion"
+        SUPERADMIN = 3, "Superadmin"
+        STAFF = 4, "Staff"
 
     @classmethod
     def setUpTestData(cls):
@@ -46,6 +48,9 @@ class LoginRequiredTestCase(TestCase):
         )
         cls.user_superadmin = User.objects.create_superuser(
             username="superadmin", password="secret", email="superadmin@example.com"
+        )
+        cls.user_staff = User.objects.create_user(
+            username="staff", password="secret", email="staff@example.com", is_staff=True
         )
         # Création des comptes Bibliothécaires de test
         cls.bib_gestion = Bibliothecaire.objects.create(
@@ -68,6 +73,8 @@ class LoginRequiredTestCase(TestCase):
             ok = self.client.login(username="testbib_admin", password="secret")
         elif role == self.RoleTest.SUPERADMIN:
             ok = self.client.login(username="superadmin", password="secret")
+        elif role == self.RoleTest.STAFF:
+            ok = self.client.login(username="staff", password="secret")
         else:
             raise ValueError(f"Rôle inconnu: {role}")
 
@@ -79,9 +86,9 @@ class LoginRequiredTestCase(TestCase):
 
     def current_user(self):
         """Retourne le nom de l’utilisateur connecté ou None."""
-        if "_auth_user_id" in self.client.session:
-            return User.objects.get(pk=self.client.session["_auth_user_id"]).username
-        return None
+        uid = self.client.session.get("_auth_user_id")
+        return User.objects.get(pk=uid).username if uid else None
+
 
 class BibliothecaireAccessTest(LoginRequiredTestCase):
     def test_access_with_login(self):

@@ -2,9 +2,9 @@
 
 📁 `/docs/developpement/dev-docs/devTests.md`  
 
-📌 Version : index K-1 (issue #5 – étape 1 - Bloc 5)
+📌 Version : index K-3 (issue #5 – étape 3 - Bloc 5)
 - Rapport de tests associé : [`devReport.md`](devReport.md)
-  - Sous-ensemble ajouté : tests des [UC-ACCOUNTS-COMPTE](../issue5/task1/devReport_UC_accounts_compte.md)
+  - Sous-ensemble ajouté : tests des [UC-SECURITE](../issue5/task3/devReport_UC_securite.md)
 
 ___
 
@@ -22,7 +22,7 @@ Les tests ont été regroupé en **Bloc de tests** qui correspondent à des phas
   - **Bloc 4** : développement fonctionnel de l'application consultation (entités `Support`, `media`, `JeuDePlateau`) et 
   complément fonctionnel pour l'application bibliothécaire (entités `Support` et `JeuDePlateau`).
 - l'issue #5 :
-  - **Bloc 5** : gestion fonctionnelle des connexion/déconnexion et des accès restreints de l'application médiathèque.
+  - **Bloc 5** : gestion fonctionnelle de connexion/déconnexion et des accès restreints de l'application médiathèque.
 Il est conçu pour :
 - Structurer les tests par catégorie (navigation, entités, fonctionnalités).
 - Garantir une couverture minimale par vue, extensible selon les besoins.
@@ -47,11 +47,12 @@ Il est conçu pour :
     - index H10, fonction de création d'un emprunt.
     - index H-11, fonction de rendu d'un emprunt.
   - index J-1 (entité JeuDePlateau et application Consultation) pour le **Bloc 4**.
-  - index K-2 (application médiathèque et connexion/déconnexion) pour le **Bloc 5**.
+  - index K-3 (application médiathèque et autorisation d'accès et sécurité) pour le **Bloc 5**.
     - index K-1, fonctions de connexion/déconnexion de la couche d'accueil de l'application médiathèque avec la 
     modélisation de l'entité Bibliothecaire associée à un User.
     - index K-2, accès restreints de l'application Bibliothecaire pour les bibliothécaires et validation des tests 
     techniques et fonctionnels antérieurs.
+    - index K-3, permissions et sécurité d'accès aux applications de médiathèque
 - **Périmètre couvert** : 
   - site administration (application).
   - site bibliothecaire (application).
@@ -107,6 +108,7 @@ Il est conçu pour :
 2. [⚙️ Organisation des tests](#-2-organisation-des-tests)
    - [📂 2.1 Catégories des tests](#-21-catégories-des-tests)
    - [🛠 2.2 Bases techniques de test](#-22-bases-techniques-de-test)
+   - [📑 2.3 Matrice des rôles et droits (applications de la médiathèque)](#-23-matrice-des-rôles-et-droits-applications-de-la-médiathèque)
 3. [📑 Cas de test](#-3-cas-de-test)
    - [🧪 3.1 Navigation (`T-NAV-xxx`)](#-31-navigation-t-nav-xxx)
    - [🧪 3.2 Entités (`T-ENT-xxx`)](#-32-entités-t-ent-xxx)
@@ -114,6 +116,7 @@ Il est conçu pour :
    - [🧪 3.4 Formulaires (`T-FORM-xxx`)](#-34-formulaires-t-form-xxx)
    - [🧪 3.5 Administration (`T-ADM-xxx`)](#-35-administration-t-adm-xxx)
    - [🧪 3.6 Fonctionnel (`T-FUN-xxx`)](#-36-fonctionnel-t-fun-xxx)
+   - [🧪 3.7 Sécurité (`T-SEC-xxx`)](#-37-sécurité-t-sec-xxx)
 4. [✅ Méthode de validation](#-4-méthode-de-validation)
 5. [📊 Couverture attendue](#-5-couverture-attendue)
 6. [🔗 Liens vers les fichiers de test](#-6-liens-vers-les-fichiers-de-test)
@@ -138,15 +141,16 @@ Il est conçu pour :
 
 Les tests sont répartis en sept catégories :
 
-| Catégorie      | Dossier / Fichier                           | Préfixe ID | Objectif principal                                              | Création |
-|----------------|---------------------------------------------|------------|-----------------------------------------------------------------|----------|
-| Navigation     | `tests_blocs/test_urls.py`                  | `T-NAV-`   | Vérifier les accès, les routes, les redirections                | Initial  |
-| Entités        | `tests_blocs/test_entites_media.py`, etc.   | `T-ENT-`   | Vérifier la cohérence des modèles et des données                | initial  |
-| Vues           | `tests_blocs/test_vues_media_list.py`, etc. | `T-VUE-`   | Vérifier le comportement des vues et des templates              | Initial  |
-| Formulaire     | `tests_blocs/test_uc_create_media.py`, etc. | `T-FORM-`  | Vérifier le comportement des formulaires                        | initial  |
-| Administration | `tests_blocs/test_admin.py`                 | `T-ADM-`   | Vérifier le site d'administration du projet                     | Bloc 1   |
-| Fonctionnel    | `tests_blocs/test_uc_list_media.py`, etc.   | `T-FUN-`   | Vérifier une fonctionnalité métier                              | Bloc 2   |
-| Technique      | `tests.py` (bibliothecaire/tests.py)        | `T-TEC-`   | Vérifier la base technique de connexion (LoginRequiredTestCase) | Bloc 5   |
+| Catégorie      | Dossier / Fichier                             | Préfixe ID | Objectif principal                                              | Création |
+|----------------|-----------------------------------------------|------------|-----------------------------------------------------------------|----------|
+| Navigation     | `tests_blocs/test_urls.py`                    | `T-NAV-`   | Vérifier les accès, les routes, les redirections                | Initial  |
+| Entités        | `tests_blocs/test_entites_media.py`, etc.     | `T-ENT-`   | Vérifier la cohérence des modèles et des données                | initial  |
+| Vues           | `tests_blocs/test_vues_media_list.py`, etc.   | `T-VUE-`   | Vérifier le comportement des vues et des templates              | Initial  |
+| Formulaire     | `tests_blocs/test_uc_create_media.py`, etc.   | `T-FORM-`  | Vérifier le comportement des formulaires                        | initial  |
+| Administration | `tests_blocs/test_admin.py`                   | `T-ADM-`   | Vérifier le site d'administration du projet                     | Bloc 1   |
+| Fonctionnel    | `tests_blocs/test_uc_list_media.py`, etc.     | `T-FUN-`   | Vérifier une fonctionnalité métier                              | Bloc 2   |
+| Technique      | `tests.py` (bibliothecaire/tests.py)          | `T-TEC-`   | Vérifier la base technique de connexion (LoginRequiredTestCase) | Bloc 5   |
+| Sécurité       | `tests_blocs/test_permissions.py` (accounts/) | `T-SEC-`   | Vérifier les rôles et permissions appliqués aux vues            | Bloc 5   |
 
 > Remarque : 
 > - les catégories Permissions, Formulaires, Erreurs, Filtrages sont envisagées, mais n'ont pas été mises en 
@@ -178,10 +182,39 @@ classe `TestCase` et un enrichissement de cette classe.
 > ℹ️ Cette base technique est utilisée dans tous les tests UC nécessitant une connexion (Bloc 5 et suivants).
 
 #### Test technique T-TEC-01
+
 - **Objectif** : valider la classe `LoginRequiredTestCase`.
 - **Description** : vérifie qu’un accès à `/bibliothecaire/accueil/` est possible avec BibGestion connecté.
 - **Résultat attendu** : code 200 + présence du menu bibliothécaire.
 - **Statut** : ✅ Validé.
+
+> ℹ️ Ce test valide le bon fonctionnement de la classe lors de la définition d'un test par héritage.
+
+> ℹ️ La validation des rôles et des accès repose sur les tests de sécurité `T-SEC-` qui suivent la matrice des droits 
+> chaque rôle des applications de la médiathèque.
+
+---
+
+### 📑 2.3 Matrice des rôles et droits (applications de la médiathèque)
+
+| Rôle / Profil                                     | Authentification (login via `accounts`) | Accès site `/admin/` Django                      | Accès app `accounts` (accueil, login/logout) | Accès app `bibliothecaire`                         | Accès app `consultation`                          | Fonctions visibles / permissions                                                                        |
+|---------------------------------------------------|-----------------------------------------|--------------------------------------------------|----------------------------------------------|----------------------------------------------------|---------------------------------------------------|---------------------------------------------------------------------------------------------------------|
+| **Superuser** (`is_superuser=True`)               | ✅                                       | ✅ complet (tous les modèles, toutes les actions) | ⚪ (possible mais inutile en pratique)        | ❌                                                  | ⚪ (possible mais inutile en pratique)             | Tous les droits techniques via admin Django. Pas de droits métier par défaut.                           |
+| **Staff** (`is_staff=True`)                       | ✅                                       | ✅ accès limité au site admin (selon permissions) | ⚪ (possible mais inutile en pratique)        | ❌                                                  | ⚪ (possible mais inutile en pratique)             | Droits techniques définis par les permissions Django. Pas de droits métier par défaut.                  |
+| **BibAdmin** (`Bibliothecaire.role=ADMIN`)        | ✅ via `auth.User`                       | ❌                                                | ✅ (utile pour login/logout, orientation)     | ✅ accès complet à toutes les vues `bibliothecaire` | ⚪ (possible mais inutile en pratique)             | Fonctions métier avancées : supervision, journalisation, gestion des rôles internes.                    |
+| **BibGestion** (`Bibliothecaire.role=GESTION`)    | ✅ via `auth.User`                       | ❌                                                | ✅ (utile pour login/logout, orientation)     | ✅ accès limité aux vues `bibliothecaire`           | ⚪ (possible mais inutile en pratique)             | Fonctions métier courantes : emprunts, retours, gestion des membres, mais pas les fonctions techniques. |
+| **Membre** (entité métier, pas lié à `auth.User`) | ❌ (pas de login)                        | ❌                                                | ❌                                            | ❌                                                  | ✅ accès en lecture seule via l’app `consultation` | Consultation des supports, jeux, médias disponibles.                                                    |
+
+#### 🔎 Points clés
+- **Superuser / Staff** : accès possible à `accounts` et `consultation`, mais sans utilité → ⚪.  
+- **Bibliothécaire (ADMIN/GESTION)** : accès utile à `accounts` et `bibliothecaire`, mais pas à `consultation`.  
+- **Membre** : accès direct et utile à `consultation`, sans authentification.  
+- **Admin Django** reste réservé aux rôles techniques (`is_staff`, `is_superuser`), sans lien avec les rôles métier.
+
+#### 📌 Légende
+- ✅ : accès utile / prévu (fonctionnel ou technique).  
+- ❌ : accès interdit / impossible.  
+- ⚪ : accès techniquement possible, mais sans pertinence métier.  
 
 ---
 
@@ -452,6 +485,31 @@ Chaque catégorie de tests est regroupée dans une sous-section spécifique avec
 
 > 🔧 Le test T-FUN-25 est volontairement laissé `🟡 Non implémenté` car il ne correspond pas à un cas d'usage métier 
 > validé. Il concerne une fonctionnalité de rejeu de test de l'UX (debug). 
+
+---
+
+### 🧪 3.7 Sécurité (`T-SEC-xxx`)
+
+| Série  | ID Test  | Description                                           | Rôle testé   | URL ciblée / Vue              | Résultat attendu                          | Statut   |
+|--------|----------|-------------------------------------------------------|--------------|-------------------------------|-------------------------------------------|----------|
+| Bloc 5 | T-SEC-01 | Accès au site admin réservé au superuser              | Superuser    | `/admin/`                     | Code 200 + accès complet                  | 🔄 À tester |
+| Bloc 5 | T-SEC-02 | Accès au site admin limité pour staff                 | Staff        | `/admin/`                     | Code 200 + accès restreint (pas Bibliothecaire) | 🔄 À tester |
+| Bloc 5 | T-SEC-03 | Accès complet aux vues Bibliothécaire                 | BibAdmin     | `/bibliothecaire/accueil/`    | Code 200 + menu bibliothécaire            | 🔄 À tester |
+| Bloc 5 | T-SEC-04 | Refus d’accès aux vues Bibliothécaire                 | Membre/Anon. | `/bibliothecaire/accueil/`    | Code 403 + template `403.html`            | 🔄 À tester |
+| Bloc 5 | T-SEC-05 | Accès en lecture seule aux vues Consultation          | Membre/Anon. | `/consultation/accueil/`      | Code 200 + affichage supports/jeux/médias | 🔄 À tester |
+
+---
+
+#### 📌 Remarques
+- Ces tests valident la **matrice des rôles et droits** définie en 
+[section 2.3](#-23-matrice-des-rôles-et-droits-applications-de-la-médiathèque).  
+- Ils couvrent les cas d’accès utile (✅), interdit (❌) et _techniquement possible mais inutile_ (⚪).  
+- Les résultats attendus sont consignés dans [`devReport.md`](devReport.md) et, pour l’index K‑3, dans 
+[`devReport_UC_securite.md`](../issue5/task3/devReport_UC_securite.md).  
+- Les tests de sécurité garantissent la séparation stricte entre :
+  - **Technique** (superuser/staff → `/admin/`),
+  - **Métier** (BibAdmin/BibGestion → `bibliothecaire`),
+  - **Consultation publique** (Membre → `consultation`).
 
 ---
 
