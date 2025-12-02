@@ -68,3 +68,4 @@
 - C. Diagrammes (UML, séquence)
 - D. Arborescence du projet
 - E. Installation Projet et configuration de l'EDI
+- F. Main‑courante technique et difficultés
