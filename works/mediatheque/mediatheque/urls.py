@@ -15,14 +15,7 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.shortcuts import render
 from django.urls import path, include
-
-# Définition du handler403
-def custom_permission_denied_view(request, exception=None):
-    return render(request, "accounts/403.html", status=403)
-
-handler403 = custom_permission_denied_view
 
 urlpatterns = [
     path('admin/', admin.site.urls),

@@ -36,6 +36,12 @@
     - [3.4.3 Entité : Membre](#343-entité--membre)
     - [3.4.4 Entité : Emprunt](#344-entité--emprunt)
     - [3.4.5 Entité : JeuDePlateau](#345-entité--jeudeplateau)
+  - [3.5 Gestion des Logs – Fonction transversale](#35-gestion-des-logs--fonction-transversale)
+    - [3.5.1 Objectifs des Logs](#351-objectifs-des-logs)
+    - [3.5.2 Spécification architecturale par niveau fonctionnel](#352-spécification-architecturale-par-niveau-fonctionnel)
+    - [3.5.3 Cas d’usage UC‑LOGS](#353-cas-dusage-uclogs)
+    - [3.5.4 Impacts techniques](#354-impacts-techniques)
+    - [3.5.5 Conclusion](#355-conclusion)
 - [4. Liaison technique](#4-liaison-technique)
   - [4.1 Application Bibliothecaire](#41-application-bibliothecaire)
     - [4.1.1 Medias](#411-medias)
@@ -708,9 +714,9 @@ Trois parcours UX sont proposés pour couvrir les usages métier :
 
 | ID (EMPRUNT-*) | Description métier                                       | Déclenchement UX                  | Validation métier appliquée           | Avancement     |
 |----------------|----------------------------------------------------------|-----------------------------------|---------------------------------------|----------------|
-| UC-RETOUR-01   | Enregistrer le retour via la liste des emprunts en cours | Vue `EmpruntRendreView`           | Validation complète dans la vue       | ⚪ À développer |
-| UC-RETOUR-02   | Enregistrer le retour depuis la fiche membre emprunteur  | Vue `EmpruntRendreFromMembreView` | Validation implicite via choix média  | ⚪ À développer |
-| UC-RETOUR-03   | Enregistrer le retour depuis la fiche média emprunté     | Vue `EmpruntRendreFromMediaView`  | Validation implicite via choix membre | ⚪ À développer |
+| UC-RETOUR-01   | Enregistrer le retour via la liste des emprunts en cours | Vue `EmpruntRendreView`           | Validation complète dans la vue       | ✅ Implémenté |
+| UC-RETOUR-02   | Enregistrer le retour depuis la fiche membre emprunteur  | Vue `EmpruntRendreFromMembreView` | Validation implicite via choix média  | ✅ Implémenté |
+| UC-RETOUR-03   | Enregistrer le retour depuis la fiche média emprunté     | Vue `EmpruntRendreFromMediaView`  | Validation implicite via choix membre | ✅ Implémenté |
 
 > 🔹 Ces trois UC partagent la même logique métier (`enregistrer_retour()`), mais diffèrent par leur parcours UX.  
 > 🔹 Chaque UC doit être testée indépendamment pour garantir la robustesse des transitions et des validations.
@@ -920,6 +926,61 @@ disponibilité.
 **Méthodes**
 - `count_total()` → **Méthode de classe**, Retourne le nombre total d'enregistrements.
 - `count_consultables()` → **Méthode de classe**, Retourne le nombre total d'enregistrements `consultable=true`.
+
+---
+
+### 3.5 Gestion des Logs – Fonction transversale
+
+#### 3.5.1 Objectifs des Logs
+
+Les logs ont pour rôle d’assurer une **traçabilité technique et métier** des actions critiques de l’application 
+médiathèque.  
+Ils permettent :
+- de suivre les connexions et déconnexions des utilisateurs,
+- de tracer les accès refusés ou accordés aux vues protégées,
+- de fournir un support de validation pour les tests fonctionnels et de sécurité,
+- d’offrir une base extensible pour un futur monitoring opérationnel.
+
+#### 3.5.2 Spécification architecturale par niveau fonctionnel
+
+Afin de cadrer l’intégration, une grille progressive de niveaux a été définie :
+
+| Niveau | Désignation                          | Description                                                                                                                                      | Issue concernée         | Statut / Intégration   |
+|--------|--------------------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------|-------------------------|------------------------|
+| 1      | Minimaliste - Architecture technique | Configuration `logging` basique (console et fichier de log dédié). Quelques appels `info/warning` dans vues critiques (login, logout, refus).    | Issue #5 (Bloc 5)       | ✅ Intégré (commit K‑4) |
+| 2      | Suffisant - Fonctions primordiales   | Niveaux cohérents (`INFO`, `WARNING`, `ERROR`). Journalisation des principales actions métier. Contexte enrichi (rôle, identifiant).             | Issue #6 (Bloc 6)       | 🔄 À intégrer          |
+| 3a     | Bonne intégration (non livré)        | Handlers multiples (console + fichier). Formatage structuré (timestamp, module, utilisateur). Journalisation systématique des événements métier. | Hors périmètre livrable | 🟡 Documenté           |
+| 3b     | Très bonne intégration (non livré)   | Rotation des fichiers. Segmentation des logs par rôle (BibAdmin vs BibGestion). Suivi opérationnel justifiant la séparation des rôles.           | Hors périmètre livrable | 🟡 Documenté           |
+| 4      | Professionnelle (non livré)          | Intégration supervision (ELK, Graylog, Sentry). Alertes/corrélations. Respect RGPD. Documentation d’exploitation.                                | Hors périmètre livrable | 🟡 Documenté           |
+
+> ℹ️ Les niveaux 1 et 2 sont directement liés aux issues #5 et #6.  
+> ℹ️ Les niveaux supérieurs sont documentés pour montrer l’évolutivité, mais non intégrés dans la version livrée.
+
+#### 3.5.3 Cas d’usage UC‑LOGS
+
+Les cas d’usage transversaux des logs couvrent les événements critiques suivants :
+
+| ID (LOG-*) | Description métier                      | Vue / Décorateur concerné | Résultat attendu   |
+|------------|-----------------------------------------|---------------------------|--------------------|
+| UC-LOG-01  | Création et alimentation du fichier log | `CustomLoginView`         | `[LOGIN]` écrit    |
+| UC-LOG-02  | Connexion génère un log `[LOGIN]`       | `CustomLoginView`         | `[LOGIN]` écrit    |
+| UC-LOG-03  | Déconnexion génère `[LOGOUT]`           | `LogoutView`              | `[LOGOUT]` écrit   |
+| UC-LOG-04  | Accès refusé génère `[ACCESS_DENIED]`   | `bibliothecaire_required` | `[ACCESS_DENIED]`  |
+| UC-LOG-05  | Accès accordé génère `[ACCESS_GRANTED]` | `bibliothecaire_required` | `[ACCESS_GRANTED]` |
+
+#### 3.5.4 Impacts techniques
+
+- Configuration `LOGGING` dans `settings.py` avec handlers console et fichier (`mediatheque.log`), et fichier dédié 
+`mediatheque_test.log` en mode test.  
+- Adaptation de `LoginRequiredTestCase` pour déclencher les vraies vues de login/logout et générer les logs.  
+- Tests fonctionnels validés (`T‑LOG‑01` à `T‑LOG‑05`) avec lecture ciblée du fichier de logs.
+
+#### 3.5.5 Conclusion
+
+La gestion des logs est une **fonction transversale** qui relie directement les aspects techniques (authentification, 
+sécurité) aux cas d’usage métier.  
+Le projet atteint le **niveau 2 (suffisant)** avec une traçabilité utile et extensible. Les niveaux supérieurs sont 
+documentés pour anticiper les besoins futurs sans sortir du périmètre demandé.
 
 ---
 

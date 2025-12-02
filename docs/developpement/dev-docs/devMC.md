@@ -78,6 +78,8 @@ et couvre :
    - [9.25 Difficulté 25 : Choix du modèle de vue pour une confirmation métier liée à un objet](#925-difficulté-25--choix-du-modèle-de-vue-pour-une-confirmation-métier-liée-à-un-objet)
    - [9.26 Difficulté 26 : Réorganisation du plan de développement et de la documentation transverse](#926-difficulté-26--réorganisation-du-plan-de-développement-et-de-la-documentation-transverse)
    - [9.27 – Difficulté 27 : Modélisation de Bibliothécaire et accès restreint à l’application](#927--difficulté-27--modélisation-de-bibliothécaire-et-accès-restreint-à-lapplication)
+   - [9.28 – Difficulté 28 : Gestion des accès restreints et du template 403](#928--difficulté-28--gestion-des-accès-restreints-et-du-template-403)
+   - [9.29 – Difficulté : Exigences et intégration des Logs](#929--difficulté--exigences-et-intégration-des-logs)
 10. [📌 Décisions structurantes du projet](#10--décisions-structurantes-du-projet)
     - [10.1 Décision 1 (D-01) – Structuration progressive du développement par blocs fonctionnels](#101-décision-1-d-01--structuration-progressive-du-développement-par-blocs-fonctionnels)
     - [10.2 Décision 2 (D-02) – Centralisation des vues sur l’entité Media avec typage différé](#102-décision-2-d-02--centralisation-des-vues-sur-lentité-media-avec-typage-différé)
@@ -1916,6 +1918,60 @@ comprendre et éventuellement réintroduire `login_required` dans des projets ul
 
 Cette résolution constitue un **point d’inflexion architectural** : elle illustre la capacité à adapter les conventions 
 Django aux besoins spécifiques du projet, tout en maintenant une documentation claire et transmissible.
+
+---
+
+### 9.29 – Difficulté : Exigences et intégration des Logs
+
+#### a) Constat
+Le sujet du devoir mentionne la mise en place de logs, mais sans fournir de spécifications précises. Cette absence de 
+définition rend difficile l’intégration directe de la fonctionnalité, car le développement ne peut se faire qu’à partir 
+d’exigences claires et graduées.  
+Il est donc nécessaire de formaliser des niveaux d’intégration afin de cadrer les travaux et d’éviter toute remise en 
+cause des développements déjà réalisés.  
+
+Cela nécessite de définir une grille progressive d’exigences et de choisir un périmètre réaliste pour les travaux 
+restants (issues #5 et #6).  
+Deux particularités sont apparues :  
+- La nécessité de distinguer les **logs opérationnels** et les **logs de tests** pour éviter toute pollution du fichier 
+principal.  
+- L’importance de passer par les vraies vues (`accounts:login`, `accounts:logout`) pour déclencher les écritures, ce qui 
+a conduit à enrichir la classe `LoginRequiredTestCase`.
+
+#### b) Objectifs
+- Garantir une architecture technique robuste (handlers console + fichier des Logs opérationnels, fichier dédié aux 
+tests).  
+- Assurer une traçabilité métier (connexion, déconnexion, refus/acceptation d’accès).  
+- Préparer l’extensibilité vers des niveaux supérieurs (rotation, supervision, segmentation par rôle) sans remettre en 
+cause les développements existants.
+
+#### c) Niveaux définis
+Les cinq niveaux d’exigence sont documentés (cf. 
+[section 3.5 de l'Analyse des Fonctionnalités](devAFBib.md#35-gestion-des-logs--fonction-transversale)) :
+1. **Minimaliste** (issue #5) : configuration de base, console, premiers appels `info/warning`.  
+2. **Suffisant** (issue #6) : fichier `mediatheque.log`, cohérence des niveaux, journalisation métier enrichie.  
+3. **Bonne intégration** (non livré) : handlers multiples, formatage structuré.  
+4. **Très bonne intégration** (non livré) : rotation, segmentation par rôle.  
+5. **Professionnelle** (non livré) : supervision, alertes, conformité RGPD.
+
+#### d) Particularités rencontrées
+- **Séparation des fichiers** : ajout d’un `mediatheque_test.log` activé automatiquement en mode test 
+(`python manage.py test`) pour préserver le fichier opérationnel.  
+- **Classe de tests enrichie** : `LoginRequiredTestCase` permet désormais de choisir entre une connexion directe 
+(`client.login`) et une connexion via l’URL (`url=True`), indispensable pour générer les logs.  
+- **Validation des UC‑LOGS** : les tests T‑LOG‑01 à T‑LOG‑05 confirment la bonne écriture des événements dans le fichier 
+de logs, avec une lecture ciblée (dernière ligne) pour éviter les doublons.
+
+#### e) Conclusion et enseignements
+- La mise en place des logs a révélé que **l’architecture technique et les tests sont indissociables** : sans passage 
+par les vraies vues, aucun log n’est généré.  
+- La séparation entre **logs opérationnels** et **logs de tests** est une bonne pratique qui garantit la fiabilité et la 
+lisibilité des traces.  
+- Le projet a atteint le **niveau 2 (suffisant)**, qui assure une traçabilité utile et extensible.  
+- Les niveaux supérieurs (rotation, supervision, segmentation) sont documentés, mais non livrés, pour conserver une 
+cohérence dans les développements du projet (les besoins futurs) sans sortir du périmètre demandé.  
+- Enseignement majeur : la gestion des logs n’est pas seulement une exigence technique, mais aussi une **exigence UX et 
+métier**. Les logs deviennent un outil de validation des accès et de compréhension des comportements utilisateurs.
 
 ---
 

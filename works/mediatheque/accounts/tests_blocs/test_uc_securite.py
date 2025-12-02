@@ -38,11 +38,28 @@ class TestFonctionnelSecurite(BaseSecuriteTestCase):
     def test_sec_04_membre_ou_anonyme_refus_bibliothecaire(self):
         self.logout()
         response = self.client.get(self.url_accueil_bib)
-        self.assertEqual(response.status_code, 403)
-        self.assertTemplateUsed(response, "accounts/403.html")
+        self.assertEqual(response.status_code, 302)
+        # Vérifie la redirection
+        self.assertRedirects(response, reverse("accounts:403"))
+        # Puis suit la redirection
+        response_follow = self.client.get(reverse("accounts:403"))
+        self.assertEqual(response_follow.status_code, 200)
+        self.assertTemplateUsed(response_follow, "accounts/403.html")
 
     def test_sec_05_membre_acces_consultation(self):
         self.logout()
         response = self.client.get(self.url_accueil_consult)
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, "consultation/accueil.html")
+
+    def test_sec_06_superuser_refus_bibliothecaire(self):
+        self.login_as(self.RoleTest.SUPERADMIN)
+        response = self.client.get(self.url_accueil_bib)
+        self.assertEqual(response.status_code, 302)
+        self.assertRedirects(response, reverse("accounts:403"))
+
+    def test_sec_07_staff_refus_bibliothecaire(self):
+        self.login_as(self.RoleTest.STAFF)
+        response = self.client.get(self.url_accueil_bib)
+        self.assertEqual(response.status_code, 302)
+        self.assertRedirects(response, reverse("accounts:403"))

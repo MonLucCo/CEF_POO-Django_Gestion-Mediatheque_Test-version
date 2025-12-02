@@ -2,9 +2,11 @@
 
 📁 `/docs/developpement/dev-docs/devTests.md`  
 
-📌 Version : index K-3 (issue #5 – étape 3 - Bloc 5)
-- Rapport de tests associé : [`devReport.md`](devReport.md)
-  - Sous-ensemble ajouté : tests des [UC-SECURITE](../issue5/task3/devReport_UC_securite.md)
+📌 Version : index K-4 (issue #5 – étape 4 - Bloc 5)
+- Rapport de tests associé : [`devReport.md`](devReport.md) et [Logs associés](../issue5/task4/mediatheque_test.log_devReport.md)
+  - Sous-ensemble ajouté : 
+    - tests des [UC-SECURITE](../issue5/task4/devReport_UC_securite.md)
+    - tests des [UC_LOGS](../issue5/task4/devReport_UC_logs.md) et [Logs associés](../issue5/task4/mediatheque_test.log_devReport_UC_logs.md)
 
 ___
 
@@ -47,12 +49,13 @@ Il est conçu pour :
     - index H10, fonction de création d'un emprunt.
     - index H-11, fonction de rendu d'un emprunt.
   - index J-1 (entité JeuDePlateau et application Consultation) pour le **Bloc 4**.
-  - index K-3 (application médiathèque et autorisation d'accès et sécurité) pour le **Bloc 5**.
+  - index K-4 (application médiathèque et autorisation d'accès et sécurité) pour le **Bloc 5**.
     - index K-1, fonctions de connexion/déconnexion de la couche d'accueil de l'application médiathèque avec la 
     modélisation de l'entité Bibliothecaire associée à un User.
     - index K-2, accès restreints de l'application Bibliothecaire pour les bibliothécaires et validation des tests 
     techniques et fonctionnels antérieurs.
-    - index K-3, permissions et sécurité d'accès aux applications de médiathèque
+    - index K-3, permissions et sécurité d'accès aux applications de médiathèque.
+    - index K-4, gestion des Logs de l'application médiathèque.
 - **Périmètre couvert** : 
   - site administration (application).
   - site bibliothecaire (application).
@@ -117,6 +120,7 @@ Il est conçu pour :
    - [🧪 3.5 Administration (`T-ADM-xxx`)](#-35-administration-t-adm-xxx)
    - [🧪 3.6 Fonctionnel (`T-FUN-xxx`)](#-36-fonctionnel-t-fun-xxx)
    - [🧪 3.7 Sécurité (`T-SEC-xxx`)](#-37-sécurité-t-sec-xxx)
+   - [🧪 3.8 Logs (`T-LOG-xxx`)](#-38-logs-t-log-xxx)
 4. [✅ Méthode de validation](#-4-méthode-de-validation)
 5. [📊 Couverture attendue](#-5-couverture-attendue)
 6. [🔗 Liens vers les fichiers de test](#-6-liens-vers-les-fichiers-de-test)
@@ -151,10 +155,11 @@ Les tests sont répartis en sept catégories :
 | Fonctionnel    | `tests_blocs/test_uc_list_media.py`, etc.     | `T-FUN-`   | Vérifier une fonctionnalité métier                              | Bloc 2   |
 | Technique      | `tests.py` (bibliothecaire/tests.py)          | `T-TEC-`   | Vérifier la base technique de connexion (LoginRequiredTestCase) | Bloc 5   |
 | Sécurité       | `tests_blocs/test_permissions.py` (accounts/) | `T-SEC-`   | Vérifier les rôles et permissions appliqués aux vues            | Bloc 5   |
+| Logs           | `tests_blocs/tests_logs.py` (accounts/)       | `T-LOG-`   | Vérifier les Logs de l'application                              | Bloc 5   |
 
 > Remarque : 
-> - les catégories Permissions, Formulaires, Erreurs, Filtrages sont envisagées, mais n'ont pas été mises en 
-> œuvre pour cette étape du développement.
+> - les catégories Permissions, Erreurs, Filtrages sont envisagées, mais n'ont pas été mises en œuvre pour cette étape 
+> du développement.
 > - les catégories sont ajoutées progressivement (cf. colonne `Création`) sans remise en cause des développements 
 > antérieurs.
 
@@ -490,13 +495,15 @@ Chaque catégorie de tests est regroupée dans une sous-section spécifique avec
 
 ### 🧪 3.7 Sécurité (`T-SEC-xxx`)
 
-| Série  | ID Test  | Description                                           | Rôle testé   | URL ciblée / Vue              | Résultat attendu                          | Statut   |
-|--------|----------|-------------------------------------------------------|--------------|-------------------------------|-------------------------------------------|----------|
-| Bloc 5 | T-SEC-01 | Accès au site admin réservé au superuser              | Superuser    | `/admin/`                     | Code 200 + accès complet                  | 🔄 À tester |
-| Bloc 5 | T-SEC-02 | Accès au site admin limité pour staff                 | Staff        | `/admin/`                     | Code 200 + accès restreint (pas Bibliothecaire) | 🔄 À tester |
-| Bloc 5 | T-SEC-03 | Accès complet aux vues Bibliothécaire                 | BibAdmin     | `/bibliothecaire/accueil/`    | Code 200 + menu bibliothécaire            | 🔄 À tester |
-| Bloc 5 | T-SEC-04 | Refus d’accès aux vues Bibliothécaire                 | Membre/Anon. | `/bibliothecaire/accueil/`    | Code 403 + template `403.html`            | 🔄 À tester |
-| Bloc 5 | T-SEC-05 | Accès en lecture seule aux vues Consultation          | Membre/Anon. | `/consultation/accueil/`      | Code 200 + affichage supports/jeux/médias | 🔄 À tester |
+| Série  | ID Test  | Description                                                  | Rôle testé   | URL ciblée / Vue           | Résultat attendu                                 | Statut   |
+|--------|----------|--------------------------------------------------------------|--------------|----------------------------|--------------------------------------------------|----------|
+| Bloc 5 | T-SEC-01 | Accès au site admin réservé au superuser                     | Superuser    | `/admin/`                  | Code 200 + accès complet à site Admin            | ✅ Validé |
+| Bloc 5 | T-SEC-02 | Accès au site admin limité pour staff                        | Staff        | `/admin/`                  | Code 200 + accès restreint (pas Bibliothecaire)  | ✅ Validé |
+| Bloc 5 | T-SEC-03 | Accès complet aux vues Bibliothécaire                        | BibAdmin     | `/bibliothecaire/accueil/` | Code 200 + menu bibliothécaire                   | ✅ Validé |
+| Bloc 5 | T-SEC-04 | Refus d’accès aux vues Bibliothécaire                        | Membre/Anon. | `/bibliothecaire/accueil/` | Code 302 + template `403.html`                   | ✅ Validé |
+| Bloc 5 | T-SEC-05 | Accès en lecture seule aux vues Consultation                 | Membre/Anon. | `/consultation/accueil/`   | Code 200 + affichage supports/jeux/médias        | ✅ Validé |
+| Bloc 5 | T-SEC-06 | Accès refusé pour un **Superuser** à l’espace Bibliothécaire | Superuser    | `/bibliothecaire/accueil/` | Code 302 + redirection vers `/acces-refuse/403/` | ✅ Validé |
+| Bloc 5 | T-SEC-07 | Accès refusé pour un **Staff** à l’espace Bibliothécaire     | Staff        | `/bibliothecaire/accueil/` | Code 302 + redirection vers `/acces-refuse/403/` | ✅ Validé |
 
 ---
 
@@ -510,6 +517,23 @@ Chaque catégorie de tests est regroupée dans une sous-section spécifique avec
   - **Technique** (superuser/staff → `/admin/`),
   - **Métier** (BibAdmin/BibGestion → `bibliothecaire`),
   - **Consultation publique** (Membre → `consultation`).
+
+---
+
+### 🧪 3.8 Logs (`T-LOG-xxx`)
+
+| Série  | ID Test  | Description                                          | Fonction ciblée | Résultat attendu                                                              | Statut      |
+|--------|----------|------------------------------------------------------|-----------------|-------------------------------------------------------------------------------|-------------|
+| Bloc 5 | T-LOG-01 | Vérifie la création du fichier `mediatheque.log`     | Infrastructure  | Le fichier est créé et contient au moins une ligne de log                     | ✅ Validé |
+| Bloc 5 | T-LOG-02 | Vérifie qu’un log est généré lors d’une connexion    | Login           | Message `[LOGIN] utilisateur=<username>` présent dans le fichier et console   | ✅ Validé |
+| Bloc 5 | T-LOG-03 | Vérifie qu’un log est généré lors d’une déconnexion  | Logout          | Message `[LOGOUT] utilisateur=<username>` ou `[LOGOUT_INVALID]` selon le cas  | ✅ Validé |
+| Bloc 5 | T-LOG-04 | Vérifie qu’un log est généré lors d’un accès refusé  | Accès restreint | Message `[ACCESS_DENIED] utilisateur=<username>` ou `anonyme` selon le profil | ✅ Validé |
+| Bloc 5 | T-LOG-05 | Vérifie qu’un log est généré lors d’un accès accordé | Accès restreint | Message `[ACCESS_GRANTED] utilisateur=<username>` présent dans le fichier     | ✅ Validé |
+
+> ℹ️ Note : les spécifications de la gestion des Logs sont accessibles dans la 
+> [section 3.5 de l'Analyse des Fonctionnalités](devAFBib.md#35-gestion-des-logs--fonction-transversale).  
+> 🔧 Les tests utilisent `mediatheque_test.log` pour archiver les traces des Logs générés durant les tests.  
+> ✅ Les traces des **Logs opérationnels** de l'application sont archivés dans `mediatheque.log`.
 
 ---
 

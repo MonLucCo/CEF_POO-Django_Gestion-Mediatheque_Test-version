@@ -59,30 +59,53 @@ class LoginRequiredTestCase(TestCase):
         cls.bib_admin = Bibliothecaire.objects.create(
             name="BibAdmin", user=cls.user_admin, role=cls.RoleTest.ADMIN
         )
+        # Définition des URLs
+        cls.url_login = reverse("accounts:login")
+        cls.url_logout = reverse("accounts:logout")
 
     def setUp(self):
         # Connexion par défaut : BibGestion
         self.login_as(self.RoleTest.GESTION)
 
     # --- Helpers génériques ---
-    def login_as(self, role: RoleTest):
-        """Connecte le client selon le rôle demandé."""
-        if role == self.RoleTest.GESTION:
-            ok = self.client.login(username="testbib_gestion", password="secret")
-        elif role == self.RoleTest.ADMIN:
-            ok = self.client.login(username="testbib_admin", password="secret")
-        elif role == self.RoleTest.SUPERADMIN:
-            ok = self.client.login(username="superadmin", password="secret")
-        elif role == self.RoleTest.STAFF:
-            ok = self.client.login(username="staff", password="secret")
+    def login_as(self, role: RoleTest, url: bool = False):
+        """Connecte le client selon le rôle demandé.
+        - url=False : connexion directe (client.login)
+        - url=True  : passe par la vue accounts:login (POST)
+        """
+        if not url:
+            if role == self.RoleTest.GESTION:
+                ok = self.client.login(username="testbib_gestion", password="secret")
+            elif role == self.RoleTest.ADMIN:
+                ok = self.client.login(username="testbib_admin", password="secret")
+            elif role == self.RoleTest.SUPERADMIN:
+                ok = self.client.login(username="superadmin", password="secret")
+            elif role == self.RoleTest.STAFF:
+                ok = self.client.login(username="staff", password="secret")
+            else:
+                raise ValueError(f"Rôle inconnu: {role}")
+            assert ok, f"Échec de connexion pour le rôle {role.label}"
         else:
-            raise ValueError(f"Rôle inconnu: {role}")
+            if role == self.RoleTest.GESTION:
+                self.client.post(self.url_login, {"username": "testbib_gestion", "password": "secret"})
+            elif role == self.RoleTest.ADMIN:
+                self.client.post(self.url_login, {"username": "testbib_admin", "password": "secret"})
+            elif role == self.RoleTest.SUPERADMIN:
+                self.client.post(self.url_login, {"username": "superadmin", "password": "secret"})
+            elif role == self.RoleTest.STAFF:
+                self.client.post(self.url_login, {"username": "staff", "password": "secret"})
+            else:
+                raise ValueError(f"Rôle inconnu: {role}")
 
-        assert ok, f"Échec de connexion pour le rôle {role.label}"
-
-    def logout(self):
-        """Déconnecte l'utilisateur'."""
-        self.client.logout()
+    def logout(self, url: bool = False):
+        """Déconnecte l’utilisateur.
+        - url=False : déconnexion directe (client.logout)
+        - url=True  : passe par la vue accounts:logout (POST)
+        """
+        if not url:
+            self.client.logout()
+        else:
+            self.client.post(self.url_logout)
 
     def current_user(self):
         """Retourne le nom de l’utilisateur connecté ou None."""
