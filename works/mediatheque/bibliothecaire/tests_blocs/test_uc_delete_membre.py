@@ -3,10 +3,14 @@ from django.urls import reverse
 from bibliothecaire.models import Membre, StatutMembre
 from datetime import datetime
 
+from bibliothecaire.tests import LoginRequiredTestCase
 
-class BaseMembreDeleteTestCase(TestCase):
+
+class BaseMembreDeleteTestCase(LoginRequiredTestCase):
     @classmethod
     def setUpTestData(cls):
+        super().setUpTestData()  # IMPORTANT: crée user+bibliothecaire
+
         cls.membre_sans_emprunt = Membre.objects.create(
             name="second membre *222",
             compte="2025_second_membre_222",

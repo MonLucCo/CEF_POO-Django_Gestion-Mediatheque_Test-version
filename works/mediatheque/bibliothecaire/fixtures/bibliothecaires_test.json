@@ -1,16 +1,20 @@
 [
-  {
+{
     "model": "bibliothecaire.bibliothecaire",
     "pk": 1,
     "fields": {
-      "name": "Leclerc"
+        "name": "Leclerc",
+        "user": 2,
+        "role": 2
     }
-  },
-  {
+},
+{
     "model": "bibliothecaire.bibliothecaire",
     "pk": 2,
     "fields": {
-      "name": "Moreau"
+        "name": "Moreau",
+        "user": 3,
+        "role": 1
     }
-  }
+}
 ]

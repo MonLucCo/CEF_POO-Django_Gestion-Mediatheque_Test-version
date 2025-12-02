@@ -3,11 +3,14 @@ from django.urls import reverse
 from django.core.management import call_command
 
 from bibliothecaire.models import JeuDePlateau
+from bibliothecaire.tests import LoginRequiredTestCase
 
 
-class BaseJeuTestCase(TestCase):
+class BaseJeuTestCase(LoginRequiredTestCase):
     @classmethod
     def setUpTestData(cls):
+        super().setUpTestData()  # IMPORTANT: crée user+bibliothecaire
+
         call_command('loaddata', 'jeux_test.json', verbosity=0)
         cls.jeu = JeuDePlateau.objects.first()
 

@@ -1,7 +1,7 @@
 # 📘 Analyse des fonctionnalités – Bibliothécaire
 
 📁 `/docs/developpement/dev-docs/devAFBib.md`  
-📌 Version : index J-1 (issue #4 – Bloc 4 - task 1)
+📌 Version : index K-1 (issue #5 – Bloc 5 - task 1)
 
 ---
 
@@ -36,6 +36,12 @@
     - [3.4.3 Entité : Membre](#343-entité--membre)
     - [3.4.4 Entité : Emprunt](#344-entité--emprunt)
     - [3.4.5 Entité : JeuDePlateau](#345-entité--jeudeplateau)
+  - [3.5 Gestion des Logs – Fonction transversale](#35-gestion-des-logs--fonction-transversale)
+    - [3.5.1 Objectifs des Logs](#351-objectifs-des-logs)
+    - [3.5.2 Spécification architecturale par niveau fonctionnel](#352-spécification-architecturale-par-niveau-fonctionnel)
+    - [3.5.3 Cas d’usage UC‑LOGS](#353-cas-dusage-uclogs)
+    - [3.5.4 Impacts techniques](#354-impacts-techniques)
+    - [3.5.5 Conclusion](#355-conclusion)
 - [4. Liaison technique](#4-liaison-technique)
   - [4.1 Application Bibliothecaire](#41-application-bibliothecaire)
     - [4.1.1 Medias](#411-medias)
@@ -45,8 +51,10 @@
   - [4.2 Application Consultation](#42-application-consultation)
   - [4.3 Application Mediatheque](#43-application-mediatheque)
     - [4.3.1 Rôle principal](#431-rôle-principal)
-    - [4.3.2 Fonctionnalités prévues (issue #5)](#432-fonctionnalités-prévues-issue-5)
+    - [4.3.2 Fonctionnalités implémentées (issue #5)](#432-fonctionnalités-implémentées-issue-5)
     - [4.3.3 Impacts techniques](#433-impacts-techniques)
+      - [4.3.3.1 Organisation de l’application](#4331-organisation-de-lapplication)
+      - [4.3.3.2 Note spécifique à la redirection](#4332-note-spécifique-à-la-redirection)
   - [4.4 Application Administration](#44-application-administration)
     - [4.4.1 Rôle principal](#441-rôle-principal)
     - [4.4.2 Fonctionnalités actuelles](#442-fonctionnalités-actuelles)
@@ -706,9 +714,9 @@ Trois parcours UX sont proposés pour couvrir les usages métier :
 
 | ID (EMPRUNT-*) | Description métier                                       | Déclenchement UX                  | Validation métier appliquée           | Avancement     |
 |----------------|----------------------------------------------------------|-----------------------------------|---------------------------------------|----------------|
-| UC-RETOUR-01   | Enregistrer le retour via la liste des emprunts en cours | Vue `EmpruntRendreView`           | Validation complète dans la vue       | ⚪ À développer |
-| UC-RETOUR-02   | Enregistrer le retour depuis la fiche membre emprunteur  | Vue `EmpruntRendreFromMembreView` | Validation implicite via choix média  | ⚪ À développer |
-| UC-RETOUR-03   | Enregistrer le retour depuis la fiche média emprunté     | Vue `EmpruntRendreFromMediaView`  | Validation implicite via choix membre | ⚪ À développer |
+| UC-RETOUR-01   | Enregistrer le retour via la liste des emprunts en cours | Vue `EmpruntRendreView`           | Validation complète dans la vue       | ✅ Implémenté |
+| UC-RETOUR-02   | Enregistrer le retour depuis la fiche membre emprunteur  | Vue `EmpruntRendreFromMembreView` | Validation implicite via choix média  | ✅ Implémenté |
+| UC-RETOUR-03   | Enregistrer le retour depuis la fiche média emprunté     | Vue `EmpruntRendreFromMediaView`  | Validation implicite via choix membre | ✅ Implémenté |
 
 > 🔹 Ces trois UC partagent la même logique métier (`enregistrer_retour()`), mais diffèrent par leur parcours UX.  
 > 🔹 Chaque UC doit être testée indépendamment pour garantir la robustesse des transitions et des validations.
@@ -921,6 +929,61 @@ disponibilité.
 
 ---
 
+### 3.5 Gestion des Logs – Fonction transversale
+
+#### 3.5.1 Objectifs des Logs
+
+Les logs ont pour rôle d’assurer une **traçabilité technique et métier** des actions critiques de l’application 
+médiathèque.  
+Ils permettent :
+- de suivre les connexions et déconnexions des utilisateurs,
+- de tracer les accès refusés ou accordés aux vues protégées,
+- de fournir un support de validation pour les tests fonctionnels et de sécurité,
+- d’offrir une base extensible pour un futur monitoring opérationnel.
+
+#### 3.5.2 Spécification architecturale par niveau fonctionnel
+
+Afin de cadrer l’intégration, une grille progressive de niveaux a été définie :
+
+| Niveau | Désignation                          | Description                                                                                                                                      | Issue concernée         | Statut / Intégration   |
+|--------|--------------------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------|-------------------------|------------------------|
+| 1      | Minimaliste - Architecture technique | Configuration `logging` basique (console et fichier de log dédié). Quelques appels `info/warning` dans vues critiques (login, logout, refus).    | Issue #5 (Bloc 5)       | ✅ Intégré (commit K‑4) |
+| 2      | Suffisant - Fonctions primordiales   | Niveaux cohérents (`INFO`, `WARNING`, `ERROR`). Journalisation des principales actions métier. Contexte enrichi (rôle, identifiant).             | Issue #6 (Bloc 6)       | 🔄 À intégrer          |
+| 3a     | Bonne intégration (non livré)        | Handlers multiples (console + fichier). Formatage structuré (timestamp, module, utilisateur). Journalisation systématique des événements métier. | Hors périmètre livrable | 🟡 Documenté           |
+| 3b     | Très bonne intégration (non livré)   | Rotation des fichiers. Segmentation des logs par rôle (BibAdmin vs BibGestion). Suivi opérationnel justifiant la séparation des rôles.           | Hors périmètre livrable | 🟡 Documenté           |
+| 4      | Professionnelle (non livré)          | Intégration supervision (ELK, Graylog, Sentry). Alertes/corrélations. Respect RGPD. Documentation d’exploitation.                                | Hors périmètre livrable | 🟡 Documenté           |
+
+> ℹ️ Les niveaux 1 et 2 sont directement liés aux issues #5 et #6.  
+> ℹ️ Les niveaux supérieurs sont documentés pour montrer l’évolutivité, mais non intégrés dans la version livrée.
+
+#### 3.5.3 Cas d’usage UC‑LOGS
+
+Les cas d’usage transversaux des logs couvrent les événements critiques suivants :
+
+| ID (LOG-*) | Description métier                      | Vue / Décorateur concerné | Résultat attendu   |
+|------------|-----------------------------------------|---------------------------|--------------------|
+| UC-LOG-01  | Création et alimentation du fichier log | `CustomLoginView`         | `[LOGIN]` écrit    |
+| UC-LOG-02  | Connexion génère un log `[LOGIN]`       | `CustomLoginView`         | `[LOGIN]` écrit    |
+| UC-LOG-03  | Déconnexion génère `[LOGOUT]`           | `LogoutView`              | `[LOGOUT]` écrit   |
+| UC-LOG-04  | Accès refusé génère `[ACCESS_DENIED]`   | `bibliothecaire_required` | `[ACCESS_DENIED]`  |
+| UC-LOG-05  | Accès accordé génère `[ACCESS_GRANTED]` | `bibliothecaire_required` | `[ACCESS_GRANTED]` |
+
+#### 3.5.4 Impacts techniques
+
+- Configuration `LOGGING` dans `settings.py` avec handlers console et fichier (`mediatheque.log`), et fichier dédié 
+`mediatheque_test.log` en mode test.  
+- Adaptation de `LoginRequiredTestCase` pour déclencher les vraies vues de login/logout et générer les logs.  
+- Tests fonctionnels validés (`T‑LOG‑01` à `T‑LOG‑05`) avec lecture ciblée du fichier de logs.
+
+#### 3.5.5 Conclusion
+
+La gestion des logs est une **fonction transversale** qui relie directement les aspects techniques (authentification, 
+sécurité) aux cas d’usage métier.  
+Le projet atteint le **niveau 2 (suffisant)** avec une traçabilité utile et extensible. Les niveaux supérieurs sont 
+documentés pour anticiper les besoins futurs sans sortir du périmètre demandé.
+
+---
+
 ## 4. Liaison technique
 
 ### 4.1 Application Bibliothecaire
@@ -1072,44 +1135,85 @@ Elle propose uniquement des fonctionnalités de lecture, sans création ni modif
 
 ### 4.3 Application Mediatheque
 
-> 🔹 Cette section est une **préparation** : elle sera finalisée dans l’issue #5 avec l’implémentation effective des 
-> vues, des templates et des tests associés.
-
 L’application **Médiathèque** constitue le point d’entrée global du projet.  
 Elle assure la cohérence entre les différentes sous‑applications (`accounts`, `bibliothecaire`, `consultation`) et 
 fournit les mécanismes transversaux nécessaires au bon fonctionnement.
 
 #### 4.3.1 Rôle principal
-- Centraliser la configuration des routes (`ROOT_URLCONF`) et l’inclusion des sous‑applications.
+- Centraliser la configuration des routes (`ROOT_URLCONF = 'mediatheque.urls'`) et l’inclusion des sous‑applications.
 - Gérer l’authentification et les comptes utilisateurs via l’application `accounts`.
 - Offrir une page d’accueil générale permettant de choisir entre les profils **Bibliothécaire** et **Consultation**.
-- Servir de socle pour les évolutions futures (issue #5) : gestion des permissions, navigation unifiée, intégration des 
-logs.
+- Servir de socle pour les évolutions futures (issue #5 et #6) : gestion des permissions, navigation unifiée, 
+intégration des logs.
 
-#### 4.3.2 Fonctionnalités prévues (issue #5)
-- **Accueil global** : une vue `HomeView` avec un template `home.html` proposant les accès directs :
+---
+
+#### 4.3.2 Fonctionnalités implémentées (issue #5)
+
+- **Accueil global** : une vue `HomeView` avec un template `accounts/accueil.html` proposant les accès directs :
   - `/bibliothecaire/` → application Bibliothécaire
   - `/consultation/` → application Consultation
+
 - **Gestion des comptes** :
-  - Création et authentification des utilisateurs (via `accounts`).
-  - Attribution des rôles (bibliothécaire vs membre).
-- **Permissions et sécurité** :
-  - Vérification des droits d’accès aux sous‑applications.
-  - Redirection automatique selon le profil connecté.
-- **Logs et traçabilité** :
-  - Mise en place d’un système de journalisation des actions (connexion, création, modification).
-  - Stockage des événements dans une base dédiée ou via le middleware Django.
+  - Connexion des utilisateurs via `CustomLoginView` (`accounts/login.html`).
+    - Redirection après connexion gérée par l’attribut `next_page = "consultation:accueil"`.
+    - Ce choix exploite le `RedirectURLMixin` de Django, qui permet d’utiliser `next_page` au lieu de `success_url` ou 
+    de la variable globale `LOGIN_REDIRECT_URL`.
+    - Avantage : le code est plus simple et lisible, sans dépendance au `settings.py`.
+  - Déconnexion des utilisateurs via `CustomLogoutView` (`accounts/logout.html`).
+    - Redirection après déconnexion gérée par l’attribut `next_page = "bibliothecaire:accueil"`.
+  - Affichage dynamique du menu : `Connexion` ou `Déconnexion (username)` selon l’état de session.
+
+- **Principe d’héritage des templates** :
+  - Issue #5 : héritage entre `base.html` (global) et `accounts/_base.html` (spécifique).
+  - Issue #6 (à venir) : propagation de l’héritage vers `bibliothecaire/_base.html` et `consultation/_base.html`.
+
+- **Paramétrage multi‑applications (settings)** :
+  - Ajout du chemin `BASE_DIR / "mediatheque" / "templates"` dans `TEMPLATES['DIRS']` pour permettre l’accès au 
+  `base.html`.
+  - Activation de `APP_DIRS=True` pour charger automatiquement les templates des sous‑applications.
+  - Aucune variable `LOGIN_REDIRECT_URL` n’est définie dans `settings.py`, car les redirections sont gérées directement 
+  par les vues via `next_page` (cf. `RedirectURLMixin`).
+
+---
 
 #### 4.3.3 Impacts techniques
-- **URLs** : fichier `mediatheque/urls.py` incluant les sous‑applications avec namespace (`bibliothecaire`, 
-`consultation`).
-- **Templates** : ajout d’un `home.html` minimaliste, extensible par un designer web.
-- **Tests** :
-  - `T-NAV-*` pour vérifier l’accès aux sous‑applications depuis l’accueil.
-  - `T-FUN-*` pour valider la logique de permissions et de redirection.
-- **Évolutivité** :
-  - Issue #5 assurera la finalisation des fonctionnalités transversales.
-  - Les tests seront enrichis pour couvrir l’authentification et la sécurité.
+
+##### 4.3.3.1 Organisation de l’application
+- **Structure des URLs** :
+  - `mediatheque/urls.py` centralise les routes et inclut les sous‑applications avec namespace (`accounts`, 
+  `bibliothecaire`, `consultation`).
+  - Chaque sous‑application conserve ses propres `urls.py` pour maintenir une séparation claire des responsabilités.
+- **Templates** :
+  - `base.html` sert de socle global.
+  - `accounts/_base.html` hérite de `base.html` et organise le menu Connexion/Déconnexion.
+  - Issue #6 : propagation de l’héritage vers `bibliothecaire/_base.html` et `consultation/_base.html`.
+- **Paramétrage multi‑applications (settings)** :
+  - Ajout du chemin `BASE_DIR / "mediatheque" / "templates"` dans `TEMPLATES['DIRS']`.
+  - Activation de `APP_DIRS=True` pour charger automatiquement les templates des sous‑applications.
+- **Tests associés** :
+  - `T-NAV-*` pour vérifier la navigation et les CTA de l’accueil.
+  - `T-FUN-*` pour valider la logique de connexion/déconnexion.
+
+---
+
+##### 4.3.3.2 Note spécifique à la redirection
+- **Usage du mixin `RedirectURLMixin`** :
+  - Les vues `LoginView` et `LogoutView` héritent de ce mixin.
+  - Il fournit la méthode `get_success_url()` qui détermine la destination après l’action.
+- **Ordre de priorité des redirections** :
+  1. Paramètre `?next=` dans l’URL (si présent et valide).
+  2. Attribut `next_page` défini dans la vue.
+  3. Variable globale `LOGIN_REDIRECT_URL` dans `settings.py` (par défaut `/accounts/profile/`).
+- **Choix du projet** :
+  - Les redirections sont gérées directement dans les vues via `next_page` :
+    - `CustomLoginView` → `next_page = "consultation:accueil"`
+    - `CustomLogoutView` → `next_page = "bibliothecaire:accueil"`
+  - Ce choix simplifie le code et évite de dépendre de `LOGIN_REDIRECT_URL`.
+- **Sécurité** :
+  - Django filtre les valeurs du paramètre `?next=` pour éviter les failles de type *open redirect*.
+  - Seules les URLs internes au projet sont acceptées ; les URLs externes sont rejetées.
+  - Il n’y a donc pas de risque de fuite de données ou de redirection vers un site tiers malveillant.
 
 ---
 

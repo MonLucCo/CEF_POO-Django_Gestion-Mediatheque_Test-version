@@ -98,14 +98,21 @@ class MembreAdmin(admin.ModelAdmin):
 
 @admin.register(Bibliothecaire)
 class BibliothecaireAdmin(admin.ModelAdmin):
-    list_display = ['name']
+    # Colonnes visibles dans la liste
+    list_display = ['name', 'user', 'role', 'is_admin', 'is_gestion']
     ordering = ['name']
-    search_fields = ['name']
+    search_fields = ['name', 'user__username']
+
+    # Organisation des champs dans le formulaire
     fieldsets = (
         ('Identité du bibliothécaire', {
-            'fields': ('name',)
+            'fields': ('name', 'user', 'role')
         }),
     )
+
+    # Pour afficher le rôle lisible dans la liste
+    def role(self, obj):
+        return obj.get_role_display()
 
 @admin.register(Emprunt)
 class EmpruntAdmin(admin.ModelAdmin):

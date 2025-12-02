@@ -27,7 +27,7 @@ et couvre :
 - Les vues CRUD, les transitions métier, les historiques
 - La préparation des tests fonctionnels et des fixtures
 
-📌 Version : index J-1 (issue #4 – étape 1 - Bloc 4)
+📌 Version : index K-2 (issue #5 – étape 2 - Bloc 5)
 
 ---
 
@@ -77,6 +77,9 @@ et couvre :
    - [9.24 Difficulté 24 : Traçabilité UX des actions métier et synchronisation du contexte d’affichage](#924-difficulté-24--traçabilité-ux-des-actions-métier-et-synchronisation-du-contexte-daffichage)
    - [9.25 Difficulté 25 : Choix du modèle de vue pour une confirmation métier liée à un objet](#925-difficulté-25--choix-du-modèle-de-vue-pour-une-confirmation-métier-liée-à-un-objet)
    - [9.26 Difficulté 26 : Réorganisation du plan de développement et de la documentation transverse](#926-difficulté-26--réorganisation-du-plan-de-développement-et-de-la-documentation-transverse)
+   - [9.27 – Difficulté 27 : Modélisation de Bibliothécaire et accès restreint à l’application](#927--difficulté-27--modélisation-de-bibliothécaire-et-accès-restreint-à-lapplication)
+   - [9.28 – Difficulté 28 : Gestion des accès restreints et du template 403](#928--difficulté-28--gestion-des-accès-restreints-et-du-template-403)
+   - [9.29 – Difficulté : Exigences et intégration des Logs](#929--difficulté--exigences-et-intégration-des-logs)
 10. [📌 Décisions structurantes du projet](#10--décisions-structurantes-du-projet)
     - [10.1 Décision 1 (D-01) – Structuration progressive du développement par blocs fonctionnels](#101-décision-1-d-01--structuration-progressive-du-développement-par-blocs-fonctionnels)
     - [10.2 Décision 2 (D-02) – Centralisation des vues sur l’entité Media avec typage différé](#102-décision-2-d-02--centralisation-des-vues-sur-lentité-media-avec-typage-différé)
@@ -1765,6 +1768,210 @@ branches `update-documentation` pour la rédaction du rapport final.
 
 Cette réorganisation documentaire s’accompagne d’une refonte du plan de développement (version 3), qui segmente les 
 issues par application (`bibliothecaire`, `consultation`, `mediatheque`) et par rôle métier.
+
+---
+
+### 9.27 – Difficulté 27 : Modélisation de Bibliothécaire et accès restreint à l’application
+
+Cette difficulté est apparue lors de l’intégration de l’authentification et de la restriction des accès à l’application 
+`bibliothecaire`.  
+
+L’enjeu était de reprendre les développements antérieurs sans modifier les fonctionnalités existantes (une fois 
+connecté), tout en garantissant la bonne exécution des tests unitaires associés. Les fonctionnalités de l’application 
+se répartissent entre :
+
+- primordiales, correspondant aux besoins de gestion courante des bibliothécaires ;
+- importantes, non demandées explicitement, mais nécessaires pour l’administration et le bon fonctionnement global.
+
+Cette dualité qui se retrouve dans les développements et les exigences fonctionnelles du projet, se traduit par une 
+interface double relative à plusieurs rôles de Bibliothécaire. Ces rôles métiers de bibliothécaire sont :
+- **BibAdmin**, le **bibliothécaire administrateur** qui accède à toutes les fonctions disponibles avec un affichage 
+technique complet.
+- **BibGestion**, le **bibliothécaire gestionnaire** qui n'accède qu'aux fonctions primordiales demandées pour le projet 
+avec un affichage opérationnel. 
+
+L'application Django prévoit l'utilisation d'un site d'administration accessible par un utilisateur `superuser` ou 
+`staff`. Cette capacité fonctionnelle et technique intégrée dans le framework Django doit être conservé sans intervenir 
+dans le fonctionnement de l'application. Cette indépendance doit être conservée. 
+
+#### a) Contexte fonctionnel et technique
+
+La mise en place de l’application `bibliothecaire` nécessite une gestion stricte des accès.  
+Seuls les utilisateurs authentifiés doivent pouvoir accéder aux vues, avec une distinction entre les rôles internes 
+(BibAdmin et BibGestion).  
+Les membres de la médiathèque ne sont pas concernés par cette authentification.
+
+Le développement des fonctions doit être revu pour ajouter les restrictions d'accès à chaque route fonctionnelle.
+
+Le développement des tests doit être repris pour ajouter la contrainte de connexion et pour s'assurer des redirections 
+prévues.
+
+#### b) Description
+
+La difficulté réside dans la modélisation de l’entité `Bibliothecaire` et son articulation avec `auth.User`.  
+Deux approches étaient envisageables (modèle étendu via `AbstractUser` ou modèle lié via `OneToOneField`).  
+Le choix retenu est de relier `Bibliothecaire` à `User` par un champ `OneToOneField`, avec un attribut `role` pour 
+distinguer `BibAdmin` et `BibGestion`.  
+
+Il est nécessaire de restreindre toutes les URLs de l’application `bibliothecaire` via `login_required` ou 
+`LoginRequiredMixin`.
+
+Il est nécessaire de compléter tous les tests de l'application bibliothecaire pour s'assurer de la connexion et de la 
+bonne gestion des redirections. 
+
+#### c) Impact
+
+- Les tests existants doivent être adaptés pour gérer la connexion préalable.  
+- Les rôles métier (BibAdmin/BibGestion) sont séparés des rôles techniques (`superuser`, `staff`).  
+- Les membres restent des entités métier sans compte `User`.
+- Les URLs associées à l'application Bibliothecaire sont à accès restreint.
+- Les tests doivent prévoir une connexion et la bonne gestion des redirections.
+
+#### d) Solution
+
+- Ajout du champ `Bibliothecaire.user = OneToOneField(User, ...)`.  
+- Ajout du champ `Bibliothecaire.role` avec valeurs `ADMIN` et `GESTION`.  
+- Restriction des URLs de `bibliothecaire` via `login_required`.  
+- Création d’une classe de test commune (`LoginRequiredTestCase`) pour factoriser la logique de connexion.  
+- Vérification des redirections vers `/accounts/login/` pour les utilisateurs non connectés.
+
+#### f) Conclusion
+
+Cette difficulté a marqué un tournant dans l’intégration architecturale du projet. La solution retenue, basée sur une 
+relation OneToOneField entre Bibliothecaire et User, s’est révélée explicite, non intrusive et facilement maintenable, 
+tout en respectant les développements déjà réalisés.  
+
+Elle a permis d’ajouter une fonctionnalité majeure (accès restreint) avec un minimum d’impact, d’exploiter pleinement le 
+modèle User de Django et de renforcer la cohérence des tests. Ce choix constitue un **point d’inflexion fonctionnel et 
+technique**, documenté comme un fait marquant du développement
+
+Ainsi, devant agir sur plusieurs axes en parallèle (le modèle, les routes, les UX et les tests), la résolution de cette 
+difficulté m’a permis :
+- d'ajouter une fonctionnalité majeure au projet tout en reprenant avec un minimum d'impact les codes déjà réalisés.
+- d'exploiter le modèle User de Django et de mieux comprendre les impacts des restrictions d'accès.
+- d'exploiter dans les fonctions et les tests les principes de la POO pour intégrer avec un minimum d'impact la 
+fonctionnalité d'accès restreint dans le projet.
+
+---
+
+### 9.28 – Difficulté 28 : Gestion des accès restreints et du template 403
+
+Cette difficulté est apparue lors de la mise en place du décorateur `bibliothecaire_required` et de la gestion des accès 
+restreints à l’application `bibliothecaire`.  
+L’enjeu était de distinguer clairement les situations d’accès non autorisé (utilisateur non connecté ou connecté sans 
+rôle Bibliothécaire) tout en garantissant une cohérence des URLs et une expérience utilisateur explicite.
+
+#### a) Contexte fonctionnel et technique
+
+La logique d’accès devait répondre à deux cas distincts :  
+- **Utilisateur non connecté** : accès refusé, invitation à se connecter.  
+- **Utilisateur connecté sans rôle Bibliothécaire** : accès refusé, retour vers l’accueil.  
+- **Utilisateur connecté avec rôle Bibliothécaire** : accès autorisé.  
+
+Le décorateur devait gérer ces situations sans dépendre de `login_required`, afin de conserver des URLs propres et 
+éviter l’ajout automatique de paramètres `?next`.  
+La difficulté s’est également posée sur le positionnement du template `403.html`, qui devait idéalement être placé dans 
+`/accounts/templates/accounts/` pour rester cohérent avec les autres templates liés à l’authentification.
+
+#### b) Description
+
+La difficulté réside dans l’articulation entre :  
+- La logique Django standard (`login_required`) qui redirige vers `/login?next=...` pour les utilisateurs non connectés.  
+- La logique projet, qui privilégie une approche simple et cohérente : lever `PermissionDenied` et afficher une page 403 
+avec des liens explicites.  
+
+Deux problèmes ont été rencontrés :  
+1. L’utilisation de `login_required` empêchait l’affichage du template 403 pour les utilisateurs non connectés.  
+2. Le template `403.html` n’était reconnu que s’il était placé dans `mediatheque/templates/`, alors que la cohérence 
+fonctionnelle demandait son placement dans `accounts/templates/accounts/`.
+
+#### c) Impact
+
+- Les utilisateurs non connectés étaient redirigés directement vers `/login`, ce qui contredisait l’esprit du 403 dans 
+le projet.  
+- Les URLs comportaient des paramètres `?next`, jugés peu élégants et non nécessaires dans ce contexte.  
+- Le template 403 devait être déplacé dans `mediatheque/templates`, ce qui brouillait la séparation entre erreurs 
+globales et erreurs liées aux accès utilisateurs.  
+- La documentation devait clarifier cette divergence entre logique Django standard et logique projet.
+
+#### d) Solution
+
+- Suppression de l’appel à `login_required` dans le décorateur.  
+- Mise en place d’un décorateur personnalisé qui lève `PermissionDenied` pour les cas non connectés et non autorisés.  
+- Création d’un template `403.html` avec messages différenciés selon l’état de l’utilisateur (non connecté ou connecté 
+sans rôle).  
+- Définition d’un `handler403` dans `urls.py` racine pour permettre l’utilisation d’un template placé dans 
+`/accounts/templates/accounts/403.html`.  
+
+#### f) Conclusion
+
+Cette difficulté a permis de clarifier la distinction entre logique technique (FBV avec `login_required`) et logique 
+métier (CBV avec `RedirectURLMixin`).  
+Le choix retenu – un décorateur personnalisé sans `login_required` – garantit des URLs propres, une expérience 
+utilisateur explicite et une cohérence avec les règles du projet.  
+
+Ce choix est **non standard Django**, mais il est adapté au cadre du projet :  
+- Il respecte la consigne fonctionnelle (accès réservé aux utilisateurs connectés).  
+- Il simplifie la logique en évitant les redirections automatiques et les paramètres `?next`.  
+- Il documente clairement la divergence avec la pratique Django standard, afin que les futurs contributeurs puissent 
+comprendre et éventuellement réintroduire `login_required` dans des projets ultérieurs.  
+
+Cette résolution constitue un **point d’inflexion architectural** : elle illustre la capacité à adapter les conventions 
+Django aux besoins spécifiques du projet, tout en maintenant une documentation claire et transmissible.
+
+---
+
+### 9.29 – Difficulté : Exigences et intégration des Logs
+
+#### a) Constat
+Le sujet du devoir mentionne la mise en place de logs, mais sans fournir de spécifications précises. Cette absence de 
+définition rend difficile l’intégration directe de la fonctionnalité, car le développement ne peut se faire qu’à partir 
+d’exigences claires et graduées.  
+Il est donc nécessaire de formaliser des niveaux d’intégration afin de cadrer les travaux et d’éviter toute remise en 
+cause des développements déjà réalisés.  
+
+Cela nécessite de définir une grille progressive d’exigences et de choisir un périmètre réaliste pour les travaux 
+restants (issues #5 et #6).  
+Deux particularités sont apparues :  
+- La nécessité de distinguer les **logs opérationnels** et les **logs de tests** pour éviter toute pollution du fichier 
+principal.  
+- L’importance de passer par les vraies vues (`accounts:login`, `accounts:logout`) pour déclencher les écritures, ce qui 
+a conduit à enrichir la classe `LoginRequiredTestCase`.
+
+#### b) Objectifs
+- Garantir une architecture technique robuste (handlers console + fichier des Logs opérationnels, fichier dédié aux 
+tests).  
+- Assurer une traçabilité métier (connexion, déconnexion, refus/acceptation d’accès).  
+- Préparer l’extensibilité vers des niveaux supérieurs (rotation, supervision, segmentation par rôle) sans remettre en 
+cause les développements existants.
+
+#### c) Niveaux définis
+Les cinq niveaux d’exigence sont documentés (cf. 
+[section 3.5 de l'Analyse des Fonctionnalités](devAFBib.md#35-gestion-des-logs--fonction-transversale)) :
+1. **Minimaliste** (issue #5) : configuration de base, console, premiers appels `info/warning`.  
+2. **Suffisant** (issue #6) : fichier `mediatheque.log`, cohérence des niveaux, journalisation métier enrichie.  
+3. **Bonne intégration** (non livré) : handlers multiples, formatage structuré.  
+4. **Très bonne intégration** (non livré) : rotation, segmentation par rôle.  
+5. **Professionnelle** (non livré) : supervision, alertes, conformité RGPD.
+
+#### d) Particularités rencontrées
+- **Séparation des fichiers** : ajout d’un `mediatheque_test.log` activé automatiquement en mode test 
+(`python manage.py test`) pour préserver le fichier opérationnel.  
+- **Classe de tests enrichie** : `LoginRequiredTestCase` permet désormais de choisir entre une connexion directe 
+(`client.login`) et une connexion via l’URL (`url=True`), indispensable pour générer les logs.  
+- **Validation des UC‑LOGS** : les tests T‑LOG‑01 à T‑LOG‑05 confirment la bonne écriture des événements dans le fichier 
+de logs, avec une lecture ciblée (dernière ligne) pour éviter les doublons.
+
+#### e) Conclusion et enseignements
+- La mise en place des logs a révélé que **l’architecture technique et les tests sont indissociables** : sans passage 
+par les vraies vues, aucun log n’est généré.  
+- La séparation entre **logs opérationnels** et **logs de tests** est une bonne pratique qui garantit la fiabilité et la 
+lisibilité des traces.  
+- Le projet a atteint le **niveau 2 (suffisant)**, qui assure une traçabilité utile et extensible.  
+- Les niveaux supérieurs (rotation, supervision, segmentation) sont documentés, mais non livrés, pour conserver une 
+cohérence dans les développements du projet (les besoins futurs) sans sortir du périmètre demandé.  
+- Enseignement majeur : la gestion des logs n’est pas seulement une exigence technique, mais aussi une **exigence UX et 
+métier**. Les logs deviennent un outil de validation des accès et de compréhension des comportements utilisateurs.
 
 ---
 

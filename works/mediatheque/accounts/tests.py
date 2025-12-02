@@ -1,3 +1,12 @@
-from django.test import TestCase
+"""
+📁 Fichier d’entrée – tests.py
 
-# Create your tests_blocs here.
+Les tests en "blocs unitaires" sont organisés dans le dossier :
+    accounts/tests_blocs/
+
+Voir le plan complet :
+    /docs/developpement/dev-docs/devTests.md
+"""
+
+def test_environment_accounts():
+    assert True  # Test minimal pour valider l’environnement

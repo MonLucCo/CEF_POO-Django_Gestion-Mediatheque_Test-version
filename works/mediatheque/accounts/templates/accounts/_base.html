@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+
+{% block title %}Accueil Médiathèque{% endblock %}
+
+{% block page_header %}
+  <h1>Médiathèque - Projet (Django)</h1>
+{% endblock %}
+
+{% block nav %}
+<nav>
+  <ul>
+    <li><a href="{% url 'accounts:accueil' %}">Accueil Médiathèque</a></li>
+    <li><a href="{% url 'bibliothecaire:accueil' %}">Espace Bibliothécaire</a></li>
+    <li><a href="{% url 'consultation:accueil' %}">Espace Consultation</a></li>
+
+    {% if user.is_authenticated %}
+      <form action="{% url 'accounts:logout' %}" method="post" style="display:inline;">
+        {% csrf_token %}
+        <button type="submit">
+            Déconnexion ({{ user.username }})
+        </button>
+      </form>
+    {% else %}
+      <li><a href="{% url 'accounts:login' %}">Connexion</a></li>
+    {% endif %}  </ul>
+</nav>
+{% endblock %}
+
+{% block footer %}
+<p>&copy; Accueil – Médiathèque</p>
+{% endblock %}

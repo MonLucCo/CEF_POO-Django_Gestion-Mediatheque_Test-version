@@ -1,14 +1,22 @@
+from django.core.management import call_command
 from django.test import TestCase
 from django.urls import reverse
 
-class MediaConsultableViewTests(TestCase):
+from bibliothecaire.tests import LoginRequiredTestCase
+
+
+class MediaConsultableViewTests(LoginRequiredTestCase):
     fixtures = ['medias_test.json']
 
     @classmethod
     def setUpTestData(cls):
+        super().setUpTestData()  # IMPORTANT: crée user+bibliothecaire
+
         cls.url = reverse('bibliothecaire:media_list_consultables')
 
     def setUp(self):
+        super().setUp() # exécute la connexion BibGestion
+
         self.response = self.client.get(self.url)
 
 
@@ -40,18 +48,22 @@ class MediaConsultableViewTests(TestCase):
         for media in self.response.context['medias']:
             self.assertTrue(media.consultable)
 
-class MediaDisponibleViewTests(TestCase):
+class MediaDisponibleViewTests(LoginRequiredTestCase):
     fixtures = ['medias_test.json']
 
     @classmethod
     def setUpTestData(cls):
+        super().setUpTestData()  # IMPORTANT: crée user+bibliothecaire
+
         cls.url = reverse('bibliothecaire:media_list_disponibles')
 
     def setUp(self):
+        super().setUp() # exécute la connexion BibGestion
+
         self.response = self.client.get(self.url)
 
     def test_nav_06_url_and_template(self):
-        """T-NAV-06 : Accès à la vue disponibles et vérification du template"""
+        """T-NAV-06 : Accès à la vue disponible et vérification du template"""
         self.assertEqual(self.response.status_code, 200)
         self.assertTemplateUsed(self.response, 'bibliothecaire/medias/media_list.html')
 
@@ -80,14 +92,18 @@ class MediaDisponibleViewTests(TestCase):
             self.assertTrue(media.consultable)
             self.assertTrue(media.disponible)
 
-class MediaTypeViewTests(TestCase):
+class MediaTypeViewTests(LoginRequiredTestCase):
     fixtures = ['medias_test.json', 'media_untyped_fixture.json']
 
     @classmethod
     def setUpTestData(cls):
+        super().setUpTestData()  # IMPORTANT: crée user+bibliothecaire
+
         cls.url = reverse('bibliothecaire:media_list_by_type')
 
     def setUp(self):
+        super().setUp() # exécute la connexion BibGestion
+
         self.media_types = ['LIVRE', 'DVD', 'CD']
         self.expected_titles = {
             'LIVRE': 'Liste des livres',
@@ -135,14 +151,18 @@ class MediaTypeViewTests(TestCase):
                 for media in response.context['medias']:
                     self.assertEqual(media.media_type, media_type)
 
-class MediaNonTypeViewTests(TestCase):
+class MediaNonTypeViewTests(LoginRequiredTestCase):
     fixtures = ['medias_test.json', 'media_untyped_fixture.json']
 
     @classmethod
     def setUpTestData(cls):
+        super().setUpTestData()  # IMPORTANT: crée user+bibliothecaire
+
         cls.url = reverse('bibliothecaire:media_list_non_types')
 
     def setUp(self):
+        super().setUp() # exécute la connexion BibGestion
+
         self.media_types = ['NON_DEFINI']
         self.expected_titles = {
             'NON_DEFINI': 'Liste des médias "non définis" (en attente de définition)'

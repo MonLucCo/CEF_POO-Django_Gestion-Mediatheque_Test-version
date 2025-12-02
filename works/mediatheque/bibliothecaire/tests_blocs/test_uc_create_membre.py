@@ -3,9 +3,11 @@ from django.urls import reverse
 from bibliothecaire.models import Membre, StatutMembre
 from datetime import datetime
 
+from bibliothecaire.tests import LoginRequiredTestCase
+
 
 # 🧪 Navigation
-class TestNavigationMembreUcCreate(TestCase):
+class TestNavigationMembreUcCreate(LoginRequiredTestCase):
     def test_nav_14_acces_vue_creation_membre(self):
         response = self.client.get(reverse("bibliothecaire:membre_create"))
         self.assertEqual(response.status_code, 200)
@@ -16,7 +18,7 @@ class TestNavigationMembreUcCreate(TestCase):
 
 
 # 🧪 Entités
-class TestEntitesMembreUcCreate(TestCase):
+class TestEntitesMembreUcCreate(LoginRequiredTestCase):
     def test_ent_13_creation_membre_standard_compte_exact(self):
         nom = "Alice Dupont"
         annee = datetime.now().year
@@ -39,7 +41,7 @@ class TestEntitesMembreUcCreate(TestCase):
 
 
 # 🧪 Vues
-class TestVuesMembreUcCreate(TestCase):
+class TestVuesMembreUcCreate(LoginRequiredTestCase):
     def test_vue_16_titre_dynamique_selon_contexte(self):
         response_membre = self.client.get(reverse("bibliothecaire:membre_create"))
         self.assertContains(response_membre, "Créer un Membre (sans droit d'emprunt)")
@@ -49,7 +51,7 @@ class TestVuesMembreUcCreate(TestCase):
 
 
 # 🧪 Formulaires
-class TestFormulairesMembreUcCreate(TestCase):
+class TestFormulairesMembreUcCreate(LoginRequiredTestCase):
     def test_form_04_champ_name_visible_et_label(self):
         response = self.client.get(reverse("bibliothecaire:membre_create"))
         self.assertContains(response, "Nom du Membre")
@@ -59,7 +61,7 @@ class TestFormulairesMembreUcCreate(TestCase):
 
 
 # 🧪 Fonctionnel
-class TestFonctionnelMembreUcCreate(TestCase):
+class TestFonctionnelMembreUcCreate(LoginRequiredTestCase):
     def test_fun_14_uc_create_01_incrementation_membre_standard(self):
         nom = "Claire Lemoine"
         annee = datetime.now().year

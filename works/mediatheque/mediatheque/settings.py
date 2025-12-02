@@ -57,7 +57,7 @@ ROOT_URLCONF = 'mediatheque.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS':  [BASE_DIR / "mediatheque" / "templates"],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -81,6 +81,60 @@ DATABASES = {
         'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
+
+
+# Ajout de la configuration des Logs
+import sys
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    "formatters": {
+        "django-style": {
+            # Format du Log : date, module, niveau, puis le message construit par l'adapter
+            "format": "[%(asctime)s] [%(levelname)s] <%(name)s> %(message)s",
+            "datefmt": "%d/%b/%Y %H:%M:%S",
+        },
+    },
+    'handlers': {
+        'console': {
+            "level": "INFO",
+            'class': 'logging.StreamHandler',
+            "formatter": "django-style",
+        },
+        "file": {
+            "level": "INFO",
+            "class": "logging.FileHandler",
+            "filename": BASE_DIR / "mediatheque.log",
+            "formatter": "django-style",
+            'encoding': 'utf-8',
+        },
+        "test_file": {
+            "level": "INFO",
+            "class": "logging.FileHandler",
+            "filename": BASE_DIR / "mediatheque_test.log",
+            "formatter": "django-style",
+            'encoding': 'utf-8',
+        },
+    },
+    'root': {
+        'handlers': ['console', 'file'],
+        'level': 'INFO',
+    },
+    "loggers": {
+        "django.server": {
+            "handlers": ["console", "file"],
+            "level": "INFO",
+            "propagate": False,
+        },
+    },
+}
+
+# 👉 Détection du mode test
+if 'test' in sys.argv:
+    # Adaptation des handlers pour écrire dans mediatheque_test.log
+    LOGGING['root']['handlers'] = ['console', 'test_file']
+    LOGGING['loggers']['django.server']['handlers'] = ['console', 'test_file']
 
 
 # Password validation

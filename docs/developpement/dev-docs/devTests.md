@@ -2,10 +2,11 @@
 
 📁 `/docs/developpement/dev-docs/devTests.md`  
 
-📌 Version : index J-1 (issue #4 – étape 1 - Bloc 4)
-- Rapport de tests associé : [`devReport.txt`](devReport.md)
-  - Sous-ensemble ajouté : tests des [UC-GESTION-JEU](../issue4/devReport_UC_gestion_jeu.md)
-  - sous-ensemble ajouté : tests des [UC-CONSULT-SUPPORT](../issue4/devReport_UC_consult_support.md)
+📌 Version : index K-4 (issue #5 – étape 4 - Bloc 5)
+- Rapport de tests associé : [`devReport.md`](devReport.md) et [Logs associés](../issue5/task4/mediatheque_test.log_devReport.md)
+  - Sous-ensemble ajouté : 
+    - tests des [UC-SECURITE](../issue5/task4/devReport_UC_securite.md)
+    - tests des [UC_LOGS](../issue5/task4/devReport_UC_logs.md) et [Logs associés](../issue5/task4/mediatheque_test.log_devReport_UC_logs.md)
 
 ___
 
@@ -22,7 +23,8 @@ Les tests ont été regroupé en **Bloc de tests** qui correspondent à des phas
 - l'issue #4 :
   - **Bloc 4** : développement fonctionnel de l'application consultation (entités `Support`, `media`, `JeuDePlateau`) et 
   complément fonctionnel pour l'application bibliothécaire (entités `Support` et `JeuDePlateau`).
-
+- l'issue #5 :
+  - **Bloc 5** : gestion fonctionnelle de connexion/déconnexion et des accès restreints de l'application médiathèque.
 Il est conçu pour :
 - Structurer les tests par catégorie (navigation, entités, fonctionnalités).
 - Garantir une couverture minimale par vue, extensible selon les besoins.
@@ -47,6 +49,13 @@ Il est conçu pour :
     - index H10, fonction de création d'un emprunt.
     - index H-11, fonction de rendu d'un emprunt.
   - index J-1 (entité JeuDePlateau et application Consultation) pour le **Bloc 4**.
+  - index K-4 (application médiathèque et autorisation d'accès et sécurité) pour le **Bloc 5**.
+    - index K-1, fonctions de connexion/déconnexion de la couche d'accueil de l'application médiathèque avec la 
+    modélisation de l'entité Bibliothecaire associée à un User.
+    - index K-2, accès restreints de l'application Bibliothecaire pour les bibliothécaires et validation des tests 
+    techniques et fonctionnels antérieurs.
+    - index K-3, permissions et sécurité d'accès aux applications de médiathèque.
+    - index K-4, gestion des Logs de l'application médiathèque.
 - **Périmètre couvert** : 
   - site administration (application).
   - site bibliothecaire (application).
@@ -83,6 +92,7 @@ Il est conçu pour :
 - **Index H+** : développement fonctionnel des vues et modèles `Membre`, `Emprunt`, `Retour`
 - **Bloc 3** : finalisation du cycle métier Bibliothécaire
 - **Bloc 4** : finalisation de la Consultation et de la gestion des Jeux de plateau
+- **Bloc 5** : finalisation de l'organisation de l'application, de l'authentification et des accès.
 
 📌 Évolutivité :
 - Préparation des tests de permissions et accès conditionnels
@@ -97,24 +107,29 @@ Il est conçu pour :
 
 ## 📑 Sommaire
 
-1. [🔹 Objectifs du plan de test](#-1-objectifs-du-plan-de-test)
-2. [🔹 Organisation des tests](#-2-organisation-des-tests)
-3. [🔹 Cas de test (Étape 5)](#-3-cas-de-test-étape-5)
-   - [🧪 Navigation (`T-NAV-xxx`)](#-navigation-t-nav-xxx)
-   - [🧪 Entités (`T-ENT-xxx`)](#-entités-t-ent-xxx)
-   - [🧪 Vues (`T-VUE-xxx`)](#-vues-t-vue-xxx)
-   - [🧪 Formulaires (`T-FORM-xxx`)](#-formulaires-t-form-xxx)
-   - [🧪 Administration (`T-ADM-xxx`)](#-administration-t-adm-xxx)
-   - [🧪 Fonctionnel (`T-FUN-xxx`)](#-fonctionnel-t-fun-xxx)
-4. [🔹 Méthode de validation](#-4-méthode-de-validation)
-5. [🔹 Couverture attendue](#-5-couverture-attendue)
-6. [🔹 Liens vers les fichiers de test](#-6-liens-vers-les-fichiers-de-test)
-7. [🔹 Évolutivité du plan](#-7-évolutivité-du-plan)
-8. [🔹 Références](#-8-références)
+1. [🎯 Objectifs du plan de test](#-1-objectifs-du-plan-de-test)
+2. [⚙️ Organisation des tests](#-2-organisation-des-tests)
+   - [📂 2.1 Catégories des tests](#-21-catégories-des-tests)
+   - [🛠 2.2 Bases techniques de test](#-22-bases-techniques-de-test)
+   - [📑 2.3 Matrice des rôles et droits (applications de la médiathèque)](#-23-matrice-des-rôles-et-droits-applications-de-la-médiathèque)
+3. [📑 Cas de test](#-3-cas-de-test)
+   - [🧪 3.1 Navigation (`T-NAV-xxx`)](#-31-navigation-t-nav-xxx)
+   - [🧪 3.2 Entités (`T-ENT-xxx`)](#-32-entités-t-ent-xxx)
+   - [🧪 3.3 Vues (`T-VUE-xxx`)](#-33-vues-t-vue-xxx)
+   - [🧪 3.4 Formulaires (`T-FORM-xxx`)](#-34-formulaires-t-form-xxx)
+   - [🧪 3.5 Administration (`T-ADM-xxx`)](#-35-administration-t-adm-xxx)
+   - [🧪 3.6 Fonctionnel (`T-FUN-xxx`)](#-36-fonctionnel-t-fun-xxx)
+   - [🧪 3.7 Sécurité (`T-SEC-xxx`)](#-37-sécurité-t-sec-xxx)
+   - [🧪 3.8 Logs (`T-LOG-xxx`)](#-38-logs-t-log-xxx)
+4. [✅ Méthode de validation](#-4-méthode-de-validation)
+5. [📊 Couverture attendue](#-5-couverture-attendue)
+6. [🔗 Liens vers les fichiers de test](#-6-liens-vers-les-fichiers-de-test)
+7. [📈 Évolutivité du plan](#-7-évolutivité-du-plan)
+8. [📚 Références](#-8-références)
 
 ---
 
-## 🔹 1. Objectifs du plan de test
+## 🎯 1. Objectifs du plan de test
 
 - Vérifier que chaque vue retourne un code HTTP 200
 - Vérifier que les bons templates sont utilisés
@@ -124,24 +139,91 @@ Il est conçu pour :
 
 ---
 
-## 🔹 2. Organisation des tests
+## ⚙️ 2. Organisation des tests
 
-Les tests sont répartis en cinq catégories :
+### 📂 2.1 Catégories des tests
 
-| Catégorie      | Dossier / Fichier                           | Préfixe ID | Objectif principal                                 | Création |
-|----------------|---------------------------------------------|------------|----------------------------------------------------|----------|
-| Navigation     | `tests_blocs/test_urls.py`                  | `T-NAV-`   | Vérifier les accès, les routes, les redirections   | Initial  |
-| Entités        | `tests_blocs/test_entites_media.py`, etc.   | `T-ENT-`   | Vérifier la cohérence des modèles et des données   | initial  |
-| Vues           | `tests_blocs/test_vues_media_list.py`, etc. | `T-VUE-`   | Vérifier le comportement des vues et des templates | Initial  |
-| Administration | `tests_blocs/test_admin.py`                 | `T-ADM-`   | Vérifier le site d'administration du projet        | Bloc 1   |
-| Fonctionnel    | `tests_blocs/test_uc_list_media.py`, etc.   | `T-FUN-`   | Vérifier une fonctionnalité métier                 | Bloc 2   |
+Les tests sont répartis en sept catégories :
 
-> Remarque : les catégories Permissions, Formulaires, Erreurs, Filtrages sont envisagées, mais n'ont pas été mises en 
-> œuvre pour cette étape du développement.
+| Catégorie      | Dossier / Fichier                             | Préfixe ID | Objectif principal                                              | Création |
+|----------------|-----------------------------------------------|------------|-----------------------------------------------------------------|----------|
+| Navigation     | `tests_blocs/test_urls.py`                    | `T-NAV-`   | Vérifier les accès, les routes, les redirections                | Initial  |
+| Entités        | `tests_blocs/test_entites_media.py`, etc.     | `T-ENT-`   | Vérifier la cohérence des modèles et des données                | initial  |
+| Vues           | `tests_blocs/test_vues_media_list.py`, etc.   | `T-VUE-`   | Vérifier le comportement des vues et des templates              | Initial  |
+| Formulaire     | `tests_blocs/test_uc_create_media.py`, etc.   | `T-FORM-`  | Vérifier le comportement des formulaires                        | initial  |
+| Administration | `tests_blocs/test_admin.py`                   | `T-ADM-`   | Vérifier le site d'administration du projet                     | Bloc 1   |
+| Fonctionnel    | `tests_blocs/test_uc_list_media.py`, etc.     | `T-FUN-`   | Vérifier une fonctionnalité métier                              | Bloc 2   |
+| Technique      | `tests.py` (bibliothecaire/tests.py)          | `T-TEC-`   | Vérifier la base technique de connexion (LoginRequiredTestCase) | Bloc 5   |
+| Sécurité       | `tests_blocs/test_permissions.py` (accounts/) | `T-SEC-`   | Vérifier les rôles et permissions appliqués aux vues            | Bloc 5   |
+| Logs           | `tests_blocs/tests_logs.py` (accounts/)       | `T-LOG-`   | Vérifier les Logs de l'application                              | Bloc 5   |
+
+> Remarque : 
+> - les catégories Permissions, Erreurs, Filtrages sont envisagées, mais n'ont pas été mises en œuvre pour cette étape 
+> du développement.
+> - les catégories sont ajoutées progressivement (cf. colonne `Création`) sans remise en cause des développements 
+> antérieurs.
 
 ---
 
-## 🔹 3. Cas de test (Étape 5)
+### 🛠️ 2.2 Bases techniques de test
+
+Cette section documente les classes et helpers utilisés pour les tests avec accès restreints qui sont basés sur la 
+classe `TestCase` et un enrichissement de cette classe.
+
+#### Classe `LoginRequiredTestCase(TestCase)`
+
+- **Objectif** : fournir une base commune pour les tests nécessitant une authentification.
+- **Fonctionnalités** :
+  - Création automatique de trois comptes de test : BibGestion, BibAdmin, Superadmin.
+  - Connexion par défaut avec BibGestion avant chaque test.
+  - Helpers disponibles :
+    - `login_as(role)` : connexion selon le rôle (`RoleTest.GESTION`, `RoleTest.ADMIN`, `RoleTest.SUPERADMIN`).
+    - `logout()` : déconnexion du client.
+    - `current_user()` : retourne le nom de l’utilisateur connecté ou `None`.
+- **Cas de validation** :
+  - Un test technique (T-TECH-01) vérifie l’accès à `/bibliothecaire/accueil/` avec BibGestion connecté.
+  - Ce test assure que la classe fonctionne correctement avant d’être utilisée dans les autres blocs.
+
+> ℹ️ Cette base technique est utilisée dans tous les tests UC nécessitant une connexion (Bloc 5 et suivants).
+
+#### Test technique T-TEC-01
+
+- **Objectif** : valider la classe `LoginRequiredTestCase`.
+- **Description** : vérifie qu’un accès à `/bibliothecaire/accueil/` est possible avec BibGestion connecté.
+- **Résultat attendu** : code 200 + présence du menu bibliothécaire.
+- **Statut** : ✅ Validé.
+
+> ℹ️ Ce test valide le bon fonctionnement de la classe lors de la définition d'un test par héritage.
+
+> ℹ️ La validation des rôles et des accès repose sur les tests de sécurité `T-SEC-` qui suivent la matrice des droits 
+> chaque rôle des applications de la médiathèque.
+
+---
+
+### 📑 2.3 Matrice des rôles et droits (applications de la médiathèque)
+
+| Rôle / Profil                                     | Authentification (login via `accounts`) | Accès site `/admin/` Django                      | Accès app `accounts` (accueil, login/logout) | Accès app `bibliothecaire`                         | Accès app `consultation`                          | Fonctions visibles / permissions                                                                        |
+|---------------------------------------------------|-----------------------------------------|--------------------------------------------------|----------------------------------------------|----------------------------------------------------|---------------------------------------------------|---------------------------------------------------------------------------------------------------------|
+| **Superuser** (`is_superuser=True`)               | ✅                                       | ✅ complet (tous les modèles, toutes les actions) | ⚪ (possible mais inutile en pratique)        | ❌                                                  | ⚪ (possible mais inutile en pratique)             | Tous les droits techniques via admin Django. Pas de droits métier par défaut.                           |
+| **Staff** (`is_staff=True`)                       | ✅                                       | ✅ accès limité au site admin (selon permissions) | ⚪ (possible mais inutile en pratique)        | ❌                                                  | ⚪ (possible mais inutile en pratique)             | Droits techniques définis par les permissions Django. Pas de droits métier par défaut.                  |
+| **BibAdmin** (`Bibliothecaire.role=ADMIN`)        | ✅ via `auth.User`                       | ❌                                                | ✅ (utile pour login/logout, orientation)     | ✅ accès complet à toutes les vues `bibliothecaire` | ⚪ (possible mais inutile en pratique)             | Fonctions métier avancées : supervision, journalisation, gestion des rôles internes.                    |
+| **BibGestion** (`Bibliothecaire.role=GESTION`)    | ✅ via `auth.User`                       | ❌                                                | ✅ (utile pour login/logout, orientation)     | ✅ accès limité aux vues `bibliothecaire`           | ⚪ (possible mais inutile en pratique)             | Fonctions métier courantes : emprunts, retours, gestion des membres, mais pas les fonctions techniques. |
+| **Membre** (entité métier, pas lié à `auth.User`) | ❌ (pas de login)                        | ❌                                                | ❌                                            | ❌                                                  | ✅ accès en lecture seule via l’app `consultation` | Consultation des supports, jeux, médias disponibles.                                                    |
+
+#### 🔎 Points clés
+- **Superuser / Staff** : accès possible à `accounts` et `consultation`, mais sans utilité → ⚪.  
+- **Bibliothécaire (ADMIN/GESTION)** : accès utile à `accounts` et `bibliothecaire`, mais pas à `consultation`.  
+- **Membre** : accès direct et utile à `consultation`, sans authentification.  
+- **Admin Django** reste réservé aux rôles techniques (`is_staff`, `is_superuser`), sans lien avec les rôles métier.
+
+#### 📌 Légende
+- ✅ : accès utile / prévu (fonctionnel ou technique).  
+- ❌ : accès interdit / impossible.  
+- ⚪ : accès techniquement possible, mais sans pertinence métier.  
+
+---
+
+## 📑 3. Cas de test
 
 Chaque catégorie de tests est regroupée dans une sous-section spécifique avec une indication de son status :
 - 🔄 À tester
@@ -149,7 +231,7 @@ Chaque catégorie de tests est regroupée dans une sous-section spécifique avec
 - ✅ Validé
 - 🟡 Non implémenté
 
-### 🧪 Navigation (`T-NAV-xxx`)
+### 🧪 3.1 Navigation (`T-NAV-xxx`)
 
 | Série  | ID Test  | Description                                                            | URL ciblée                                           | Résultat attendu                                    | Statut   |
 |--------|----------|------------------------------------------------------------------------|------------------------------------------------------|-----------------------------------------------------|----------|
@@ -190,7 +272,11 @@ Chaque catégorie de tests est regroupée dans une sous-section spécifique avec
 | Bloc 4 | T-NAV-35 | Accès à la liste des jeux consultables                                 | `/consultation/supports/jeux/`                       | Code 200 + template `supports_list.html`            | ✅ Validé |
 | Bloc 4 | T-NAV-36 | Accès à la liste des médias disponibles                                | `/consultation/supports/medias/disponibles`          | Code 200 + template `supports_list.html`            | ✅ Validé |
 | Bloc 4 | T-NAV-37 | Accès au cas de liste vide (test technique)                            | `/consultation/supports/vide`                        | Code 200 + message “Aucun support…”                 | ✅ Validé |
-
+| Bloc 5 | T-NAV-38 | Accès à la page d’accueil Médiathèque                                  | `/accounts/accueil/`                                 | Code 200 + template `accueil.html`                  | ✅ Validé |
+| Bloc 5 | T-NAV-39 | Lien vers l’espace Bibliothécaire (CTA accueil médiathèque)            | `/bibliothecaire/accueil/`                           | Redirection vers accueil Bibliothécaire             | ✅ Validé |
+| Bloc 5 | T-NAV-40 | Lien vers l’espace Consultation (CTA accueil médiathèque)              | `/consultation/accueil/`                             | Redirection vers accueil Consultation               | ✅ Validé |
+| Bloc 5 | T-NAV-41 | Lien Connexion affiché si non connecté                                 | `/accounts/login/`                                   | Présence du lien “Connexion” dans le menu           | ✅ Validé |
+| Bloc 5 | T-NAV-42 | Lien Déconnexion affiché si connecté                                   | `/accounts/logout/`                                  | Présence du bouton “Déconnexion (username)”         | ✅ Validé |
 
 > ❌ Le test T-NAV-03 a révélé une contrainte sur le champ `annee_edition` du modèle `Media`. ✅ Il a été repris 
 > après correction du modèle de données.  
@@ -199,7 +285,7 @@ Chaque catégorie de tests est regroupée dans une sous-section spécifique avec
 
 ---
 
-### 🧪 Entités (`T-ENT-xxx`)
+### 🧪 3.2 Entités (`T-ENT-xxx`)
 
 | Série  | ID Test  | Description                                                              | Modèle testé    | Résultat attendu                                                                        | Statut   |
 |--------|----------|--------------------------------------------------------------------------|-----------------|-----------------------------------------------------------------------------------------|----------|
@@ -231,7 +317,7 @@ Chaque catégorie de tests est regroupée dans une sous-section spécifique avec
 
 ---
 
-### 🧪 Vues (`T-VUE-xxx`)
+### 🧪 3.3 Vues (`T-VUE-xxx`)
 
 | Série  | ID Test  | Vue testée                                                      | Description                                                              | Résultat attendu                                                       | Statut   |
 |--------|----------|-----------------------------------------------------------------|--------------------------------------------------------------------------|------------------------------------------------------------------------|----------|
@@ -280,7 +366,7 @@ Chaque catégorie de tests est regroupée dans une sous-section spécifique avec
 
 ---
 
-### 🧪 Formulaires (`T-FORM-xxx`)
+### 🧪 3.4 Formulaires (`T-FORM-xxx`)
 
 | Série  | ID Test   | Formulaire testé | Description                                                         | Résultat attendu                                                              | Statut   |
 |--------|-----------|------------------|---------------------------------------------------------------------|-------------------------------------------------------------------------------|----------|
@@ -300,7 +386,7 @@ Chaque catégorie de tests est regroupée dans une sous-section spécifique avec
 
 ---
 
-### 🧪 Administration (`T-ADM-xxx`)
+### 🧪 3.5 Administration (`T-ADM-xxx`)
 
 | Série  | ID Test  | Description                                                                 | Cible                         | Résultat attendu                                           | Statut   |
 |--------|----------|-----------------------------------------------------------------------------|-------------------------------|------------------------------------------------------------|----------|
@@ -314,7 +400,7 @@ Chaque catégorie de tests est regroupée dans une sous-section spécifique avec
 
 ---
 
-### 🧪 Fonctionnel (`T-FUN-xxx`)
+### 🧪 3.6 Fonctionnel (`T-FUN-xxx`)
 
 | Série  | ID Test  | Description                                                                                                        | Résultat attendu                                                                                                            | Statut            |
 |--------|----------|--------------------------------------------------------------------------------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------|-------------------|
@@ -369,6 +455,11 @@ Chaque catégorie de tests est regroupée dans une sous-section spécifique avec
 | Bloc 4 | T-FUN-49 | Cas de liste vide (test technique) (SUPPORT-UC-CONSULT-04)                                                         | Message “Aucun support n’est consultable” affiché                                                                           | ✅ Validé          |
 | Bloc 4 | T-FUN-50 | Persistance du filtre après redirection (SUPPORT-UC-CONSULT-05)                                                    | Formulaire prérempli avec la valeur choisie                                                                                 | ✅ Validé          |
 | Bloc 4 | T-FUN-51 | CTA accueil Consultation (SUPPORT-UC-CONSULT-06)                                                                   | Bouton “Voir les supports…” → `/consultation/supports/`                                                                     | ✅ Validé          |
+| Bloc 5 | T-FUN-52 | Connexion avec identifiants valides (`CustomLoginView`) (COMPTE-UC-GESTION-01)                                     | Redirection vers `accounts:accueil`                                                                                         | ✅ Validé          |
+| Bloc 5 | T-FUN-53 | Connexion avec identifiants invalides (`CustomLoginView`) (COMPTE-UC-GESTION-02)                                   | Formulaire réaffiché + message d’erreur                                                                                     | ✅ Validé          |
+| Bloc 5 | T-FUN-54 | Déconnexion via POST (`CustomLogoutView`) (COMPTE-UC-GESTION-03)                                                   | Session terminée + redirection vers `accounts:accueil`                                                                      | ✅ Validé          |
+| Bloc 5 | T-FUN-55 | Affichage dynamique du menu (login/logout) (`_base.html`) (COMPTE-UC-GESTION-04)                                   | Menu affiche Connexion ou Déconnexion selon l’état                                                                          | ✅ Validé          |
+| Bloc 5 | T-FUN-56 | Affichage du nom de l’utilisateur connecté (`_base.html`) (COMPTE-UC-GESTION-05)                                   | Bouton affiche “Déconnexion (username)”                                                                                     | ✅ Validé          |
 
 > 🔧 Les tests unitaires _fonctionnels_ sont définis pour être autonome. Ils peuvent se rapprocher de tests unitaires
 > _techniques_ qui sont indiqués dans le _résultat attendu_. 
@@ -402,7 +493,51 @@ Chaque catégorie de tests est regroupée dans une sous-section spécifique avec
 
 ---
 
-## 🔹 4. Méthode de validation
+### 🧪 3.7 Sécurité (`T-SEC-xxx`)
+
+| Série  | ID Test  | Description                                                  | Rôle testé   | URL ciblée / Vue           | Résultat attendu                                 | Statut   |
+|--------|----------|--------------------------------------------------------------|--------------|----------------------------|--------------------------------------------------|----------|
+| Bloc 5 | T-SEC-01 | Accès au site admin réservé au superuser                     | Superuser    | `/admin/`                  | Code 200 + accès complet à site Admin            | ✅ Validé |
+| Bloc 5 | T-SEC-02 | Accès au site admin limité pour staff                        | Staff        | `/admin/`                  | Code 200 + accès restreint (pas Bibliothecaire)  | ✅ Validé |
+| Bloc 5 | T-SEC-03 | Accès complet aux vues Bibliothécaire                        | BibAdmin     | `/bibliothecaire/accueil/` | Code 200 + menu bibliothécaire                   | ✅ Validé |
+| Bloc 5 | T-SEC-04 | Refus d’accès aux vues Bibliothécaire                        | Membre/Anon. | `/bibliothecaire/accueil/` | Code 302 + template `403.html`                   | ✅ Validé |
+| Bloc 5 | T-SEC-05 | Accès en lecture seule aux vues Consultation                 | Membre/Anon. | `/consultation/accueil/`   | Code 200 + affichage supports/jeux/médias        | ✅ Validé |
+| Bloc 5 | T-SEC-06 | Accès refusé pour un **Superuser** à l’espace Bibliothécaire | Superuser    | `/bibliothecaire/accueil/` | Code 302 + redirection vers `/acces-refuse/403/` | ✅ Validé |
+| Bloc 5 | T-SEC-07 | Accès refusé pour un **Staff** à l’espace Bibliothécaire     | Staff        | `/bibliothecaire/accueil/` | Code 302 + redirection vers `/acces-refuse/403/` | ✅ Validé |
+
+---
+
+#### 📌 Remarques
+- Ces tests valident la **matrice des rôles et droits** définie en 
+[section 2.3](#-23-matrice-des-rôles-et-droits-applications-de-la-médiathèque).  
+- Ils couvrent les cas d’accès utile (✅), interdit (❌) et _techniquement possible mais inutile_ (⚪).  
+- Les résultats attendus sont consignés dans [`devReport.md`](devReport.md) et, pour l’index K‑3, dans 
+[`devReport_UC_securite.md`](../issue5/task3/devReport_UC_securite.md).  
+- Les tests de sécurité garantissent la séparation stricte entre :
+  - **Technique** (superuser/staff → `/admin/`),
+  - **Métier** (BibAdmin/BibGestion → `bibliothecaire`),
+  - **Consultation publique** (Membre → `consultation`).
+
+---
+
+### 🧪 3.8 Logs (`T-LOG-xxx`)
+
+| Série  | ID Test  | Description                                          | Fonction ciblée | Résultat attendu                                                              | Statut      |
+|--------|----------|------------------------------------------------------|-----------------|-------------------------------------------------------------------------------|-------------|
+| Bloc 5 | T-LOG-01 | Vérifie la création du fichier `mediatheque.log`     | Infrastructure  | Le fichier est créé et contient au moins une ligne de log                     | ✅ Validé |
+| Bloc 5 | T-LOG-02 | Vérifie qu’un log est généré lors d’une connexion    | Login           | Message `[LOGIN] utilisateur=<username>` présent dans le fichier et console   | ✅ Validé |
+| Bloc 5 | T-LOG-03 | Vérifie qu’un log est généré lors d’une déconnexion  | Logout          | Message `[LOGOUT] utilisateur=<username>` ou `[LOGOUT_INVALID]` selon le cas  | ✅ Validé |
+| Bloc 5 | T-LOG-04 | Vérifie qu’un log est généré lors d’un accès refusé  | Accès restreint | Message `[ACCESS_DENIED] utilisateur=<username>` ou `anonyme` selon le profil | ✅ Validé |
+| Bloc 5 | T-LOG-05 | Vérifie qu’un log est généré lors d’un accès accordé | Accès restreint | Message `[ACCESS_GRANTED] utilisateur=<username>` présent dans le fichier     | ✅ Validé |
+
+> ℹ️ Note : les spécifications de la gestion des Logs sont accessibles dans la 
+> [section 3.5 de l'Analyse des Fonctionnalités](devAFBib.md#35-gestion-des-logs--fonction-transversale).  
+> 🔧 Les tests utilisent `mediatheque_test.log` pour archiver les traces des Logs générés durant les tests.  
+> ✅ Les traces des **Logs opérationnels** de l'application sont archivés dans `mediatheque.log`.
+
+---
+
+## ✅ 4. Méthode de validation
 
 - Exécution des tests via :
   ```bash
@@ -432,7 +567,7 @@ Chaque catégorie de tests est regroupée dans une sous-section spécifique avec
 
 ---
 
-## 🔹 5. Couverture attendue
+## 📊 5. Couverture attendue
 
 | Niveau de couverture | Description                                                      |
 |----------------------|------------------------------------------------------------------|
@@ -442,32 +577,36 @@ Chaque catégorie de tests est regroupée dans une sous-section spécifique avec
 
 ---
 
-## 🔹 6. Liens vers les fichiers de test
+## 🔗 6. Liens vers les fichiers de test
 
-| Fichier                     | Fonctionnalité ciblée                                                                   | Catégorie                |
-|-----------------------------|-----------------------------------------------------------------------------------------|--------------------------|
-| `test_urls.py`              | Routage et accès (URLs locales)                                                         | Navigation               |
-| `test_entites_media.py`     | Modèle `Media` et sous-types                                                            | Entités                  |
-| `test_vues_media_detail.py` | Détail d’un média typé                                                                  | Vues                     |
-| `test_vues_media_list.py`   | Liste des médias                                                                        | Vues                     |
-| `test_admin.py`             | Interface d’administration                                                              | Administration           |
-| `test_uc_list_media.py`     | Cas d’usage des listes de médias (consultables, disponibles, typés)                     | Fonctionnel              |
-| `test_uc_create_media.py`   | Cas d'usage des créations de médias (non typé, livre, dvd, cd)                          | Fonctionnel              |
-| `test_uc_typage_media.py`   | Cas d’usage du typage et rollback des médias non typés                                  | Fonctionnel              |
-| `test_uc_list_membre.py`    | Cas d'usage des listes des membres (membres, emprunteurs, supprimés, tous)              | Technique et Fonctionnel |
-| `test_uc_create_membre.py`  | Cas d'usage de création des membres (membre, emprunteur)                                | Technique et Fonctionnel |
-| `test_uc_update_membre.py`  | Cas d'usage de modification des membres (membre, emprunteur)                            | Technique et Fonctionnel |
-| `test_uc_delete_membre.py`  | Cas d'usage de suppression des membres (membre, emprunteur) de la gestion               | Technique et Fonctionnel |
-| `test_uc_retard_emprunt.py` | Cas d'usage de marquage des retards des emprunts (automatique ou manuel)                | Technique et Fonctionnel |
-| `test_uc_create_emprunt.py` | Cas d'usage de création des emprunts (sans ou avec sélection d'un membre ou d'un média) | Technique et Fonctionnel |
-| `test_uc_retour_emprunt.py` | Cas d'usage de retour des emprunts (sans ou avec sélection d'un membre ou d'un média)   | Technique et Fonctionnel |
+| Fichier                        | Fonctionnalité ciblée                                                                   | Catégorie                |
+|--------------------------------|-----------------------------------------------------------------------------------------|--------------------------|
+| `test_urls.py`                 | Routage et accès (URLs locales)                                                         | Navigation               |
+| `test_entites_media.py`        | Modèle `Media` et sous-types                                                            | Entités                  |
+| `test_vues_media_detail.py`    | Détail d’un média typé                                                                  | Vues                     |
+| `test_vues_media_list.py`      | Liste des médias                                                                        | Vues                     |
+| `test_admin.py`                | Interface d’administration                                                              | Administration           |
+| `test_uc_list_media.py`        | Cas d’usage des listes de médias (consultables, disponibles, typés)                     | Fonctionnel              |
+| `test_uc_create_media.py`      | Cas d'usage des créations de médias (non typé, livre, dvd, cd)                          | Fonctionnel              |
+| `test_uc_typage_media.py`      | Cas d’usage du typage et rollback des médias non typés                                  | Fonctionnel              |
+| `test_uc_list_membre.py`       | Cas d'usage des listes des membres (membres, emprunteurs, supprimés, tous)              | Technique et Fonctionnel |
+| `test_uc_create_membre.py`     | Cas d'usage de création des membres (membre, emprunteur)                                | Technique et Fonctionnel |
+| `test_uc_update_membre.py`     | Cas d'usage de modification des membres (membre, emprunteur)                            | Technique et Fonctionnel |
+| `test_uc_delete_membre.py`     | Cas d'usage de suppression des membres (membre, emprunteur) de la gestion               | Technique et Fonctionnel |
+| `test_uc_retard_emprunt.py`    | Cas d'usage de marquage des retards des emprunts (automatique ou manuel)                | Technique et Fonctionnel |
+| `test_uc_create_emprunt.py`    | Cas d'usage de création des emprunts (sans ou avec sélection d'un membre ou d'un média) | Technique et Fonctionnel |
+| `test_uc_retour_emprunt.py`    | Cas d'usage de retour des emprunts (sans ou avec sélection d'un membre ou d'un média)   | Technique et Fonctionnel |
+| `test_uc_gestion_jeu.py`       | Cas d'usage de la gestion des jeux de plateau (                                         | Technique et Fonctionnel |
+| `test_uc_accounts_compte.py`   | Cas de gestion des accès et des conexions/déconnexion de la médiathèque                 | Technique et Fonctionnel |
+| `tests.py` (`bibliothecaire/`) | Classe de base de tests avec login et teste technique de connexion par héritage         | Technique et Fonctionnel |
 
 > Les fichiers de tests **technique et fonctionnel** correspondent au regroupement des catégories par classe de tests 
 > (cf. [Difficulté 15](devMC.md#915-difficulté-15--regroupement-des-tests-techniques-et-fonctionnels-dans-un-même-groupe-de-tests)).
-
+> Pour les tests nécessitant une connexion/déconnexion, une classe `LoginRequiredTestCase(TestCase)` permet de gérer 
+> directement les fonctionnalités.
 ---
 
-## 🔹 7. Évolutivité du plan
+## 📈 7. Évolutivité du plan
 
 Ce plan est conçu pour être enrichi au fil du développement :
 
@@ -482,7 +621,7 @@ Ce plan est conçu pour être enrichi au fil du développement :
 
 ---
 
-## 🔹 8. Références
+## 📚 8. Références
 
 - [Main courante du développement](devMC.md)
 - [Issue #3 – Développement de l’application bibliothécaire](https://github.com/MonLucCo/CEF_POO-Django_Gestion-Mediatheque_Test-version/issues/3)

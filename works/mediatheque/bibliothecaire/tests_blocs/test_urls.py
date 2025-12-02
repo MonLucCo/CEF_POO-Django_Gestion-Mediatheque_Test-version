@@ -1,8 +1,10 @@
 from django.test import TestCase
 from django.urls import reverse
 
+from bibliothecaire.tests import LoginRequiredTestCase
 
-class NavigationTests(TestCase):
+
+class NavigationTests(LoginRequiredTestCase):
     def test_nav_01_accueil_accessible(self):
         response = self.client.get(reverse('bibliothecaire:accueil'))
         self.assertEqual(response.status_code, 200)

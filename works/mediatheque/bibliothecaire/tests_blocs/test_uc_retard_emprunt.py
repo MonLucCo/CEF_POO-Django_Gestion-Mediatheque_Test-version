@@ -3,11 +3,14 @@ from django.test import TestCase
 from django.urls import reverse
 from datetime import date, timedelta
 from bibliothecaire.models import Membre, Media, Emprunt, StatutEmprunt, StatutMembre
+from bibliothecaire.tests import LoginRequiredTestCase
 
 
-class BaseEmpruntRetardTestCase(TestCase):
+class BaseEmpruntRetardTestCase(LoginRequiredTestCase):
     @classmethod
     def setUpTestData(cls):
+        super().setUpTestData()  # IMPORTANT: crée user+bibliothecaire
+
         # Chargement du jeu de données (fixtures)
         call_command('loaddata', 'test_uc_emprunt_retard.json', verbosity=0)
 
