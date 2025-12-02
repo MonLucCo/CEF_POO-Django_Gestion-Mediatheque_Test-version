@@ -6,7 +6,7 @@
 | **Date**          | Septembre 2025                                                        |
 | **Rédacteur**     | `Luc PERARD` / micro-entreprise `PerLucCo`                            |
 | **Formation**     | CEF – Développement Web et Web Mobile – Module POO                    |
-| **Avancement**    | ✔️ Done : #1, #12, #2, #3 • 🚧 En cours : #4 • ⏳ À venir : #5, #6, #7 |
+| **Avancement**    | ✔️ Done : #1, #12, #2, #3, #4 • 🚧 En cours : #5 • ⏳ À venir : #6, #7 |
 
 > Cette rédaction du rapport est incrémentale et les paragraphes absents seront intégrés lors de la réalisation du 
 > développement.
@@ -48,6 +48,7 @@
       - [3.4.5.1 Configuration centrale de l'application `mediatheque`](#3451-configuration-centrale-de-lapplication-mediatheque)
       - [3.4.5.2 Fonctionnalités et arborescence des fichiers](#3452-fonctionnalités-et-arborescence-des-fichiers)
       - [3.4.5.3 Résolution du routage et identification des templates](#3453-résolution-du-routage-et-identification-des-templates)
+      - [3.4.5.4 Configuration et exploitation des Logs](#3454-configuration-et-exploitation-des-logs)
 
 - [4. Implémentation des fonctionnalités](#4-implémentation-des-fonctionnalités)  
   - [4.1 Application bibliothécaire](#41-application-bibliothécaire)  
@@ -78,6 +79,11 @@
     - [4.3.2 Contrainte 2 – Durée maximale d’un emprunt : 7 jours](#432-contrainte-2--durée-maximale-dun-emprunt--7-jours)
     - [4.3.3 Contrainte 3 – Blocage des membres en retard](#433-contrainte-3--blocage-des-membres-en-retard)
     - [4.3.4 Contrainte 4 – Jeux de plateau non empruntables](#434-contrainte-4--jeux-de-plateau-non-empruntables)
+  - [4.4 Authentification - gestion des rôles et des Logs](#44-authentification---gestion-des-rôles-et-des-logs)
+    - [4.4.1 Rôle principal](#441-rôle-principal)
+    - [4.4.2 Fonctionnalités liées à l'authentification](#442-fonctionnalités-liées-à-lauthentification)
+      - [4.4.3 Fonctionnalités liées à la gestion des Logs](#443-fonctionnalités-liées-à-la-gestion-des-logs)
+      - 
 
 - [6. Base de données et données de test](#6-base-de-données-et-données-de-test)  
   - [6.1 Schéma des modèles et migration](#61-schéma-des-modèles-et-migration)
@@ -102,14 +108,18 @@
     - [8.1.2 Principe de la main-courante technique](#812-principe-de-la-main-courante-technique)
   - [8.2 Table de traçabilité – Issues, fichiers, tests et livrables](#82-table-de-traçabilité--issues-fichiers-tests-et-livrables)
   - [8.3 Difficultés rencontrées et leçons apprises](#83-difficultés-rencontrées-et-leçons-apprises)
-    - [8.3.1 Difficulté d'un bon plan de développement](#831-difficulté-dun-bon-plan-de-développement)
-    - [8.3.2 Difficulté d'une bonne configuration de l'EDI](#832-difficulté-dune-bonne-configuration-de-ledi)
-    - [8.3.3 Difficulté d'une bonne identification des templates](#833-difficulté-dune-bonne-identification-des-templates)
+    - [8.3.1 Plan de développement et organisation](#831-plan-de-développement-et-organisation)
+    - [8.3.2 Configuration de l’EDI](#832-configuration-de-ledi)
+    - [8.3.3 Résolution des templates](#833-résolution-des-templates)
+    - [8.3.4 Authentification et sécurité](#834-authentification-et-sécurité)
+    - [8.3.5 Gestion des logs](#835-gestion-des-logs)
+    - 
 
 - [Annexes](#annexes)
   - [Annexe A – Extraits de code clés](rapport-projet_annexe-a.md)
   - [Annexe D – Arborescence du projet](rapport-projet_annexe-d.md)  
   - [Annexe E – Installation projet et configuration de l’EDI](rapport-projet_annexe-e.md)
+  - [Annexe F – Main‑courante technique et difficultés](rapport-projet_annexe-f.md)
 
 ---
 
@@ -213,7 +223,7 @@ Chaque application suit la convention Django, avec une séparation stricte des r
 > 📌 Cette organisation permet une lisibilité immédiate, une maintenance facilitée et une extensibilité maîtrisée.
 
 > 🔗 Cette organisation est illustrée dans la section 
-> [3.4.1 – Arborescence des fichiers](#341-fonctionnalités-et-arborescence-des-fichiers), qui présente la structure 
+> [3.4.5.2 – Arborescence des fichiers](#3452-fonctionnalités-et-arborescence-des-fichiers), qui présente la structure 
 > réelle du projet `mediatheque/`.
 
 ---
@@ -237,7 +247,7 @@ Exemple de synthèse pour l’entité `Emprunt` :
 > transitions métier.
 
 > 🔗 La mise en œuvre technique du routage est détaillée dans la section 
-> [3.4.2 – Codage de la couche centrale](#342-codage-de-la-couche-centrale), avec les extraits de `urls.py` et 
+> [3.4.1 – Codage de la couche centrale](#341-application-accounts), avec les extraits de `urls.py` et 
 > `views.py`.
 
 ---
@@ -402,7 +412,7 @@ pip install -r requirements.txt
 ```
 
 > 🔗 L'arborescence du projet est détaillée dans la section 
-> [Annexe D – Arborescence du projet](#annexe-d--arborescence-du-projet), pour le positionnement du fichier 
+> [Annexe D – Arborescence du projet](rapport-projet_annexe-d.md), pour le positionnement du fichier 
 > `requirements.txt` avec la recopie pour archive de livraison.
 
 #### 3.3.3 Exécution des tests
@@ -500,6 +510,12 @@ collisions et de garantir la clarté documentaire.
   Le fichier `mediatheque/urls.py` centralise la configuration et sert de point d’entrée unique pour l’ensemble du 
 projet.
 
+- **Logs applicatifs** :  
+  La configuration `LOGGING` dans `settings.py` définit des handlers pour la console et pour un fichier `mediatheque.log`.  
+  Un fichier séparé `mediatheque_test.log` est utilisé automatiquement lors de l’exécution des tests afin de préserver 
+le fichier opérationnel. Les logs permettent de tracer les événements critiques (connexion, déconnexion, accès refusé ou 
+accordé).
+
 > Cette organisation garantit une séparation claire entre les couches applicatives et facilite la maintenance et les 
 > tests.
 
@@ -514,10 +530,11 @@ correspondant à leur profil.
 Définie lors de la réorganisation des issues (cf. issue #12), la couche `mediatheque` sert de point d’entrée unique et 
 assure :
 
-- Configuration globale (`settings.py`) : base de données, langue, timezone  
-- Vue d’accueil protégée et redirection selon le rôle utilisateur  
-- Routage principal (`urls.py`) pour coordonner les deux sous-applications  
-- Gestion des sessions et des permissions pour sécuriser l’accès.
+- Configuration globale (`settings.py`) : base de données, langue, timezone, logging.  
+- Vue d’accueil protégée et redirection selon le rôle utilisateur.  
+- Routage principal (`urls.py`) pour coordonner les deux sous-applications.  
+- Gestion des sessions et des permissions pour sécuriser l’accès. 
+- Configuration des logs applicatifs pour tracer les événements critiques.
 
 ---
 
@@ -534,40 +551,54 @@ couches fonctionnelles.
 works/
 └── mediatheque/
     │ 
-    ├── accounts/                   # Application de la couche centrale
-    │   ├── views.py                # Vue de l'application
-    │   ├── urls.py                 # Routage de l'application
-    │   └── templates/              # Layouts de l'application
-    │       └── accounts/           # Discriminant du layout de l'application
-    │           └── accueil.html    # Layout de l'application
+    ├── accounts/                   # Application centrale : authentification, accueil, gestion des rôles
+    │   ├── views.py                # Vues de connexion/déconnexion et accueil
+    │   ├── urls.py                 # Routage des comptes (login/logout, accueil)
+    │   ├── tests_blocs/            # Tests UC liés aux comptes, sécurité et logs
+    │   └── templates/              # Templates spécifiques à l'application accounts
+    │       └── accounts/           # Répertoire discriminant pour éviter les collisions
+    │           └── accueil.html    # Template d'accueil de l'application accounts
     │
-    ├── bibliothecaire/             # Application de la couche bibliothecaire
-    │   ├── views.py                # Vue de l'application
-    │   ├── urls.py                 # Routage de l'application
-    │   └── templates/              # Layouts de l'application
-    │       └── bibliothecaire/     # Discriminant du layout de l'application
-    │           └── accueil.html    # Layout de l'application
+    ├── bibliothecaire/             # Application métier : gestion interne de la médiathèque
+    │   ├── admin.py                # Configuration du site d'administration Django
+    │   ├── decorator.py            # Décorateurs de sécurité et restrictions d'accès
+    │   ├── mixins.py               # Mixins pour factoriser la logique des vues
+    │   ├── models.py               # Modèles métier (Media, Membre, Emprunt, JeuDePlateau)
+    │   ├── forms.py                # Formulaires métier (création, mise à jour, emprunt)
+    │   ├── views.py                # Vues métier (CRUD, emprunts, retours, indicateurs)
+    │   ├── urls.py                 # Routage des fonctionnalités bibliothécaire
+    │   ├── tests.py                # Tests techniques de base
+    │   ├── tests_blocs/            # Tests UC (médias, membres, emprunts, jeux, retards)
+    │   └── templates/              # Templates spécifiques à l'application bibliothécaire
+    │       └── bibliothecaire/     # Répertoire discriminant
+    │           └── accueil.html    # Template d'accueil de l'application bibliothécaire
     │
-    ├── consultation/               # Application de la couche consultation
-    │   ├── views.py                # Vue de l'application
-    │   ├── urls.py                 # Routage de l'application
-    │   └── templates/              # Layouts de l'application
-    │       └── consultation/       # Discriminant du layout de l'application
-    │           └── accueil.html    # Layout de l'application
+    ├── consultation/               # Application métier : interface publique de consultation
+    │   ├── views.py                # Vues de consultation des supports
+    │   ├── urls.py                 # Routage de l'application consultation
+    │   ├── tests_blocs/            # Tests UC de consultation
+    │   └── templates/              # Templates spécifiques à l'application consultation
+    │       └── consultation/       # Répertoire discriminant
+    │           └── accueil.html    # Template d'accueil de l'application consultation
     │
     ├── mediatheque/                # Couche centrale du projet
-    │   ├── settings.py             # Configurations du projet 
-    |   └── urls.py                 # Routage global du projet
+    │   ├── common/                 # Modules communs
+    │   │   └── logging.py          # Structuration des messages de logs
+    │   ├── templates/              # Templates globaux
+    │   │   └── base.html           # Layout principal partagé par toutes les applications
+    │   ├── settings.py             # Configuration globale du projet (DB, langue, timezone, logs)
+    │   └── urls.py                 # Routage global du projet (ROOT_URLCONF)
     │
-    ├── db.sqlite3                  # BD du projet
-    └── manage.py                   # Gestion des commandes de Django
-    
+    ├── db.sqlite3                  # Base de données SQLite du projet
+    ├── mediatheque.log             # Fichier des logs opérationnels
+    ├── mediatheque_test.log        # Fichier des logs générés lors des tests
+    └── manage.py                   # Commandes de gestion Django
 ```
 
 Cette organisation permet à Django de résoudre automatiquement les templates grâce à la directive `APP_DIRS=True` dans 
-`settings.py`, sans configuration supplémentaire.
-Ainsi, cette structure permet une résolution fiable des templates et une séparation claire entre les composants 
-fonctionnels.
+`settings.py`, sans configuration supplémentaire.  
+Elle garantit aussi une séparation claire entre les composants fonctionnels et une traçabilité fiable via les fichiers 
+de logs.
 
 ---
 
@@ -618,6 +649,48 @@ routes et templates, tout en étant intégrée dans un schéma global.
 > templates permet d’éviter toute collision entre les applications de la Médiathèque.  
 > Cette organisation garantit une résolution fiable des vues et des templates, tout en facilitant la maintenance et 
 > l’extensibilité du projet.
+
+---
+
+##### 3.4.5.4 Configuration et exploitation des Logs
+
+La configuration des logs est définie dans `settings.py` et repose sur le module standard `logging` de Python.  
+Elle assure une traçabilité des événements critiques et une séparation entre logs opérationnels et logs de tests.
+
+- **Handlers configurés** :
+  - `console` : affichage en direct des événements.
+  - `file` : écriture dans `mediatheque.log` pour les événements opérationnels.
+  - `test_file` : écriture dans `mediatheque_test.log` lors de l’exécution des tests.
+
+- **Détection du mode test** :
+  - Si la commande `python manage.py test` est exécutée, les handlers basculent automatiquement vers `test_file`.
+  - Cela évite de polluer le fichier opérationnel avec des traces de tests.
+
+- **Messages générés par l’application** :
+  - `[LOGIN]` lors d’une connexion réussie.
+  - `[LOGOUT]` lors d’une déconnexion.
+  - `[ACCESS_DENIED]` lors d’un refus d’accès.
+  - `[ACCESS_GRANTED]` lors d’un accès accordé.
+
+- **Exploitation des logs du serveur Django** :
+  - Le logger `django.server` est configuré pour écrire également dans les fichiers de logs.
+  - Chaque requête HTTP est tracée avec son URL, sa méthode (`GET`, `POST`), son code de retour (`200`, `302`, `403`…), 
+  et le module concerné.
+  - Exemple de ligne générée :
+    ```
+    [02/Dec/2025 12:55:06] [INFO] <accounts.views> "POST /login/ HTTP/1.1" 302 0 : [LOGIN] utilisateur=testbib_gestion
+    ```
+  - Ces traces permettent de corréler les événements applicatifs (LOGIN, LOGOUT, ACCESS_DENIED, ACCESS_GRANTED) avec les 
+  URLs réellement appelées, offrant une vision complète du comportement du système.
+
+- **Impacts techniques** :
+  - Les logs sont utilisés dans les tests UC‑LOGS (`T‑LOG‑01` à `T‑LOG‑05`) pour valider la traçabilité.
+  - La classe `LoginRequiredTestCase` déclenche les vues réelles afin de générer les logs.
+  - La lecture ciblée du fichier (`read_last_log_line()`) permet de vérifier chaque événement indépendamment.
+  - Les logs du serveur enrichissent la traçabilité en ajoutant le contexte HTTP (URL, méthode, code retour).
+
+> 📌 Cette configuration garantit une traçabilité fiable, une séparation claire entre environnement opérationnel et 
+> tests, et prépare l’extension future (rotation, segmentation par rôle, supervision).
 
 ---
 
@@ -2232,6 +2305,97 @@ charges.
 
 ---
 
+### 4.4 Authentification - gestion des rôles et des Logs
+
+#### 4.4.1 Rôle principal
+
+L’application `accounts` gère l’authentification des utilisateurs et l’attribution des rôles.  
+Deux profils métier sont distingués :
+- **Bibliothécaire** (`BibGestion`, `BibAdmin`) : accès aux vues internes de gestion.
+  - `BibGestion` : **gestionnaire Bibliothécaire** ayant accès aux **fonctionnalités primordiale** du projet :
+    - créer un membre-emprunteur. 
+    - afficher la liste des membres. 
+    - mettre à jour un membre. 
+    - supprimer un membre. 
+    - afficher la liste des médias. 
+    - créer un emprunt pour un média disponible. 
+    - ajouter un média. 
+    - rentrer un emprunt.
+  - `BibAdmin` : **administrateur Bibliothécaire** ayant accès à l'**ensemble des fonctionnalités disponibles** de 
+  l'application Bibliothécaire
+- **Membre** : accès limité à la consultation publique.
+
+---
+
+#### 4.4.2 Fonctionnalités liées à l'authentification
+
+- Connexion via `CustomLoginView` et déconnexion via `CustomLogoutView`.
+- Redirection automatique selon le rôle (accueil Bibliothécaire ou Consultation).
+- Affichage conditionnel du menu (Connexion/Déconnexion).
+- Gestion des refus d’accès avec page dédiée `403.html` (page de redirection).
+
+---
+
+##### 4.4.2.1 Fonctionnalités complémentaires
+
+- **Issue #5** :
+  - Mise en place des accès restreints et des rôles techniques (`Superuser`, `Staff`).
+  - Tests UC‑SECURITE (`T‑SEC‑01` à `T‑SEC‑05`) validés.
+  - Intégration des logs applicatifs (connexion, déconnexion, accès refusé/accordé).
+- **Issue #6** :
+  - Enrichissement des logs métiers (création d’emprunt, retour, ajout de média).
+  - Rotation et segmentation des fichiers de logs.
+  - UX améliorée pour la gestion des rôles et permissions.
+
+---
+
+##### 4.4.2.2 Impacts techniques
+
+- Classe de tests `LoginRequiredTestCase` :
+  - Connexion automatique du compte BibGestion.
+  - Helpers `login_as(role, url=True)` et `logout(url=True)` pour déclencher les vues réelles.
+  - Enum `RoleTest` pour simplifier les connexions (Gestion, Admin, Superadmin, Staff).
+- Configuration `LOGGING` :
+  - Fichier `mediatheque.log` pour l’application.
+  - Fichier `mediatheque_test.log` pour les tests.
+- Tests UC‑LOGS (`T‑LOG‑01` à `T‑LOG‑05`) validés, garantissant la traçabilité des événements critiques.
+
+---
+
+#### 4.4.3 Fonctionnalités liées à la gestion des Logs
+
+La gestion des logs est une fonctionnalité transversale qui complète l’authentification et la sécurité.  
+Elle permet de tracer les événements critiques et de fournir une base de validation pour les tests UC‑LOGS.
+
+- **Objectifs principaux** :
+  - Assurer la traçabilité des actions sensibles (connexion, déconnexion, accès refusé ou accordé).
+  - Garantir une séparation claire entre logs opérationnels (`mediatheque.log`) et logs de tests 
+  (`mediatheque_test.log`).
+  - Offrir une base extensible pour un suivi métier et technique.
+
+- **Fonctionnalités implémentées (Issue #5)** :
+  - Configuration `LOGGING` avec handlers console et fichier.
+  - Détection automatique du mode test pour basculer sur `mediatheque_test.log`.
+  - Ajout de messages `[LOGIN]`, `[LOGOUT]`, `[ACCESS_DENIED]`, `[ACCESS_GRANTED]` dans les vues critiques.
+  - Tests UC‑LOGS (`T‑LOG‑01` à `T‑LOG‑05`) validés, confirmant l’écriture correcte des événements.
+
+- **Fonctionnalités prévues (Issue #6)** :
+  - Journalisation des actions métier (création d’emprunt, retour, ajout de média).
+  - Rotation des fichiers de logs et politique de conservation.
+  - Segmentation des logs par rôle (BibGestion vs BibAdmin).
+  - Intégration future avec une solution de supervision (ELK, Graylog, Sentry).
+
+- **Impacts techniques** :
+  - Les logs sont utilisés comme outil de validation dans les tests fonctionnels.
+  - La classe `LoginRequiredTestCase` a été enrichie pour déclencher les vues réelles et générer les logs.
+  - La lecture ciblée du fichier de logs (dernière ligne) permet de valider chaque événement indépendamment.
+
+> 📌 La gestion des logs constitue une **fonction transversale** : elle relie directement la couche `accounts` 
+> (authentification) aux applications métier (`bibliothecaire`, `consultation`) et assure une traçabilité complète des 
+> accès.
+
+---
+
 ##### 4.3.1 Contrainte 1 – Limite de 3 emprunts simultanés par membre
 
 Un membre ne peut pas avoir plus de trois emprunts actifs (statuts `EN_COURS` ou `RETARD`).  
@@ -2710,48 +2874,78 @@ artefacts du projet.
 
 ### 8.3 Difficultés rencontrées et leçons apprises
 
-**À compléter à la fin de tous les développements**
+Au cours du projet, plusieurs difficultés majeures ont été rencontrées. Elles ont permis de clarifier la méthodologie, 
+d’améliorer la configuration technique et de renforcer la cohérence documentaire.  
+Le détail complet des difficultés et des décisions associées est conservé dans **l’Annexe F – Main‑courante technique**.  
 
+Ce projet a été mené dans une démarche complète documentaire, technique et de recherche pour :
+- réaliser le sujet demandé de gestion d'une médiathèque (ensemble des fonctionnalités primordiales).
+- apprendre et maîtriser le framework Django (recherche documentaire et réalisation de fonctionnalités complémentaires).
+- préparer la mise en place d'un projet complet à soutenir (organisation, documentation technique et versionnage GitHub).
+- disposer d'une ressource technique complète pour de futurs développements.
 
-#### 8.3.1 Difficulté d'un bon plan de développement
+L'annexe F constitue une **recopie intégrale** d'une partie de la main-courante qui peut servir de support pour suivre 
+les difficultés, les successions de points de blocage avec une historisation très fine. Les sections ci-après n'expriment 
+qu'une synthèse très succincte d'un projet très riche en difficulté et en sources d'apprentissage.
 
-L'origine de ce problème est l'apparition d'une incohérence d'organisation et d'architecture à l'engagement de la 
-réalisation de l'issue #2 selon la version initiale du plan de développement.
+---
 
-La mise à jour des issues a représenté une difficulté notable, notamment pour comprendre la logique de découpage 
-fonctionnel qui distingue :
-- une couche centrale d'authentification (médiathèque)
-- deux applications métier (bibliothécaire et membre).
+#### 8.3.1 Plan de développement et organisation
+La première difficulté est apparue lors de l’issue #2, avec une incohérence dans le plan initial.  
+La réorganisation des issues (#12) a permis de distinguer clairement :
+- une couche centrale d’authentification (`mediatheque`),
+- deux applications métier (`bibliothecaire` et `consultation`).
 
-Cette étape à la fois d'architecture, d'organisation, de technique a permis de mieux anticiper les tâches techniques à 
-réaliser, en distinguant clairement les rôles métier et les responsabilités de chaque application. Elle a également 
-facilité la rédaction du rapport et la cohérence du projet dans son ensemble.
+Cette clarification a facilité la planification, la cohérence du code et la rédaction du rapport.
 
-#### 8.3.2 Difficulté d'une bonne configuration de l'EDI
+---
 
-L'origine de ce problème est l'apparition de modules de Django non reconnus lors du codage de l'app `accounts` de 
-l'issue #2. Il y avait une incohérence entre l'affichage du code (modules non reconnus soulignés dans l'éditeur PyCharm).
+#### 8.3.2 Configuration de l’EDI
+Une difficulté est survenue lors du développement de l’application `accounts`, avec des modules Django non reconnus 
+dans l’éditeur (PyCharm).  
+La résolution a nécessité une meilleure configuration de l’EDI pour pointer vers l’environnement virtuel Python.  
+Cela a permis de bénéficier pleinement de l’autocomplétion, de la navigation dans les templates et des suggestions de 
+code.
 
-La compréhension de ce problème a nécessité de bien comprendre la nécessité d'adapter la configuration de l'éditeur pour 
-qu'il trouve les scripts adaptés à Python et Django qui exploite un environnement virtuel.
+---
 
-Une fois les champs de configuration de l'EDI bien définis, l'interpréteur de l'EDI est en mesure de fonctionner en 
-retrouvant la bonne information et d'apporter son assistance (autocomplétion, reconnaissance modules, navigation dans 
-les templates, suggestions de code).
+#### 8.3.3 Résolution des templates
+Une erreur 404 a révélé une mauvaise organisation des dossiers `templates`.  
+L’adoption de la convention `app/templates/app/template.html` a résolu le problème et assuré une résolution fiable des 
+templates par Django.  
+Cette étape a renforcé la compréhension des bonnes pratiques et la robustesse de l’architecture.
 
-Cette difficulté m'a permis de mieux comprendre la différence entre les lignes de commande du terminal et le 
-fonctionnement intégré de l'EDI (dans mon cas, c'était PyCharm).
+---
 
-#### 8.3.3 Difficulté d'une bonne identification des templates
+#### 8.3.4 Authentification et sécurité
+La mise en place des rôles et des accès restreints a nécessité plusieurs ajustements :
+- création d’une classe de tests commune (`LoginRequiredTestCase`),
+- distinction entre login technique et login via les vues réelles,
+- gestion des refus d’accès avec une page dédiée `403.html`.
 
-L'origine de ce problème est une **erreur 404** rencontrée lors du rendu du template `accueil.html`. Cette erreur était 
-due à une mauvaise structure du dossier `templates`.
+Ces choix ont permis de valider les UC‑SECURITE et d’assurer une traçabilité fiable.
 
-En adoptant la convention `app/templates/app/template.html`, la résolution du template a été assurée sans ambiguïté, 
-conformément aux bonnes pratiques Django.
+---
 
-Cette difficulté m'a permis de mieux comprendre la logique de résolution des templates dans Django et d'adopter une 
-convention robuste pour la suite du projet.
+#### 8.3.5 Gestion des logs
+L’intégration des logs applicatifs a soulevé deux points :
+- la nécessité de séparer les fichiers opérationnels (`mediatheque.log`) et de tests (`mediatheque_test.log`),
+- l’importance de passer par les vraies vues pour déclencher les écritures.
+
+Les UC‑LOGS ont confirmé la validité de cette approche. Les niveaux supérieurs (rotation, segmentation, supervision) sont 
+documentés mais non livrés.
+
+---
+
+> 📌 Pour le détail complet des difficultés, des décisions et des arbitrages techniques, voir **Annexe F – Main‑courante 
+> technique et difficultés**.
+> 
+> En résumé, ces difficultés ont constitué autant de jalons d’apprentissage que de validations techniques.  
+> 
+> Elles ont permis de renforcer la cohérence du projet, d’améliorer la qualité du code et de la documentation, et de 
+me préparer à de futurs projets qui nécessiteront une soutenance structurée.  
+> La main‑courante (Annexe F) conserve le détail exhaustif, tandis que cette section met en avant les enseignements clés.
+
 
 ---
 
@@ -2762,3 +2956,4 @@ convention robuste pour la suite du projet.
 - [Annexe C - Diagrammes (UML, séquence)](rapport-projet_annexe-c.md)
 - [Annexe D – Arborescence du projet](rapport-projet_annexe-d.md)
 - [Annexe E - Installation Projet et configuration de l'EDI](rapport-projet_annexe-e.md)
+- [Annexe F – Main‑courante technique et difficultés](rapport-projet_annexe-f.md)
