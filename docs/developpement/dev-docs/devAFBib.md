@@ -40,8 +40,9 @@
     - [3.5.1 Objectifs des Logs](#351-objectifs-des-logs)
     - [3.5.2 Spécification architecturale par niveau fonctionnel](#352-spécification-architecturale-par-niveau-fonctionnel)
     - [3.5.3 Cas d’usage UC‑LOGS](#353-cas-dusage-uclogs)
-    - [3.5.4 Impacts techniques](#354-impacts-techniques)
-    - [3.5.5 Conclusion](#355-conclusion)
+    - [3.5.4 Table de correspondance Logs ↔ Fonctions métiers](#354-table-de-correspondance-logs--fonctions-métiers)
+    - [3.5.5 Impacts techniques](#355-impacts-techniques)
+    - [3.5.6 Conclusion](#356-conclusion)
 - [4. Liaison technique](#4-liaison-technique)
   - [4.1 Application Bibliothecaire](#41-application-bibliothecaire)
     - [4.1.1 Medias](#411-medias)
@@ -968,14 +969,74 @@ Les cas d’usage transversaux des logs couvrent les événements critiques suiv
 | UC-LOG-04  | Accès refusé génère `[ACCESS_DENIED]`   | `bibliothecaire_required` | `[ACCESS_DENIED]`  |
 | UC-LOG-05  | Accès accordé génère `[ACCESS_GRANTED]` | `bibliothecaire_required` | `[ACCESS_GRANTED]` |
 
-#### 3.5.4 Impacts techniques
+#### 3.5.4 Table de correspondance Logs ↔ Fonctions métiers
+
+Le tableau ci‑dessous relie chaque fonction métier de l’application aux logs générés.  
+La colonne **Logs** précise si une trace particulière (P) est attendue ou si la journalisation est implicite par l’URL.
+
+| Id | Application    | Fonction                         |    Entité    | Route                                              | Fonction  | Logs |   Etat    |
+|----|----------------|----------------------------------|:------------:|----------------------------------------------------|:---------:|:----:|:---------:|
+| 1  | médiathèque    | accueil médiathèque              |   __app__    | accounts:accueil                                   |           |      |           |
+| 2  | médiathèque    | espace bibliothécaire            |   __app__    | bibliothecaire:accueil                             |           |      |           |
+| 3  | médiathèque    | espace consultation              |   __app__    | consultation:accueil                               |           |      |           |
+| 4  | médiathèque    | espace administration            |   __app__    | admin:index                                        |           |      |           |
+| 5  | médiathèque    | connexion                        |     User     | accounts:login                                     |  Gestion  |  P   | ✅ intégré |
+| 6  | médiathèque    | déconnexion                      |     User     | accounts:logout                                    |  Gestion  |  P   | ✅ intégré |
+| 7  | bibliothecaire | accueil médiathèque              |   __app__    | accounts:accueil                                   |           |      |           |
+| 8  | bibliothecaire | accueil bibliothécaire           |   __app__    | bibliothecaire:accueil                             |           |      |           |
+| 9  | bibliothecaire | accueil consultation             |   __app__    | consultation:accueil                               |           |      |           |
+| 10 | bibliothecaire | changer date marquage            |  __system__  | bibliothecaire:rejeu_reset_retard_session          | Technique |  P   | ✅ intégré |
+| 11 | bibliothecaire | créer média                      |    Media     | bibliothecaire:media_create                        | Technique |  P   | ✅ intégré |
+| 12 | bibliothecaire | lister consultables              |    Media     | bibliothecaire:media_list_consultables             |           |      |           |
+| 13 | bibliothecaire | lister disponibles               |    Media     | bibliothecaire:media_list_disponibles              |           |      |           |
+| 14 | bibliothecaire | lister médias                    |    Media     | bibliothecaire:media_list                          |           |      |           |
+| 15 | bibliothecaire | lister médias non typés          |    Media     | bibliothecaire:media_list_by_type ?type=NON_DEFINI |           |      |           |
+| 16 | bibliothecaire | modifier un média                |    Media     | bibliothecaire:media_update                        | Technique |  P   | ✅ intégré |
+| 17 | bibliothecaire | détailler un média               |    Media     | bibliothecaire:media_detail                        |           |      |           |
+| 18 | bibliothecaire | créer Livre                      |    Livre     | bibliothecaire:media_create_livre                  |  Gestion  |  P   | ✅ intégré |
+| 19 | bibliothecaire | lister Livres                    |    Livre     | bibliothecaire:media_list_by_type ?type=LIVRE      |           |      |           |
+| 20 | bibliothecaire | modifier un média en Livre       |    Livre     | bibliothecaire:media_typage_livre                  | Technique |  P   | ✅ intégré |
+| 21 | bibliothecaire | modifier un Livre                |    Livre     | bibliothecaire:media_update_livre                  |  Gestion  |  P   | ✅ intégré |
+| 22 | bibliothecaire | détailler un membre              |    Livre     | bibliothecaire:membre_detail                       |           |      |           |
+| 23 | bibliothecaire | créer DVD                        |     Dvd      | bibliothecaire:media_create_dvd                    |  Gestion  |  P   | ✅ intégré |
+| 24 | bibliothecaire | lister DVD                       |     Dvd      | bibliothecaire:media_list_by_type ?type=DVD        |           |      |           |
+| 25 | bibliothecaire | modifier un média en DVD         |     Dvd      | bibliothecaire:media_typage_dvd                    |           |      |           |
+| 26 | bibliothecaire | modifier un DVD                  |     Dvd      | bibliothecaire:media_update_dvd                    |           |      |           |
+| 27 | bibliothecaire | créer CD                         |      Cd      | bibliothecaire:media_create_cd                     |  Gestion  |  P   | ✅ intégré |
+| 28 | bibliothecaire | lister CD                        |      Cd      | bibliothecaire:media_list_by_type ?type=CD         |           |      |           |
+| 29 | bibliothecaire | modifier un média en CD          |      cd      | bibliothecaire:media_typage_cd                     |           |      |           |
+| 30 | bibliothecaire | modifier un CD                   |      Cd      | bibliothecaire:media_update_cd                     |           |      |           |
+| 31 | bibliothecaire | créer membre                     |    Membre    | bibliothecaire:membre_create                       |  Gestion  |  P   | ✅ intégré |
+| 32 | bibliothecaire | créer emprunteur                 |    Membre    | bibliothecaire:membre_create_emprunteur            |  Gestion  |  P   | ✅ intégré |
+| 33 | bibliothecaire | lister membres en gestion        |    Membre    | bibliothecaire:membre_list_gestion                 |           |      |           |
+| 34 | bibliothecaire | lister membres emprunteurs       |    Membre    | bibliothecaire:membre_list_emprunteurs             |           |      |           |
+| 35 | bibliothecaire | lister membres supprimés         |    Membre    | bibliothecaire:membre_list_archives                |           |      |           |
+| 36 | bibliothecaire | lister membres                   |    Membre    | bibliothecaire:membre_list                         |           |      |           |
+| 37 | bibliothecaire | modifier un membre               |    Membre    | bibliothecaire:membre_update                       |  Gestion  |  P   | ✅ intégré |
+| 38 | bibliothecaire | activer membre emprunteur        |    Membre    | bibliothecaire:membre_activate_emprunteur          |  Gestion  |  P   | ✅ intégré |
+| 39 | bibliothecaire | marquage des retards             |   Emprunt    | bibliothecaire:emprunt_retard                      |           |      |           |
+| 40 | bibliothecaire | lister emprunts                  |   Emprunt    | bibliothecaire:emprunt_list                        |           |      |           |
+| 41 | bibliothecaire | créer emprunt                    |   Emprunt    | bibliothecaire:emprunt_create                      |  Gestion  |  P   | ✅ intégré |
+| 42 | bibliothecaire | rendre emprunt                   |   Emprunt    | bibliothecaire:emprunt_rendre                      |  Gestion  |  P   | ✅ intégré |
+| 43 | bibliothecaire | emprunter un média               |   Emprunt    | bibliothecaire:media_emprunter                     |  Gestion  |  P   | ✅ intégré |
+| 44 | bibliothecaire | rendre un  média                 |   Emprunt    | bibliothecaire:media_rendre                        |  Gestion  |  P   | ✅ intégré |
+| 45 | bibliothecaire | créer un emprunt pour un membre  |   Emprunt    | bibliothecaire:membre_emprunter                    |  Gestion  |  P   | ✅ intégré |
+| 46 | bibliothecaire | rendre un emprunt pour un membre |   Emprunt    | bibliothecaire:membre_rendre                       |  Gestion  |  P   | ✅ intégré |
+| 47 | bibliothecaire | lister jeux                      | JeuDePlateau | bibliothecaire:jeu_list                            |           |      |           |
+| 48 | bibliothecaire | créer jeux                       | JeuDePlateau | bibliothecaire:jeu_create                          | Technique |  P   | ✅ intégré |
+| 49 | bibliothecaire | détailler un jeu                 | JeuDePlateau | bibliothecaire:jeu_detail                          |           |      |           |
+| 50 | consultation   | accueil médiathèque              |   __app__    | accounts:accueil                                   |           |      |           |
+| 51 | consultation   | accueil consultation             |   __app__    | consultation:accueil                               |           |      |           |
+| 52 | consultation   | consulter supports               |   Support    | consultation:supports                              |           |      |           |
+
+#### 3.5.5 Impacts techniques
 
 - Configuration `LOGGING` dans `settings.py` avec handlers console et fichier (`mediatheque.log`), et fichier dédié 
 `mediatheque_test.log` en mode test.  
 - Adaptation de `LoginRequiredTestCase` pour déclencher les vraies vues de login/logout et générer les logs.  
 - Tests fonctionnels validés (`T‑LOG‑01` à `T‑LOG‑05`) avec lecture ciblée du fichier de logs.
 
-#### 3.5.5 Conclusion
+#### 3.5.6 Conclusion
 
 La gestion des logs est une **fonction transversale** qui relie directement les aspects techniques (authentification, 
 sécurité) aux cas d’usage métier.  

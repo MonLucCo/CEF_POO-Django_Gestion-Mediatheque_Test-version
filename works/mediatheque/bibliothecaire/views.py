@@ -13,8 +13,11 @@ from bibliothecaire.forms import MediaForm, LivreForm, DvdForm, CdForm, MembreFo
     EmpruntRetourForm, EmpruntRendreFromMembreForm, JeuDePlateauForm
 from django.db import transaction
 
+from mediatheque.common.logging import get_request_logger
 
 # Create your views here.
+
+logger = get_request_logger(__name__)
 
 # accueil
 class AccueilBibliothecaireView(OrigineSessionMixin, TemplateView):
@@ -151,7 +154,20 @@ class MediaCreateView(CreateView):
 
     def form_valid(self, form):
         self.set_lifecycle_flags(form)
-        return super(MediaCreateView, self).form_valid(form)
+        response = super(MediaCreateView, self).form_valid(form)
+        length = len(response.content) if hasattr(response, "content") else 0
+
+        # ✅ Trace particulière (ligne 11 du tableau des logs)
+        media = self.object
+        logger.info(
+            f"[MediaCreate] utilisateur={self.request.user.username} "
+            f"a créé un média id={media.id}, type={media.media_type}, nom={media.name}",
+            request=self.request,
+            status_code=response.status_code,
+            content_length=length,
+        )
+
+        return response
 
 
 class MediaLivreCreateView(MediaCreateView):
@@ -170,7 +186,20 @@ class MediaLivreCreateView(MediaCreateView):
 
     def form_valid(self, form):
         self.set_lifecycle_flags(form)
-        return super(MediaLivreCreateView, self).form_valid(form)
+        response = super(MediaLivreCreateView, self).form_valid(form)
+        length = len(response.content) if hasattr(response, "content") else 0
+
+        # ✅ Trace particulière (ligne 18 du tableau des logs)
+        livre = self.object
+        logger.info(
+            f"[LivreCreate] utilisateur={self.request.user.username} "
+            f"a créé un Livre id={livre.id}, nom={livre.name}, année={livre.annee_edition}",
+            request=self.request,
+            status_code=response.status_code,
+            content_length=length,
+        )
+
+        return response
 
 
 class MediaDvdCreateView(MediaCreateView):
@@ -189,7 +218,20 @@ class MediaDvdCreateView(MediaCreateView):
 
     def form_valid(self, form):
         self.set_lifecycle_flags(form)
-        return super(MediaDvdCreateView, self).form_valid(form)
+        response = super(MediaDvdCreateView, self).form_valid(form)
+        length = len(response.content) if hasattr(response, "content") else 0
+
+        # ✅ Trace particulière (ligne 23 du tableau des logs)
+        dvd = self.object
+        logger.info(
+            f"[DvdCreate] utilisateur={self.request.user.username} "
+            f"a créé un DVD id={dvd.id}, nom={dvd.name}, année={dvd.annee_edition}",
+            request=self.request,
+            status_code=response.status_code,
+            content_length=length,
+        )
+
+        return response
 
 
 class MediaCdCreateView(MediaCreateView):
@@ -208,7 +250,20 @@ class MediaCdCreateView(MediaCreateView):
 
     def form_valid(self, form):
         self.set_lifecycle_flags(form)
-        return super(MediaCdCreateView, self).form_valid(form)
+        response = super(MediaCdCreateView, self).form_valid(form)
+        length = len(response.content) if hasattr(response, "content") else 0
+
+        # ✅ Trace particulière (ligne 27 du tableau des logs)
+        cd = self.object
+        logger.info(
+            f"[CdCreate] utilisateur={self.request.user.username} "
+            f"a créé un CD id={cd.id}, nom={cd.name}, année={cd.annee_edition}",
+            request=self.request,
+            status_code=response.status_code,
+            content_length=length,
+        )
+
+        return response
 
 
 class MediaUpdateView(UpdateView):
@@ -258,11 +313,34 @@ class MediaUpdateView(UpdateView):
 
         # Cas : media_type modifié vers un type réel → redirection vers création typée
         if is_typage:
-            media = form.save(commit=False)     # contient les données du formulaire nettoyées et sans sauvegarde
-            return redirect(media.get_typage_url_name(), pk=media.pk)
+            media = form.save(commit=False)
+            response = redirect(media.get_typage_url_name(), pk=media.pk)
+            length = len(response.content) if hasattr(response, "content") else 0
+
+            # ✅ Trace particulière (ligne 16 du tableau des logs)
+            logger.info(
+                f"[MediaUpdate] utilisateur={self.request.user.username} "
+                f"a modifié le média id={media.pk}, transition de type NON_DEFINI → {media.media_type}",
+                request=self.request,
+                status_code=response.status_code,
+                content_length=length,
+            )
+            return response
 
         # Cas classique : mise à jour sans changement de type
-        return super(MediaUpdateView, self).form_valid(form)
+        response = super(MediaUpdateView, self).form_valid(form)
+        length = len(response.content) if hasattr(response, "content") else 0
+
+        # ✅ Trace particulière (ligne 16 du tableau des logs)
+        media = self.object
+        logger.info(
+            f"[MediaUpdate] utilisateur={self.request.user.username} "
+            f"a mis à jour le média id={media.pk}, type={media.media_type}, nom={media.name}",
+            request=self.request,
+            status_code=response.status_code,
+            content_length=length,
+        )
+        return response
 
     # 7. Redirection après succès
     def get_success_url(self):
@@ -292,7 +370,20 @@ class LivreUpdateView(UpdateView):
 
     def form_valid(self, form):
         self.set_lifecycle_flags(form)
-        return super(LivreUpdateView, self).form_valid(form)
+        response = super(LivreUpdateView, self).form_valid(form)
+        length = len(response.content) if hasattr(response, "content") else 0
+
+        # ✅ Trace particulière (ligne 21 du tableau des logs)
+        livre = self.object
+        logger.info(
+            f"[LivreUpdate] utilisateur={self.request.user.username} "
+            f"a modifié le Livre id={livre.pk}, nom={livre.name}, année={livre.annee_edition}",
+            request=self.request,
+            status_code=response.status_code,
+            content_length=length,
+        )
+
+        return response
 
     def get_success_url(self):
         return reverse('bibliothecaire:media_list')
@@ -415,7 +506,19 @@ class MediaTypageLivreView(FormView):
 
             typed_instance.save()
 
-        return super(MediaTypageLivreView, self).form_valid(form)
+        response = super(MediaTypageLivreView, self).form_valid(form)
+        length = len(response.content) if hasattr(response, "content") else 0
+
+        # ✅ Trace particulière (ligne 20 du tableau des logs)
+        logger.info(
+            f"[MediaTypageLivre] utilisateur={self.request.user.username} "
+            f"a typé le média id={media.pk} en Livre, nom={media.name}, année={media.annee_edition}",
+            request=self.request,
+            status_code=response.status_code,
+            content_length=length,
+        )
+
+        return response
 
     def get_success_url(self):
         return reverse('bibliothecaire:media_list')
@@ -565,7 +668,20 @@ class MembreCreateView(CreateView):
     def form_valid(self, form):
         form.instance.statut = StatutMembre.MEMBRE
         form.instance.compte = Membre.generer_compte(form.cleaned_data['name'])
-        return super(MembreCreateView, self).form_valid(form)
+        response = super(MembreCreateView, self).form_valid(form)
+        length = len(response.content) if hasattr(response, "content") else 0
+
+        # ✅ Trace particulière (ligne 31 du tableau des logs)
+        membre = self.object
+        logger.info(
+            f"[MembreCreate] utilisateur={self.request.user.username} "
+            f"a créé un Membre id={membre.pk}, nom={membre.name}, compte={membre.compte}",
+            request=self.request,
+            status_code=response.status_code,
+            content_length=length,
+        )
+
+        return response
 
     def get_success_url(self):
         return reverse('bibliothecaire:membre_detail', kwargs={'pk': self.object.pk})
@@ -591,7 +707,20 @@ class MembreCreateEmprunteurView(CreateView):
     def form_valid(self, form):
         form.instance.statut = StatutMembre.EMPRUNTEUR
         form.instance.compte = Membre.generer_compte(form.cleaned_data['name'])
-        return super(MembreCreateEmprunteurView, self).form_valid(form)
+        response = super(MembreCreateEmprunteurView, self).form_valid(form)
+        length = len(response.content) if hasattr(response, "content") else 0
+
+        # ✅ Trace particulière (ligne 32 du tableau des logs)
+        membre = self.object
+        logger.info(
+            f"[MembreCreateEmprunteur] utilisateur={self.request.user.username} "
+            f"a créé un Membre Emprunteur id={membre.pk}, nom={membre.name}, compte={membre.compte}",
+            request=self.request,
+            status_code=response.status_code,
+            content_length=length,
+        )
+
+        return response
 
     def get_success_url(self):
         return reverse('bibliothecaire:membre_detail', kwargs={'pk': self.object.pk})
@@ -624,6 +753,22 @@ class MembreUpdateView(UpdateView):
     template_name = 'bibliothecaire/membres/membre_form.html'
     context_object_name = 'membre'
 
+    def form_valid(self, form):
+        response = super(MembreUpdateView, self).form_valid(form)
+        length = len(response.content) if hasattr(response, "content") else 0
+
+        # ✅ Trace particulière (ligne 37 du tableau des logs)
+        membre = self.object
+        logger.info(
+            f"[MembreUpdate] utilisateur={self.request.user.username} "
+            f"a modifié le Membre id={membre.pk}, nom={membre.name}, compte={membre.compte}, statut={membre.statut}",
+            request=self.request,
+            status_code=response.status_code,
+            content_length=length,
+        )
+
+        return response
+
     def get_success_url(self):
         return reverse('bibliothecaire:membre_detail', kwargs={'pk': self.object.pk})
 
@@ -645,6 +790,18 @@ class MembreActivateEmprunteurView(View):
         membre = get_object_or_404(Membre, pk=pk)
         if membre.activer_emprunteur():
             messages.success(request, f"Le statut du membre « {membre.name} » a été activé en emprunteur.")
+            response = redirect("bibliothecaire:membre_detail", pk=pk)
+            length = len(response.content) if hasattr(response, "content") else 0
+
+            # ✅ Trace particulière (ligne 38 du tableau des logs)
+            logger.info(
+                f"[MembreActivateEmprunteur] utilisateur={request.user.username} "
+                f"a activé le statut emprunteur pour Membre id={membre.pk}, nom={membre.name}, compte={membre.compte}",
+                request=request,
+                status_code=response.status_code,
+                content_length=length,
+            )
+            return response
         else:
             messages.warning(request, f"Aucune modification effectuée : le membre n'était pas éligible.")
         return redirect("bibliothecaire:membre_detail", pk=pk)
@@ -742,7 +899,19 @@ class EmpruntCreateView(CreateView):
         media.disponible = False
         media.save()
         messages.success(self.request, f"Emprunt enregistré : {membre.name} → {media.name} ({media.media_type})")
-        return redirect("bibliothecaire:emprunt_list")
+        response = redirect("bibliothecaire:emprunt_list")
+        length = len(response.content) if hasattr(response, "content") else 0
+
+        # ✅ Trace particulière (ligne 41 du tableau des logs)
+        logger.info(
+            f"[EmpruntCreate] utilisateur={self.request.user.username} "
+            f"a créé un Emprunt id={emprunt.pk}, emprunteur={membre.name}, media={media.name} ({media.media_type})",
+            request=self.request,
+            status_code=response.status_code,
+            content_length=length,
+        )
+
+        return response
 
 
 class EmpruntCreateFromMembreView(EmpruntCreateView):
@@ -852,6 +1021,20 @@ class EmpruntRetourConfirmView(SingleObjectMixin, FormView):
             media = emprunt.media
             membre = emprunt.emprunteur
             messages.success(self.request, f"Emprunt rendu : {membre.name} → {media.name} ({media.media_type})")
+
+            response = redirect(self.get_success_url())
+            length = len(response.content) if hasattr(response, "content") else 0
+
+            # ✅ Trace particulière (ligne 42 — confirmation validée du retour)
+            logger.info(
+                f"[EmpruntRetourConfirm] utilisateur={self.request.user.username} "
+                f"a confirmé le retour de l’Emprunt id={emprunt.pk}, emprunteur={membre.name}, "
+                f"media={media.name} ({media.media_type})",
+                request=self.request,
+                status_code=response.status_code,
+                content_length=length,
+            )
+            return response
         else:
             messages.warning(self.request, "Cet emprunt ne peut pas être rendu.")
         return redirect(self.get_success_url())
@@ -953,6 +1136,22 @@ class JeuCreateView(CreateView):
     form_class = JeuDePlateauForm
     template_name = 'bibliothecaire/jeux/jeu_form.html'
     success_url = reverse_lazy('bibliothecaire:jeu_list')
+
+    def form_valid(self, form):
+        response = super().form_valid(form)
+        length = len(response.content) if hasattr(response, "content") else 0
+
+        # ✅ Trace particulière (ligne 48 du tableau des logs)
+        jeu = self.object
+        logger.info(
+            f"[JeuCreate] utilisateur={self.request.user.username} "
+            f"a créé un Jeu id={jeu.pk}, nom={jeu.name}, année={jeu.annee_edition}",
+            request=self.request,
+            status_code=response.status_code,
+            content_length=length,
+        )
+
+        return response
 
 
 class JeuDetailView(DetailView):

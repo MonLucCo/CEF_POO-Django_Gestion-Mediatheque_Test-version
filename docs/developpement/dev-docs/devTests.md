@@ -2,11 +2,10 @@
 
 📁 `/docs/developpement/dev-docs/devTests.md`  
 
-📌 Version : index K-4 (issue #5 – étape 4 - Bloc 5)
-- Rapport de tests associé : [`devReport.md`](devReport.md) et [Logs associés](../issue5/task4/mediatheque_test.log_devReport.md)
+📌 Version : index L-2 (issue #6 – étape 2 - Bloc 6)
+- Rapport de tests associé : [`devReport.md`](devReport.md) et [Logs associés](../issue6/task2/mediatheque_test.log_devReport.md)
   - Sous-ensemble ajouté : 
-    - tests des [UC-SECURITE](../issue5/task4/devReport_UC_securite.md)
-    - tests des [UC_LOGS](../issue5/task4/devReport_UC_logs.md) et [Logs associés](../issue5/task4/mediatheque_test.log_devReport_UC_logs.md)
+    - tests des [UC_LOGS](../issue6/task2/devReport_UC_logs.md) et [Logs associés](../issue6/task2/mediatheque_test.log_devReport_UC_logs.md)
 
 ___
 
@@ -56,6 +55,9 @@ Il est conçu pour :
     techniques et fonctionnels antérieurs.
     - index K-3, permissions et sécurité d'accès aux applications de médiathèque.
     - index K-4, gestion des Logs de l'application médiathèque.
+  - index L-2 (finalisation UX et Logs métiers, tests et validation du projet) correspond au **Bloc 6**.
+    - index L-1, adaptation et harmonisation des menus des applications du projet.
+    - index L-2, intégration des Logs des fonctions Métiers du projet.
 - **Périmètre couvert** : 
   - site administration (application).
   - site bibliothecaire (application).
@@ -522,18 +524,42 @@ Chaque catégorie de tests est regroupée dans une sous-section spécifique avec
 
 ### 🧪 3.8 Logs (`T-LOG-xxx`)
 
-| Série  | ID Test  | Description                                          | Fonction ciblée | Résultat attendu                                                              | Statut      |
-|--------|----------|------------------------------------------------------|-----------------|-------------------------------------------------------------------------------|-------------|
-| Bloc 5 | T-LOG-01 | Vérifie la création du fichier `mediatheque.log`     | Infrastructure  | Le fichier est créé et contient au moins une ligne de log                     | ✅ Validé |
-| Bloc 5 | T-LOG-02 | Vérifie qu’un log est généré lors d’une connexion    | Login           | Message `[LOGIN] utilisateur=<username>` présent dans le fichier et console   | ✅ Validé |
-| Bloc 5 | T-LOG-03 | Vérifie qu’un log est généré lors d’une déconnexion  | Logout          | Message `[LOGOUT] utilisateur=<username>` ou `[LOGOUT_INVALID]` selon le cas  | ✅ Validé |
-| Bloc 5 | T-LOG-04 | Vérifie qu’un log est généré lors d’un accès refusé  | Accès restreint | Message `[ACCESS_DENIED] utilisateur=<username>` ou `anonyme` selon le profil | ✅ Validé |
-| Bloc 5 | T-LOG-05 | Vérifie qu’un log est généré lors d’un accès accordé | Accès restreint | Message `[ACCESS_GRANTED] utilisateur=<username>` présent dans le fichier     | ✅ Validé |
+| Série  | ID Test  | Description                                                                      | Fonction ciblée                             | Résultat attendu                                                                         | Statut   |
+|--------|----------|----------------------------------------------------------------------------------|---------------------------------------------|------------------------------------------------------------------------------------------|----------|
+| Bloc 5 | T-LOG-01 | Vérifie la création du fichier `mediatheque.log`                                 | Infrastructure                              | Le fichier est créé et contient au moins une ligne de log                                | ✅ Validé |
+| Bloc 5 | T-LOG-02 | Vérifie qu’un log est généré lors d’une connexion (Ligne 5 - Bloc 6)             | Login                                       | Message `[LOGIN] utilisateur=<username>` présent dans le fichier et console              | ✅ Validé |
+| Bloc 5 | T-LOG-03 | Vérifie qu’un log est généré lors d’une déconnexion (Ligne 6 - Bloc 6)           | Logout                                      | Message `[LOGOUT] utilisateur=<username>` ou `[LOGOUT_INVALID]` selon le cas             | ✅ Validé |
+| Bloc 5 | T-LOG-04 | Vérifie qu’un log est généré lors d’un accès refusé                              | Accès restreint                             | Message `[ACCESS_DENIED] utilisateur=<username>` ou `anonyme` selon le profil            | ✅ Validé |
+| Bloc 5 | T-LOG-05 | Vérifie qu’un log est généré lors d’un accès accordé                             | Accès restreint                             | Message `[ACCESS_GRANTED] utilisateur=<username>` présent dans le fichier                | ✅ Validé |
+| Bloc 6 | T-LOG-10 | Changement de date de marquage génère un log `[ResetRetardSession]`              | `bibliothecaire:rejeu_reset_retard_session` | Log contient `[ResetRetardSession] utilisateur=... décalage=... nouvelle_date=...`       | ✅ Validé |
+| Bloc 6 | T-LOG-11 | Création d’un média génère un log `[MediaCreate]`                                | `bibliothecaire:media_create`               | Log contient `[MediaCreate] utilisateur=... id=... type=... nom=...`                     | ✅ Validé |
+| Bloc 6 | T-LOG-16 | Modification d’un média génère un log `[MediaUpdate]`                            | `bibliothecaire:media_update`               | Log contient `[MediaUpdate] utilisateur=... id=... type=... nom=...`                     | ✅ Validé |
+| Bloc 6 | T-LOG-18 | Création d’un Livre génère un log `[LivreCreate]`                                | `bibliothecaire:media_create_livre`         | Log contient `[LivreCreate] utilisateur=... id=... nom=... année=...`                    | ✅ Validé |
+| Bloc 6 | T-LOG-20 | Typage d’un média en Livre génère un log `[MediaTypageLivre]`                    | `bibliothecaire:media_typage_livre`         | Log contient `[MediaTypageLivre] utilisateur=... id=... nom=... année=...`               | ✅ Validé |
+| Bloc 6 | T-LOG-21 | Modification d’un Livre génère un log `[LivreUpdate]`                            | `bibliothecaire:media_update_livre`         | Log contient `[LivreUpdate] utilisateur=... id=... nom=... année=...`                    | ✅ Validé |
+| Bloc 6 | T-LOG-23 | Création d’un DVD génère un log `[DvdCreate]`                                    | `bibliothecaire:media_create_dvd`           | Log contient `[DvdCreate] utilisateur=... id=... nom=... année=...`                      | ✅ Validé |
+| Bloc 6 | T-LOG-27 | Création d’un CD génère un log `[CdCreate]`                                      | `bibliothecaire:media_create_cd`            | Log contient `[CdCreate] utilisateur=... id=... nom=... année=...`                       | ✅ Validé |
+| Bloc 6 | T-LOG-31 | Création d’un membre génère un log `[MembreCreate]`                              | `bibliothecaire:membre_create`              | Log contient `[MembreCreate] utilisateur=... id=... nom=... compte=...`                  | ✅ Validé |
+| Bloc 6 | T-LOG-32 | Création d’un emprunteur génère un log `[MembreCreateEmprunteur]`                | `bibliothecaire:membre_create_emprunteur`   | Log contient `[MembreCreateEmprunteur] utilisateur=... id=... nom=... compte=...`        | ✅ Validé |
+| Bloc 6 | T-LOG-37 | Modification d’un membre génère un log `[MembreUpdate]`                          | `bibliothecaire:membre_update`              | Log contient `[MembreUpdate] utilisateur=... id=... nom=... compte=... statut=...`       | ✅ Validé |
+| Bloc 6 | T-LOG-38 | Activation d’un emprunteur génère un log `[MembreActivateEmprunteur]`            | `bibliothecaire:membre_activate_emprunteur` | Log contient `[MembreActivateEmprunteur] utilisateur=... id=... nom=... compte=...`      | ✅ Validé |
+| Bloc 6 | T-LOG-41 | Création d’un emprunt génère un log `[EmpruntCreate]`                            | `bibliothecaire:emprunt_create`             | Log contient `[EmpruntCreate] utilisateur=... id=... emprunteur=... media=...`           | ✅ Validé |
+| Bloc 6 | T-LOG-42 | Confirmation du retour d’un emprunt génère un log `[EmpruntRetourConfirm]`       | `bibliothecaire:emprunt_retour_confirm`     | Log contient `[EmpruntRetourConfirm] utilisateur=... id=... emprunteur=... media=...`    | ✅ Validé |
+| Bloc 6 | T-LOG-43 | Création d’un emprunt depuis un média génère un log `[EmpruntCreateFromMedia]`   | `bibliothecaire:media_emprunter`            | Log contient `[EmpruntCreateFromMedia] utilisateur=... id=... media=... emprunteur=...`  | ✅ Validé |
+| Bloc 6 | T-LOG-44 | Rendu d’un emprunt depuis un média génère un log `[EmpruntRetourConfirm]`        | `bibliothecaire:media_rendre`               | Log contient `[EmpruntRendreFromMedia] utilisateur=... id=... media=... emprunteur=...`  | ✅ Validé |
+| Bloc 6 | T-LOG-45 | Création d’un emprunt depuis un membre génère un log `[EmpruntCreateFromMembre]` | `bibliothecaire:membre_emprunter`           | Log contient `[EmpruntCreateFromMembre] utilisateur=... id=... emprunteur=... media=...` | ✅ Validé |
+| Bloc 6 | T-LOG-46 | Rendu d’un emprunt depuis un membre génère un log `[EmpruntRetourConfirm]`       | `bibliothecaire:membre_rendre`              | Log contient `[EmpruntRendreFromMembre] utilisateur=... id=... emprunteur=... media=...` | ✅ Validé |
+| Bloc 6 | T-LOG-48 | Création d’un jeu génère un log `[JeuCreate]`                                    | `bibliothecaire:jeu_create`                 | Log contient `[JeuCreate] utilisateur=... id=... nom=... année=...`                      | ✅ Validé |
+
 
 > ℹ️ Note : les spécifications de la gestion des Logs sont accessibles dans la 
 > [section 3.5 de l'Analyse des Fonctionnalités](devAFBib.md#35-gestion-des-logs--fonction-transversale).  
 > 🔧 Les tests utilisent `mediatheque_test.log` pour archiver les traces des Logs générés durant les tests.  
 > ✅ Les traces des **Logs opérationnels** de l'application sont archivés dans `mediatheque.log`.
+> 
+> ℹ️ Note : les tests du **Bloc 6** sont définis dans une 
+> [table](devAFBib.md#354-table-de-correspondance-logs--fonctions-métiers) liant les **Logs particuliers au métier** aux 
+> fonctions métier. Les numéros de ces tests correspondent à la numérotation de la ligne de la table.
 
 ---
 

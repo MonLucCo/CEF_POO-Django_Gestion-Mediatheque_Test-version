@@ -117,4 +117,4 @@ class BibliothecaireAccessTest(LoginRequiredTestCase):
     def test_access_with_login(self):
         response = self.client.get(reverse("bibliothecaire:accueil"))
         self.assertEqual(response.status_code, 200)
-        self.assertContains(response, 'table id="menu-bibliothecaire"')
+        self.assertContains(response, 'id="menu-bibliothecaire"')
