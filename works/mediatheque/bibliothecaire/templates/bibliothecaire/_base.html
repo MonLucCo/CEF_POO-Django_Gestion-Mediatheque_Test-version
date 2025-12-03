@@ -1,150 +1,60 @@
-<!DOCTYPE html>
-<html lang="fr">
-<head>
-    <meta charset="UTF-8">
-    <title>{% block title %}Espace Bibliothécaire{% endblock %}</title>
-    <style>
-      .messages {
-        list-style: none;
-        padding: 0;
-        margin: 10px 0;
-      }
-      .messages li {
-        padding: 6px 12px;
-        margin-bottom: 5px;
-        border-radius: 4px;
-        font-weight: bold;
-      }
+{% extends "base.html" %}
 
-      .success { background-color: #e6ffe6; color: #2d662d; }
-      .error   { background-color: #ffe6e6; color: #992d2d; }
-      .warning { background-color: #fff8e6; color: #996600; }
-      .info    { background-color: #e6f0ff; color: #2d4d99; }
-    </style>
-</head>
-<body>
-    <header>
-        <h1>Médiathèque – Bibliothécaire</h1>
-        <nav>
-          <table id="menu-bibliothecaire" style="width:100%; text-align:left;">
-            <thead>
-              <tr>
-                <th>Applications</th>
-                <th>Médias</th>
-                <th>Membres</th>
-                <th>Autres</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td style="vertical-align: top;">
-                  <ul>
-                    <li>
-                      <strong>Aller à l'accueil :</strong>
-                      <ul>
-                        <li><a href="{% url 'accounts:accueil' %}">Médiathèque</a></li>
-                        <li><a href="{% url 'bibliothecaire:accueil' %}">Bibliothécaire</a></li>
-                        <li><a href="{% url 'consultation:accueil' %}">Consultation</a></li>
-                      </ul>
-                    </li>
-                    <li>
-                      <strong>Fonctions techniques :</strong>
-                      <ul>
-                        <li><a href="{% url 'bibliothecaire:emprunt_retard' %}">Marquage des retards</a></li>
-                      </ul>
-                    </li>
-                    <li>
-                      <strong>Fonctions de rejeu :</strong>
-                      <ul>
-                        <li><a href="{% url 'bibliothecaire:rejeu_reset_retard_session' %}">Changer date de marquage</a></li>
-                      </ul>
-                    </li>
-                  </ul>
-                </td>
-                <td style="vertical-align: top;">
-                  <ul>
-                    <li>
-                      <strong>Créer :</strong>
-                      <ul>
-                        <li><a href="{% url 'bibliothecaire:media_create_livre' %}">Type LIVRE</a></li>
-                        <li><a href="{% url 'bibliothecaire:media_create_dvd' %}">Type DVD</a></li>
-                        <li><a href="{% url 'bibliothecaire:media_create_cd' %}">Type CD</a></li>
-                        <li><a href="{% url 'bibliothecaire:media_create' %}">Type Non défini</a></li>
-                      </ul>
-                    </li>
-                    <li>
-                      <strong>Lister :</strong>
-                      <ul>
-                        <li><a href="{% url 'bibliothecaire:media_list_consultables' %}">Consultables</a></li>
-                        <li><a href="{% url 'bibliothecaire:media_list_disponibles' %}">Disponibles</a></li>
-                        <li><a href="{% url 'bibliothecaire:media_list' %}">Tous</a></li>
-                      </ul>
-                    </li>
-                    <li>
-                      <strong>Filtrer par type :</strong>
-                      <ul>
-                        <li><a href="{% url 'bibliothecaire:media_list_by_type' %}?type=LIVRE">Livres</a></li>
-                        <li><a href="{% url 'bibliothecaire:media_list_by_type' %}?type=DVD">DVD</a></li>
-                        <li><a href="{% url 'bibliothecaire:media_list_by_type' %}?type=CD">CD</a></li>
-                        <li><a href="{% url 'bibliothecaire:media_list_non_types' %}?type=NON_DEFINI">Non typés</a></li>
-                      </ul>
-                    </li>
-                  </ul>
-                </td>
-                <td style="vertical-align: top;">
-                  <ul>
-                    <li>
-                      <strong>Créer :</strong>
-                      <ul>
-                        <li><a href="{% url 'bibliothecaire:membre_create' %}">Membre</a></li>
-                        <li><a href="{% url 'bibliothecaire:membre_create_emprunteur' %}">Emprunteur</a></li>
-                      </ul>
-                    </li>
-                    <li>
-                      <strong>lister :</strong>
-                      <ul>
-                        <li><a href="{% url 'bibliothecaire:membre_list_gestion' %}">Membres</a></li>
-                        <li><a href="{% url 'bibliothecaire:membre_list_emprunteurs' %}">Emprunteurs</a></li>
-                        <li><a href="{% url 'bibliothecaire:membre_list_archives' %}">Supprimés</a></li>
-                        <li><a href="{% url 'bibliothecaire:membre_list' %}">Tous</a></li>
-                      </ul>
-                    </li>
-                  </ul>
-                </td>
-                <td style="vertical-align: top;">
-                  <ul>
-                    <li>
-                      <strong>Emprunts</strong>
-                      <ul>
-                        <li><a href="{% url 'bibliothecaire:emprunt_list' %}">Lister</a></li>
-                        <li><a href="{% url 'bibliothecaire:emprunt_create' %}">Créer</a></li>
-                        <li><a href="{% url 'bibliothecaire:emprunt_rendre' %}">Rendre</a></li>
-                      </ul>
-                    </li>
-                    <li>
-                      <strong>Jeux</strong>
-                      <ul>
-                        <li><a href="{% url 'bibliothecaire:jeu_list' %}">Lister</a></li>
-                        <li><a href="{% url 'bibliothecaire:jeu_create' %}">Créer</a></li>
-                      </ul>
-                    </li>
-                  </ul>
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </nav>
+{% block title %}Espace Bibliothécaire{% endblock %}
 
-    </header>
+{% block page_header %}
+  <h1>Médiathèque – Bibliothécaire</h1>
+{% endblock %}
 
-    <main>
-        {% block content %}
-        <!-- Contenu spécifique à chaque page -->
-        {% endblock %}
-    </main>
+{% block nav %}
+<nav id="menu-bibliothecaire">
+  <ul>
+    <li><a href="{% url 'accounts:accueil' %}">Accueil Médiathèque</a></li>
+    <li><a href="{% url 'consultation:accueil' %}">Accueil Consultation</a></li>
+    <li><a href="{% url 'bibliothecaire:accueil' %}">Accueil Bibliothécaire</a></li>
 
-    <footer>
-        <p>&copy; Bibliothécaire - Médiathèque – Projet Django</p>
-    </footer>
-</body>
-</html>
+    {% if user.bibliothecaire %}
+    <li>
+      <ul>
+        <li><a href="{% url 'bibliothecaire:media_create_livre' %}">Créer Livre</a></li>
+        <li><a href="{% url 'bibliothecaire:media_create_dvd' %}">Créer DVD</a></li>
+        <li><a href="{% url 'bibliothecaire:media_create_cd' %}">Créer CD</a></li>
+        <li><a href="{% url 'bibliothecaire:media_list' %}">Lister Médias</a></li>
+        <li><a href="{% url 'bibliothecaire:media_list_consultables' %}">Lister Consultables</a></li>
+        <li><a href="{% url 'bibliothecaire:media_list_disponibles' %}">Lister Disponibles</a></li>
+        <li><a href="{% url 'bibliothecaire:membre_create' %}">Créer Membre</a></li>
+        <li><a href="{% url 'bibliothecaire:membre_create_emprunteur' %}">Créer Membre-Emprunteur</a></li>
+        <li><a href="{% url 'bibliothecaire:membre_list_gestion' %}">Lister Membres</a></li>
+        <li><a href="{% url 'bibliothecaire:membre_list_emprunteurs' %}">Lister Membres-Emprunteur</a></li>
+        <li><a href="{% url 'bibliothecaire:emprunt_list' %}">Lister Emprunts</a></li>
+        <li><a href="{% url 'bibliothecaire:emprunt_create' %}">Créer Emprunt</a></li>
+        <li><a href="{% url 'bibliothecaire:emprunt_rendre' %}">Rendre Emprunt</a></li>
+      </ul>
+    </li>
+
+    {% if user.bibliothecaire.is_admin %}
+    <li>
+      <ul>
+        <li><a href="{% url 'bibliothecaire:emprunt_retard' %}">Marquage des retards</a></li>
+        <li><a href="{% url 'bibliothecaire:rejeu_reset_retard_session' %}">Changer date de marquage</a></li>
+        <li><a href="{% url 'bibliothecaire:media_create' %}">Créer média non typé</a></li>
+        <li><a href="{% url 'bibliothecaire:media_list_by_type' %}?type=LIVRE">Lister Livres</a></li>
+        <li><a href="{% url 'bibliothecaire:media_list_by_type' %}?type=DVD">Lister DVDs</a></li>
+        <li><a href="{% url 'bibliothecaire:media_list_by_type' %}?type=CD">Lister CDs</a></li>
+        <li><a href="{% url 'bibliothecaire:media_list_by_type' %}?type=NON_DEFINI">Lister médias non typés</a></li>
+        <li><a href="{% url 'bibliothecaire:membre_list' %}">Lister membres en base</a></li>
+        <li><a href="{% url 'bibliothecaire:membre_list_archives' %}">Lister membres supprimés</a></li>
+        <li><a href="{% url 'bibliothecaire:jeu_list' %}">Lister jeux</a></li>
+        <li><a href="{% url 'bibliothecaire:jeu_create' %}">Créer jeu</a></li>
+      </ul>
+    </li>
+    {% endif %}
+
+    {% endif %}
+  </ul>
+</nav>
+{% endblock %}
+
+{% block footer %}
+<p>&copy; Bibliothécaire – Médiathèque</p>
+{% endblock %}

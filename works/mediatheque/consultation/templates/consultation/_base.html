@@ -1,72 +1,22 @@
-<!DOCTYPE html>
-<html lang="fr">
-<head>
-    <meta charset="UTF-8">
-    <title>{% block title %}Espace Consultation{% endblock %}</title>
-    <style>
-      .success { background-color: #e6ffe6; color: #2d662d; }
-      .error   { background-color: #ffe6e6; color: #992d2d; }
-      .warning { background-color: #fff8e6; color: #996600; }
-      .info    { background-color: #e6f0ff; color: #2d4d99; }
-    </style>
-</head>
-<body>
-    <header>
-        <h1>Médiathèque – Bibliothécaire</h1>
-        <nav>
-          <table id="menu-consultation" style="width:100%; text-align:left;">
-            <thead>
-              <tr>
-                <th>Applications</th>
-                <th>Supports</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td style="vertical-align: top;">
-                  <ul>
-                    <li>
-                      <strong>Aller à l'accueil :</strong>
-                      <ul>
-                        <li><a href="{% url 'accounts:accueil' %}">Médiathèque</a></li>
-                        <li><a href="{% url 'bibliothecaire:accueil' %}">Bibliothécaire</a></li>
-                        <li><a href="{% url 'consultation:accueil' %}">Consultation</a></li>
-                      </ul>
-                    </li>
-                    <li>
-                      <strong>Fonctions techniques :</strong>
-                      <ul>
-                        <li><a href="#">Connexion</a></li>
-                        <li><a href="#">Déconnexion</a></li>
-                      </ul>
-                    </li>
-                  </ul>
-                </td>
-                <td style="vertical-align: top;">
-                  <ul>
-                    <li>
-                      <strong>Consulter :</strong>
-                      <ul>
-                        <li><a href="{% url 'consultation:supports' %}">Tous</a></li>
-                      </ul>
-                    </li>
-                  </ul>
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </nav>
+{% extends "base.html" %}
 
-    </header>
+{% block title %}Espace Consultation{% endblock %}
 
-    <main>
-        {% block content %}
-        <!-- Contenu spécifique à chaque page -->
-        {% endblock %}
-    </main>
+{% block page_header %}
+  <h1>Médiathèque – Consultation</h1>
+{% endblock %}
 
-    <footer>
-        <p>&copy; Consultation - Médiathèque – Projet Django</p>
-    </footer>
-</body>
-</html>
+{% block nav %}
+<nav id="menu-consultation">
+  <ul>
+    <li><a href="{% url 'accounts:accueil' %}">Accueil Médiathèque</a></li>
+    <li><a href="{% url 'consultation:accueil' %}">Accueil Consultation</a></li>
+    <li><a href="{% url 'consultation:supports' %}">Consulter supports</a></li>
+  </ul>
+</nav>
+{% endblock %}
+
+{% block footer %}
+<p>&copy; Consultation – Médiathèque</p>
+{% endblock %}
+
