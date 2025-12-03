@@ -28,6 +28,8 @@ class CustomLoginView(LoginView):
     def form_invalid(self, form):
         response = super().form_invalid(form)
         length = response.get('Content-Length', 0)
+
+        # ✅ Trace particulière (ligne 5 du tableau des logs)
         logger.warning("[LOGIN_INVALID] tentative de connexion",
                        request=self.request, status_code=response.status_code,
                        content_length=length)
@@ -45,6 +47,7 @@ class CustomLogoutView(LogoutView):
         response = super().dispatch(request, *args, **kwargs)   # Déconnexion effective de l'utilisateur
         length = response.get('Content-Length', 0)
 
+        # ✅ Trace particulière (ligne 6 du tableau des logs)
         if user:
             logger.info(f"[LOGOUT] utilisateur={user.username}",
                         request=request, status_code=response.status_code,

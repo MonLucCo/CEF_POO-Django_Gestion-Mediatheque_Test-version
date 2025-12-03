@@ -79,7 +79,7 @@ et couvre :
    - [9.26 Difficulté 26 : Réorganisation du plan de développement et de la documentation transverse](#926-difficulté-26--réorganisation-du-plan-de-développement-et-de-la-documentation-transverse)
    - [9.27 – Difficulté 27 : Modélisation de Bibliothécaire et accès restreint à l’application](#927--difficulté-27--modélisation-de-bibliothécaire-et-accès-restreint-à-lapplication)
    - [9.28 – Difficulté 28 : Gestion des accès restreints et du template 403](#928--difficulté-28--gestion-des-accès-restreints-et-du-template-403)
-   - [9.29 – Difficulté : Exigences et intégration des Logs](#929--difficulté--exigences-et-intégration-des-logs)
+   - [9.29 – Difficulté 29 : Exigences et intégration des Logs](#929--difficulté-29--exigences-et-intégration-des-logs)
 10. [📌 Décisions structurantes du projet](#10--décisions-structurantes-du-projet)
     - [10.1 Décision 1 (D-01) – Structuration progressive du développement par blocs fonctionnels](#101-décision-1-d-01--structuration-progressive-du-développement-par-blocs-fonctionnels)
     - [10.2 Décision 2 (D-02) – Centralisation des vues sur l’entité Media avec typage différé](#102-décision-2-d-02--centralisation-des-vues-sur-lentité-media-avec-typage-différé)
@@ -1921,7 +1921,7 @@ Django aux besoins spécifiques du projet, tout en maintenant une documentation 
 
 ---
 
-### 9.29 – Difficulté : Exigences et intégration des Logs
+### 9.29 – Difficulté 29 : Exigences et intégration des Logs
 
 #### a) Constat
 Le sujet du devoir mentionne la mise en place de logs, mais sans fournir de spécifications précises. Cette absence de 
