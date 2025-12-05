@@ -9,6 +9,49 @@
 
 ---
 
+**Sommaire**
+
+9. [📌 Difficultés rencontrées](#9--difficultés-rencontrées)
+   - [9.1 Difficulté 1 : organiser le développement avec une vue d'ensemble cohérente (main courante)](#91-difficulté-1--organiser-le-développement-avec-une-vue-densemble-cohérente---création-dune-main-courante-de-développement)
+   - [9.2 Difficulté 2 : comprendre les mécanismes liés au moteur de template Django](#92-difficulté-2--comprendre-les-mécanismes-liés-au-moteur-de-template-django)
+   - [9.3 Difficulté 3 : choix de la meilleure architecture de Vue](#93-difficulté-3--choix-de-la-meilleure-architecture-de-vue)
+   - [9.4 Difficulté 4 : accéder aux données spécifiques de l’objet typé (héritage multi-table et ORM Django)](#94-difficulté-4--accéder-aux-données-spécifiques-de-lobjet-typé-héritage-multi-table-et-orm-django)
+   - [9.5 Difficulté 5 : définir et structurer les tests unitaires](#95-difficulté-5--définir-et-structurer-les-tests-unitaires)
+   - [9.6 Difficulté 6 : reprise de modélisation en cours de développement](#96-difficulté-6--reprise-de-modélisation-en-cours-de-développement)
+   - [9.7 Difficulté 7 : gestion des contrôles de validité sur les champs numériques de données](#97-difficulté-7--gestion-des-contrôles-de-validité-sur-les-champs-numériques-de-données)
+   - [9.8 Difficulté 8 : nommage des dossiers du projet](#98-difficulté-8--nommage-des-dossiers-du-projet)
+   - [9.9 Difficulté 9 : interactions entre les tests unitaires techniques et fonctionnels métier](#99-difficulté-9--interactions-entre-les-tests-unitaires-techniques-et-fonctionnels-métier)
+   - [9.10 Difficulté 10 : Organisation et clarté du routage lié aux médias](#910-difficulté-10--organisation-et-clarté-du-routage-lié-aux-médias)
+   - [9.11 Difficulté 11 : Visualisation des contraintes du formulaire](#911-difficulté-11--visualisation-des-contraintes-du-formulaire)
+   - [9.12 Difficulté 12 : Formalisation du cycle de vie initial et typé des médias](#912-difficulté-12--formalisation-du-cycle-de-vie-initial-et-typé-des-médias)
+   - [9.13 Difficulté 13 : Définir ce que signifie “ajouter un média” – segmentation fonctionnelle, typage différé et structuration technique](#913-difficulté-13--définir-ce-que-signifie-ajouter-un-média--segmentation-fonctionnelle-typage-différé-et-structuration-technique)
+   - [9.14 Difficulté 14 : Définition transversale du cycle de vie métier avant développement des UC](#914-difficulté-14--définition-transversale-du-cycle-de-vie-métier-avant-développement-des-uc)
+   - [9.15 Difficulté 15 : Regroupement des tests techniques et fonctionnels dans un même groupe de tests](#915-difficulté-15--regroupement-des-tests-techniques-et-fonctionnels-dans-un-même-groupe-de-tests)
+   - [9.16 Difficulté 16 : Redondance du champ `bloqué` et modélisation du blocage métier](#916-difficulté-16--redondance-du-champ-bloqué-et-modélisation-du-blocage-métier)
+   - [9.17 Difficulté 17 : Cohérence UX et gestion du contexte métier via session](#917-difficulté-17--cohérence-ux-et-gestion-du-contexte-métier-via-session)
+   - [9.18 Difficulté 18 : Appel implicite d’une méthode sans argument dans un template Django](#918-difficulté-18--appel-implicite-dune-méthode-sans-argument-dans-un-template-django)
+   - [9.19 Difficulté 19 : Stylisation minimale des messages utilisateur](#919-difficulté-19--stylisation-minimale-des-messages-utilisateur)
+   - [9.20 Difficulté 20 : Activation du calcul des retards des emprunts en cours](#920-difficulté-20--activation-du-calcul-des-retards-des-emprunts-en-cours)
+   - [9.21 Difficulté 21 : Formalisation des méthodes métier et transitions d’état](#921-difficulté-21--formalisation-des-méthodes-métier-et-transitions-détat)
+   - [9.22 Difficulté 22 : Gestion des messages d’incohérence (Logs) et d’information utilisateur (UX)](#922-difficulté-22--gestion-des-messages-dincohérence-logs-et-dinformation-utilisateur-ux)
+   - [9.23 Difficulté 23 : Formalisation des scenarii métier](#923-difficulté-23--formalisation-des-scenarii-métier)
+   - [9.24 Difficulté 24 : Traçabilité UX des actions métier et synchronisation du contexte d’affichage](#924-difficulté-24--traçabilité-ux-des-actions-métier-et-synchronisation-du-contexte-daffichage)
+   - [9.25 Difficulté 25 : Choix du modèle de vue pour une confirmation métier liée à un objet](#925-difficulté-25--choix-du-modèle-de-vue-pour-une-confirmation-métier-liée-à-un-objet)
+   - [9.26 Difficulté 26 : Réorganisation du plan de développement et de la documentation transverse](#926-difficulté-26--réorganisation-du-plan-de-développement-et-de-la-documentation-transverse)
+   - [9.27 – Difficulté 27 : Modélisation de Bibliothécaire et accès restreint à l’application](#927--difficulté-27--modélisation-de-bibliothécaire-et-accès-restreint-à-lapplication)
+   - [9.28 – Difficulté 28 : Gestion des accès restreints et du template 403](#928--difficulté-28--gestion-des-accès-restreints-et-du-template-403)
+   - [9.29 – Difficulté 29 : Exigences et intégration des Logs](#929--difficulté-29--exigences-et-intégration-des-logs)
+10. [📌 Décisions structurantes du projet](#10--décisions-structurantes-du-projet)
+    - [10.1 Décision 1 (D-01) – Structuration progressive du développement par blocs fonctionnels](#101-décision-1-d-01--structuration-progressive-du-développement-par-blocs-fonctionnels)
+    - [10.2 Décision 2 (D-02) – Centralisation des vues sur l’entité Media avec typage différé](#102-décision-2-d-02--centralisation-des-vues-sur-lentité-media-avec-typage-différé)
+    - [10.3 Décision 3 (D-03) – Gel de la première version avant _refactorisation_ métier](#103-décision-3-d-03--gel-de-la-première-version-avant-_refactorisation_-métier)
+    - [10.4 Décision 4 (D-04) – Clarification du champ `Support.consultable` selon le sous-type](#104-décision-4-d-04--clarification-du-champ-supportconsultable-selon-le-sous-type)
+    - [10.5 Décision 5 (D-05) – Stratégie de gestion des messages et des logs](#105-décision-5-d-05--stratégie-de-gestion-des-messages-et-des-logs)
+    - [10.6 Décision 6 (D-06) – Structuration des scenarii métier](#106-décision-6-d-06--structuration-des-scenarii-métier)
+    - [10.7 Décision 7 (D-07) - Reorganisation des documents techniques et du plan de développement (version 3)](#107-décision-7-d-07---reorganisation-des-documents-techniques-et-du-plan-de-développement-version-3)
+
+---
+
 ## 9. 📌 Difficultés rencontrées
 
 > À compléter au fil du développement : erreurs, choix techniques, contournements, arbitrages entre exigences et extensions.
@@ -1676,7 +1719,7 @@ Django aux besoins spécifiques du projet, tout en maintenant une documentation 
 
 ---
 
-### 9.29 – Difficulté : Exigences et intégration des Logs
+### 9.29 – Difficulté 29 : Exigences et intégration des Logs
 
 #### a) Constat
 Le sujet du devoir mentionne la mise en place de logs, mais sans fournir de spécifications précises. Cette absence de 

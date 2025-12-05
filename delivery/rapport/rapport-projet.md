@@ -1,12 +1,12 @@
 # Rapport de projet – Application Médiathèque Django
 
-| Élément           | Détail                                                                |
-|-------------------|-----------------------------------------------------------------------|
-| **Nom du projet** | Gestion de médiathèque avec Django                                    |
-| **Date**          | Septembre 2025                                                        |
-| **Rédacteur**     | `Luc PERARD` / micro-entreprise `PerLucCo`                            |
-| **Formation**     | CEF – Développement Web et Web Mobile – Module POO                    |
-| **Avancement**    | ✔️ Done : #1, #12, #2, #3, #4 • 🚧 En cours : #5 • ⏳ À venir : #6, #7 |
+| Élément           | Détail                                                   |
+|-------------------|----------------------------------------------------------|
+| **Nom du projet** | Gestion de médiathèque avec Django                       |
+| **Date**          | Septembre 2025                                           |
+| **Rédacteur**     | `Luc PERARD` / micro-entreprise `PerLucCo`               |
+| **Formation**     | CEF – Développement Web et Web Mobile – Module POO       |
+| **Avancement**    | ✔️ Done : #1, #12, #2, #3, #4, #5, #6 • 🚧 En cours : #7 |
 
 > Cette rédaction du rapport est incrémentale et les paragraphes absents seront intégrés lors de la réalisation du 
 > développement.
@@ -82,8 +82,17 @@
   - [4.4 Authentification - gestion des rôles et des Logs](#44-authentification---gestion-des-rôles-et-des-logs)
     - [4.4.1 Rôle principal](#441-rôle-principal)
     - [4.4.2 Fonctionnalités liées à l'authentification](#442-fonctionnalités-liées-à-lauthentification)
-      - [4.4.3 Fonctionnalités liées à la gestion des Logs](#443-fonctionnalités-liées-à-la-gestion-des-logs)
-      - 
+    - [4.4.3 Fonctionnalités liées à la gestion des Logs](#443-fonctionnalités-liées-à-la-gestion-des-logs)
+    - [4.4.4 Tableau des accès aux menus par rôle](#444-tableau-des-accès-aux-menus-par-rôle)
+      - [4.4.4.1 Menus accessibles pour superuser (SUPER) et staff (STAFF)](#4441-menus-accessibles-pour-superuser-super-et-staff-staff)
+      - [4.4.4.2 Menus accessibles pour BibGestion (GESTION) et BibAdmin (ADMIN)](#4442-menus-accessibles-pour-bibgestion-gestion-et-bibadmin-admin)
+      - [4.4.4.3 menus accessibles  pour MEMBRE (anonyme)](#4443-menus-accessibles--pour-membre-anonyme)
+
+- [5. Qualité du code et stratégie de tests](#5-qualité-du-code-et-stratégie-de-tests)
+  - [5.1 Logs et monitorage](#51-logs-et-monitorage)
+    - [5.1.1 Tableau des fonctions tracées par logs](#511-tableau-des-fonctions-tracées-par-logs)
+  - [5.2 Tests unitaires Django](#52-tests-unitaires-django)
+  - [5.3 Exécution automatisée des tests](#53-exécution-automatisée-des-tests)
 
 - [6. Base de données et données de test](#6-base-de-données-et-données-de-test)  
   - [6.1 Schéma des modèles et migration](#61-schéma-des-modèles-et-migration)
@@ -100,7 +109,6 @@
     - [7.3.1 Interface minimale après initialisation](#731-interface-minimale-après-initialisation)
     - [7.3.2 Interface enrichie (à venir)](#732-interface-enrichie-à-venir)
     - [7.3.3 Interface métier (prévision)](#733-interface-métier-prévision)
-    - 
 
 - [8. Démarche de travail et traçabilité](#8-démarche-de-travail-et-traçabilité)  
   - [8.1 Traçabilité du développement : GitHub et main-courante technique](#81-traçabilité-du-développement--github-et-main-courante-technique)
@@ -113,10 +121,17 @@
     - [8.3.3 Résolution des templates](#833-résolution-des-templates)
     - [8.3.4 Authentification et sécurité](#834-authentification-et-sécurité)
     - [8.3.5 Gestion des logs](#835-gestion-des-logs)
-    - 
+
+- [9. Conclusion et perspectives](#9-conclusion-et-perspectives)
+  - [9.1 Bilan des compétences acquises](#91-bilan-des-compétences-acquises)
+  - [9.2 Améliorations futures](#92-améliorations-futures)
+  - [9.3 Bilan sur la démarche et le recul acquis](#93-bilan-sur-la-démarche-et-le-recul-acquis)
+  - [9.4 Synthèse générale et conclusion](#94-synthèse-générale-et-conclusion)
 
 - [Annexes](#annexes)
   - [Annexe A – Extraits de code clés](rapport-projet_annexe-a.md)
+  - [Annexe B - Logs d’exécution et de tests](rapport-projet_annexe-b.md)
+  - [Annexe C - Diagrammes (UML, séquence)](rapport-projet_annexe-c.md)
   - [Annexe D – Arborescence du projet](rapport-projet_annexe-d.md)  
   - [Annexe E – Installation projet et configuration de l’EDI](rapport-projet_annexe-e.md)
   - [Annexe F – Main‑courante technique et difficultés](rapport-projet_annexe-f.md)
@@ -2305,97 +2320,6 @@ charges.
 
 ---
 
-### 4.4 Authentification - gestion des rôles et des Logs
-
-#### 4.4.1 Rôle principal
-
-L’application `accounts` gère l’authentification des utilisateurs et l’attribution des rôles.  
-Deux profils métier sont distingués :
-- **Bibliothécaire** (`BibGestion`, `BibAdmin`) : accès aux vues internes de gestion.
-  - `BibGestion` : **gestionnaire Bibliothécaire** ayant accès aux **fonctionnalités primordiale** du projet :
-    - créer un membre-emprunteur. 
-    - afficher la liste des membres. 
-    - mettre à jour un membre. 
-    - supprimer un membre. 
-    - afficher la liste des médias. 
-    - créer un emprunt pour un média disponible. 
-    - ajouter un média. 
-    - rentrer un emprunt.
-  - `BibAdmin` : **administrateur Bibliothécaire** ayant accès à l'**ensemble des fonctionnalités disponibles** de 
-  l'application Bibliothécaire
-- **Membre** : accès limité à la consultation publique.
-
----
-
-#### 4.4.2 Fonctionnalités liées à l'authentification
-
-- Connexion via `CustomLoginView` et déconnexion via `CustomLogoutView`.
-- Redirection automatique selon le rôle (accueil Bibliothécaire ou Consultation).
-- Affichage conditionnel du menu (Connexion/Déconnexion).
-- Gestion des refus d’accès avec page dédiée `403.html` (page de redirection).
-
----
-
-##### 4.4.2.1 Fonctionnalités complémentaires
-
-- **Issue #5** :
-  - Mise en place des accès restreints et des rôles techniques (`Superuser`, `Staff`).
-  - Tests UC‑SECURITE (`T‑SEC‑01` à `T‑SEC‑05`) validés.
-  - Intégration des logs applicatifs (connexion, déconnexion, accès refusé/accordé).
-- **Issue #6** :
-  - Enrichissement des logs métiers (création d’emprunt, retour, ajout de média).
-  - Rotation et segmentation des fichiers de logs.
-  - UX améliorée pour la gestion des rôles et permissions.
-
----
-
-##### 4.4.2.2 Impacts techniques
-
-- Classe de tests `LoginRequiredTestCase` :
-  - Connexion automatique du compte BibGestion.
-  - Helpers `login_as(role, url=True)` et `logout(url=True)` pour déclencher les vues réelles.
-  - Enum `RoleTest` pour simplifier les connexions (Gestion, Admin, Superadmin, Staff).
-- Configuration `LOGGING` :
-  - Fichier `mediatheque.log` pour l’application.
-  - Fichier `mediatheque_test.log` pour les tests.
-- Tests UC‑LOGS (`T‑LOG‑01` à `T‑LOG‑05`) validés, garantissant la traçabilité des événements critiques.
-
----
-
-#### 4.4.3 Fonctionnalités liées à la gestion des Logs
-
-La gestion des logs est une fonctionnalité transversale qui complète l’authentification et la sécurité.  
-Elle permet de tracer les événements critiques et de fournir une base de validation pour les tests UC‑LOGS.
-
-- **Objectifs principaux** :
-  - Assurer la traçabilité des actions sensibles (connexion, déconnexion, accès refusé ou accordé).
-  - Garantir une séparation claire entre logs opérationnels (`mediatheque.log`) et logs de tests 
-  (`mediatheque_test.log`).
-  - Offrir une base extensible pour un suivi métier et technique.
-
-- **Fonctionnalités implémentées (Issue #5)** :
-  - Configuration `LOGGING` avec handlers console et fichier.
-  - Détection automatique du mode test pour basculer sur `mediatheque_test.log`.
-  - Ajout de messages `[LOGIN]`, `[LOGOUT]`, `[ACCESS_DENIED]`, `[ACCESS_GRANTED]` dans les vues critiques.
-  - Tests UC‑LOGS (`T‑LOG‑01` à `T‑LOG‑05`) validés, confirmant l’écriture correcte des événements.
-
-- **Fonctionnalités prévues (Issue #6)** :
-  - Journalisation des actions métier (création d’emprunt, retour, ajout de média).
-  - Rotation des fichiers de logs et politique de conservation.
-  - Segmentation des logs par rôle (BibGestion vs BibAdmin).
-  - Intégration future avec une solution de supervision (ELK, Graylog, Sentry).
-
-- **Impacts techniques** :
-  - Les logs sont utilisés comme outil de validation dans les tests fonctionnels.
-  - La classe `LoginRequiredTestCase` a été enrichie pour déclencher les vues réelles et générer les logs.
-  - La lecture ciblée du fichier de logs (dernière ligne) permet de valider chaque événement indépendamment.
-
-> 📌 La gestion des logs constitue une **fonction transversale** : elle relie directement la couche `accounts` 
-> (authentification) aux applications métier (`bibliothecaire`, `consultation`) et assure une traçabilité complète des 
-> accès.
-
----
-
 ##### 4.3.1 Contrainte 1 – Limite de 3 emprunts simultanés par membre
 
 Un membre ne peut pas avoir plus de trois emprunts actifs (statuts `EN_COURS` ou `RETARD`).  
@@ -2488,6 +2412,338 @@ class Emprunt(models.Model):
 
 ---
 
+### 4.4 Authentification - gestion des rôles et des Logs
+
+#### 4.4.1 Rôle principal
+
+L’application `accounts` gère l’authentification des utilisateurs et l’attribution des rôles.  
+Deux profils métier sont distingués :
+- **Bibliothécaire** (`BibGestion`, `BibAdmin`) : accès aux vues internes de gestion.
+  - `BibGestion` : **gestionnaire Bibliothécaire** ayant accès aux **fonctionnalités primordiale** du projet :
+    - créer un membre-emprunteur. 
+    - afficher la liste des membres. 
+    - mettre à jour un membre. 
+    - supprimer un membre. 
+    - afficher la liste des médias. 
+    - créer un emprunt pour un média disponible. 
+    - ajouter un média. 
+    - rentrer un emprunt.
+  - `BibAdmin` : **administrateur Bibliothécaire** ayant accès à l'**ensemble des fonctionnalités disponibles** de 
+  l'application Bibliothécaire
+- **Membre** : accès limité à la consultation publique.
+
+---
+
+#### 4.4.2 Fonctionnalités liées à l'authentification
+
+- Connexion via `CustomLoginView` et déconnexion via `CustomLogoutView`.
+- Redirection automatique selon le rôle (accueil Bibliothécaire ou Consultation).
+- Affichage conditionnel du menu (Connexion/Déconnexion).
+- Gestion des refus d’accès avec page dédiée `403.html` (page de redirection).
+
+---
+
+##### 4.4.2.1 Fonctionnalités complémentaires
+
+- **Issue #5** :
+  - Mise en place des accès restreints et des rôles techniques (`Superuser`, `Staff`).
+  - Tests UC‑SECURITE (`T‑SEC‑01` à `T‑SEC‑05`) validés.
+  - Intégration des logs applicatifs (connexion, déconnexion, accès refusé/accordé).
+- **Issue #6** :
+  - Enrichissement des logs métiers (création d’emprunt, retour, ajout de média).
+  - Rotation et segmentation des fichiers de logs.
+  - UX améliorée pour la gestion des rôles et permissions.
+
+---
+
+##### 4.4.2.2 Impacts techniques
+
+- Classe de tests `LoginRequiredTestCase` :
+  - Connexion automatique du compte BibGestion.
+  - Helpers `login_as(role, url=True)` et `logout(url=True)` pour déclencher les vues réelles.
+  - Enum `RoleTest` pour simplifier les connexions (Gestion, Admin, Superadmin, Staff).
+- Configuration `LOGGING` :
+  - Fichier `mediatheque.log` pour l’application.
+  - Fichier `mediatheque_test.log` pour les tests.
+- Tests UC‑LOGS (`T‑LOG‑01` à `T‑LOG‑05`) validés, garantissant la traçabilité des événements critiques.
+
+---
+
+#### 4.4.3 Fonctionnalités liées à la gestion des Logs
+
+La gestion des logs est une fonctionnalité transversale qui complète l’authentification et la sécurité.  
+Elle permet de tracer les événements critiques et de fournir une base de validation pour les tests UC‑LOGS.
+
+- **Objectifs principaux** :
+  - Assurer la traçabilité des actions sensibles (connexion, déconnexion, accès refusé ou accordé).
+  - Garantir une séparation claire entre logs opérationnels (`mediatheque.log`) et logs de tests 
+  (`mediatheque_test.log`).
+  - Offrir une base extensible pour un suivi métier et technique.
+
+- **Fonctionnalités implémentées (Issue #5)** :
+  - Configuration `LOGGING` avec handlers console et fichier.
+  - Détection automatique du mode test pour basculer sur `mediatheque_test.log`.
+  - Ajout de messages `[LOGIN]`, `[LOGOUT]`, `[ACCESS_DENIED]`, `[ACCESS_GRANTED]` dans les vues critiques.
+  - Tests UC‑LOGS (`T‑LOG‑01` à `T‑LOG‑05`) validés, confirmant l’écriture correcte des événements.
+
+- **Fonctionnalités prévues (Issue #6)** :
+  - Journalisation des actions métier (création d’emprunt, retour, ajout de média).
+  - Rotation des fichiers de logs et politique de conservation.
+  - Segmentation des logs par rôle (BibGestion vs BibAdmin).
+  - Intégration future avec une solution de supervision (ELK, Graylog, Sentry).
+
+- **Impacts techniques** :
+  - Les logs sont utilisés comme outil de validation dans les tests fonctionnels.
+  - La classe `LoginRequiredTestCase` a été enrichie pour déclencher les vues réelles et générer les logs.
+  - La lecture ciblée du fichier de logs (dernière ligne) permet de valider chaque événement indépendamment.
+
+> 📌 La gestion des logs constitue une **fonction transversale** : elle relie directement la couche `accounts` 
+> (authentification) aux applications métier (`bibliothecaire`, `consultation`) et assure une traçabilité complète des 
+> accès.
+
+---
+
+#### 4.4.4 Tableau des accès aux menus par rôle
+
+La logique d’authentification et de gestion des rôles se traduit directement dans les menus applicatifs.  
+Le tableau ci‑dessous synthétise les accès des menus autorisés ou refusés en fonction des profils (SUPER, STAFF, 
+BibGestion, BibAdmin, Membre).
+
+✅ = accès autorisé  
+❌ = accès refusé
+
+| Id | Application    | Menu                       |    Entité    | Route                                              | SUPER | STAFF | GESTION | ADMIN | MEMBRE |
+|----|----------------|----------------------------|:------------:|----------------------------------------------------|:-----:|:-----:|:-------:|:-----:|:------:|
+| 1  | médiathèque    | accueil médiathèque        |   __app__    | accounts:accueil                                   |   ✅   |   ✅   |    ✅    |   ✅   |   ✅    |
+| 2  | médiathèque    | espace bibliothécaire      |   __app__    | bibliothecaire:accueil                             |   ✅   |   ✅   |    ✅    |   ✅   |   ✅    |
+| 3  | médiathèque    | espace consultation        |   __app__    | consultation:accueil                               |   ✅   |   ✅   |    ✅    |   ✅   |   ✅    |
+| 4  | médiathèque    | espace administration      |   __app__    | admin:index                                        |   ✅   |   ✅   |    ❌    |   ❌   |   ❌    |
+| 5  | médiathèque    | connexion                  |     User     | accounts:login                                     |   ✅   |   ✅   |    ✅    |   ✅   |   ✅    |
+| 6  | médiathèque    | déconnexion                |     User     | accounts:logout                                    |   ✅   |   ✅   |    ✅    |   ✅   |   ✅    |
+| 7  | bibliothecaire | accueil médiathèque        |   __app__    | accounts:accueil                                   |   ✅   |   ✅   |    ✅    |   ✅   |   ❌    |
+| 8  | bibliothecaire | accueil bibliothécaire     |   __app__    | bibliothecaire:accueil                             |   ❌   |   ❌   |    ✅    |   ✅   |   ❌    |
+| 9  | bibliothecaire | accueil consultation       |   __app__    | consultation:accueil                               |   ❌   |   ❌   |    ✅    |   ✅   |   ❌    |
+| 10 | bibliothecaire | changer date marquage      |  __system__  | bibliothecaire:rejeu_reset_retard_session          |   ❌   |   ❌   |    ❌    |   ✅   |   ❌    |
+| 11 | bibliothecaire | créer média                |    Media     | bibliothecaire:media_create                        |   ❌   |   ❌   |    ❌    |   ✅   |   ❌    |
+| 12 | bibliothecaire | lister consultables        |    Media     | bibliothecaire:media_list_consultables             |   ❌   |   ❌   |    ✅    |   ✅   |   ❌    |
+| 13 | bibliothecaire | lister disponibles         |    Media     | bibliothecaire:media_list_disponibles              |   ❌   |   ❌   |    ✅    |   ✅   |   ❌    |
+| 14 | bibliothecaire | lister médias              |    Media     | bibliothecaire:media_list                          |   ❌   |   ❌   |    ✅    |   ✅   |   ❌    |
+| 15 | bibliothecaire | lister médias non typés    |    Media     | bibliothecaire:media_list_by_type ?type=NON_DEFINI |   ❌   |   ❌   |    ❌    |   ✅   |   ❌    |
+| 16 | bibliothecaire | créer livre                |    Livre     | bibliothecaire:media_create_livre                  |   ❌   |   ❌   |    ✅    |   ✅   |   ❌    |
+| 17 | bibliothecaire | lister livres              |    Livre     | bibliothecaire:media_list_by_type ?type=LIVRE      |   ❌   |   ❌   |    ✅    |   ✅   |   ❌    |
+| 18 | bibliothecaire | créer dvd                  |     Dvd      | bibliothecaire:media_create_dvd                    |   ❌   |   ❌   |    ✅    |   ✅   |   ❌    |
+| 19 | bibliothecaire | lister dvd                 |     Dvd      | bibliothecaire:media_list_by_type ?type=DVD        |   ❌   |   ❌   |    ✅    |   ✅   |   ❌    |
+| 20 | bibliothecaire | créer cd                   |      Cd      | bibliothecaire:media_create_cd                     |   ❌   |   ❌   |    ✅    |   ✅   |   ❌    |
+| 21 | bibliothecaire | lister cd                  |      Cd      | bibliothecaire:media_list_by_type ?type=CD         |   ❌   |   ❌   |    ✅    |   ✅   |   ❌    |
+| 22 | bibliothecaire | créer membre               |    Membre    | bibliothecaire:membre_create                       |   ❌   |   ❌   |    ✅    |   ✅   |   ❌    |
+| 23 | bibliothecaire | créer emprunteur           |    Membre    | bibliothecaire:membre_create_emprunteur            |   ❌   |   ❌   |    ✅    |   ✅   |   ❌    |
+| 24 | bibliothecaire | lister membres en gestion  |    Membre    | bibliothecaire:membre_list_gestion                 |   ❌   |   ❌   |    ✅    |   ✅   |   ❌    |
+| 25 | bibliothecaire | lister membres emprunteurs |    Membre    | bibliothecaire:membre_list_emprunteurs             |   ❌   |   ❌   |    ✅    |   ✅   |   ❌    |
+| 26 | bibliothecaire | lister membres supprimés   |    Membre    | bibliothecaire:membre_list_archives                |   ❌   |   ❌   |    ❌    |   ✅   |   ❌    |
+| 27 | bibliothecaire | lister membres             |    Membre    | bibliothecaire:membre_list                         |   ❌   |   ❌   |    ❌    |   ✅   |   ❌    |
+| 28 | bibliothecaire | marquage des retards       |   Emprunt    | bibliothecaire:emprunt_retard                      |   ❌   |   ❌   |    ❌    |   ✅   |   ❌    |
+| 29 | bibliothecaire | lister emprunts            |   Emprunt    | bibliothecaire:emprunt_list                        |   ❌   |   ❌   |    ✅    |   ✅   |   ❌    |
+| 30 | bibliothecaire | créer emprunt              |   Emprunt    | bibliothecaire:emprunt_create                      |   ❌   |   ❌   |    ✅    |   ✅   |   ❌    |
+| 31 | bibliothecaire | rendre emprunt             |   Emprunt    | bibliothecaire:emprunt_rendre                      |   ❌   |   ❌   |    ✅    |   ✅   |   ❌    |
+| 32 | bibliothecaire | lister jeux                | JeuDePlateau | bibliothecaire:jeu_list                            |   ❌   |   ❌   |    ❌    |   ✅   |   ❌    |
+| 33 | bibliothecaire | créer jeux                 | JeuDePlateau | bibliothecaire:jeu_create                          |   ❌   |   ❌   |    ❌    |   ✅   |   ❌    |
+| 34 | consultation   | accueil médiathèque        |   __app__    | accounts:accueil                                   |   ✅   |   ✅   |    ✅    |   ✅   |   ✅    |
+| 35 | consultation   | accueil consultation       |   __app__    | consultation:accueil                               |   ✅   |   ✅   |    ✅    |   ✅   |   ✅    |
+| 36 | consultation   | consulter supports         |   Support    | consultation:supports                              |   ✅   |   ✅   |    ✅    |   ✅   |   ✅    |
+
+Ce tableau est central pour la mise en place dans les menus de la gestion des fonctionnalités de chaque application. Il 
+permet d'identifier directement :
+- la fonction et sa route, 
+- l'entité principale concernée par la fonction,
+- la gestion UX considérée selon l'authentification de l'utilisateur.
+
+Toutefois, ce tableau ne constitue pas une description exhaustive des fonctionnalités métier (UX) de l'application. En 
+effet, certaines fonctions dépendent d'un contexte lié à l'état des entités (objets de la médiathèque) et du contexte 
+d'utilisation. Ces fonctions ne sont pas alors décrites dans ce tableau, car elles sont liées à une vue de l'application 
+(ie. `modifier un Livre` n'est pas dans le tableau, amis `lister les Livres` - id 17 - est un menu identifié dans le 
+tableau).
+
+
+Pour rendre la lecture plus visuelle, des captures d’écran des menus sont ajoutées :
+
+- **Accueil Médiathèque (accounts)** : menu visible par tous les rôles, avec Connexion/Déconnexion.  
+- **Accueil Bibliothécaire** : menu réservé aux rôles BibGestion et BibAdmin, avec accès aux fonctionnalités de gestion.  
+- **Accueil Consultation** : menu accessible à tous les rôles, permettant la consultation des supports.
+
+Ces snapshots permettent de visualiser la différence d’expérience utilisateur selon le rôle attribué.
+
+---
+
+##### 4.4.4.1 Menus accessibles pour superuser (SUPER) et staff (STAFF)
+
+Les rôles SUPER et STAFF sont des rôles d'administration technique du projet. L'application qui leur est dédiée est le 
+site d'**administration Django**. Il leur est toutefois possible d'accéder à :
+- l'accueil de la médiathèque
+  - ![img_2.png](assets/img_UX_menu_accounts_superuser.png)  
+    > L'accès au menu **Espace Bibliothécaire** génère un refus d'accès.  
+  Cet affichage est maintenu pour permettre de constater le fonctionnement ; le menu sera masqué pour une situation 
+  opérationnelle.
+- la consultation des supports (médias) consultables.
+  - ![img_1.png](assets/img_UX_menu_consultation.png)
+
+##### 4.4.4.2 Menus accessibles pour BibGestion (GESTION) et BibAdmin (ADMIN)
+Les rôles ADMIN et GESTION sont des rôles de Bibliothécaire de la médiathèque. L'application qui leur est dédiée est le 
+site **bibliothecaire**. Il leur est possible d'accéder à :
+- l'accueil de la médiathèque.
+  - ![img_3.png](assets/img_UX_menu_accounts_bibliothecaire.png)
+- la gestion de la bibliothèque.
+  - Pour un Bibliothecaire gestionnaire (GESTION)
+    - ![img_4.png](assets/img_UX_menu_bibliothecaire_gestion.png)
+  - Pour un Bibliothécaire administrateur (ADMIN) fonctionnel
+    - ![img_5.png](assets/img_UX_menu_bibliothecaire_admin.png)
+- la consultation des supports (médias) consultables.
+  - ![img_1.png](assets/img_UX_menu_consultation.png)
+
+##### 4.4.4.3 menus accessibles  pour MEMBRE (anonyme)
+Le rôle de MEMBRE (ou anonyme) est le rôle par défaut si l'utilisateur ne se connecte pas. Il lui est possible d'accéder 
+à :
+- l'accueil de la médiathèque.
+  - ![img.png](assets/img_UX_menu_accounts_anonyme.png)
+    > L'accès au menu **Espace Bibliothécaire** génère un refus d'accès.  
+  Cet affichage est maintenu pour permettre de constater le fonctionnement ; le menu sera masqué pour une situation 
+  opérationnelle.
+- la consultation des supports (médias) consultables.
+  - ![img_1.png](assets/img_UX_menu_consultation.png)
+
+---
+
+## 5. Qualité du code et stratégie de tests
+
+### 5.1 Logs et monitorage
+
+La qualité du code passe par une traçabilité rigoureuse des actions critiques. Le projet Médiathèque intègre une 
+configuration avancée du module `LOGGING` de Django, permettant de journaliser les événements techniques et métier dans 
+deux fichiers distincts :
+
+- `mediatheque.log` : journal des événements en production.
+- `mediatheque_test.log` : journal des événements déclenchés lors des tests.
+
+La configuration inclut :
+- des handlers console et fichier,
+- une détection automatique du mode test,
+- des balises explicites (`[LOGIN]`, `[LOGOUT]`, `[ACCESS_GRANTED]`, `[ACCESS_DENIED]`, `[EmpruntCreate]`, etc.),
+- une rotation des fichiers prévue pour les livraisons futures.
+
+Les logs sont utilisés comme **outil de validation** dans les tests fonctionnels, notamment les UC‑LOGS (`T‑LOG‑01` à 
+`T‑LOG‑48`), qui vérifient que chaque action métier déclenche bien une trace identifiable (trace **Particulière**).
+
+---
+
+#### 5.1.1 Tableau des fonctions tracées par logs
+
+Le tableau ci-dessous recense les fonctions de l’application qui déclenchent une trace métier ou technique.  
+Il distingue les fonctions de **gestion** (demandées dans le sujet) et les fonctions **techniques** (nécessaires à la 
+cohérence du projet).  
+La colonne “Logs” indique si une balise spécifique est attendue (`P`) ou si la trace est implicite via l’URL.
+
+✅ = log intégré et validé dans les tests UC‑LOGS.
+
+| Id | Application    | Fonction                         |    Entité    | Route                                              | Fonction  | Logs |   Etat    |
+|----|----------------|----------------------------------|:------------:|----------------------------------------------------|:---------:|:----:|:---------:|
+| 1  | médiathèque    | accueil médiathèque              |   __app__    | accounts:accueil                                   |           |      |           |
+| 2  | médiathèque    | espace bibliothécaire            |   __app__    | bibliothecaire:accueil                             |           |      |           |
+| 3  | médiathèque    | espace consultation              |   __app__    | consultation:accueil                               |           |      |           |
+| 4  | médiathèque    | espace administration            |   __app__    | admin:index                                        |           |      |           |
+| 5  | médiathèque    | connexion                        |     User     | accounts:login                                     |  Gestion  |  P   | ✅ intégré |
+| 6  | médiathèque    | déconnexion                      |     User     | accounts:logout                                    |  Gestion  |  P   | ✅ intégré |
+| 7  | bibliothecaire | accueil médiathèque              |   __app__    | accounts:accueil                                   |           |      |           |
+| 8  | bibliothecaire | accueil bibliothécaire           |   __app__    | bibliothecaire:accueil                             |           |      |           |
+| 9  | bibliothecaire | accueil consultation             |   __app__    | consultation:accueil                               |           |      |           |
+| 10 | bibliothecaire | changer date marquage            |  __system__  | bibliothecaire:rejeu_reset_retard_session          | Technique |  P   | ✅ intégré |
+| 11 | bibliothecaire | créer média                      |    Media     | bibliothecaire:media_create                        | Technique |  P   | ✅ intégré |
+| 12 | bibliothecaire | lister consultables              |    Media     | bibliothecaire:media_list_consultables             |           |      |           |
+| 13 | bibliothecaire | lister disponibles               |    Media     | bibliothecaire:media_list_disponibles              |           |      |           |
+| 14 | bibliothecaire | lister médias                    |    Media     | bibliothecaire:media_list                          |           |      |           |
+| 15 | bibliothecaire | lister médias non typés          |    Media     | bibliothecaire:media_list_by_type ?type=NON_DEFINI |           |      |           |
+| 16 | bibliothecaire | modifier un média                |    Media     | bibliothecaire:media_update                        | Technique |  P   | ✅ intégré |
+| 17 | bibliothecaire | détailler un média               |    Media     | bibliothecaire:media_detail                        |           |      |           |
+| 18 | bibliothecaire | créer Livre                      |    Livre     | bibliothecaire:media_create_livre                  |  Gestion  |  P   | ✅ intégré |
+| 19 | bibliothecaire | lister Livres                    |    Livre     | bibliothecaire:media_list_by_type ?type=LIVRE      |           |      |           |
+| 20 | bibliothecaire | modifier un média en Livre       |    Livre     | bibliothecaire:media_typage_livre                  | Technique |  P   | ✅ intégré |
+| 21 | bibliothecaire | modifier un Livre                |    Livre     | bibliothecaire:media_update_livre                  |  Gestion  |  P   | ✅ intégré |
+| 22 | bibliothecaire | détailler un membre              |    Livre     | bibliothecaire:membre_detail                       |           |      |           |
+| 23 | bibliothecaire | créer DVD                        |     Dvd      | bibliothecaire:media_create_dvd                    |  Gestion  |  P   | ✅ intégré |
+| 24 | bibliothecaire | lister DVD                       |     Dvd      | bibliothecaire:media_list_by_type ?type=DVD        |           |      |           |
+| 25 | bibliothecaire | modifier un média en DVD         |     Dvd      | bibliothecaire:media_typage_dvd                    |           |      |           |
+| 26 | bibliothecaire | modifier un DVD                  |     Dvd      | bibliothecaire:media_update_dvd                    |           |      |           |
+| 27 | bibliothecaire | créer CD                         |      Cd      | bibliothecaire:media_create_cd                     |  Gestion  |  P   | ✅ intégré |
+| 28 | bibliothecaire | lister CD                        |      Cd      | bibliothecaire:media_list_by_type ?type=CD         |           |      |           |
+| 29 | bibliothecaire | modifier un média en CD          |      Cd      | bibliothecaire:media_typage_cd                     |           |      |           |
+| 30 | bibliothecaire | modifier un CD                   |      Cd      | bibliothecaire:media_update_cd                     |           |      |           |
+| 31 | bibliothecaire | créer membre                     |    Membre    | bibliothecaire:membre_create                       |  Gestion  |  P   | ✅ intégré |
+| 32 | bibliothecaire | créer emprunteur                 |    Membre    | bibliothecaire:membre_create_emprunteur            |  Gestion  |  P   | ✅ intégré |
+| 33 | bibliothecaire | lister membres en gestion        |    Membre    | bibliothecaire:membre_list_gestion                 |           |      |           |
+| 34 | bibliothecaire | lister membres emprunteurs       |    Membre    | bibliothecaire:membre_list_emprunteurs             |           |      |           |
+| 35 | bibliothecaire | lister membres supprimés         |    Membre    | bibliothecaire:membre_list_archives                |           |      |           |
+| 36 | bibliothecaire | lister membres                   |    Membre    | bibliothecaire:membre_list                         |           |      |           |
+| 37 | bibliothecaire | modifier un membre               |    Membre    | bibliothecaire:membre_update                       |  Gestion  |  P   | ✅ intégré |
+| 38 | bibliothecaire | activer membre emprunteur        |    Membre    | bibliothecaire:membre_activate_emprunteur          |  Gestion  |  P   | ✅ intégré |
+| 39 | bibliothecaire | marquage des retards             |   Emprunt    | bibliothecaire:emprunt_retard                      |           |      |           |
+| 40 | bibliothecaire | lister emprunts                  |   Emprunt    | bibliothecaire:emprunt_list                        |           |      |           |
+| 41 | bibliothecaire | créer emprunt                    |   Emprunt    | bibliothecaire:emprunt_create                      |  Gestion  |  P   | ✅ intégré |
+| 42 | bibliothecaire | rendre emprunt                   |   Emprunt    | bibliothecaire:emprunt_rendre                      |  Gestion  |  P   | ✅ intégré |
+| 43 | bibliothecaire | emprunter un média               |   Emprunt    | bibliothecaire:media_emprunter                     |  Gestion  |  P   | ✅ intégré |
+| 44 | bibliothecaire | rendre un  média                 |   Emprunt    | bibliothecaire:media_rendre                        |  Gestion  |  P   | ✅ intégré |
+| 45 | bibliothecaire | créer un emprunt pour un membre  |   Emprunt    | bibliothecaire:membre_emprunter                    |  Gestion  |  P   | ✅ intégré |
+| 46 | bibliothecaire | rendre un emprunt pour un membre |   Emprunt    | bibliothecaire:membre_rendre                       |  Gestion  |  P   | ✅ intégré |
+| 47 | bibliothecaire | lister jeux                      | JeuDePlateau | bibliothecaire:jeu_list                            |           |      |           |
+| 48 | bibliothecaire | créer jeux                       | JeuDePlateau | bibliothecaire:jeu_create                          | Technique |  P   | ✅ intégré |
+| 49 | bibliothecaire | détailler un jeu                 | JeuDePlateau | bibliothecaire:jeu_detail                          |           |      |           |
+| 50 | consultation   | accueil médiathèque              |   __app__    | accounts:accueil                                   |           |      |           |
+| 51 | consultation   | accueil consultation             |   __app__    | consultation:accueil                               |           |      |           |
+| 52 | consultation   | consulter supports               |   Support    | consultation:supports                              |           |      |           |
+
+> Tableau est trié avec l'ordre de tri suivant :
+>  - Application: médiathèque, bibliothecaire, consultation.
+>  - Entité (au sein de chaque application): __app__, __system__, User, Media, Livre, Dvd, Cd, Membre, Emprunt, 
+  JeuDePlateau, Support.
+
+> La colonne :
+>  - **Fonction** précise si la fonction est de gestion (demandée dans le sujet) ou technique (nécessaire pour la 
+> cohérence technique).
+>  - **Logs** précise si la trace doit être particulière (P) ou si elle est tracée par l'URl (vide).
+
+---
+
+### 5.2 Tests unitaires Django
+
+Chaque fonctionnalité métier est couverte par au moins un test unitaire.  
+Les tests sont organisés par blocs (`accounts`, `bibliothecaire`, `consultation`) et par type (`tests.py`, `tests_blocs`, 
+`tests_uc_logs.py`).  
+Les tests UC‑LOGS ont été ajoutés dans le fichier `test_uc_logs.py` et couvrent les 21 balises métier attendues (P) pour 
+les 52 fonctions recensées..
+
+- **198 tests validés** au total.  
+- Couverture exhaustive des cas critiques (connexion, création, modification, retour, activation…).  
+- Utilisation de fixtures et de créations dynamiques pour garantir la validité métier.
+
+---
+
+### 5.3 Exécution automatisée des tests
+
+Les tests sont exécutables via la commande Django standard :
+
+```bash
+python manage.py test
+```
+
+Le fichier `devReport.md` permettant de visualiser les résultats des tests et des traces est obtenu avec une redirection 
+des sorties de la console à partir de la commande Django :
+
+```bash
+python manage.py test > devReport.md 2>&1 -v 2 
+```
+
+La configuration détecte automatiquement le mode test et bascule sur le fichier `mediatheque_test.log`.  
+Les logs sont lus en fin de test pour valider la présence des balises attendues.  
+
+---
+
 ## 6. Base de données et données de test
 
 Cette section présente la configuration de la base de données, les migrations effectuées à partir des modèles Django, 
@@ -2535,14 +2791,16 @@ Les relations sont gérées par des clés étrangères (`ForeignKey`) et des hé
 Des jeux de données ont été préparés pour les tests fonctionnels et les démonstrations.  
 Ils sont stockés dans le dossier `/fixtures/` et organisés par thème :
 
-| Fichier fixture        | Contenu chargé                                  |
-|------------------------|-------------------------------------------------|
-| `membres_test.json`    | Membres de test (statuts variés)                |
-| `medias_test.json`     | Livres, DVDs, CDs, jeux de plateau              |
-| `emprunts_test.json`   | Emprunts en cours, retours, retards             |
-| `jeux_test.json`       | Jeux de plateau                                 |
-| `/scenarii/scenar_01/` | Scénarios de fichiers json gestion des emprunts |
-| `users_test.json`      | Comptes utilisateurs pour l’authentification    |
+| Fichier fixture             | Contenu chargé                                  |
+|-----------------------------|-------------------------------------------------|
+| `membres_test.json`         | Membres de test (statuts variés)                |
+| `medias_test.json`          | Livres, DVDs, CDs, jeux de plateau              |
+| `emprunts_test.json`        | Emprunts en cours, retours, retards             |
+| `jeux_test.json`            | Jeux de plateau                                 |
+| `/scenarii/scenar_01/`      | Scénarios de fichiers json gestion des emprunts |
+| `users_test.json`           | Comptes utilisateurs pour l’authentification    |
+| `bibliothecaires_test.json` | Bibliothécaire (BibGestion et BibAdmin)         |
+| `superuser.json`            | SuperUser de la base                            |
 
 Les fixtures sont chargées avec la commande :
 
@@ -2933,7 +3191,7 @@ L’intégration des logs applicatifs a soulevé deux points :
 - l’importance de passer par les vraies vues pour déclencher les écritures.
 
 Les UC‑LOGS ont confirmé la validité de cette approche. Les niveaux supérieurs (rotation, segmentation, supervision) sont 
-documentés mais non livrés.
+documentés, mais non livrés.
 
 ---
 
@@ -2946,6 +3204,79 @@ documentés mais non livrés.
 me préparer à de futurs projets qui nécessiteront une soutenance structurée.  
 > La main‑courante (Annexe F) conserve le détail exhaustif, tandis que cette section met en avant les enseignements clés.
 
+---
+
+## 9. Conclusion et perspectives
+
+### 9.1 Bilan des compétences acquises
+
+Le projet Médiathèque a permis de consolider plusieurs compétences techniques et méthodologiques :
+
+- **Programmation orientée objet (POO)** : mise en place d’une hiérarchie claire des classes (Media, Livre, DVD, CD, 
+- JeuDePlateau) et séparation en modules Django (`models.py`, `views.py`, `urls.py`, `tests.py`).
+- **Architecture Django** : structuration des applications (`accounts`, `bibliothecaire`, `consultation`), gestion des 
+- rôles et des permissions, intégration des logs.
+- **Traçabilité et qualité logicielle** : configuration avancée du module `LOGGING`, séparation des journaux 
+- (`mediatheque.log` / `mediatheque_test.log`), validation par 198 tests automatisés.
+- **Tests unitaires et fonctionnels** : couverture exhaustive des cas critiques (connexion, création, modification, 
+- emprunt, retour, activation), intégration des UC‑LOGS et UC‑SECURITE.
+- **Documentation et transmission** : rédaction structurée du rapport, mise en place des annexes (logs, diagrammes, 
+- arborescence), harmonisation des fichiers techniques (`devReport.md`, `devTests.md`, `devAFBib.md`, `devMC.md`).
+
+### 9.2 Améliorations futures
+
+Plusieurs pistes d’évolution ont été identifiées pour enrichir et pérenniser le projet :
+
+- **Webservices et API REST** : ouverture des fonctionnalités de la médiathèque à des clients externes (applications 
+mobiles, intégrations tierces).
+- **Asynchronisme et performance** : optimisation des emprunts et retours via des tâches asynchrones (Celery, Django 
+Channels).
+- **Interface utilisateur (UI/UX)** : amélioration de l’ergonomie des menus, ajout de tableaux de bord pour les 
+bibliothécaires, personnalisation des vues pour les membres.
+- **Internationalisation (i18n)** : traduction des interfaces et adaptation aux contextes multilingues.
+- **Supervision et monitoring** : intégration avec des solutions de supervision (ELK, Graylog, Sentry) pour une 
+traçabilité en production.
+- **Sécurité renforcée** : gestion fine des rôles et permissions, audit des accès, rotation des logs et politique de 
+conservation.
+
+### 9.3 Bilan sur la démarche et le recul acquis
+
+Lorsque j’ai commencé ce projet, je n’avais aucune connaissance préalable de Python, ni de Django. J’ai abordé chaque 
+étape avec une logique exploratoire, en m’appuyant sur la documentation, les erreurs rencontrées et les ajustements 
+progressifs.  
+
+Les premières implémentations étaient souvent verbeuses, parfois redondantes, mais elles m’ont permis de comprendre en 
+profondeur les mécanismes du framework. Pour arriver à mieux comprendre les points abordés et pouvoir en retirer un 
+profit durable, ces travaux me conduisaient fréquemment à largement dépasser le périmètre du sujet proposé. Le résultat 
+se traduit dans les deux profils de Bibliothécaire pour lesquels le `BibGestion` correspond au périmètre du sujet et 
+`BibAdmin` à l'ensemble de tous les sujets abordés. 
+
+Au fil du développement, j’ai acquis une vision plus structurée : j’ai appris à isoler les responsabilités, à anticiper 
+les effets de bord, à formaliser les règles métier dans des méthodes dédiées, et à concevoir des tests fonctionnels qui 
+valident non seulement le comportement technique, mais aussi les intentions métier. J’ai également pris conscience de 
+l’importance de la documentation, non comme une trace passive, mais comme un outil actif de transmission, de 
+clarification et de synthèse.  
+
+Ce recul m’a permis de simplifier des blocs de code, de rendre les vues plus lisibles, de structurer les tests par 
+usage métier, et de mieux distinguer ce qui relève de la logique technique, de l’UX, ou du cycle de vie fonctionnel. 
+Aujourd’hui, je suis capable de relire mes premières contributions avec un regard critique, non pour les rejeter, mais 
+pour mesurer le chemin parcouru.  
+
+Ce projet a été pour moi un véritable terrain d’apprentissage, de structuration et de montée en compétence. Il m’a 
+permis de passer d’une approche intuitive à une démarche architecturale, où chaque choix est motivé, documenté et validé.
+
+---
+
+### 9.4 Synthèse générale et conclusion
+
+Le projet Médiathèque atteint son objectif pédagogique : démontrer la mise en œuvre d’une application Django complète, 
+robuste et traçable.  
+La validation des **198 tests** et l’intégration des **UC‑LOGS** garantissent la qualité et la fiabilité du code.  
+La documentation produite (rapport, annexes, matrices d’accès et de logs) assure une transmission claire et exploitable 
+pour la soutenance et pour de futurs contributeurs.  
+
+Ce socle technique et documentaire ouvre la voie à la **livraison finale**, ainsi qu'à une évolution vers une 
+application professionnelle, extensible et maintenable.
 
 ---
 
