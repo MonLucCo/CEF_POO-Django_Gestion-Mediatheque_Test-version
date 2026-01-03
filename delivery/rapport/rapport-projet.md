@@ -1,14 +1,14 @@
 # Rapport de projet – Application Médiathèque Django
 
-| Élément           | Détail                                                                |
-|-------------------|-----------------------------------------------------------------------|
-| **Nom du projet** | Gestion de médiathèque avec Django                                    |
-| **Date**          | Septembre 2025                                                        |
-| **Rédacteur**     | `Luc PERARD` / micro-entreprise `PerLucCo`                            |
-| **Formation**     | CEF – Développement Web et Web Mobile – Module POO                    |
-| **Avancement**    | ✔️ Done : #1, #12, #2, #3, #4 • 🚧 En cours : #5 • ⏳ À venir : #6, #7 |
+| Élément           | Détail                                             |
+|-------------------|----------------------------------------------------|
+| **Nom du projet** | Gestion de médiathèque avec Django                 |
+| **Dates**         | Septembre à décembre 2025                          |
+| **Rédacteur**     | `Luc PERARD` / micro-entreprise `PerLucCo`         |
+| **Formation**     | CEF – Développement Web et Web Mobile – Module POO |
+| **Avancement**    | ✔️ Done : #1, #12, #2, #3, #4, #5, #6, #7          |
 
-> Cette rédaction du rapport est incrémentale et les paragraphes absents seront intégrés lors de la réalisation du 
+> Cette rédaction du rapport est incrémentale et les paragraphes sont intégrés progressivement lors de la réalisation du 
 > développement.
 > 
 > Dans le dépôt GitHub du projet, chaque issue du plan de développement prévoit les sections concernées par la mise à 
@@ -19,6 +19,9 @@
 ## Sommaire
 
 - [1. Introduction](#1-introduction)
+  - [1.1 Présentation du sujet](#11-présentation-du-sujet)
+  - [1.2 Comment débuter et organisation du projet](#12-comment-débuter-et-organisation-du-projet)
+  - [1.3 Organisation du rapport](#13-organisation-du-rapport)
 
 - [2. Reprise et refactoring du code existant](#2-reprise-et-refactoring-du-code-existant)  
   - [2.1 Analyse du code fourni](#21-analyse-du-code-fourni)  
@@ -85,6 +88,12 @@
       - [4.4.3 Fonctionnalités liées à la gestion des Logs](#443-fonctionnalités-liées-à-la-gestion-des-logs)
       - 
 
+- [5. Qualité du code et stratégie de tests](#5-qualité-du-code-et-stratégie-de-tests)
+  - [5.1 Logs et monitorage](#51-logs-et-monitorage)
+    - [5.1.1 Tableau des fonctions tracées par logs](#511-tableau-des-fonctions-tracées-par-logs)
+  - [5.2 Tests unitaires Django](#52-tests-unitaires-django)
+  - [5.3 Exécution automatisée des tests](#53-exécution-automatisée-des-tests)
+
 - [6. Base de données et données de test](#6-base-de-données-et-données-de-test)  
   - [6.1 Schéma des modèles et migration](#61-schéma-des-modèles-et-migration)
   - [6.2 Jeu de données via fixtures ou script](#62-jeu-de-données-via-fixtures-ou-script)
@@ -96,11 +105,10 @@
     - [7.2.1 Étapes communes](#721--étapes-communes)  
     - [7.2.2 Étapes spécifiques à un système d'exploitation](#722--étapes-spécifiques-à-un-système-dexploitation)  
     - [7.2.3 Étapes spécifiques à la configuration de l'environnement de développement (EDI)](#723--étapes-spécifiques-à-la-configuration-de-lenvironnement-de-développement-edi)  
-   - [7.3 URL d’accès et description des interfaces](#73-url-daccès-et-description-des-interfaces)  
+  - [7.3 URL d’accès et description des interfaces](#73-url-daccès-et-description-des-interfaces)  
     - [7.3.1 Interface minimale après initialisation](#731-interface-minimale-après-initialisation)
-    - [7.3.2 Interface enrichie (à venir)](#732-interface-enrichie-à-venir)
-    - [7.3.3 Interface métier (prévision)](#733-interface-métier-prévision)
-    - 
+    - [7.3.2 Interface enrichie (les développements fonctionnels)](#732-interface-enrichie-les-développements-fonctionnels)
+    - [7.3.3 Interface métier (l'UX de l'application)](#733-interface-métier-lux-de-lapplication)
 
 - [8. Démarche de travail et traçabilité](#8-démarche-de-travail-et-traçabilité)  
   - [8.1 Traçabilité du développement : GitHub et main-courante technique](#81-traçabilité-du-développement--github-et-main-courante-technique)
@@ -113,17 +121,26 @@
     - [8.3.3 Résolution des templates](#833-résolution-des-templates)
     - [8.3.4 Authentification et sécurité](#834-authentification-et-sécurité)
     - [8.3.5 Gestion des logs](#835-gestion-des-logs)
-    - 
+
+- [9. Conclusion et perspectives](#9-conclusion-et-perspectives)
+  - [9.1 Bilan des compétences acquises](#91-bilan-des-compétences-acquises)
+  - [9.2 Améliorations futures](#92-améliorations-futures)
+  - [9.3 Bilan sur la démarche et le recul acquis](#93-bilan-sur-la-démarche-et-le-recul-acquis)
+  - [9.4 Conclusion](#94-conclusion)
 
 - [Annexes](#annexes)
   - [Annexe A – Extraits de code clés](rapport-projet_annexe-a.md)
-  - [Annexe D – Arborescence du projet](rapport-projet_annexe-d.md)  
-  - [Annexe E – Installation projet et configuration de l’EDI](rapport-projet_annexe-e.md)
+  - [Annexe B - Logs d’exécution et de tests](rapport-projet_annexe-b.md)
+  - [Annexe C - Diagrammes (UML, séquence)](rapport-projet_annexe-c.md)
+  - [Annexe D – Arborescence du projet](rapport-projet_annexe-d.md)
+  - [Annexe E - Installation Projet et configuration de l'EDI](rapport-projet_annexe-e.md)
   - [Annexe F – Main‑courante technique et difficultés](rapport-projet_annexe-f.md)
 
 ---
 
 ## 1. Introduction
+
+### 1.1 Présentation du sujet
 
 Ce projet s’inscrit dans le cadre du devoir du module Programmation Orientée Objet (POO) avec Python. Il vise à mettre 
 en œuvre une application Django simulant la gestion d’une médiathèque, en respectant des contraintes métier précises.
@@ -137,7 +154,84 @@ Les objectifs pédagogiques sont :
 
 Le livrable final comprend :
 - Un dépôt GitHub structuré et développé à partir de huit (8) issues.
-- Un rapport de projet rédigé en Markdown et exporté en PDF.
+- Un rapport de projet rédigé en Markdown.
+
+### 1.2 Comment débuter et organisation du projet
+
+Le projet est archivé complètement dans le dépôt GitHub et se compose de trois dossiers principaux : 
+- `/works` contenant le code développé en Django pour les applications de la médiathèque.
+- `/docs` contenant l'ensemble de la documentation du projet.
+- `/delivery` contenant les différents éléments à livrer (le rapport).
+
+Pour débuter et accéder aux différentes parties du projet, le dépôt GitHub est constitué de documents **README** qui 
+facilitent la navigation dans le projet. Tous ces documents sont accessibles à partir de la page d'accueil du dépôt.
+
+La première mise en œuvre du projet nécessite l'installation de l'application, puis l'initialisation des données. Le 
+fonctionnement de l'application peut débuter ensuite.
+Les commandes suivantes permettent en lignes de commande de réaliser l'installation en utilisant les données de la base 
+de données.
+
+```bash
+git clone https://github.com/MonLucCo/CEF_POO-Django_Gestion-Mediatheque_Test-version.git
+cd CEF_POO-Django_Gestion-Mediatheque_Test-version
+   
+cd works
+venv\Scripts\activate
+    
+cd mediatheque
+python manage.py runserver 8900
+```
+
+L’application peut être exécutée immédiatement grâce aux données préchargées, sans configuration supplémentaire.
+
+Pour la prise en main de l'application et de ces fonctionnalités, il est préconisé d'utiliser la base de données en 
+l'état. Toutefois, pour une réinitialisation complète des données et l'insertion d'un jeu de données, les commandes 
+suivantes permettent de réutiliser un jeu de données minimaliste qui permet de recharger les utilisateurs (et leurs mots 
+de passe), les membres, les médias, les emprunts (premier retard à partir du 3 janvier 2026) et les jeux (de plateau).
+
+```bash
+del db.sqlite3
+python manage.py migrate
+python manage.py loaddata initial_data.json
+```
+
+Le mot de passe de chaque `utilisateur` peut être modifié en se connectant en tant qu'administrateur (login du 
+`superuser` fourni par ailleurs) au `site d'administration` à partir de l'application Médiathèque. Le chargement de 
+données `initial_data.json` prévoit les connexions suivantes :
+- leclerc : test_bibgestion.
+- moreau  : test_bibadmin.
+- staff : mediatheque_staff.
+
+Les données prévoient des emprunts (non rendus) en date du 27 au 29 décembre 2025. Les premiers retards sont à prévoir à 
+partir du 3 janvier 2026. La modification directe du fichier de chargement n'est pas préconisée et peut générer des 
+incohérences entre les données.
+
+### 1.3 Organisation du rapport
+
+Le rapport a été rédigé en parallèle des travaux de développement (codage et documentation). C'est pourquoi, le rapport 
+s'appuie sur la documentation produite tout au long du projet et, contient dans ses annexes des éléments repris 
+intégralement pour appréhender la vie du projet. Il s'agit en particulier de l'annexe F qui contient le contenu de la 
+**main-courante** du projet.
+
+Par ailleurs, le rapport tente une présentation segmentée et linéaire du projet. Il s'agit des sections 2 à 5 qui 
+traitent selon une approche progressive la réalisation du projet :
+- section 2 : la reprise du code existant.
+- section 3 : l'analyse et l'architecture.
+- section 4 : l'implémentation fonctionnelle.
+- section 5 : la validation.
+
+Pour les éléments complémentaires, le rapport fournit dans ces dernières sections (de 6 à 9) les éléments techniques qui 
+font la cohérence du projet :
+- section 6 : les données de la base de données.
+- section 7 : installation et exécution de l'application.
+- section 8 : démarche de travail et traçabilité.
+- section 9 : conclusions et bilan.
+
+Ce rapport est à la fois une présentation du projet et une partie prenante complète du projet. Ceci au même titre que le 
+codage et la documentation technique.
+
+Cette introduction pose le cadre général du projet. Les sections suivantes détaillent successivement la reprise du code, 
+l’architecture, l’implémentation fonctionnelle et la validation.
 
 ---
 
@@ -2488,6 +2582,138 @@ class Emprunt(models.Model):
 
 ---
 
+## 5. Qualité du code et stratégie de tests
+
+### 5.1 Logs et monitorage
+
+La qualité du code passe par une traçabilité rigoureuse des actions critiques. Le projet Médiathèque intègre une 
+configuration avancée du module `LOGGING` de Django, permettant de journaliser les événements techniques et métier dans 
+deux fichiers distincts :
+
+- `mediatheque.log` : journal des événements en production.
+- `mediatheque_test.log` : journal des événements déclenchés lors des tests.
+
+La configuration inclut :
+- des handlers console et fichier,
+- une détection automatique du mode test,
+- des balises explicites (`[LOGIN]`, `[LOGOUT]`, `[ACCESS_GRANTED]`, `[ACCESS_DENIED]`, `[EmpruntCreate]`, etc.),
+- une rotation des fichiers prévue pour les livraisons futures.
+
+Les logs sont utilisés comme **outil de validation** dans les tests fonctionnels, notamment les UC‑LOGS (`T‑LOG‑01` à 
+`T‑LOG‑48`), qui vérifient que chaque action métier déclenche bien une trace identifiable (trace **Particulière**).
+
+---
+
+#### 5.1.1 Tableau des fonctions tracées par logs
+
+Le tableau ci-dessous recense les fonctions de l’application qui déclenchent une trace métier ou technique.  
+Il distingue les fonctions de **gestion** (demandées dans le sujet) et les fonctions **techniques** (nécessaires à la 
+cohérence du projet).  
+La colonne “Logs” indique si une balise spécifique est attendue (`P`) ou si la trace est implicite via l’URL.
+
+✅ = log intégré et validé dans les tests UC‑LOGS.
+
+| Id | Application    | Fonction                         |    Entité    | Route                                              | Fonction  | Logs |   Etat    |
+|----|----------------|----------------------------------|:------------:|----------------------------------------------------|:---------:|:----:|:---------:|
+| 1  | médiathèque    | accueil médiathèque              |   __app__    | accounts:accueil                                   |           |      |           |
+| 2  | médiathèque    | espace bibliothécaire            |   __app__    | bibliothecaire:accueil                             |           |      |           |
+| 3  | médiathèque    | espace consultation              |   __app__    | consultation:accueil                               |           |      |           |
+| 4  | médiathèque    | espace administration            |   __app__    | admin:index                                        |           |      |           |
+| 5  | médiathèque    | connexion                        |     User     | accounts:login                                     |  Gestion  |  P   | ✅ intégré |
+| 6  | médiathèque    | déconnexion                      |     User     | accounts:logout                                    |  Gestion  |  P   | ✅ intégré |
+| 7  | bibliothecaire | accueil médiathèque              |   __app__    | accounts:accueil                                   |           |      |           |
+| 8  | bibliothecaire | accueil bibliothécaire           |   __app__    | bibliothecaire:accueil                             |           |      |           |
+| 9  | bibliothecaire | accueil consultation             |   __app__    | consultation:accueil                               |           |      |           |
+| 10 | bibliothecaire | changer date marquage            |  __system__  | bibliothecaire:rejeu_reset_retard_session          | Technique |  P   | ✅ intégré |
+| 11 | bibliothecaire | créer média                      |    Media     | bibliothecaire:media_create                        | Technique |  P   | ✅ intégré |
+| 12 | bibliothecaire | lister consultables              |    Media     | bibliothecaire:media_list_consultables             |           |      |           |
+| 13 | bibliothecaire | lister disponibles               |    Media     | bibliothecaire:media_list_disponibles              |           |      |           |
+| 14 | bibliothecaire | lister médias                    |    Media     | bibliothecaire:media_list                          |           |      |           |
+| 15 | bibliothecaire | lister médias non typés          |    Media     | bibliothecaire:media_list_by_type ?type=NON_DEFINI |           |      |           |
+| 16 | bibliothecaire | modifier un média                |    Media     | bibliothecaire:media_update                        | Technique |  P   | ✅ intégré |
+| 17 | bibliothecaire | détailler un média               |    Media     | bibliothecaire:media_detail                        |           |      |           |
+| 18 | bibliothecaire | créer Livre                      |    Livre     | bibliothecaire:media_create_livre                  |  Gestion  |  P   | ✅ intégré |
+| 19 | bibliothecaire | lister Livres                    |    Livre     | bibliothecaire:media_list_by_type ?type=LIVRE      |           |      |           |
+| 20 | bibliothecaire | modifier un média en Livre       |    Livre     | bibliothecaire:media_typage_livre                  | Technique |  P   | ✅ intégré |
+| 21 | bibliothecaire | modifier un Livre                |    Livre     | bibliothecaire:media_update_livre                  |  Gestion  |  P   | ✅ intégré |
+| 22 | bibliothecaire | détailler un membre              |    Livre     | bibliothecaire:membre_detail                       |           |      |           |
+| 23 | bibliothecaire | créer DVD                        |     Dvd      | bibliothecaire:media_create_dvd                    |  Gestion  |  P   | ✅ intégré |
+| 24 | bibliothecaire | lister DVD                       |     Dvd      | bibliothecaire:media_list_by_type ?type=DVD        |           |      |           |
+| 25 | bibliothecaire | modifier un média en DVD         |     Dvd      | bibliothecaire:media_typage_dvd                    |           |      |           |
+| 26 | bibliothecaire | modifier un DVD                  |     Dvd      | bibliothecaire:media_update_dvd                    |           |      |           |
+| 27 | bibliothecaire | créer CD                         |      Cd      | bibliothecaire:media_create_cd                     |  Gestion  |  P   | ✅ intégré |
+| 28 | bibliothecaire | lister CD                        |      Cd      | bibliothecaire:media_list_by_type ?type=CD         |           |      |           |
+| 29 | bibliothecaire | modifier un média en CD          |      Cd      | bibliothecaire:media_typage_cd                     |           |      |           |
+| 30 | bibliothecaire | modifier un CD                   |      Cd      | bibliothecaire:media_update_cd                     |           |      |           |
+| 31 | bibliothecaire | créer membre                     |    Membre    | bibliothecaire:membre_create                       |  Gestion  |  P   | ✅ intégré |
+| 32 | bibliothecaire | créer emprunteur                 |    Membre    | bibliothecaire:membre_create_emprunteur            |  Gestion  |  P   | ✅ intégré |
+| 33 | bibliothecaire | lister membres en gestion        |    Membre    | bibliothecaire:membre_list_gestion                 |           |      |           |
+| 34 | bibliothecaire | lister membres emprunteurs       |    Membre    | bibliothecaire:membre_list_emprunteurs             |           |      |           |
+| 35 | bibliothecaire | lister membres supprimés         |    Membre    | bibliothecaire:membre_list_archives                |           |      |           |
+| 36 | bibliothecaire | lister membres                   |    Membre    | bibliothecaire:membre_list                         |           |      |           |
+| 37 | bibliothecaire | modifier un membre               |    Membre    | bibliothecaire:membre_update                       |  Gestion  |  P   | ✅ intégré |
+| 38 | bibliothecaire | activer membre emprunteur        |    Membre    | bibliothecaire:membre_activate_emprunteur          |  Gestion  |  P   | ✅ intégré |
+| 39 | bibliothecaire | marquage des retards             |   Emprunt    | bibliothecaire:emprunt_retard                      |           |      |           |
+| 40 | bibliothecaire | lister emprunts                  |   Emprunt    | bibliothecaire:emprunt_list                        |           |      |           |
+| 41 | bibliothecaire | créer emprunt                    |   Emprunt    | bibliothecaire:emprunt_create                      |  Gestion  |  P   | ✅ intégré |
+| 42 | bibliothecaire | rendre emprunt                   |   Emprunt    | bibliothecaire:emprunt_rendre                      |  Gestion  |  P   | ✅ intégré |
+| 43 | bibliothecaire | emprunter un média               |   Emprunt    | bibliothecaire:media_emprunter                     |  Gestion  |  P   | ✅ intégré |
+| 44 | bibliothecaire | rendre un  média                 |   Emprunt    | bibliothecaire:media_rendre                        |  Gestion  |  P   | ✅ intégré |
+| 45 | bibliothecaire | créer un emprunt pour un membre  |   Emprunt    | bibliothecaire:membre_emprunter                    |  Gestion  |  P   | ✅ intégré |
+| 46 | bibliothecaire | rendre un emprunt pour un membre |   Emprunt    | bibliothecaire:membre_rendre                       |  Gestion  |  P   | ✅ intégré |
+| 47 | bibliothecaire | lister jeux                      | JeuDePlateau | bibliothecaire:jeu_list                            |           |      |           |
+| 48 | bibliothecaire | créer jeux                       | JeuDePlateau | bibliothecaire:jeu_create                          | Technique |  P   | ✅ intégré |
+| 49 | bibliothecaire | détailler un jeu                 | JeuDePlateau | bibliothecaire:jeu_detail                          |           |      |           |
+| 50 | consultation   | accueil médiathèque              |   __app__    | accounts:accueil                                   |           |      |           |
+| 51 | consultation   | accueil consultation             |   __app__    | consultation:accueil                               |           |      |           |
+| 52 | consultation   | consulter supports               |   Support    | consultation:supports                              |           |      |           |
+
+> Tableau est trié avec l'ordre de tri suivant :
+>  - Application: médiathèque, bibliothecaire, consultation.
+>  - Entité (au sein de chaque application): __app__, __system__, User, Media, Livre, Dvd, Cd, Membre, Emprunt, 
+  JeuDePlateau, Support.
+
+> La colonne :
+>  - **Fonction** précise si la fonction est de gestion (demandée dans le sujet) ou technique (nécessaire pour la 
+> cohérence technique).
+>  - **Logs** précise si la trace doit être particulière (P) ou si elle est tracée par l'URl (vide).
+
+---
+
+### 5.2 Tests unitaires Django
+
+Chaque fonctionnalité métier est couverte par au moins un test unitaire.  
+Les tests sont organisés par blocs (`accounts`, `bibliothecaire`, `consultation`) et par type (`tests.py`, `tests_blocs`, 
+`tests_uc_logs.py`).  
+Les tests UC‑LOGS ont été ajoutés dans le fichier `test_uc_logs.py` et couvrent les 21 balises métier attendues (P) pour 
+les 52 fonctions recensées..
+
+- **198 tests validés** au total.  
+- Couverture exhaustive des cas critiques (connexion, création, modification, retour, activation…).  
+- Utilisation de fixtures et de créations dynamiques pour garantir la validité métier.
+
+---
+
+### 5.3 Exécution automatisée des tests
+
+Les tests sont exécutables via la commande Django standard :
+
+```bash
+python manage.py test
+```
+
+Le fichier `devReport.md` permettant de visualiser les résultats des tests et des traces est obtenu avec une redirection 
+des sorties de la console à partir de la commande Django :
+
+```bash
+python manage.py test > devReport.md 2>&1 -v 2 
+```
+
+La configuration détecte automatiquement le mode test et bascule sur le fichier `mediatheque_test.log`.  
+Les logs sont lus en fin de test pour valider la présence des balises attendues.  
+
+---
+
 ## 6. Base de données et données de test
 
 Cette section présente la configuration de la base de données, les migrations effectuées à partir des modèles Django, 
@@ -2733,7 +2959,7 @@ applications _métier_.
 
 #### 7.3.1 Interface minimale après initialisation
 
-La première version de l’interface est volontairement épurée. Elle permet de valider :
+La première version de l’interface est volontairement épurée. Elle permet de valider pour les étapes de développement :
 
 - Le bon fonctionnement du routage
 - La résolution correcte du template
@@ -2743,23 +2969,59 @@ La première version de l’interface est volontairement épurée. Elle permet d
 |:------------------------------------------------------------------------------------------------------------------:|
 | *Figure 1 – Affichage (version initiale - Issue #2) du template `accueil.html` après lancement du serveur Django.* |
 
-> Cette capture montre l’état initial de l’interface après exécution de `python manage.py runserver`.
+> Cette capture montre l’état initial de l’interface après exécution de `python manage.py runserver`.  
+> Cette interface est reprise pour une version finale lorsque les applications métiers ont été exploitables (cf. la 
+> section 7.3.3 ci-après).
 
-#### 7.3.2 Interface enrichie (à venir)
+#### 7.3.2 Interface enrichie (les développements fonctionnels)
 
-Les prochaines issues (#3 et #4) introduiront :
+Les étapes de développement fonctionnel (issues #3 et #4) ont introduit les différentes fonctionnalités techniques, puis
+(issues # 5 et #6) les fonctionnalités métiers dans les applications de la médiathèque (Bibliothécaire, Consultation, 
+Administration et Accueil). 
+La mise en œuvre finale (issues #6) a permis l'intégration dans une seule application :
 
-- Des liens vers les applications métier
-- Des blocs dynamiques selon le rôle utilisateur
-- Une navigation cohérente entre les vues
+- Des liens vers les applications métier.
+- Des blocs dynamiques selon le rôle utilisateur.
+- Une navigation cohérente entre les vues.
 
-#### 7.3.3 Interface métier (prévision)
+#### 7.3.3 Interface métier (l'UX de l'application)
 
-L’interface finale proposera :
+L’interface finale propose :
 
-- Une page d’accueil personnalisée selon le profil (bibliothécaire ou membre)
-- Des accès sécurisés via authentification (issue #5)
-- Une navigation entre les modules fonctionnels
+- Une page d’accueil personnalisée selon le profil (bibliothécaire ou membre).
+- Des accès sécurisés via authentification.
+- Une navigation entre les modules fonctionnels.
+
+|                               ![Médiathèque accueil](assets/img_UX_Application_Accueil.png)                               |
+|:-------------------------------------------------------------------------------------------------------------------------:|
+| *Figure 2 – Affichage (version finale - Issue #6) du template `accounts/accueil.html` après lancement du serveur Django.* |
+
+En accédant à l'espace de consultation (sans nécessité de connexion avec mot de passe)
+
+|                       ![Métier Consultation](assets/img_UX_Application_Metier_Consultation_Accueil.png)                       |
+|:-----------------------------------------------------------------------------------------------------------------------------:|
+| *Figure 3 – Affichage (version finale - Issue #6) du template `consultation/accueil.html` après lancement du serveur Django.* |
+
+En accédant à l'espace Bibliothécaire (avec une connexion en tant que BibGestion : accès les fonctions du métier 
+Bibliothécaire du sujet)
+
+|                        ![Métier Bibliothécaire : BibGestion](assets/img_UX_Application_Metier_Bibliothecaire_Accueil_Gestion.png)                         |
+|:---------------------------------------------------------------------------------------------------------------------------------------------------------:|
+| *Figure 4 – Affichage (version finale - Issue #6) du template `bibliothecaire/accueil.html` après lancement du serveur Django et connexion `BibGestion`.* |
+
+En accédant à l'espace Bibliothécaire (avec une connexion en tant que BibAdmin : accès à toutes les fonctions 
+nécessaires au fonctionnement de l'espace)
+
+|                         ![Métier Bibliothécaire : BibAdmin](assets/img_UX_Application_Metier_Bibliothecaire_Accueil_Admin.png)                          |
+|:-------------------------------------------------------------------------------------------------------------------------------------------------------:|
+| *Figure 5 – Affichage (version finale - Issue #6) du template `bibliothecaire/accueil.html` après lancement du serveur Django et connexion `BibAdmin`.* |
+
+En se connectant avec un compte administrateur (ou staff), l'accueil de la médiathèque permet d'accéder au 
+`site d'administration`
+
+|                                     ![Médiathèque accueil : Administrateur](assets/img_UX_Application_Accueil_Administrateur.png)                                      |
+|:----------------------------------------------------------------------------------------------------------------------------------------------------------------------:|
+| *Figure 6 – Affichage (version finale - Issue #6) du template `accounts/accueil.html` après lancement du serveur Django et connexion avec un compte d'administrateur.* |
 
 ---
 
@@ -2770,7 +3032,7 @@ L’interface finale proposera :
 La traçabilité du projet repose sur un double dispositif :
 
 - **GitHub** : utilisé pour la gestion des issues (#1 à #7, #12), des branches de développement (`update-technical`, 
-- `update-report`, etc.), des commits et des Pull Requests.  
+- `update-report`, etc.), des commits et des `Pull Requests`.  
   Chaque étape du projet est associée à une issue dédiée, assurant une traçabilité fine des tâches réalisées.
 
 - **Main-courante technique (`devMC.md`)** : document interne structurant les travaux de développement.  
@@ -2860,9 +3122,9 @@ artefacts du projet.
 | #1           | Préparation de l’environnement           | `venv/`, `requirements.txt`, `README-tech.md`       | —                                      | `rapport-projet.md`, `README-tech.md`                      |
 | #2           | Initialisation du projet Django          | `manage.py`, `settings.py`, `urls.py`, `accounts/`  | Test de lancement projet               | `devMC.md`, `rapport-projet.md`                            |
 | #3           | Application fonctionnelle bibliothécaire | `models.py`, `views.py`, `forms.py`, `templates/`   | `tests_blocs/`, shell Django, fixtures | `devMC.md`, `devTests.md`, `Analyse_Fonctionnalites.md`    |
-| #4           | Application fonctionnelle consultation   | `views.py`, `templates/consultation/`               | À venir                                | `README-fonct.md` (prévision)                              |
-| #5           | Authentification et sécurité             | `accounts/models.py`, `login.html`, `middleware.py` | À venir                                | `README-auth.md` (prévision)                               |
-| #6           | Tests et validation                      | `tests_blocs/`, `fixtures/*.json`, `devReport.txt`  | `python manage.py test`                | `devTests.md`, `devFixtures.md`                            |
+| #4           | Application fonctionnelle consultation   | `views.py`, `templates/consultation/`               | `tests_blocs/`, shell Django, fixtures | `devTests.md`                                              |
+| #5           | Authentification et sécurité             | `accounts/models.py`, `login.html`, `middleware.py` | `tests_blocs/`, shell Django, fixtures | `devTests.md`                                              |
+| #6           | Tests et validation                      | `tests_blocs/`, `fixtures/*.json`, `devReport.txt`  | `python manage.py test`                | `devTests.md`                                              |
 | #7           | Rapport final et livraison               | `rapport-projet.md`, `rapport-projet.pdf`           | —                                      | `rapport-projet.md`, `rapport-projet.pdf`                  |
 | #12          | Réorganisation documentaire              | `README-tech.md`, `devMC.md`, `plan-rapport.md`     | —                                      | `devMC.md`, `README-tech.md`, `Analyse_Fonctionnalites.md` |
 
@@ -2876,7 +3138,8 @@ artefacts du projet.
 
 Au cours du projet, plusieurs difficultés majeures ont été rencontrées. Elles ont permis de clarifier la méthodologie, 
 d’améliorer la configuration technique et de renforcer la cohérence documentaire.  
-Le détail complet des difficultés et des décisions associées est conservé dans **l’Annexe F – Main‑courante technique**.  
+Le détail complet des difficultés et des décisions associées est conservé dans 
+**l’[Annexe F – Main‑courante technique](rapport-projet_annexe-f.md)**.  
 
 Ce projet a été mené dans une démarche complète documentaire, technique et de recherche pour :
 - réaliser le sujet demandé de gestion d'une médiathèque (ensemble des fonctionnalités primordiales).
@@ -2933,12 +3196,12 @@ L’intégration des logs applicatifs a soulevé deux points :
 - l’importance de passer par les vraies vues pour déclencher les écritures.
 
 Les UC‑LOGS ont confirmé la validité de cette approche. Les niveaux supérieurs (rotation, segmentation, supervision) sont 
-documentés mais non livrés.
+documentés, mais non livrés.
 
 ---
 
-> 📌 Pour le détail complet des difficultés, des décisions et des arbitrages techniques, voir **Annexe F – Main‑courante 
-> technique et difficultés**.
+> 📌 Pour le détail complet des difficultés, des décisions et des arbitrages techniques, voir 
+> **[Annexe F – Main‑courante technique et difficultés](rapport-projet_annexe-f.md)**.
 > 
 > En résumé, ces difficultés ont constitué autant de jalons d’apprentissage que de validations techniques.  
 > 
@@ -2946,6 +3209,83 @@ documentés mais non livrés.
 me préparer à de futurs projets qui nécessiteront une soutenance structurée.  
 > La main‑courante (Annexe F) conserve le détail exhaustif, tandis que cette section met en avant les enseignements clés.
 
+---
+
+## 9. Conclusion et perspectives
+
+### 9.1 Bilan des compétences acquises
+
+Le projet Médiathèque a permis de consolider plusieurs compétences techniques et méthodologiques :
+
+- **Programmation orientée objet (POO)** : mise en place d’une hiérarchie claire des classes (Media, Livre, DVD, CD, 
+JeuDePlateau) et séparation en modules Django (`models.py`, `views.py`, `urls.py`, `tests.py`).
+- **Architecture Django** : structuration des applications (`accounts`, `bibliothecaire`, `consultation`), gestion des 
+rôles et des permissions, intégration des logs.
+- **Traçabilité et qualité logicielle** : configuration avancée du module `LOGGING`, séparation des journaux 
+(`mediatheque.log` / `mediatheque_test.log`), validation par 198 tests automatisés.
+- **Tests unitaires et fonctionnels** : couverture exhaustive des cas critiques (connexion, création, modification, 
+emprunt, retour, activation), intégration des UC‑LOGS et UC‑SECURITE.
+- **Documentation et transmission** : rédaction structurée du rapport, mise en place des annexes (logs, diagrammes, 
+arborescence), harmonisation des fichiers techniques (`devReport.md`, `devTests.md`, `devAFBib.md`, `devMC.md`).
+
+### 9.2 Améliorations futures
+
+Plusieurs pistes d’évolution ont été identifiées pour enrichir et pérenniser le projet :
+
+- **Webservices et API REST** : ouverture des fonctionnalités de la médiathèque à des clients externes (applications 
+mobiles, intégrations tierces).
+- **Asynchronisme et performance** : optimisation des emprunts et retours via des tâches asynchrones (Celery, Django 
+Channels).
+- **Interface utilisateur (UI/UX)** : amélioration de l’ergonomie des menus, ajout de tableaux de bord pour les 
+bibliothécaires, personnalisation des vues pour les membres.
+- **Internationalisation (i18n)** : traduction des interfaces et adaptation aux contextes multilingues.
+- **Supervision et monitoring** : intégration avec des solutions de supervision (ELK, Graylog, Sentry) pour une 
+traçabilité en production.
+- **Sécurité renforcée** : gestion fine des rôles et permissions, audit des accès, rotation des logs et politique de 
+conservation.
+
+### 9.3 Bilan sur la démarche et le recul acquis
+
+Lorsque j’ai commencé ce projet, je n’avais aucune connaissance préalable de Python, ni de Django. J’ai abordé chaque 
+étape avec une logique exploratoire, en m’appuyant sur la documentation, les erreurs rencontrées et les ajustements 
+progressifs.  
+
+Les premières implémentations étaient souvent verbeuses, parfois redondantes, mais elles m’ont permis de comprendre en 
+profondeur les mécanismes du framework. Pour arriver à mieux comprendre les points abordés et pouvoir en retirer un 
+profit durable, ces travaux me conduisaient fréquemment à largement dépasser le périmètre du sujet proposé. Le résultat 
+se traduit dans les deux profils de Bibliothécaire pour lesquels le `BibGestion` correspond au périmètre du sujet et 
+`BibAdmin` à l'ensemble de tous les sujets abordés. 
+
+Au fil du développement, j’ai acquis une vision plus structurée : j’ai appris à isoler les responsabilités, à anticiper 
+les effets de bord, à formaliser les règles métier dans des méthodes dédiées, et à concevoir des tests fonctionnels qui 
+valident non seulement le comportement technique, mais aussi les intentions métier. J’ai également pris conscience de 
+l’importance de la documentation, non comme une trace passive, mais comme un outil actif de transmission, de 
+clarification et de synthèse.  
+
+Ce recul m’a permis de simplifier des blocs de code, de rendre les vues plus lisibles, de structurer les tests par 
+usage métier, et de mieux distinguer ce qui relève de la logique technique, de l’UX, ou du cycle de vie fonctionnel. 
+Aujourd’hui, je suis capable de relire mes premières contributions avec un regard critique, non pour les rejeter, mais 
+pour mesurer le chemin parcouru.  
+
+Ce projet a été pour moi un véritable terrain d’apprentissage, de structuration et de montée en compétence. Il m’a 
+permis de passer d’une approche intuitive à une démarche architecturale, où chaque choix est motivé, documenté et validé.
+
+---
+
+### 9.4 Conclusion
+
+Le projet Médiathèque atteint son objectif pédagogique : démontrer la mise en œuvre d’une application Django complète, 
+robuste et traçable.  
+La validation des **198 tests** et l’intégration des **UC‑LOGS** garantissent la qualité et la fiabilité du code.  
+La documentation produite (rapport, annexes, matrices d’accès et de logs) assure une transmission claire et exploitable 
+pour la soutenance et pour de futurs contributeurs.  
+
+Ce socle technique et documentaire ouvre la voie à la **livraison finale**, ainsi qu'à une évolution vers une 
+application professionnelle, extensible et maintenable.
+
+Ce rapport a pu être mené de bout en bout en parallèle du développement afin de pouvoir livrer un seul et unique projet. 
+Cette méthode de réalisation m'a permis de conserver à tout moment un forte cohérence entre les objectifs pédagogiques 
+et la mise en place d'une démarche professionnelle, finalité de ma formation. 
 
 ---
 
