@@ -10,12 +10,21 @@ Configuration du projet : [Requirements](/delivery/rapport/requirements-projet.t
 
 ---
 
-## 🚀 Lancement rapide
+## 🚀 Installation rapide
 
 ```bash
+git clone https://github.com/MonLucCo/CEF_POO-Django_Gestion-Mediatheque_Test-version.git
+cd CEF_POO-Django_Gestion-Mediatheque_Test-version
+
 cd works
-.\venv\Scripts\activate
+python -m venv venv
+venv\Scripts\activate.bat
+
+pip install -r ../requirements.txt
+
 cd mediatheque
+python manage.py migrate
+python manage.py loaddata initial_data.json
 python manage.py runserver 8900
 ```
 
@@ -30,6 +39,7 @@ CEF_POO-Django_Gestion-Mediatheque_Test-version/
 ├── delivery/           # Livrables
 ├── docs/               # Documentation technique et fonctionnelle
 ├── works/              # Projet Django et environnement virtuel
+├── requirements.txt    # Dépendances du projet
 └── README.md           # Présentation générale du projet
 ```
 
@@ -43,7 +53,7 @@ La documentation complète est disponible dans le dossier [`/docs`](docs/README.
 - [Suivi du développement](docs/developpement/README-dev.md)
 - [Architecture du projet](docs/architecture/README-archi.md)
 
-Le rapport de projet est disponible dans le dossier [`/delivery`](delivery/rapport/rapport-projet.md) dans sa version _actualisée_ tout au long du projet.
+Le [rapport de projet](delivery/rapport/rapport-projet.md) est disponible dans le dossier `/delivery` dans sa version _actualisée_ tout au long du projet.
 
 ---
 
@@ -56,7 +66,7 @@ Aucune contribution externe n’est demandée.
 
 ## 📄 Licence
 
-Distribué sous la licence **MIT**.
+Distribué sous la [licence **MIT**](LICENSE).
 
 ---
 

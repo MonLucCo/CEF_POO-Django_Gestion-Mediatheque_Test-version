@@ -12,7 +12,7 @@
       "email": "admin.test@localhost",
       "is_staff": true,
       "is_active": true,
-      date_joined": "2025-09-20T10:00:00Z",
+      "date_joined": "2025-09-20T10:00:00Z",
       "groups": [],
       "user_permissions": []
     }
@@ -130,7 +130,7 @@
     "pk": 2,
     "fields": {
       "name": "Moreau",
-      "user": 2,
+      "user": 3,
       "role": 1
     }
   },
@@ -572,9 +572,9 @@
     "fields": {
       "media": 3,
       "emprunteur": 3,
-      "date_emprunt": "2025-12-27",
+      "date_emprunt": "2025-12-26",
       "date_retour": null,
-      "statut": 0
+      "statut": 1
     }
   },
   {
