@@ -4,6 +4,10 @@
 
 Ce projet pédagogique vise à développer une application web de gestion de médiathèque en utilisant **Django** et les principes de la **programmation orientée objet (POO)**.
 
+Le rapport de ce projet : [Rapport](/delivery/rapport/rapport-projet.md).
+
+Configuration du projet : [Requirements](/delivery/rapport/requirements-projet.txt)
+
 ---
 
 ## 🚀 Lancement rapide
@@ -39,7 +43,7 @@ La documentation complète est disponible dans le dossier [`/docs`](docs/README.
 - [Suivi du développement](docs/developpement/README-dev.md)
 - [Architecture du projet](docs/architecture/README-archi.md)
 
-Le rapport de projet est disponible dans le dossier [`/delivery`](delivery/rapport/rapport-projet.md) dans sa version _intermédiaire_.
+Le rapport de projet est disponible dans le dossier [`/delivery`](delivery/rapport/rapport-projet.md) dans sa version _actualisée_ tout au long du projet.
 
 ---
 

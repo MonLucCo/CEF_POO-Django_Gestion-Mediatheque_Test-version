@@ -21,8 +21,8 @@
     "model": "auth.user",
     "pk": 2,
     "fields": {
-      "password": "pbkdf2_sha256$1000000$tfbDUcVJbex6OQGLXQhNlA$GPmr+NpuM3tCqEsILYpEjgLBwn3Y1ZYQe/qiEuLSQ7Y=",
-      "last_login": null,
+      "password": "pbkdf2_sha256$1000000$vaD0ryNu2t7nKIp2YLnNoI$e+ixDyTqkRDkNfWuuUZu9lTWQnkK0rESC0UubKSeIqc=",
+      "last_login": "2026-01-02T18:31:46.112Z",
       "is_superuser": false,
       "username": "leclerc",
       "first_name": "",
@@ -39,8 +39,8 @@
     "model": "auth.user",
     "pk": 3,
     "fields": {
-      "password": "pbkdf2_sha256$1000000$I6MCX30uB3hLaqdM8QpgF5$rD+NX+b0ZwX+5iGwB00tMiruwpQxV4VLwKH9Kkt51Xc=",
-      "last_login": null,
+      "password": "pbkdf2_sha256$1000000$D1IFE8jN2olvm5VEpmNvHY$vceJGLe0+P1Z9e97Y0dmZFRFi7jr9rmGY0O0t8W6xGQ=",
+      "last_login": "2026-01-02T18:32:08.548Z",
       "is_superuser": false,
       "username": "moreau",
       "first_name": "",
@@ -49,6 +49,24 @@
       "is_staff": false,
       "is_active": true,
       "date_joined": "2025-11-24T19:07:34Z",
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "auth.user",
+    "pk": 4,
+    "fields": {
+      "password": "pbkdf2_sha256$1000000$GxCNwfCdxAOEIIxnJLj3if$5XbZ8cU9YwAqqtEw04yHCAKZw1WA+pjEIwevLqSkoss=",
+      "last_login": "2026-01-02T18:39:08.600Z",
+      "is_superuser": false,
+      "username": "staff",
+      "first_name": "",
+      "last_name": "",
+      "email": "staff_test@localhost",
+      "is_staff": true,
+      "is_active": true,
+      "date_joined": "2025-11-27T17:18:05Z",
       "groups": [],
       "user_permissions": []
     }
@@ -543,7 +561,7 @@
     "fields": {
       "media": 2,
       "emprunteur": 2,
-      "date_emprunt": "2025-10-05",
+      "date_emprunt": "2025-12-28",
       "date_retour": null,
       "statut": 1
     }
@@ -554,7 +572,7 @@
     "fields": {
       "media": 3,
       "emprunteur": 3,
-      "date_emprunt": "2025-08-20",
+      "date_emprunt": "2025-12-27",
       "date_retour": null,
       "statut": 0
     }
@@ -565,7 +583,7 @@
     "fields": {
       "media": 7,
       "emprunteur": 4,
-      "date_emprunt": "2025-10-20",
+      "date_emprunt": "2025-12-29",
       "date_retour": null,
       "statut": 1
     }
@@ -576,9 +594,89 @@
     "fields": {
       "media": 12,
       "emprunteur": 5,
-      "date_emprunt": "2025-07-01",
-      "date_retour": "2025-07-15",
+      "date_emprunt": "2025-01-01",
+      "date_retour": "2025-01-02",
       "statut": 2
+    }
+  },
+  {
+    "model": "bibliothecaire.jeudeplateau",
+    "pk": 16,
+    "fields": {
+      "name": "Monopoly",
+      "annee_edition": 1935,
+      "consultable": true,
+      "createur": "Parker Brothers",
+      "regle_consultable": true,
+      "categorie": "Économie",
+      "duree_partie": 90,
+      "nb_joueur_min": 2,
+      "nb_joueur_max": 6,
+      "age_min": 8
+    }
+  },
+  {
+    "model": "bibliothecaire.jeudeplateau",
+    "pk": 17,
+    "fields": {
+      "name": "Risk",
+      "annee_edition": 1959,
+      "consultable": true,
+      "createur": "Parker Brothers",
+      "regle_consultable": true,
+      "categorie": "Stratégie",
+      "duree_partie": 120,
+      "nb_joueur_min": 2,
+      "nb_joueur_max": 6,
+      "age_min": 10
+    }
+  },
+  {
+    "model": "bibliothecaire.jeudeplateau",
+    "pk": 18,
+    "fields": {
+      "name": "Catan",
+      "annee_edition": 1995,
+      "consultable": false,
+      "createur": "Klaus Teuber",
+      "regle_consultable": true,
+      "categorie": "Stratégie",
+      "duree_partie": 75,
+      "nb_joueur_min": 3,
+      "nb_joueur_max": 4,
+      "age_min": 10
+    }
+  },
+  {
+    "model": "bibliothecaire.jeudeplateau",
+    "pk": 19,
+    "fields": {
+      "name": "Carcassonne",
+      "annee_edition": 2000,
+      "consultable": true,
+      "createur": "Klaus-Jürgen Wrede",
+      "regle_consultable": true,
+      "categorie": "Placement de tuiles",
+      "duree_partie": 45,
+      "nb_joueur_min": 2,
+      "nb_joueur_max": 5,
+      "age_min": 8
+    }
+  },
+  {
+    "model": "bibliothecaire.jeudeplateau",
+    "pk": 20,
+    "fields": {
+      "name": "Dixit",
+      "annee_edition": 2008,
+      "consultable": false,
+      "createur": "Jean-Louis Roubira",
+      "regle_consultable": false,
+      "categorie": "Imagination",
+      "duree_partie": 30,
+      "nb_joueur_min": 3,
+      "nb_joueur_max": 6,
+      "age_min": 8
     }
   }
 ]
