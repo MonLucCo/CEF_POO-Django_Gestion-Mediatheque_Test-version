@@ -168,43 +168,50 @@ facilitent la navigation dans le projet. Tous ces documents sont accessibles à 
 
 La première mise en œuvre du projet nécessite l'installation de l'application, puis l'initialisation des données. Le 
 fonctionnement de l'application peut débuter ensuite.
-Les commandes suivantes permettent en lignes de commande de réaliser l'installation en utilisant les données de la base 
-de données.
+
+L’installation suit les étapes classiques d’un projet Django utilisant un environnement virtuel Python.
+
+#### 🔧 Installation rapide
 
 ```bash
 git clone https://github.com/MonLucCo/CEF_POO-Django_Gestion-Mediatheque_Test-version.git
 cd CEF_POO-Django_Gestion-Mediatheque_Test-version
-   
+
 cd works
-venv\Scripts\activate
-    
+python -m venv venv
+venv\Scripts\activate.bat
+
+pip install -r ../requirements.txt
+
 cd mediatheque
+python manage.py migrate
+python manage.py loaddata initial_data.json
 python manage.py runserver 8900
 ```
 
-L’application peut être exécutée immédiatement grâce aux données préchargées, sans configuration supplémentaire.
+L’application est alors accessible à l’adresse :  
+**http://127.0.0.1:8900**
 
-Pour la prise en main de l'application et de ces fonctionnalités, il est préconisé d'utiliser la base de données en 
-l'état. Toutefois, pour une réinitialisation complète des données et l'insertion d'un jeu de données, les commandes 
-suivantes permettent de réutiliser un jeu de données minimaliste qui permet de recharger les utilisateurs (et leurs mots 
-de passe), les membres, les médias, les emprunts (premier retard à partir du 3 janvier 2026) et les jeux (de plateau).
+Les données chargées via `initial_data.json` incluent :
 
-```bash
-del db.sqlite3
-python manage.py migrate
-python manage.py loaddata initial_data.json
-```
+- les utilisateurs (avec mots de passe hashés),
+- les membres,
+- les médias,
+- les emprunts (dont certains en retard),
+- les jeux de plateau.
 
 Le mot de passe de chaque `utilisateur` peut être modifié en se connectant en tant qu'administrateur (login du 
-`superuser` fourni par ailleurs) au `site d'administration` à partir de l'application Médiathèque. Le chargement de 
-données `initial_data.json` prévoit les connexions suivantes :
+`superuser` fourni par ailleurs) au `site d'administration` Django à partir de l'application **Médiathèque**. Le 
+chargement de données `initial_data.json` prévoit les connexions suivantes :
 - leclerc : test_bibgestion.
 - moreau  : test_bibadmin.
 - staff : mediatheque_staff.
 
-Les données prévoient des emprunts (non rendus) en date du 27 au 29 décembre 2025. Les premiers retards sont à prévoir à 
-partir du 3 janvier 2026. La modification directe du fichier de chargement n'est pas préconisée et peut générer des 
-incohérences entre les données.
+Les données prévoient des emprunts (non rendus) en date du **26 au 30 décembre** 2025. Les premiers retards sont à 
+prévoir à partir du **3 janvier 2026**. La modification directe du fichier de chargement n'est pas préconisée et peut 
+générer des incohérences entre les données.
+
+---
 
 ### 1.3 Organisation du rapport
 
